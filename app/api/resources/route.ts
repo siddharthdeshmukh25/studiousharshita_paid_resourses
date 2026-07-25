@@ -11,10 +11,13 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category');
     const search = searchParams.get('search');
 
+    console.log('API Request - Category:', category, 'Search:', search);
+
     let query = {};
     
-    if (category) {
+    if (category && category !== 'All') {
       query = { category };
+      console.log('Category Query:', query);
     }
     
     if (search) {
@@ -29,6 +32,17 @@ export async function GET(request: NextRequest) {
     }
 
     const resources = await Resource.find(query).sort({ createdAt: -1 });
+
+    console.log('Found resources:', resources.length, 'for query:', query);
+    
+    // Log all resources and their categories for debugging
+    if (category && category !== 'All') {
+      const allResources = await Resource.find({});
+      console.log('All resources in DB:');
+      allResources.forEach(r => {
+        console.log(`- Title: ${r.title}, Category: "${r.category}"`);
+      });
+    }
 
     // Get ratings for each resource
     const resourcesWithRatings = await Promise.all(

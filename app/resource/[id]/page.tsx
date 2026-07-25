@@ -45,6 +45,7 @@ export default function ResourceDetailPage() {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPurchased, setIsPurchased] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -331,11 +332,11 @@ export default function ResourceDetailPage() {
             {/* Thumbnail Block */}
             <div className="order-1 lg:col-start-1 lg:row-start-1">
               <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
-                <div className="aspect-video md:aspect-square flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                <div className="w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer" onClick={() => setShowImageModal(true)}>
                   <img
                     src={resource.thumbnailUrl}
                     alt={resource.title}
-                    className="w-full h-full object-cover"
+                    className="w-full object-contain"
                   />
                 </div>
               </div>
@@ -457,7 +458,7 @@ export default function ResourceDetailPage() {
 
             {/* Comments Block */}
             <div className="order-3 lg:col-start-1 lg:row-start-2 w-full">
-              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 border border-gray-200">
+              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-3 sm:p-6 border border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-gray-900 text-lg flex items-center">
                     <span className="w-1 h-6 bg-blue-600 rounded-full mr-3"></span>
@@ -492,36 +493,49 @@ export default function ResourceDetailPage() {
 
                 {/* Existing Reviews */}
                 {reviews.length > 0 ? (
-                  <div className="space-y-4 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
+                  <div className="space-y-3 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
                     {reviews.map((review) => (
-                      <div key={review._id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-2">
-                            <span className="font-semibold text-gray-900">{review.userName}</span>
-                            <span className="text-xs text-gray-400">
-                              {new Date(review.createdAt).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric'
-                              })}
-                            </span>
+                      <div key={review._id} className="bg-white p-3 sm:p-4 rounded-xl border border-gray-100 shadow-sm">
+                        {/* Header: Name & Stars on Left, Date on Right */}
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="flex flex-col">
+                            {/* Name (Scaled down for mobile, clamped to 1 line) */}
+                            <h4 className="text-sm sm:text-base font-bold text-gray-900 line-clamp-1">
+                              {review.userName}
+                            </h4>
+                            
+                            {/* Stars (Below the name on mobile) */}
+                            <div className="flex items-center gap-0.5 mt-0.5 sm:mt-1">
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-3 w-3 sm:h-4 sm:w-4 ${
+                                    i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+                                  }`}
+                                />
+                              ))}
+                            </div>
                           </div>
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`h-4 w-4 ${
-                                  i < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
-                                }`}
-                              />
-                            ))}
-                          </div>
+
+                          {/* Date (Pushed to the top right, small text) */}
+                          <span className="text-[10px] sm:text-xs text-gray-500 whitespace-nowrap ml-2 pt-0.5">
+                            {new Date(review.createdAt).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric'
+                            })}
+                          </span>
                         </div>
-                        <p className="text-gray-600 text-sm">{review.comment}</p>
+
+                        {/* Review Text */}
+                        <p className="text-xs sm:text-sm text-gray-700 mt-2 leading-relaxed break-words">
+                          {review.comment}
+                        </p>
+                        
                         {session?.user?.email === review.userId && (
                           <button
                             onClick={() => handleEditReview(review)}
-                            className="mt-2 text-blue-600 text-sm hover:text-blue-700 font-medium"
+                            className="mt-2 text-blue-600 text-xs sm:text-sm hover:text-blue-700 font-medium"
                           >
                             Edit
                           </button>
@@ -539,6 +553,26 @@ export default function ResourceDetailPage() {
           </div>
         </div>
       </main>
+
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setShowImageModal(false)}>
+          <div className="relative max-w-4xl max-h-[90vh] w-full">
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute -top-12 right-0 text-white hover:text-gray-200 transition-colors"
+            >
+              <X className="h-8 w-8" />
+            </button>
+            <img
+              src={resource.thumbnailUrl}
+              alt={resource.title}
+              className="w-full h-full object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Review Modal */}
       {showReviewModal && (
@@ -584,7 +618,7 @@ export default function ResourceDetailPage() {
                   value={reviewComment}
                   onChange={(e) => setReviewComment(e.target.value)}
                   placeholder="Write a review..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 resize-none"
+                  className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 resize-none text-sm sm:text-base break-words"
                   rows={3}
                 />
               </div>

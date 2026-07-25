@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceCard from '@/components/resource/ResourceCard';
-import { Loader2 } from 'lucide-react';
+import ResourceCardSkeleton from '@/components/resource/ResourceCardSkeleton';
 import { useRouter } from 'next/navigation';
 
 interface Resource {
@@ -43,10 +43,12 @@ export default function Home() {
       if (response.ok) {
         setResources(data.resources || []);
         
-        // Extract unique categories
-        const categoryList: string[] = data.resources?.map((r: Resource) => r.category) || [];
-        const uniqueCategories: string[] = ['All', ...Array.from(new Set(categoryList))];
-        setCategories(uniqueCategories);
+        // Extract unique categories only when fetching all resources
+        if (selectedCategory === 'All') {
+          const categoryList: string[] = data.resources?.map((r: Resource) => r.category) || [];
+          const uniqueCategories: string[] = ['All', ...Array.from(new Set(categoryList))];
+          setCategories(uniqueCategories);
+        }
       }
     } catch (error) {
       console.error('Error fetching resources:', error);
@@ -64,7 +66,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative bg-[#09090b] overflow-hidden pt-6 pb-8 md:pt-8 md:pb-10 border-b border-white/10">
+      <section className="relative bg-[#09090b] overflow-hidden pt-4 pb-6 md:pt-5 md:pb-7 border-b border-white/10">
         {/* Subtle CSS Grid Background */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 
@@ -72,17 +74,17 @@ export default function Home() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 text-blue-400 text-xs sm:text-sm font-medium mb-8 backdrop-blur-sm">
-            <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
+          <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-blue-400 text-[10px] sm:text-xs font-medium mb-4 backdrop-blur-sm">
+            <span className="flex h-1.5 w-1.5 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
             Premium Study Resources
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight">
             Learn Better <br className="hidden sm:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">
               Study Smarter
             </span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
+          <p className="text-sm md:text-base text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6">
             Access high-quality study materials, notes, and resources designed to accelerate your learning and help you achieve academic excellence.
           </p>
         </div>
@@ -114,8 +116,10 @@ export default function Home() {
       <section className="flex-1 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 w-full">
+              {[...Array(8)].map((_, i) => (
+                <ResourceCardSkeleton key={i} />
+              ))}
             </div>
           ) : resources.length === 0 ? (
             <div className="text-center py-16">
