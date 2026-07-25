@@ -1,65 +1,158 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect, useState } from 'react';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import ResourceCard from '@/components/resource/ResourceCard';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+interface Resource {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  discount?: number;
+  thumbnailUrl: string;
+  category: string;
+  avgRating?: number;
+  totalReviews?: number;
+}
 
 export default function Home() {
+  const router = useRouter();
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [categories, setCategories] = useState<string[]>(['All']);
+
+  useEffect(() => {
+    fetchResources();
+  }, [selectedCategory]);
+
+  const fetchResources = async () => {
+    try {
+      setLoading(true);
+      const url = selectedCategory === 'All' 
+        ? '/api/resources' 
+        : `/api/resources?category=${selectedCategory}`;
+      
+      const response = await fetch(url);
+      const data = await response.json() as { resources: Resource[] };
+
+      if (response.ok) {
+        setResources(data.resources || []);
+        
+        // Extract unique categories
+        const categoryList: string[] = data.resources?.map((r: Resource) => r.category) || [];
+        const uniqueCategories: string[] = ['All', ...Array.from(new Set(categoryList))];
+        setCategories(uniqueCategories);
+      }
+    } catch (error) {
+      console.error('Error fetching resources:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResourceClick = (resourceId: string) => {
+    router.push(`/resource/${resourceId}`);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
+
+      {/* Hero Section */}
+      <section className="relative bg-[#09090b] overflow-hidden pt-6 pb-8 md:pt-8 md:pb-10 border-b border-white/10">
+        {/* Subtle CSS Grid Background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+
+        {/* Glowing Orb in the center */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/5 border border-white/10 text-blue-400 text-xs sm:text-sm font-medium mb-8 backdrop-blur-sm">
+            <span className="flex h-2 w-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
+            Premium Study Resources
+          </div>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight">
+            Learn Better <br className="hidden sm:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">
+              Study Smarter
+            </span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
+            Access high-quality study materials, notes, and resources designed to accelerate your learning and help you achieve academic excellence.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Filter/Sort Bar */}
+      <section className="bg-white border-b border-gray-200 py-4 sticky top-16 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex overflow-x-auto gap-3 items-center pb-2 w-full custom-scrollbar">
+            <span className="text-gray-900 font-medium whitespace-nowrap flex-shrink-0">Categories:</span>
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`whitespace-nowrap flex-shrink-0 px-4 py-2 rounded-full font-medium transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Resources Grid */}
+      <section className="flex-1 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+            </div>
+          ) : resources.length === 0 ? (
+            <div className="text-center py-16">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                No resources found
+              </h2>
+              <p className="text-gray-600">
+                Check back later for new resources
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 w-full">
+              {resources.map((resource) => (
+                <div
+                  key={resource._id}
+                  onClick={() => handleResourceClick(resource._id)}
+                  className="cursor-pointer w-full"
+                >
+                  <ResourceCard
+                    id={resource._id}
+                    title={resource.title}
+                    rating={resource.avgRating || 0}
+                    reviewCount={resource.totalReviews || 0}
+                    price={resource.price}
+                    discount={resource.discount}
+                    thumbnailUrl={resource.thumbnailUrl}
+                    category={resource.category}
+                    onGetResource={() => handleResourceClick(resource._id)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }
