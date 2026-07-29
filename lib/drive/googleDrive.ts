@@ -7,7 +7,9 @@ const auth = new google.auth.GoogleAuth({
     private_key_id: process.env.GOOGLE_PRIVATE_KEY_ID,
     private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
     client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    client_id: process.env.GOOGLE_CLIENT_ID,
+    // Keep this separate from GOOGLE_CLIENT_ID, which is used by NextAuth's
+    // Google OAuth provider.
+    client_id: process.env.GOOGLE_SERVICE_ACCOUNT_CLIENT_ID,
     universe_domain: process.env.GOOGLE_UNIVERSE_DOMAIN || 'googleapis.com',
   },
   scopes: ['https://www.googleapis.com/auth/drive.readonly'],

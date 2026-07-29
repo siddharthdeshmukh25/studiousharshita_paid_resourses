@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import ResourceCard from '@/components/resource/ResourceCard';
 import ResourceCardSkeleton from '@/components/resource/ResourceCardSkeleton';
 import { useRouter } from 'next/navigation';
+import { BookOpen, Bookmark, Check, Sparkles } from 'lucide-react';
 
 interface Resource {
   _id: string;
@@ -25,6 +26,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [categories, setCategories] = useState<string[]>(['All']);
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
 
   async function fetchResources() {
     try {
@@ -65,32 +67,44 @@ export default function Home() {
     <div className="academic-surface min-h-screen flex flex-col">
       <Navbar />
 
-      <section className="border-b border-[#E2E8F0] bg-white/70 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#2563EB]">Curated for better learning</p>
-          <h1 className="max-w-2xl text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-[#0F172A]">Study resources that help you move forward.</h1>
-          <p className="mt-4 max-w-xl text-sm sm:text-base leading-7 text-[#64748B]">High-quality notes and digital materials, selected to make your study time clearer, calmer, and more productive.</p>
-        </div>
-      </section>
+      <section className="relative overflow-hidden border-b border-[#E2E8F0] bg-gradient-to-r from-white via-[#F8FBFF] to-[#E7F1FF] py-12 sm:py-16">
+        <div aria-hidden="true" className="absolute -right-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#2563EB]/10 blur-3xl" />
+        <div aria-hidden="true" className="absolute right-[12%] top-0 h-full w-px bg-gradient-to-b from-transparent via-[#2563EB]/15 to-transparent" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl lg:max-w-[54%]">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#2563EB]">Designed for ambitious students</p>
+            <h1 className="font-serif text-4xl italic leading-[1.08] text-[#0F172A] sm:text-5xl md:text-6xl">Everything you need to study, stay organized, and achieve more.</h1>
+            <p className="mt-5 max-w-2xl font-[family-name:var(--font-poppins)] text-sm leading-7 text-[#64748B] sm:text-base">Carefully crafted digital resources to help you stay organized, build better study habits, and make steady progress toward your academic and career goals.</p>
+          </div>
 
-      {/* Filter/Sort Bar */}
-      <section className="sticky top-16 z-40 border-b border-[#E2E8F0] bg-[#FFFFFF]/95 py-3 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex overflow-x-auto gap-2.5 items-center pb-1 w-full custom-scrollbar">
-            <span className="text-[#2563EB] text-sm font-semibold whitespace-nowrap flex-shrink-0 mr-1">Categories</span>
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`whitespace-nowrap flex-shrink-0 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-[#2563EB] text-white shadow-sm'
-                    : 'bg-[#EFF6FF] text-[#334155] hover:bg-[#E0F2FE]'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+          <div aria-hidden="true" className="pointer-events-none absolute right-2 top-1/2 hidden h-[310px] w-[390px] -translate-y-1/2 lg:block xl:right-10">
+            <div className="absolute inset-3 rounded-[42%] border border-white/70 bg-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-sm" />
+            <div className="absolute bottom-3 left-1/2 h-8 w-64 -translate-x-1/2 rounded-full bg-[#2563EB]/15 blur-xl" />
+
+            <div className="absolute left-7 top-16 h-44 w-28 -rotate-[16deg] rounded-xl bg-gradient-to-br from-[#1649B8] to-[#2563EB] p-3 shadow-[12px_14px_0_rgba(30,64,175,0.18),0_20px_28px_rgba(37,99,235,0.25)]">
+              <div className="flex items-center justify-between text-white/90"><BookOpen className="h-5 w-5" /><span className="text-[8px] font-bold tracking-wider">STUDY</span></div>
+              <div className="mt-8 h-px w-12 bg-white/40" />
+              <p className="mt-2 text-sm font-bold leading-tight text-white">Focus<br />notes</p>
+              <Bookmark className="absolute bottom-3 right-3 h-5 w-5 fill-[#FCD34D] text-[#FCD34D]" />
+            </div>
+
+            <div className="absolute left-[105px] top-5 w-[190px] rotate-[7deg] rounded-2xl border border-white/90 bg-white p-4 shadow-[14px_18px_0_rgba(148,163,184,0.16),0_24px_36px_rgba(15,23,42,0.15)]">
+              <div className="flex items-center justify-between"><span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#2563EB]">Weekly plan</span><Sparkles className="h-4 w-4 text-[#06B6D4]" /></div>
+              <div className="mt-4 space-y-2.5">
+                {['Review notes', 'Practice quiz', 'Plan tomorrow'].map((task, index) => (
+                  <div key={task} className="flex items-center gap-2 text-[10px] font-medium text-[#475569]">
+                    <span className={`grid h-4 w-4 place-items-center rounded-full ${index < 2 ? 'bg-[#DBEAFE] text-[#2563EB]' : 'border border-[#CBD5E1] text-transparent'}`}><Check className="h-2.5 w-2.5 stroke-[3]" /></span>
+                    <span>{task}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#E2E8F0]"><div className="h-full w-2/3 rounded-full bg-[#06B6D4]" /></div>
+            </div>
+
+            <div className="absolute bottom-6 right-8 rotate-[-7deg] rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 shadow-[8px_10px_0_rgba(37,99,235,0.12),0_14px_24px_rgba(37,99,235,0.16)]">
+              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#2563EB]">Keep going</p>
+              <p className="mt-1 text-xs font-bold text-[#0F172A]">Small steps, big goals.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -98,6 +112,50 @@ export default function Home() {
       {/* Resources Grid */}
       <section className="flex-1 py-9 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 flex flex-col gap-3 border-b border-[#E2E8F0] pb-5 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#2563EB]">Browse resources</p>
+              <h2 className="mt-1 text-xl font-bold text-[#0F172A] sm:text-2xl">Find your next study resource</h2>
+            </div>
+            <div className="relative self-start">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={isCategoryMenuOpen}
+                onClick={() => setIsCategoryMenuOpen((isOpen) => !isOpen)}
+                className="flex h-10 items-center gap-2 rounded-lg border border-[#D7E0EC] bg-white py-2 pl-3 pr-2 text-sm shadow-sm transition-all hover:border-[#2563EB] hover:shadow focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20"
+              >
+                <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#64748B]">Category</span>
+                <span className="max-w-28 truncate font-semibold text-[#0F172A]">{selectedCategory === 'All' ? 'All resources' : selectedCategory}</span>
+                <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" className={`ml-1 h-4 w-4 text-[#2563EB] transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`}>
+                <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clipRule="evenodd" />
+                </svg>
+              </button>
+              {isCategoryMenuOpen && (
+                <div role="listbox" aria-label="Filter resources by category" className="absolute right-0 top-full z-30 mt-2 w-52 overflow-hidden rounded-xl border border-[#D7E0EC] bg-white p-1.5 shadow-lg shadow-[#0F172A]/10">
+                  {categories.map((category) => {
+                    const isSelected = selectedCategory === category;
+                    return (
+                      <button
+                        key={category}
+                        type="button"
+                        role="option"
+                        aria-selected={isSelected}
+                        onClick={() => {
+                          setSelectedCategory(category);
+                          setIsCategoryMenuOpen(false);
+                        }}
+                        className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${isSelected ? 'bg-[#EFF6FF] font-semibold text-[#2563EB]' : 'text-[#334155] hover:bg-[#F8FAFC]'}`}
+                      >
+                        {category === 'All' ? 'All resources' : category}
+                        {isSelected && <span aria-hidden="true" className="text-[#2563EB]">✓</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
           {loading ? (
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 w-full">
               {[...Array(8)].map((_, i) => (

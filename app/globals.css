@@ -16,6 +16,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
 }
 
 * {
@@ -29,7 +30,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 .academic-surface {
@@ -55,4 +56,31 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #aebfce;
   border-radius: 999px;
+}
+
+@keyframes mobile-category-sheet-in {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 639px) {
+  .mobile-category-sheet {
+    animation: mobile-category-sheet-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .admin-mobile-modal {
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+  }
+
+  .admin-mobile-modal > .admin-modal-card {
+    animation: mobile-category-sheet-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    border-radius: 0;
+    height: 100dvh;
+    margin: 0;
+    max-height: 100dvh;
+    max-width: none;
+    width: 100%;
+  }
 }

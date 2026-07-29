@@ -4,6 +4,7 @@ import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
 import Resource from '@/models/Resource';
 import Order from '@/models/Order';
+import { getValidCoupon } from '@/lib/coupons';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cashfree credentials are not configured.' }, { status: 500 });
     }
 
-    const body = await request.json() as { resourceId?: string };
+    const body = await request.json() as { resourceId?: string; couponCode?: string };
     const customerPhone = process.env.CASHFREE_DEFAULT_CUSTOMER_PHONE?.replace(/\D/g, '');
     if (!body.resourceId) {
       return NextResponse.json({ error: 'Resource ID is required.' }, { status: 400 });
@@ -55,9 +56,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'You have already purchased this resource.' }, { status: 400 });
     }
 
-    const amount = resource.discount && resource.discount > 0
+    const resourceAmount = resource.discount && resource.discount > 0
       ? Number((resource.price * (1 - resource.discount / 100)).toFixed(2))
       : resource.price;
+    const coupon = body.couponCode ? await getValidCoupon(body.couponCode) : null;
+    if (body.couponCode && !coupon) {
+      return NextResponse.json({ error: 'This coupon is invalid or has expired.' }, { status: 400 });
+    }
+    const amount = coupon
+      ? Number((resourceAmount * (1 - coupon.discountPercentage / 100)).toFixed(2))
+      : resourceAmount;
     const orderId = `cf_${Date.now()}_${randomUUID().replace(/-/g, '').slice(0, 10)}`;
     const returnUrl = `${request.nextUrl.origin}/payment/return?order_id={order_id}`;
 
@@ -84,7 +92,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: cashfreeOrder.message || 'Cashfree could not create the payment order.' }, { status: 502 });
     }
 
-    await Order.create({ userId: user._id, resourceId: resource._id, cashfreeOrderId: orderId, amount, status: 'pending' });
+    await Order.create({
+      userId: user._id,
+      resourceId: resource._id,
+      cashfreeOrderId: orderId,
+      amount,
+      couponCode: coupon?.code,
+      couponDiscountPercentage: coupon?.discountPercentage,
+      status: 'pending',
+    });
     return NextResponse.json({
       paymentSessionId: cashfreeOrder.payment_session_id,
       environment: process.env.CASHFREE_ENVIRONMENT === 'production' ? 'production' : 'sandbox',

@@ -23,6 +23,15 @@ interface Category {
   description?: string;
 }
 
+interface Coupon {
+  _id: string;
+  code: string;
+  title: string;
+  expiresAt: string;
+  discountPercentage: number;
+  isActive: boolean;
+}
+
 interface Stats {
   totalRevenue: number;
   totalUsers: number;
@@ -33,6 +42,7 @@ export default function AdminPage() {
   const router = useRouter();
   const [resources, setResources] = useState<Resource[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [stats, setStats] = useState<Stats>({ totalRevenue: 0, totalUsers: 0, totalResources: 0 });
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -40,11 +50,14 @@ export default function AdminPage() {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [showCouponModal, setShowCouponModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [editingResource, setEditingResource] = useState<Resource | null>(null);
   const [addingResource, setAddingResource] = useState(false);
   const [editingResourceLoading, setEditingResourceLoading] = useState(false);
   const [addingCategory, setAddingCategory] = useState(false);
+  const [addingCoupon, setAddingCoupon] = useState(false);
+  const [deleteCouponLoading, setDeleteCouponLoading] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
   const [deleteCategoryLoading, setDeleteCategoryLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -78,6 +91,8 @@ export default function AdminPage() {
     description: '',
   });
 
+  const [newCoupon, setNewCoupon] = useState({ code: '', title: '', expiresAt: '', discountPercentage: '' });
+
   const handleLogout = () => {
     document.cookie = 'admin_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     router.push('/admin/login');
@@ -86,19 +101,22 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [resourcesRes, statsRes, categoriesRes] = await Promise.all([
+        const [resourcesRes, statsRes, categoriesRes, couponsRes] = await Promise.all([
           fetch('/api/resources'),
           fetch('/api/admin/stats'),
           fetch('/api/categories'),
+          fetch('/api/admin/coupons'),
         ]);
 
         const resourcesData = await resourcesRes.json();
         const statsData = await statsRes.json();
         const categoriesData = await categoriesRes.json();
+        const couponsData = await couponsRes.json();
 
         setResources(resourcesData.resources || []);
         setStats(statsData || { totalRevenue: 0, totalUsers: 0, totalResources: 0 });
         setCategories(categoriesData.categories || []);
+        setCoupons(couponsData.coupons || []);
       } catch (err) {
         console.error('Failed to fetch data:', err);
         setError('Failed to load data');
@@ -109,6 +127,43 @@ export default function AdminPage() {
 
     fetchData();
   }, []);
+
+  const handleAddCoupon = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setAddingCoupon(true);
+    setError(null);
+    try {
+      const response = await fetch('/api/admin/coupons', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...newCoupon, discountPercentage: Number(newCoupon.discountPercentage) }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to create coupon.');
+      setCoupons((current) => [data.coupon, ...current]);
+      setNewCoupon({ code: '', title: '', expiresAt: '', discountPercentage: '' });
+      setShowCouponModal(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create coupon.');
+    } finally {
+      setAddingCoupon(false);
+    }
+  };
+
+  const handleDeleteCoupon = async (id: string) => {
+    if (!confirm('Delete this coupon?')) return;
+    setDeleteCouponLoading(id);
+    try {
+      const response = await fetch(`/api/admin/coupons?id=${id}`, { method: 'DELETE' });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to delete coupon.');
+      setCoupons((current) => current.filter((coupon) => coupon._id !== id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete coupon.');
+    } finally {
+      setDeleteCouponLoading(null);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this resource?')) return;
@@ -367,23 +422,23 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-50">
 
-      <main className="flex-1 py-12">
+      <main className="flex-1 py-6 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-5 flex items-start justify-between gap-3 sm:mb-8 sm:items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-xl font-bold text-gray-900 sm:text-3xl mb-1 sm:mb-2">
                 Admin Dashboard
               </h1>
-              <p className="text-gray-600">
+              <p className="text-xs text-gray-600 sm:text-base">
                 Manage your resources and users
               </p>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              className="flex shrink-0 items-center justify-center space-x-1.5 rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-red-700 sm:px-4 sm:text-sm"
             >
-              <LogOut className="h-5 w-5" />
+              <LogOut className="h-4 w-4" />
               <span>Logout</span>
             </button>
           </div>
@@ -395,76 +450,80 @@ export default function AdminPage() {
           )}
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+          <div className="mb-5 grid grid-cols-3 gap-2 sm:mb-8 sm:gap-6">
+            <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm sm:rounded-xl sm:p-6 sm:shadow-md">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Total Resources</p>
-                  <p className="text-3xl font-bold text-gray-900">{stats.totalResources}</p>
+                  <p className="mb-1 text-[10px] font-medium leading-tight text-gray-500 sm:text-sm">Resources</p>
+                  <p className="text-lg font-bold text-gray-900 sm:text-3xl">{stats.totalResources}</p>
                 </div>
-                <Package className="h-12 w-12 text-blue-600" />
+                <Package className="h-5 w-5 text-blue-600 sm:h-12 sm:w-12" />
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+            <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm sm:rounded-xl sm:p-6 sm:shadow-md">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Total Users</p>
-                  <p className="text-3xl font-bold text-gray-900">{stats.totalUsers}</p>
+                  <p className="mb-1 text-[10px] font-medium leading-tight text-gray-500 sm:text-sm">Users</p>
+                  <p className="text-lg font-bold text-gray-900 sm:text-3xl">{stats.totalUsers}</p>
                 </div>
-                <Users className="h-12 w-12 text-green-600" />
+                <Users className="h-5 w-5 text-green-600 sm:h-12 sm:w-12" />
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200">
+            <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm sm:rounded-xl sm:p-6 sm:shadow-md">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Total Revenue</p>
-                  <p className="text-3xl font-bold text-gray-900">₹{stats.totalRevenue}</p>
+                  <p className="mb-1 text-[10px] font-medium leading-tight text-gray-500 sm:text-sm">Revenue</p>
+                  <p className="text-lg font-bold text-gray-900 sm:text-3xl">₹{stats.totalRevenue}</p>
                 </div>
-                <IndianRupee className="h-12 w-12 text-purple-600" />
+                <IndianRupee className="h-5 w-5 text-purple-600 sm:h-12 sm:w-12" />
               </div>
             </div>
           </div>
 
           {/* Add Resource Button with Dropdown */}
-          <div className="mb-6 flex items-center space-x-4">
+          <div className="mb-5 grid grid-cols-3 gap-2 sm:mb-6 sm:flex sm:items-center sm:gap-4">
             <button
               onClick={() => setShowAddModal(true)}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center space-x-2"
+              className="flex items-center justify-center gap-1 rounded-lg bg-blue-600 px-2 py-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-blue-700 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-base"
             >
-              <Plus className="h-5 w-5" />
-              <span>Add New Resource</span>
+              <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="sm:hidden">Resource</span><span className="hidden sm:inline">Add New Resource</span>
             </button>
-            <div className="relative">
+            <div className="relative sm:w-auto">
               <button
                 onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors font-medium flex items-center space-x-2"
+                className="flex w-full items-center justify-center gap-1 rounded-lg bg-gray-600 px-2 py-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-gray-700 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-base"
               >
-                <MoreVertical className="h-5 w-5" />
+                <MoreVertical className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span>Categories</span>
               </button>
               {showCategoryDropdown && (
-                <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                <div className="mobile-category-sheet fixed inset-0 z-40 flex flex-col overflow-y-auto bg-[#F8FAFC] sm:absolute sm:inset-x-auto sm:top-full sm:right-0 sm:mt-2 sm:block sm:max-h-80 sm:w-64 sm:rounded-xl sm:border sm:border-gray-200 sm:bg-white sm:shadow-xl">
+                  <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-white px-5 py-4 sm:hidden">
+                    <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-[#2563EB]">Admin tools</p><h2 className="mt-1 text-xl font-bold text-[#0F172A]">Manage categories</h2></div>
+                    <button onClick={() => setShowCategoryDropdown(false)} className="grid h-10 w-10 place-items-center rounded-full bg-[#EFF6FF] text-[#2563EB]" aria-label="Close categories"><X className="h-5 w-5" /></button>
+                  </div>
                   <button
                     onClick={() => {
                       setShowCategoryModal(true);
                       setShowCategoryDropdown(false);
                     }}
-                    className="w-full text-left px-4 py-3 hover:bg-gray-50 text-gray-700 flex items-center space-x-2 border-b border-gray-100 first:rounded-t-lg"
+                    className="mx-4 mt-5 flex w-auto items-center justify-center space-x-2 rounded-xl bg-[#2563EB] px-4 py-3 text-left font-semibold text-white shadow-sm hover:bg-[#1D4ED8] sm:m-0 sm:w-full sm:justify-start sm:rounded-none sm:bg-transparent sm:px-4 sm:text-gray-700 sm:shadow-none sm:hover:bg-gray-50"
                   >
                     <Plus className="h-4 w-4" />
                     <span className="font-medium">Add New Category</span>
                   </button>
                   {categories.length > 0 && (
                     <>
-                      <div className="px-4 py-2 bg-gray-50 border-b border-gray-100">
+                      <div className="mt-5 border-b border-[#E2E8F0] bg-white px-5 py-3 sm:mt-0 sm:px-4 sm:py-2">
                         <span className="text-xs font-semibold text-gray-500 uppercase">Categories</span>
                       </div>
                       {categories.map((category) => (
                         <div
                           key={category._id}
-                          className="flex items-center justify-between px-4 py-2 hover:bg-gray-50 last:rounded-b-lg"
+                          className="mx-4 flex items-center justify-between border-b border-[#E2E8F0] bg-white px-4 py-4 last:border-b-0 sm:mx-0 sm:px-4 sm:py-3 sm:hover:bg-gray-50"
                         >
                           <span className="text-sm text-gray-700 flex-1">{category.name}</span>
                           <div className="flex items-center space-x-1">
@@ -493,6 +552,13 @@ export default function AdminPage() {
                 </div>
               )}
             </div>
+            <button
+              onClick={() => setShowCouponModal(true)}
+              className="flex items-center justify-center gap-1 rounded-lg bg-purple-600 px-2 py-2.5 text-[11px] font-semibold text-white transition-colors hover:bg-purple-700 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-base"
+            >
+              <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="sm:hidden">Coupon</span><span className="hidden sm:inline">Create Coupon</span>
+            </button>
           </div>
 
           {/* Resources Table */}
@@ -507,9 +573,9 @@ export default function AdminPage() {
                 <p className="text-gray-600">No resources found</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
+              <div className="max-h-[420px] overflow-auto">
+                <table className="min-w-[720px] w-full">
+                  <thead className="sticky top-0 z-10 bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Resource
@@ -592,8 +658,8 @@ export default function AdminPage() {
 
       {/* Add Resource Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="admin-mobile-modal fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm">
+          <div className="admin-modal-card bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-white">Add New Resource</h2>
@@ -809,8 +875,8 @@ export default function AdminPage() {
 
       {/* Edit Resource Modal */}
       {showEditModal && editingResource && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="admin-mobile-modal fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm">
+          <div className="admin-modal-card bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-white">Edit Resource</h2>
@@ -969,10 +1035,32 @@ export default function AdminPage() {
         </div>
       )}
 
+      <section className="mx-auto mb-8 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md">
+          <div className="flex flex-col gap-3 border-b border-gray-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">Coupons</h2>
+              <p className="mt-1 text-sm text-gray-500">Active coupons can be applied to any resource.</p>
+            </div>
+            <button onClick={() => setShowCouponModal(true)} className="w-full rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700 sm:w-auto">Create Coupon</button>
+          </div>
+          {coupons.length === 0 ? (
+            <p className="p-8 text-center text-sm text-gray-500">No coupons created yet.</p>
+          ) : (
+            <div className="max-h-[320px] overflow-auto">
+              <table className="min-w-[650px] w-full text-left text-sm">
+                <thead className="sticky top-0 z-10 bg-gray-50 text-xs uppercase tracking-wide text-gray-500"><tr><th className="px-6 py-3">Code</th><th className="px-6 py-3">Title</th><th className="px-6 py-3">Discount</th><th className="px-6 py-3">Expires</th><th className="px-6 py-3 text-right">Action</th></tr></thead>
+                <tbody>{coupons.map((coupon) => <tr key={coupon._id} className="border-t border-gray-100"><td className="px-6 py-4 font-bold tracking-wide text-purple-700">{coupon.code}</td><td className="px-6 py-4 text-gray-700">{coupon.title}</td><td className="px-6 py-4 font-semibold text-green-700">{coupon.discountPercentage}%</td><td className="px-6 py-4 text-gray-600">{new Date(coupon.expiresAt).toLocaleDateString()}</td><td className="px-6 py-4 text-right"><button onClick={() => handleDeleteCoupon(coupon._id)} disabled={deleteCouponLoading === coupon._id} className="rounded p-1 text-red-600 hover:bg-red-50 disabled:opacity-50">{deleteCouponLoading === coupon._id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}</button></td></tr>)}</tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Edit Category Modal */}
       {showEditCategoryModal && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4">
+        <div className="admin-mobile-modal fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm">
+          <div className="admin-modal-card bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4">
             <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-white">Edit Category</h2>
@@ -1049,10 +1137,27 @@ export default function AdminPage() {
         </div>
       )}
 
+      {showCouponModal && (
+        <div className="admin-mobile-modal fixed inset-0 z-50 flex items-center justify-center bg-gray-900/75 p-4 backdrop-blur-sm">
+          <div className="admin-modal-card w-full max-w-md rounded-2xl bg-white shadow-2xl">
+            <div className="flex items-center justify-between rounded-t-2xl bg-gradient-to-r from-purple-600 to-indigo-600 p-6">
+              <div><h2 className="text-xl font-semibold text-white">Create Coupon</h2><p className="mt-1 text-sm text-purple-100">Applies to every resource purchase.</p></div>
+              <button onClick={() => setShowCouponModal(false)} className="text-white hover:text-purple-100"><X className="h-6 w-6" /></button>
+            </div>
+            <form onSubmit={handleAddCoupon} className="space-y-5 p-6">
+              <div><label className="mb-2 block text-sm font-semibold text-gray-900">Coupon code</label><input required maxLength={30} value={newCoupon.code} onChange={(event) => setNewCoupon({ ...newCoupon, code: event.target.value.toUpperCase() })} placeholder="WELCOME20" className="w-full rounded-xl border border-gray-300 px-4 py-3 font-bold uppercase text-gray-900 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100" /></div>
+              <div><label className="mb-2 block text-sm font-semibold text-gray-900">Coupon title</label><input required value={newCoupon.title} onChange={(event) => setNewCoupon({ ...newCoupon, title: event.target.value })} placeholder="Welcome discount" className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100" /></div>
+              <div className="grid grid-cols-2 gap-4"><div><label className="mb-2 block text-sm font-semibold text-gray-900">Expiry date</label><input required type="date" value={newCoupon.expiresAt} onChange={(event) => setNewCoupon({ ...newCoupon, expiresAt: event.target.value })} className="w-full rounded-xl border border-gray-300 px-3 py-3 text-gray-900 outline-none focus:border-purple-500" /></div><div><label className="mb-2 block text-sm font-semibold text-gray-900">Discount %</label><input required type="number" min="1" max="100" value={newCoupon.discountPercentage} onChange={(event) => setNewCoupon({ ...newCoupon, discountPercentage: event.target.value })} placeholder="20" className="w-full rounded-xl border border-gray-300 px-3 py-3 text-gray-900 outline-none focus:border-purple-500" /></div></div>
+              <div className="flex justify-end gap-3 pt-2"><button type="button" onClick={() => setShowCouponModal(false)} className="rounded-xl border border-gray-300 px-5 py-3 font-medium text-gray-700 hover:bg-gray-50">Cancel</button><button type="submit" disabled={addingCoupon} className="flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-3 font-medium text-white hover:bg-purple-700 disabled:opacity-50">{addingCoupon && <Loader2 className="h-4 w-4 animate-spin" />}Create Coupon</button></div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Add Category Modal */}
       {showCategoryModal && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4">
+        <div className="admin-mobile-modal fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm">
+          <div className="admin-modal-card bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4">
             <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-600 to-teal-600 rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-white">Add New Category</h2>

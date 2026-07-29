@@ -55,6 +55,10 @@ export default function ResourceDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [isPurchased, setIsPurchased] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
+  const [couponMessage, setCouponMessage] = useState<string | null>(null);
+  const [couponLoading, setCouponLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -229,7 +233,7 @@ export default function ResourceDetailPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ resourceId: params.id }),
+        body: JSON.stringify({ resourceId: params.id, couponCode: couponDiscount ? couponCode : undefined }),
       });
 
       const data = await response.json();
@@ -246,6 +250,29 @@ export default function ResourceDetailPage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to initiate checkout');
       setCheckoutLoading(false);
+    }
+  };
+
+  const applyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setCouponMessage(null);
+    try {
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not apply coupon.');
+      setCouponCode(data.coupon.code);
+      setCouponDiscount(data.coupon.discountPercentage);
+      setCouponMessage(`${data.coupon.discountPercentage}% off applied — ${data.coupon.title}`);
+    } catch (err) {
+      setCouponDiscount(null);
+      setCouponMessage(err instanceof Error ? err.message : 'Could not apply coupon.');
+    } finally {
+      setCouponLoading(false);
     }
   };
 
@@ -361,6 +388,24 @@ export default function ResourceDetailPage() {
                     {error}
                   </div>
                 )}
+
+                <div className="mb-4 rounded-lg border border-blue-100 bg-white/75 p-3">
+                  <label htmlFor="resource-coupon" className="mb-2 block text-xs font-bold uppercase tracking-wide text-[#475569]">Have a coupon?</label>
+                  <div className="flex gap-2">
+                    <input
+                      id="resource-coupon"
+                      value={couponCode}
+                      onChange={(event) => { setCouponCode(event.target.value.toUpperCase()); setCouponDiscount(null); setCouponMessage(null); }}
+                      placeholder="Enter code"
+                      className="min-w-0 flex-1 rounded-md border border-[#CBD5E1] bg-white px-3 py-2 text-sm font-semibold uppercase text-[#0F172A] outline-none focus:border-[#2563EB]"
+                    />
+                    <button type="button" onClick={applyCoupon} disabled={couponLoading || !couponCode.trim()} className="rounded-md bg-[#0F172A] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1E293B] disabled:cursor-not-allowed disabled:opacity-50">
+                      {couponLoading ? 'Checking' : 'Apply'}
+                    </button>
+                  </div>
+                  {couponMessage && <p className={`mt-2 text-xs ${couponDiscount ? 'text-green-700' : 'text-red-600'}`}>{couponMessage}</p>}
+                  {couponDiscount && <p className="mt-2 text-sm font-semibold text-green-700">You pay ₹{((resource.discount && resource.discount > 0 ? resource.price * (1 - resource.discount / 100) : resource.price) * (1 - couponDiscount / 100)).toFixed(2)} after {couponDiscount}% off.</p>}
+                </div>
 
                 {isPurchased ? (
                   <button

@@ -6,6 +6,8 @@ interface IOrder {
   cashfreeOrderId: string;
   cashfreePaymentId?: string;
   amount: number;
+  couponCode?: string;
+  couponDiscountPercentage?: number;
   status: 'pending' | 'completed' | 'failed';
   createdAt: Date;
   updatedAt: Date;
@@ -18,6 +20,8 @@ const OrderSchema = new Schema<IOrder>(
     cashfreeOrderId: { type: String, required: true, unique: true },
     cashfreePaymentId: { type: String },
     amount: { type: Number, required: true },
+    couponCode: { type: String },
+    couponDiscountPercentage: { type: Number, min: 0, max: 100 },
     status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
   },
   { timestamps: true }

@@ -24,6 +24,10 @@ export default function CartPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [couponCode, setCouponCode] = useState('');
+  const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
+  const [couponMessage, setCouponMessage] = useState<string | null>(null);
+  const [couponLoading, setCouponLoading] = useState(false);
 
   useEffect(() => {
     fetchCart();
@@ -71,6 +75,33 @@ export default function CartPage() {
       return total + price;
     }, 0);
   };
+
+  const applyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setCouponMessage(null);
+    try {
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not apply coupon.');
+      setCouponCode(data.coupon.code);
+      setCouponDiscount(data.coupon.discountPercentage);
+      setCouponMessage(`${data.coupon.discountPercentage}% off applied`);
+    } catch (err) {
+      setCouponDiscount(null);
+      setCouponMessage(err instanceof Error ? err.message : 'Could not apply coupon.');
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const subtotal = calculateTotal();
+  const couponAmount = couponDiscount ? subtotal * (couponDiscount / 100) : 0;
+  const totalAfterCoupon = subtotal - couponAmount;
 
   if (loading) {
     return <PageSkeleton showSidebar cards={3} />;
@@ -167,19 +198,27 @@ export default function CartPage() {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-24">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+                <div className="mb-5 rounded-lg border border-blue-100 bg-blue-50/60 p-3">
+                  <label htmlFor="cart-coupon" className="mb-2 block text-xs font-bold uppercase tracking-wide text-[#475569]">Coupon code</label>
+                  <div className="flex gap-2">
+                    <input id="cart-coupon" value={couponCode} onChange={(event) => { setCouponCode(event.target.value.toUpperCase()); setCouponDiscount(null); setCouponMessage(null); }} placeholder="Enter code" className="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold uppercase outline-none focus:border-blue-500" />
+                    <button type="button" onClick={applyCoupon} disabled={couponLoading || !couponCode.trim()} className="rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 disabled:opacity-50">{couponLoading ? '...' : 'Apply'}</button>
+                  </div>
+                  {couponMessage && <p className={`mt-2 text-xs font-medium ${couponDiscount ? 'text-green-700' : 'text-red-600'}`}>{couponMessage}</p>}
+                </div>
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-gray-600">
                     <span>Subtotal ({cart.length} items)</span>
-                    <span>₹{calculateTotal().toFixed(2)}</span>
+                    <span>₹{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Discount</span>
-                    <span className="text-green-600">₹0.00</span>
+                    <span className="text-green-600">−₹{couponAmount.toFixed(2)}</span>
                   </div>
                   <hr />
                   <div className="flex justify-between text-lg font-bold text-gray-900">
                     <span>Total</span>
-                    <span>₹{calculateTotal().toFixed(2)}</span>
+                    <span>₹{totalAfterCoupon.toFixed(2)}</span>
                   </div>
                 </div>
                 <button

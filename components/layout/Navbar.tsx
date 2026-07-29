@@ -50,7 +50,7 @@ export default function Navbar() {
               {status === 'loading' ? (
                 <div className="h-9 w-20 rounded-lg bg-[#EFF6FF] animate-pulse" />
               ) : session ? (
-                <div className="relative">
+                <div className="relative z-[60]">
                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-2 hover:bg-[#EFF6FF] transition-colors">
                     {session.user?.image ? (
                       <img src={session.user.image} alt={session.user.name || 'User'} className="h-7 w-7 rounded-full border border-[#CBD5E1] object-cover" referrerPolicy="no-referrer" />
@@ -60,7 +60,7 @@ export default function Navbar() {
                     <span className="hidden lg:block max-w-28 truncate text-sm font-medium text-[#1E293B]">{session.user?.name?.split(' ')[0] || session.user?.email?.split('@')[0]}</span>
                   </button>
                   {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-52 overflow-hidden rounded-lg border border-[#E2E8F0] bg-white py-1 shadow-lg">
+                    <div className="absolute right-0 z-[60] mt-2 w-52 overflow-hidden rounded-lg border border-[#E2E8F0] bg-white py-1 shadow-lg">
                       <div className="border-b border-[#EFF6FF] px-3 py-2.5">
                         <p className="truncate text-sm font-semibold text-[#0F172A]">{session.user?.name || session.user?.email}</p>
                         <p className="truncate text-xs text-[#64748B]">{session.user?.email}</p>
