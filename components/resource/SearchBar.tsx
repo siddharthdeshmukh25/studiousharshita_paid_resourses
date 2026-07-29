@@ -4,12 +4,7 @@ import { Search, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-interface Resource {
-  _id: string;
-  title: string;
-  thumbnailUrl: string;
-  price: number;
-}
+interface Resource { _id: string; title: string; thumbnailUrl: string; price: number; }
 
 export default function SearchBar() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -20,98 +15,27 @@ export default function SearchBar() {
 
   useEffect(() => {
     const searchResources = async () => {
-      if (searchQuery.trim().length < 2) {
-        setSearchResults([]);
-        setShowDropdown(false);
-        return;
-      }
-
+      if (searchQuery.trim().length < 2) { setSearchResults([]); setShowDropdown(false); return; }
       setLoading(true);
       try {
         const response = await fetch(`/api/resources?search=${encodeURIComponent(searchQuery)}`);
         const data = await response.json();
         setSearchResults(data.resources || []);
         setShowDropdown(true);
-      } catch (error) {
-        console.error('Search error:', error);
-        setSearchResults([]);
-      } finally {
-        setLoading(false);
-      }
+      } catch { setSearchResults([]); } finally { setLoading(false); }
     };
-
     const debounceTimer = setTimeout(searchResources, 300);
     return () => clearTimeout(debounceTimer);
   }, [searchQuery]);
 
-  const handleResourceClick = (resourceId: string) => {
-    router.push(`/resource/${resourceId}`);
-    setSearchQuery('');
-    setShowDropdown(false);
-  };
+  const handleResourceClick = (resourceId: string) => { router.push(`/resource/${resourceId}`); setSearchQuery(''); setShowDropdown(false); };
 
-  return (
-    <div className="relative">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <Search className="h-5 w-5 text-gray-400" />
-      </div>
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onFocus={() => searchQuery.trim().length >= 2 && setShowDropdown(true)}
-        placeholder="Search resources..."
-        className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-xl leading-5 bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:bg-white sm:text-sm transition-colors"
-      />
-      {searchQuery && (
-        <button
-          onClick={() => {
-            setSearchQuery('');
-            setSearchResults([]);
-            setShowDropdown(false);
-          }}
-          className="absolute inset-y-0 right-0 pr-3 flex items-center"
-        >
-          <X className="h-5 w-5 text-gray-400 hover:text-gray-600 cursor-pointer" />
-        </button>
-      )}
-
-      {/* Search Dropdown */}
-      {showDropdown && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 max-h-96 overflow-y-auto z-50">
-          {loading ? (
-            <div className="p-4 text-center text-gray-500">
-              <div className="inline-block h-5 w-5 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
-            </div>
-          ) : searchResults.length > 0 ? (
-            <div className="py-2">
-              {searchResults.map((resource) => (
-                <div
-                  key={resource._id}
-                  onClick={() => handleResourceClick(resource._id)}
-                  className="px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors border-b border-gray-100 last:border-0"
-                >
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={resource.thumbnailUrl}
-                      alt={resource.title}
-                      className="h-10 w-10 rounded object-cover"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">{resource.title}</p>
-                      <p className="text-xs text-gray-500">₹{resource.price}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-4 text-center text-gray-500">
-              <p className="text-sm">No resources found</p>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+  return <div className="relative">
+    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#64748B]" />
+    <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onFocus={() => searchQuery.trim().length >= 2 && setShowDropdown(true)} placeholder="Search study resources" className="block w-full rounded-lg border border-[#CBD5E1] bg-[#F8FAFC] py-2 pl-9 pr-9 text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:border-[#06B6D4] focus:bg-white focus:outline-none" />
+    {searchQuery && <button onClick={() => { setSearchQuery(''); setSearchResults([]); setShowDropdown(false); }} aria-label="Clear search" className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#64748B] hover:text-[#0F172A]"><X className="h-4 w-4" /></button>}
+    {showDropdown && <div className="absolute left-0 right-0 top-full z-50 mt-2 max-h-96 overflow-y-auto rounded-lg border border-[#E2E8F0] bg-white py-1 shadow-lg">
+      {loading ? <div className="p-4 text-center"><div className="inline-block h-5 w-5 rounded-full border-2 border-[#E2E8F0] border-t-[#06B6D4] animate-spin" /></div> : searchResults.length > 0 ? searchResults.map((resource) => <button key={resource._id} onClick={() => handleResourceClick(resource._id)} className="flex w-full items-center gap-3 border-b border-[#F1F5F9] px-3 py-2.5 text-left last:border-0 hover:bg-[#F8FAFC] transition-colors"><img src={resource.thumbnailUrl} alt="" className="h-10 w-10 rounded object-cover bg-[#EFF6FF]" /><span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-[#0F172A]">{resource.title}</span><span className="text-xs text-[#64748B]">Rs. {resource.price}</span></span></button>) : <p className="p-4 text-center text-sm text-[#64748B]">No resources found</p>}
+    </div>}
+  </div>;
 }

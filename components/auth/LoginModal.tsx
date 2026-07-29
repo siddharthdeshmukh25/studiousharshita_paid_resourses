@@ -28,17 +28,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-        {/* Header with gradient */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
+      <div className="bg-[#FFFFFF] rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-[#E2E8F0]">
+        <div className="bg-[#2563EB] px-6 sm:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
-              <p className="text-blue-100 text-sm mt-1">Sign in to continue</p>
+              <p className="text-[#E0F2FE] text-sm mt-1">Sign in to continue</p>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/20 rounded-full transition-colors"
+              aria-label="Close login modal"
+              className="p-2 hover:bg-white/20 rounded-md transition-colors"
             >
               <X className="h-5 w-5 text-white" />
             </button>
@@ -46,15 +46,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         </div>
 
         {/* Content */}
-        <div className="p-8">
+        <div className="p-6 sm:p-8">
           {/* Features */}
           <div className="space-y-3 mb-8">
-            <div className="flex items-center text-sm text-gray-600">
-              <Shield className="h-4 w-4 text-green-500 mr-3" />
+            <div className="flex items-center text-sm text-[#64748B]">
+              <Shield className="h-4 w-4 text-[#06B6D4] mr-3" />
               <span>Secure and safe login</span>
             </div>
-            <div className="flex items-center text-sm text-gray-600">
-              <Lock className="h-4 w-4 text-blue-500 mr-3" />
+            <div className="flex items-center text-sm text-[#64748B]">
+              <Lock className="h-4 w-4 text-[#06B6D4] mr-3" />
               <span>Your data is protected</span>
             </div>
           </div>
@@ -63,11 +63,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full flex items-center justify-center space-x-3 bg-white border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 text-gray-700 py-4 px-6 rounded-xl transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+            className="w-full flex items-center justify-center space-x-3 bg-white border border-[#CBD5E1] hover:border-[#06B6D4] hover:bg-[#F8FAFC] text-[#1E293B] py-4 px-6 rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
           >
             {loading ? (
               <>
-                <div className="h-5 w-5 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
+                <div className="h-5 w-5 border-2 border-[#E2E8F0] border-t-[#06B6D4] rounded-full animate-spin" />
                 <span>Connecting...</span>
               </>
             ) : (
@@ -96,14 +96,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           </button>
 
           {/* Footer */}
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs text-gray-500 text-center leading-relaxed">
+          <div className="mt-6 pt-6 border-t border-[#EFF6FF]">
+            <p className="text-xs text-[#64748B] text-center leading-relaxed">
               By continuing, you agree to our{' '}
-              <a href="/terms" className="text-blue-600 hover:text-blue-700 underline">
+              <a href="/terms" className="text-[#2563EB] hover:text-[#0F172A] underline">
                 Terms of Service
               </a>{' '}
               and{' '}
-              <a href="/privacy" className="text-blue-600 hover:text-blue-700 underline">
+              <a href="/privacy" className="text-[#2563EB] hover:text-[#0F172A] underline">
                 Privacy Policy
               </a>
             </p>

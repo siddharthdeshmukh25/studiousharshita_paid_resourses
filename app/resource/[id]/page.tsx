@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import ResourceDetailSkeleton from '@/components/ui/ResourceDetailSkeleton';
 import { Star, Download, Loader2, ShoppingCart, Send, X, Share2 } from 'lucide-react';
 
 interface Resource {
@@ -27,6 +28,14 @@ interface Review {
   rating: number;
   comment: string;
   createdAt: string;
+}
+
+declare global {
+  interface Window {
+    Cashfree?: (config: { mode: 'sandbox' | 'production' }) => {
+      checkout: (options: { paymentSessionId: string; redirectTarget: '_self' }) => Promise<unknown>;
+    };
+  }
 }
 
 export default function ResourceDetailPage() {
@@ -229,59 +238,11 @@ export default function ResourceDetailPage() {
         throw new Error(data.error || 'Failed to create order');
       }
 
-      const options = {
-        key: data.keyId,
-        amount: data.amount,
-        currency: data.currency,
-        name: 'studiousharshita',
-        description: resource?.title,
-        order_id: data.orderId,
-        handler: async (response: any) => {
-          try {
-            const verifyResponse = await fetch('/api/checkout', {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                razorpayOrderId: response.razorpay_order_id,
-                razorpayPaymentId: response.razorpay_payment_id,
-                razorpaySignature: response.razorpay_signature,
-                userId: data.userId,
-                resourceId: data.resourceId,
-                finalPrice: data.finalPrice,
-              }),
-            });
-
-            const verifyData = await verifyResponse.json();
-
-            if (verifyResponse.ok) {
-              router.push('/dashboard');
-            } else {
-              throw new Error(verifyData.error || 'Payment verification failed');
-            }
-          } catch (err) {
-            setError(err instanceof Error ? err.message : 'Payment verification failed');
-          } finally {
-            setCheckoutLoading(false);
-          }
-        },
-        prefill: {
-          name: session?.user?.name || '',
-          email: session?.user?.email || '',
-        },
-        theme: {
-          color: '#2563eb',
-        },
-      };
-
-      const razorpay = (window as any).Razorpay(options);
-      razorpay.open();
-
-      razorpay.on('payment.failed', (response: any) => {
-        setError('Payment failed. Please try again.');
-        setCheckoutLoading(false);
-      });
+      if (!window.Cashfree) {
+        throw new Error('Cashfree checkout is still loading. Please try again in a moment.');
+      }
+      const cashfree = window.Cashfree({ mode: data.environment });
+      await cashfree.checkout({ paymentSessionId: data.paymentSessionId, redirectTarget: '_self' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to initiate checkout');
       setCheckoutLoading(false);
@@ -289,15 +250,7 @@ export default function ResourceDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
-        <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-        </div>
-        <Footer />
-      </div>
-    );
+    return <ResourceDetailSkeleton />;
   }
 
   if (error || !resource) {
@@ -331,19 +284,19 @@ export default function ResourceDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             {/* Thumbnail Block */}
             <div className="order-1 lg:col-start-1 lg:row-start-1">
-              <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
-                <div className="w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer" onClick={() => setShowImageModal(true)}>
+              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl shadow-sm overflow-hidden border border-gray-200">
+                <div className="aspect-square w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer" onClick={() => setShowImageModal(true)}>
                   <img
                     src={resource.thumbnailUrl}
                     alt={resource.title}
-                    className="w-full object-contain"
+                    className="h-full w-full object-contain"
                   />
                 </div>
               </div>
             </div>
 
             {/* Details & Price Block */}
-            <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 space-y-6">
+            <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 space-y-3 sm:space-y-3">
               <div>
                 <div className="flex items-center gap-3 mb-3">
                   <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
@@ -355,7 +308,7 @@ export default function ResourceDetailPage() {
                     </span>
                   )}
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 leading-tight">
+                <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 leading-tight">
                   {resource.title}
                 </h1>
                 {/* Overall Rating */}
@@ -377,7 +330,7 @@ export default function ResourceDetailPage() {
               </div>
 
               {/* Price and Checkout */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-sm border border-blue-100 p-4 sm:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     {resource.discount && resource.discount > 0 ? (
@@ -421,19 +374,9 @@ export default function ResourceDetailPage() {
                   <button
                     onClick={handleCheckout}
                     disabled={checkoutLoading}
-                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-[#2563EB] text-white py-3 rounded-lg hover:bg-[#1D4ED8] transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {checkoutLoading ? (
-                      <>
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                        <span>Processing...</span>
-                      </>
-                    ) : (
-                      <>
-                        <ShoppingCart className="h-5 w-5" />
-                        <span>Buy Now</span>
-                      </>
-                    )}
+                    {checkoutLoading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Opening secure payment...</span></> : <><ShoppingCart className="h-5 w-5" /><span>Buy securely</span></>}
                   </button>
                 )}
 
@@ -445,12 +388,12 @@ export default function ResourceDetailPage() {
               </div>
 
               {/* Description */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
-                <h3 className="font-semibold text-gray-900 mb-3 text-lg flex items-center">
-                  <span className="w-1 h-6 bg-blue-600 rounded-full mr-3"></span>
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-4 sm:p-6 border border-blue-100">
+                <h3 className="font-semibold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg flex items-center">
+                  <span className="w-1 h-5 sm:h-6 bg-blue-600 rounded-full mr-2 sm:mr-3"></span>
                   Description
                 </h3>
-                <p className="text-gray-700 leading-relaxed text-base">
+                <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
                   {resource.description}
                 </p>
               </div>

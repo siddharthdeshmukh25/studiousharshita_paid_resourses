@@ -3,8 +3,8 @@ import mongoose, { Schema, Model } from 'mongoose';
 interface IOrder {
   userId: mongoose.Types.ObjectId;
   resourceId: mongoose.Types.ObjectId;
-  razorpayOrderId: string;
-  razorpayPaymentId?: string;
+  cashfreeOrderId: string;
+  cashfreePaymentId?: string;
   amount: number;
   status: 'pending' | 'completed' | 'failed';
   createdAt: Date;
@@ -13,40 +13,16 @@ interface IOrder {
 
 const OrderSchema = new Schema<IOrder>(
   {
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    resourceId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Resource',
-      required: true,
-    },
-    razorpayOrderId: {
-      type: String,
-      required: true,
-    },
-    razorpayPaymentId: {
-      type: String,
-      required: false,
-    },
-    amount: {
-      type: Number,
-      required: true,
-    },
-    status: {
-      type: String,
-      enum: ['pending', 'completed', 'failed'],
-      default: 'pending',
-    },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    resourceId: { type: Schema.Types.ObjectId, ref: 'Resource', required: true },
+    cashfreeOrderId: { type: String, required: true, unique: true },
+    cashfreePaymentId: { type: String },
+    amount: { type: Number, required: true },
+    status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-// Prevent model recompilation in development
 const Order: Model<IOrder> = mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);
 
 export default Order;

@@ -1,16 +1,16 @@
 export default function ResourceCardSkeleton() {
   return (
-    <div className="w-full flex flex-col bg-white rounded-2xl shadow-sm border border-gray-100 h-full overflow-hidden">
+    <div className="w-full flex flex-col bg-[#FFFFFF] rounded-lg shadow-sm border border-[#E2E8F0] h-full overflow-hidden">
       {/* Thumbnail Section Skeleton */}
-      <div className="w-full h-32 sm:h-44 md:h-52 relative bg-gray-200 animate-pulse">
+      <div className="w-full h-32 sm:h-44 md:h-52 relative bg-[#F1F5F9] animate-pulse">
         {/* Category Badge Skeleton */}
-        <div className="absolute top-2 left-2 bg-gray-300 h-5 w-16 rounded-full animate-pulse" />
+        <div className="absolute top-2 left-2 bg-[#CBD5E1] h-5 w-16 rounded-md animate-pulse" />
         
         {/* Wishlist Heart Skeleton */}
-        <div className="absolute top-2 right-2 bg-gray-300 h-7 w-7 rounded-full animate-pulse" />
+        <div className="absolute top-2 right-2 bg-[#CBD5E1] h-7 w-7 rounded-md animate-pulse" />
         
         {/* Cart Button Skeleton */}
-        <div className="absolute top-2 right-10 sm:right-12 bg-gray-300 h-7 w-7 rounded-full animate-pulse" />
+        <div className="absolute top-2 right-10 sm:right-12 bg-[#CBD5E1] h-7 w-7 rounded-md animate-pulse" />
       </div>
 
       {/* Content Section Skeleton */}

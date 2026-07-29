@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "studiousharshita - Premium Developer Resources",
-  description: "Premium digital resources, code snippets, and templates curated for developers",
+  title: "studiousharshita | Premium Study Resources",
+  description: "Quality study materials and digital resources for focused learning.",
 };
 
 export default function RootLayout({

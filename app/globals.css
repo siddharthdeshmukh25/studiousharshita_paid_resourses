@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  --ink: #2563EB;
+  --ink-deep: #0F172A;
+  --teal: #06B6D4;
+  --teal-light: #E0F2FE;
+  --paper-blue: #EFF6FF;
+  --line: #E2E8F0;
 }
 
 @theme inline {
@@ -12,15 +18,41 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.academic-surface {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(37, 99, 235, 0.10), transparent 30rem),
+    radial-gradient(circle at 88% 18%, rgba(6, 182, 212, 0.08), transparent 25rem),
+    #F8FAFC;
+}
+
+button, a, input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #aebfce;
+  border-radius: 999px;
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, Package, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertical } from 'lucide-react';
+import PageSkeleton from '@/components/ui/PageSkeleton';
 
 interface Resource {
   _id: string;
@@ -360,11 +361,7 @@ export default function AdminPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-      </div>
-    );
+    return <PageSkeleton cards={6} />;
   }
 
   return (

@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
               <section>
                 <h2 className="text-xl font-semibold text-gray-900 mb-3">6. Third-Party Services</h2>
                 <p className="leading-relaxed">
-                  We use third-party services for payment processing (Razorpay), authentication (Google), 
+                  We use third-party services for payment processing (Cashfree), authentication (Google), 
                   and analytics. These services have their own privacy policies which we encourage you 
                   to review.
                 </p>

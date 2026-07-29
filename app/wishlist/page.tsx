@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Heart, X, Loader2 } from 'lucide-react';
+import { Heart, X } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceCard from '@/components/resource/ResourceCard';
+import PageSkeleton from '@/components/ui/PageSkeleton';
 
 interface WishlistItem {
   _id: string;
@@ -66,11 +67,7 @@ export default function WishlistPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   return (

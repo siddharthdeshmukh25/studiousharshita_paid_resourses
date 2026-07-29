@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, X, Loader2, Trash2 } from 'lucide-react';
+import { ShoppingCart, X, Trash2 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import PageSkeleton from '@/components/ui/PageSkeleton';
 
 interface CartItem {
   _id: string;
@@ -72,11 +73,7 @@ export default function CartPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-      </div>
-    );
+    return <PageSkeleton showSidebar cards={3} />;
   }
 
   return (

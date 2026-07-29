@@ -7,6 +7,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceCard from '@/components/resource/ResourceCard';
 import { Download, Loader2, Package, Calendar } from 'lucide-react';
+import PageSkeleton from '@/components/ui/PageSkeleton';
 
 interface PurchasedResource {
   _id: string;
@@ -85,15 +86,7 @@ export default function DashboardPage() {
   };
 
   if (status === 'loading' || loading) {
-    return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
-        <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-        </div>
-        <Footer />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   return (
