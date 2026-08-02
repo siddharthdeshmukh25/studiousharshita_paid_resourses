@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { X, Lock, Shield } from 'lucide-react';
 
@@ -11,6 +11,18 @@ interface LoginModalProps {
 
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [loading, setLoading] = useState(false);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   const handleGoogleLogin = async () => {
     setLoading(true);
@@ -27,7 +39,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-none p-4">
       <div className="bg-[#FFFFFF] rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-[#E2E8F0]">
         <div className="bg-[#2563EB] px-6 sm:px-8 py-6">
           <div className="flex items-center justify-between">
@@ -99,11 +111,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <div className="mt-6 pt-6 border-t border-[#EFF6FF]">
             <p className="text-xs text-[#64748B] text-center leading-relaxed">
               By continuing, you agree to our{' '}
-              <a href="/terms" className="text-[#2563EB] hover:text-[#0F172A] underline">
+              <a href="/terms-of-service" className="text-[#2563EB] hover:text-[#0F172A] underline">
                 Terms of Service
               </a>{' '}
               and{' '}
-              <a href="/privacy" className="text-[#2563EB] hover:text-[#0F172A] underline">
+              <a href="/privacy-policy" className="text-[#2563EB] hover:text-[#0F172A] underline">
                 Privacy Policy
               </a>
             </p>

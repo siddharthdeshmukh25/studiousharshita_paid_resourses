@@ -4,12 +4,12 @@ import { getValidCoupon } from '@/lib/coupons';
 
 export async function POST(request: NextRequest) {
   try {
-    const { code } = await request.json() as { code?: string };
+    const { code, purchaseAmount } = await request.json() as { code?: string; purchaseAmount?: number };
     if (!code?.trim()) return NextResponse.json({ error: 'Enter a coupon code.' }, { status: 400 });
 
     await connectDB();
-    const coupon = await getValidCoupon(code);
-    if (!coupon) return NextResponse.json({ error: 'This coupon is invalid or has expired.' }, { status: 400 });
+    const coupon = await getValidCoupon(code, purchaseAmount);
+    if (!coupon) return NextResponse.json({ error: 'This coupon is invalid, expired, or does not meet the minimum purchase requirement.' }, { status: 400 });
 
     return NextResponse.json({
       coupon: {

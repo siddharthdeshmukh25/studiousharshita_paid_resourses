@@ -92,3 +92,27 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to update review' }, { status: 500 });
   }
 }
+
+// DELETE review
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const reviewId = searchParams.get('reviewId');
+
+    if (!reviewId) {
+      return NextResponse.json({ error: 'Review ID is required' }, { status: 400 });
+    }
+
+    await mongoose.connect(process.env.MONGODB_URI!);
+
+    const review = await Review.findByIdAndDelete(reviewId);
+    if (!review) {
+      return NextResponse.json({ error: 'Review not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Review deleted successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    return NextResponse.json({ error: 'Failed to delete review' }, { status: 500 });
+  }
+}

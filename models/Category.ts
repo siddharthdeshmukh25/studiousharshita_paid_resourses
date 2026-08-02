@@ -13,10 +13,14 @@ const CategorySchema = new Schema<ICategory>(
       type: String,
       required: true,
       unique: true,
+      trim: true,
+      maxlength: 50,
     },
     description: {
       type: String,
       required: false,
+      trim: true,
+      maxlength: 200,
     },
   },
   {

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user?.email) {
+    if (!session || !session.user?.id) {
       return NextResponse.json(
         { error: 'Unauthorized. Please login to continue.' },
         { status: 401 }
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
-    const user = await User.findOne({ email: session.user.email }).populate('purchasedResources');
+    const user = await User.findById(session.user.id).populate('purchasedResources');
     
     if (!user) {
       return NextResponse.json(

@@ -4,53 +4,84 @@ import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
 import Resource from '@/models/Resource';
 import Order from '@/models/Order';
+import PaymentSettings from '@/models/PaymentSettings';
 import { getValidCoupon } from '@/lib/coupons';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 
-const apiVersion = process.env.CASHFREE_API_VERSION || '2025-01-01';
-
-function cashfreeBaseUrl() {
-  return process.env.CASHFREE_ENVIRONMENT === 'production'
-    ? 'https://api.cashfree.com/pg'
-    : 'https://sandbox.cashfree.com/pg';
-}
-
-function cashfreeHeaders() {
-  return {
-    'Content-Type': 'application/json',
-    'x-api-version': apiVersion,
-    'x-client-id': process.env.CASHFREE_CLIENT_ID || '',
-    'x-client-secret': process.env.CASHFREE_CLIENT_SECRET || '',
-  };
+async function getPaymentSettings() {
+  await connectDB();
+  const settings = await PaymentSettings.findOne();
+  return settings;
 }
 
 async function getAuthenticatedUser() {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.email) return null;
-  return User.findOne({ email: session.user.email });
+  if (!session?.user?.id) return null;
+  return User.findById(session.user.id);
+}
+
+// Razorpay functions
+function razorpayBaseUrl() {
+  return 'https://api.razorpay.com/v1';
+}
+
+function razorpayHeaders(settings: any) {
+  const razorpayConfig = settings?.razorpay || {};
+  const keyId = razorpayConfig.keyId;
+  const keySecret = razorpayConfig.keySecret;
+
+  console.log('Razorpay config:', { keyId: keyId ? '***' : 'missing', keySecret: keySecret ? '***' : 'missing' });
+
+  const auth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Basic ${auth}`,
+  };
+}
+
+// Cashfree functions
+function cashfreeBaseUrl() {
+  return 'https://api.cashfree.com/pg';
+}
+
+function cashfreeHeaders(settings: any) {
+  const cashfreeConfig = settings?.cashfree || {};
+  const clientId = cashfreeConfig.clientId;
+  const clientSecret = cashfreeConfig.clientSecret;
+
+  console.log('Cashfree config:', { clientId: clientId ? '***' : 'missing', clientSecret: clientSecret ? '***' : 'missing' });
+
+  return {
+    'Content-Type': 'application/json',
+    'x-api-version': '2025-01-01',
+    'x-client-id': clientId || '',
+    'x-client-secret': clientSecret || '',
+  };
 }
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.CASHFREE_CLIENT_ID || !process.env.CASHFREE_CLIENT_SECRET) {
-      return NextResponse.json({ error: 'Cashfree credentials are not configured.' }, { status: 500 });
+    const settings = await getPaymentSettings();
+    if (!settings || !settings.gateway) {
+      console.error('Payment settings not configured:', settings);
+      return NextResponse.json({ error: 'Payment gateway is not configured.' }, { status: 500 });
     }
 
     const body = await request.json() as { resourceId?: string; couponCode?: string };
-    const customerPhone = process.env.CASHFREE_DEFAULT_CUSTOMER_PHONE?.replace(/\D/g, '');
+    console.log('Checkout request body:', body);
     if (!body.resourceId) {
       return NextResponse.json({ error: 'Resource ID is required.' }, { status: 400 });
-    }
-    if (!customerPhone || customerPhone.length !== 10) {
-      return NextResponse.json({ error: 'Cashfree customer phone is not configured.' }, { status: 500 });
     }
 
     await connectDB();
     const user = await getAuthenticatedUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized. Please login to continue.' }, { status: 401 });
 
+    console.log('Looking for resource with ID:', body.resourceId);
     const resource = await Resource.findById(body.resourceId);
+    console.log('Found resource:', resource);
     if (!resource) return NextResponse.json({ error: 'Resource not found.' }, { status: 404 });
     if (user.purchasedResources.some((item) => item.toString() === resource._id.toString())) {
       return NextResponse.json({ error: 'You have already purchased this resource.' }, { status: 400 });
@@ -59,37 +90,77 @@ export async function POST(request: NextRequest) {
     const resourceAmount = resource.discount && resource.discount > 0
       ? Number((resource.price * (1 - resource.discount / 100)).toFixed(2))
       : resource.price;
-    const coupon = body.couponCode ? await getValidCoupon(body.couponCode) : null;
+    const coupon = body.couponCode ? await getValidCoupon(body.couponCode, resourceAmount) : null;
     if (body.couponCode && !coupon) {
-      return NextResponse.json({ error: 'This coupon is invalid or has expired.' }, { status: 400 });
+      return NextResponse.json({ error: 'This coupon is invalid, expired, or does not meet the minimum purchase requirement.' }, { status: 400 });
     }
     const amount = coupon
       ? Number((resourceAmount * (1 - coupon.discountPercentage / 100)).toFixed(2))
       : resourceAmount;
-    const orderId = `cf_${Date.now()}_${randomUUID().replace(/-/g, '').slice(0, 10)}`;
+
+    // Ensure minimum price of ₹1 for payment gateway compatibility
+    const MINIMUM_PRICE = 1;
+    if (amount < MINIMUM_PRICE) {
+      return NextResponse.json({ 
+        error: `Final price cannot be less than ₹${MINIMUM_PRICE}. Please use a smaller discount or increase the resource price.` 
+      }, { status: 400 });
+    }
+
+    const orderId = `${settings.gateway}_${Date.now()}_${randomUUID().replace(/-/g, '').slice(0, 10)}`;
     const returnUrl = `${request.nextUrl.origin}/payment/return?order_id={order_id}`;
 
-    const cashfreeResponse = await fetch(`${cashfreeBaseUrl()}/orders`, {
-      method: 'POST',
-      headers: { ...cashfreeHeaders(), 'x-idempotency-key': randomUUID() },
-      body: JSON.stringify({
-        order_id: orderId,
-        order_amount: amount,
-        order_currency: 'INR',
-        customer_details: {
-          customer_id: user._id.toString(),
-          customer_name: user.name,
-          customer_email: user.email,
-          customer_phone: customerPhone,
-        },
-        order_meta: { return_url: returnUrl },
-        order_note: `Purchase: ${resource.title}`,
-      }),
-    });
-    const cashfreeOrder = await cashfreeResponse.json() as { payment_session_id?: string; message?: string };
-    if (!cashfreeResponse.ok || !cashfreeOrder.payment_session_id) {
-      console.error('Cashfree order creation failed:', cashfreeOrder);
-      return NextResponse.json({ error: cashfreeOrder.message || 'Cashfree could not create the payment order.' }, { status: 502 });
+    let paymentResponse;
+    let paymentSessionId;
+
+    if (settings.gateway === 'razorpay') {
+      // Razorpay checkout
+      const razorpayResponse = await fetch(`${razorpayBaseUrl()}/orders`, {
+        method: 'POST',
+        headers: razorpayHeaders(settings),
+        body: JSON.stringify({
+          amount: amount * 100, // Razorpay expects amount in paise
+          currency: 'INR',
+          receipt: orderId,
+          notes: {
+            userId: user._id.toString(),
+            resourceId: resource._id.toString(),
+            resourceTitle: resource.title,
+          },
+        }),
+      });
+      paymentResponse = await razorpayResponse.json();
+      if (!razorpayResponse.ok || !paymentResponse.id) {
+        console.error('Razorpay order creation failed:', paymentResponse);
+        return NextResponse.json({ error: paymentResponse.error?.description || 'Razorpay could not create the payment order.' }, { status: 502 });
+      }
+      paymentSessionId = paymentResponse.id;
+    } else if (settings.gateway === 'cashfree') {
+      // Cashfree checkout
+      const cashfreeResponse = await fetch(`${cashfreeBaseUrl()}/orders`, {
+        method: 'POST',
+        headers: { ...cashfreeHeaders(settings), 'x-idempotency-key': randomUUID() },
+        body: JSON.stringify({
+          order_id: orderId,
+          order_amount: amount,
+          order_currency: 'INR',
+          customer_details: {
+            customer_id: user._id.toString(),
+            customer_name: user.name,
+            customer_email: user.email,
+            customer_phone: '9999999999', // Default phone - in production, collect from user during signup
+          },
+          order_meta: { return_url: returnUrl },
+          order_note: `Purchase: ${resource.title}`,
+        }),
+      });
+      paymentResponse = await cashfreeResponse.json();
+      if (!cashfreeResponse.ok || !paymentResponse.payment_session_id) {
+        console.error('Cashfree order creation failed:', paymentResponse);
+        return NextResponse.json({ error: paymentResponse.message || 'Cashfree could not create the payment order.' }, { status: 502 });
+      }
+      paymentSessionId = paymentResponse.payment_session_id;
+    } else {
+      return NextResponse.json({ error: 'Payment gateway not supported yet.' }, { status: 400 });
     }
 
     await Order.create({
@@ -101,12 +172,23 @@ export async function POST(request: NextRequest) {
       couponDiscountPercentage: coupon?.discountPercentage,
       status: 'pending',
     });
-    return NextResponse.json({
-      paymentSessionId: cashfreeOrder.payment_session_id,
-      environment: process.env.CASHFREE_ENVIRONMENT === 'production' ? 'production' : 'sandbox',
-    });
+
+    const responseData: any = {
+      paymentSessionId,
+      gateway: settings.gateway,
+      environment: 'production',
+      orderId,
+      amount,
+    };
+
+    // Add keyId for Razorpay frontend initialization
+    if (settings.gateway === 'razorpay') {
+      responseData.keyId = settings.razorpay.keyId;
+    }
+
+    return NextResponse.json(responseData);
   } catch (error) {
-    console.error('Cashfree checkout error:', error);
+    console.error('Checkout error:', error);
     return NextResponse.json({ error: 'Failed to create the payment order.' }, { status: 500 });
   }
 }
@@ -124,21 +206,41 @@ export async function PUT(request: NextRequest) {
     if (!order) return NextResponse.json({ error: 'Order not found.' }, { status: 404 });
     if (order.status === 'completed') return NextResponse.json({ success: true });
 
-    const cashfreeResponse = await fetch(`${cashfreeBaseUrl()}/orders/${encodeURIComponent(order.cashfreeOrderId)}`, {
-      headers: cashfreeHeaders(),
-      cache: 'no-store',
-    });
-    const cashfreeOrder = await cashfreeResponse.json() as { order_status?: string; cf_order_id?: string; message?: string };
-    if (!cashfreeResponse.ok) return NextResponse.json({ error: cashfreeOrder.message || 'Could not verify payment status.' }, { status: 502 });
-    if (cashfreeOrder.order_status !== 'PAID') return NextResponse.json({ error: 'Payment was not completed.' }, { status: 400 });
+    const settings = await getPaymentSettings();
+    let paymentStatus = false;
+
+    if (settings.gateway === 'razorpay') {
+      // Razorpay verification (simplified - in production you'd use webhook)
+      const razorpayResponse = await fetch(`${razorpayBaseUrl()}/orders/${order.cashfreeOrderId}`, {
+        headers: razorpayHeaders(settings),
+        cache: 'no-store',
+      });
+      const razorpayOrder = await razorpayResponse.json();
+      if (razorpayResponse.ok && razorpayOrder.status === 'paid') {
+        paymentStatus = true;
+      }
+    } else if (settings.gateway === 'cashfree') {
+      // Cashfree verification
+      const cashfreeResponse = await fetch(`${cashfreeBaseUrl()}/orders/${encodeURIComponent(order.cashfreeOrderId)}`, {
+        headers: cashfreeHeaders(settings),
+        cache: 'no-store',
+      });
+      const cashfreeOrder = await cashfreeResponse.json();
+      if (cashfreeResponse.ok && cashfreeOrder.order_status === 'PAID') {
+        paymentStatus = true;
+      }
+    }
+
+    if (!paymentStatus) {
+      return NextResponse.json({ error: 'Payment was not completed.' }, { status: 400 });
+    }
 
     order.status = 'completed';
-    order.cashfreePaymentId = cashfreeOrder.cf_order_id;
     await order.save();
     await User.findByIdAndUpdate(user._id, { $addToSet: { purchasedResources: order.resourceId } });
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Cashfree payment verification error:', error);
+    console.error('Payment verification error:', error);
     return NextResponse.json({ error: 'Failed to verify the payment.' }, { status: 500 });
   }
 }

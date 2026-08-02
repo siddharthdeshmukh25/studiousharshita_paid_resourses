@@ -59,6 +59,18 @@ export default function Home() {
     fetchResources();
   }, [selectedCategory]);
 
+  // Prevent body scroll when category menu is open
+  useEffect(() => {
+    if (isCategoryMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isCategoryMenuOpen]);
+
   const handleResourceClick = (resourceId: string) => {
     router.push(`/resource/${resourceId}`);
   };
@@ -117,7 +129,7 @@ export default function Home() {
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#2563EB]">Browse resources</p>
               <h2 className="mt-1 text-xl font-bold text-[#0F172A] sm:text-2xl">Find your next study resource</h2>
             </div>
-            <div className="relative self-start">
+            <div className="relative self-start z-40">
               <button
                 type="button"
                 aria-haspopup="listbox"
@@ -132,7 +144,7 @@ export default function Home() {
                 </svg>
               </button>
               {isCategoryMenuOpen && (
-                <div role="listbox" aria-label="Filter resources by category" className="absolute right-0 top-full z-30 mt-2 w-52 overflow-hidden rounded-xl border border-[#D7E0EC] bg-white p-1.5 shadow-lg shadow-[#0F172A]/10">
+                <div role="listbox" aria-label="Filter resources by category" className="absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-xl border border-[#D7E0EC] bg-white p-1.5 shadow-lg shadow-[#0F172A]/10">
                   {categories.map((category) => {
                     const isSelected = selectedCategory === category;
                     return (

@@ -22,7 +22,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-[#CBD5E1]">
               <li className="flex items-start gap-2.5">
                 <Mail className="h-4 w-4 mt-0.5 shrink-0 text-[#67E8F9]" />
-                <a href="mailto:studiousharshita@gmail.com" className="hover:text-white transition-colors break-all">studiousharshita@gmail.com</a>
+                <a href="mailto:connect@studiousharshita.com" className="hover:text-white transition-colors break-all">connect@studiousharshita.com</a>
               </li>
               <li className="flex items-start gap-2.5">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0 text-[#67E8F9]" />
@@ -34,11 +34,18 @@ export default function Footer() {
 
         <div className="mt-10 pt-5 border-t border-[#334155] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-[#CBD5E1]">&copy; {new Date().getFullYear()} studiousharshita. All rights reserved.</p>
-          <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-[#CBD5E1]">
-            <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="/refund" className="hover:text-white transition-colors">Refund Policy</a>
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-[#CBD5E1] sm:justify-end">
+            <a href="/about" className="hover:text-white transition-colors">About Us</a>
+            <a href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</a>
+            <a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="/refund-policy" className="hover:text-white transition-colors">Refund Policy</a>
           </div>
+        </div>
+
+        <div className="mt-6 pt-4 border-t border-[#334155] text-center">
+          <p className="text-xs text-[#94A3B8]">
+            Build by <a href="https://www.linkedin.com/in/siddharth-deshmukh2028/" target="_blank" rel="noopener noreferrer" className="text-[#67E8F9] hover:text-white transition-colors">Siddharth Deshmukh</a>
+          </p>
         </div>
       </div>
     </footer>

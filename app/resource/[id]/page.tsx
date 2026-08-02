@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceDetailSkeleton from '@/components/ui/ResourceDetailSkeleton';
-import { Star, Download, Loader2, ShoppingCart, Send, X, Share2 } from 'lucide-react';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
+import { Star, Download, Loader2, Send, X, Share2, Heart } from 'lucide-react';
 
 interface Resource {
   _id: string;
@@ -35,6 +36,7 @@ declare global {
     Cashfree?: (config: { mode: 'sandbox' | 'production' }) => {
       checkout: (options: { paymentSessionId: string; redirectTarget: '_self' }) => Promise<unknown>;
     };
+    Razorpay?: any;
   }
 }
 
@@ -59,10 +61,28 @@ export default function ResourceDetailPage() {
   const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
   const [couponMessage, setCouponMessage] = useState<string | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
+  const [reviewModalError, setReviewModalError] = useState<string | null>(null);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (showReviewModal || deleteConfirmModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showReviewModal, deleteConfirmModal]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log('Fetching resource for ID:', params.id);
         const [resourceRes, reviewsRes] = await Promise.all([
           fetch(`/api/resources/${params.id}`),
           fetch(`/api/reviews?resourceId=${params.id}`),
@@ -70,6 +90,9 @@ export default function ResourceDetailPage() {
 
         const resourceData = await resourceRes.json();
         const reviewsData = await reviewsRes.json();
+
+        console.log('Resource response:', resourceData);
+        console.log('Resource response status:', resourceRes.status);
 
         if (!resourceRes.ok) {
           throw new Error(resourceData.error || 'Failed to fetch resource');
@@ -94,8 +117,24 @@ export default function ResourceDetailPage() {
           } catch (err) {
             console.error('Error checking purchased status:', err);
           }
+
+          // Check if resource is wishlisted
+          try {
+            const wishlistRes = await fetch('/api/wishlist');
+            if (wishlistRes.ok) {
+              const wishlistData = await wishlistRes.json();
+              const wishlist = wishlistData.wishlist || [];
+              const wishlistedIds = wishlist.map((item: any) => 
+                typeof item.resourceId === 'string' ? item.resourceId : item.resourceId._id
+              );
+              setIsWishlisted(wishlistedIds.includes(params.id));
+            }
+          } catch (err) {
+            console.error('Error checking wishlist status:', err);
+          }
         }
       } catch (err) {
+        console.error('Error fetching resource:', err);
         setError(err instanceof Error ? err.message : 'Failed to load resource');
       } finally {
         setLoading(false);
@@ -112,12 +151,12 @@ export default function ResourceDetailPage() {
     
     if (!session || userRating === 0 || !reviewComment.trim()) {
       console.log('Validation failed', { session: !!session, userRating, reviewComment: reviewComment.trim() });
-      setError('Please select a rating and write a review');
+      setReviewModalError('Please select a rating and write a review');
       return;
     }
 
     setSubmittingReview(true);
-    setError(null);
+    setReviewModalError(null);
 
     try {
       let response, data;
@@ -196,12 +235,70 @@ export default function ResourceDetailPage() {
     setShowReviewModal(true);
   };
 
+  const handleDeleteReview = async (reviewId: string) => {
+    setReviewToDelete(reviewId);
+    setDeleteConfirmModal(true);
+  };
+
+  const confirmDeleteReview = async () => {
+    if (!reviewToDelete) return;
+
+    try {
+      const response = await fetch(`/api/reviews?reviewId=${reviewToDelete}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to delete review');
+      }
+
+      // Refresh reviews
+      const reviewsRes = await fetch(`/api/reviews?resourceId=${params.id}`);
+      const reviewsData = await reviewsRes.json();
+      setReviews(reviewsData.reviews || []);
+      setAvgRating(reviewsData.avgRating || 0);
+    } catch (err) {
+      console.error('Delete review error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to delete review');
+    } finally {
+      setReviewToDelete(null);
+    }
+  };
+
+  const toggleWishlist = async () => {
+    if (!session) {
+      // Prompt user to login
+      const loginButton = document.querySelector('[data-login-trigger]') as HTMLButtonElement;
+      if (loginButton) {
+        loginButton.click();
+      }
+      return;
+    }
+
+    try {
+      const response = isWishlisted 
+        ? await fetch(`/api/wishlist?resourceId=${params.id}`, { method: 'DELETE' })
+        : await fetch('/api/wishlist', { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ resourceId: params.id }) 
+          });
+
+      if (response.ok) {
+        setIsWishlisted(!isWishlisted);
+      }
+    } catch (error) {
+      console.error('Error toggling wishlist:', error);
+    }
+  };
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
           title: resource?.title || 'Check out this resource',
-          text: resource?.description || 'Check out this amazing resource on studiousharshita',
+          text: `Check out this amazing resource: ${resource?.title}`,
           url: window.location.href,
         });
       } catch (error) {
@@ -224,6 +321,14 @@ export default function ResourceDetailPage() {
       return;
     }
 
+    // Check if session is about to expire or has expired
+    const sessionExpiry = session.expires;
+    if (sessionExpiry && new Date(sessionExpiry) < new Date()) {
+      // Session expired, force logout
+      await signOut({ callbackUrl: '/' });
+      return;
+    }
+
     setCheckoutLoading(true);
     setError(null);
 
@@ -239,32 +344,98 @@ export default function ResourceDetailPage() {
       const data = await response.json();
 
       if (!response.ok) {
+        // Handle specific payment errors
+        if (data.error === 'Payment gateway is not configured.' || data.error === 'Payment gateway not supported yet.') {
+          throw new Error('Payment service is not available at this time. Please contact admin or try again later.');
+        }
+        
+        // Handle unauthorized error - session expired
+        if (response.status === 401) {
+          await signOut({ callbackUrl: '/' });
+          throw new Error('Your session has expired. Please login again.');
+        }
+        
         throw new Error(data.error || 'Failed to create order');
       }
 
-      if (!window.Cashfree) {
-        throw new Error('Cashfree checkout is still loading. Please try again in a moment.');
+      // Handle different payment gateways
+      if (data.gateway === 'razorpay') {
+        if (!window.Razorpay) {
+          throw new Error('Razorpay checkout is still loading. Please try again in a moment.');
+        }
+        const options = {
+          key: data.keyId,
+          amount: data.amount * 100, // Razorpay expects amount in paise
+          currency: 'INR',
+          name: 'Studiousharshita',
+          description: resource?.title,
+          order_id: data.paymentSessionId,
+          handler: function (response: any) {
+            // Handle successful payment
+            window.location.href = `/payment/return?order_id=${data.orderId}`;
+          },
+          modal: {
+            ondismiss: function() {
+              // Handle when payment popup is closed/cancelled
+              setCheckoutLoading(false);
+              setPaymentError('Payment cancelled. You can try again when ready.');
+            },
+            onclose: function() {
+              // Handle when payment popup is closed
+              setCheckoutLoading(false);
+            }
+          },
+          prefill: {
+            name: session?.user?.name,
+            email: session?.user?.email,
+          },
+          theme: {
+            color: '#2563EB',
+          },
+        };
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+      } else if (data.gateway === 'cashfree') {
+        if (!window.Cashfree) {
+          throw new Error('Cashfree checkout is still loading. Please try again in a moment.');
+        }
+        const cashfree = window.Cashfree({ mode: data.environment });
+        await cashfree.checkout({ paymentSessionId: data.paymentSessionId, redirectTarget: '_self' });
+      } else {
+        throw new Error('Payment gateway not supported yet.');
       }
-      const cashfree = window.Cashfree({ mode: data.environment });
-      await cashfree.checkout({ paymentSessionId: data.paymentSessionId, redirectTarget: '_self' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to initiate checkout');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to initiate checkout';
+      console.error('Checkout error:', errorMessage);
+      setPaymentError(errorMessage);
       setCheckoutLoading(false);
     }
   };
 
   const applyCoupon = async () => {
-    if (!couponCode.trim()) return;
+    if (!couponCode.trim() || !resource) return;
     setCouponLoading(true);
     setCouponMessage(null);
     try {
+      // Calculate current resource price (after any existing discount)
+      const resourceAmount = resource.discount && resource.discount > 0
+        ? Number((resource.price * (1 - resource.discount / 100)).toFixed(2))
+        : resource.price;
+
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: couponCode }),
+        body: JSON.stringify({ code: couponCode, purchaseAmount: resourceAmount }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Could not apply coupon.');
+
+      // Check if final price would be below ₹1
+      const finalPrice = Number((resourceAmount * (1 - data.coupon.discountPercentage / 100)).toFixed(2));
+      if (finalPrice < 1) {
+        throw new Error('This coupon would make the price below ₹1. Please use a smaller discount.');
+      }
+
       setCouponCode(data.coupon.code);
       setCouponDiscount(data.coupon.discountPercentage);
       setCouponMessage(`${data.coupon.discountPercentage}% off applied — ${data.coupon.title}`);
@@ -334,6 +505,13 @@ export default function ResourceDetailPage() {
                       PAID
                     </span>
                   )}
+                  <button
+                    onClick={toggleWishlist}
+                    className="ml-auto p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+                    title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                  >
+                    <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                  </button>
                 </div>
                 <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 leading-tight">
                   {resource.title}
@@ -366,7 +544,7 @@ export default function ResourceDetailPage() {
                         <p className="text-2xl md:text-3xl font-bold text-green-600">
                           ₹{(resource.price * (1 - resource.discount / 100)).toFixed(2)}
                         </p>
-                        <p className="text-sm text-red-500 font-semibold">{resource.discount}% OFF</p>
+                        <p className="text-sm text-red-500 font-semibold">{Math.round(resource.discount)}% OFF</p>
                       </div>
                     ) : (
                       <p className="text-2xl md:text-3xl font-bold text-gray-900">
@@ -383,6 +561,17 @@ export default function ResourceDetailPage() {
                   </button>
                 </div>
 
+                {paymentError && (
+                  <div className="mb-4 p-4 bg-red-50/50 border border-red-100 rounded-xl text-red-700 text-sm flex items-start gap-3">
+                    <svg className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <div>
+                      <p className="font-semibold mb-1">Payment Notice</p>
+                      <p className="text-red-600">{paymentError}</p>
+                    </div>
+                  </div>
+                )}
                 {error && (
                   <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-base">
                     {error}
@@ -421,14 +610,8 @@ export default function ResourceDetailPage() {
                     disabled={checkoutLoading}
                     className="w-full bg-[#2563EB] text-white py-3 rounded-lg hover:bg-[#1D4ED8] transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {checkoutLoading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Opening secure payment...</span></> : <><ShoppingCart className="h-5 w-5" /><span>Buy securely</span></>}
+                    {checkoutLoading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Opening secure payment...</span></> : <><Download className="h-5 w-5" /><span>Buy securely</span></>}
                   </button>
-                )}
-
-                {!session && (
-                  <p className="mt-3 text-center text-gray-500 text-base">
-                    Login to purchase this resource
-                  </p>
                 )}
               </div>
 
@@ -438,14 +621,15 @@ export default function ResourceDetailPage() {
                   <span className="w-1 h-5 sm:h-6 bg-blue-600 rounded-full mr-2 sm:mr-3"></span>
                   Description
                 </h3>
-                <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
-                  {resource.description}
-                </p>
+                <div 
+                  className="text-gray-700 leading-relaxed text-sm sm:text-base max-w-none description-content"
+                  dangerouslySetInnerHTML={{ __html: resource.description }}
+                />
               </div>
             </div>
 
             {/* Comments Block */}
-            <div className="order-3 lg:col-start-1 lg:row-start-2 w-full">
+            <div className="order-3 lg:col-start-1 lg:row-start-2 w-full mt-1">
               <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-3 sm:p-6 border border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-gray-900 text-lg flex items-center">
@@ -521,12 +705,20 @@ export default function ResourceDetailPage() {
                         </p>
                         
                         {session?.user?.email === review.userId && (
-                          <button
-                            onClick={() => handleEditReview(review)}
-                            className="mt-2 text-blue-600 text-xs sm:text-sm hover:text-blue-700 font-medium"
-                          >
-                            Edit
-                          </button>
+                          <div className="mt-2 flex gap-3">
+                            <button
+                              onClick={() => handleEditReview(review)}
+                              className="text-blue-600 text-xs sm:text-sm hover:text-blue-700 font-medium"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteReview(review._id)}
+                              className="text-red-600 text-xs sm:text-sm hover:text-red-700 font-medium"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         )}
                       </div>
                     ))}
@@ -545,7 +737,7 @@ export default function ResourceDetailPage() {
       {/* Image Modal */}
       {showImageModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setShowImageModal(false)}>
-          <div className="relative max-w-4xl max-h-[90vh] w-full">
+          <div className="relative max-w-2xl max-h-[80vh] w-full">
             <button
               onClick={() => setShowImageModal(false)}
               className="absolute -top-12 right-0 text-white hover:text-gray-200 transition-colors"
@@ -564,11 +756,11 @@ export default function ResourceDetailPage() {
 
       {/* Review Modal */}
       {showReviewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4">
-            <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-t-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4">
+            <div className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-t-2xl">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-white">
+                <h2 className="text-lg sm:text-xl font-semibold text-white">
                   {editingReviewId ? 'Edit Your Review' : 'Write Your Review'}
                 </h2>
                 <button
@@ -577,23 +769,29 @@ export default function ResourceDetailPage() {
                     setEditingReviewId(null);
                     setUserRating(0);
                     setReviewComment('');
+                    setReviewModalError(null);
                   }}
                   className="text-white hover:text-gray-200 transition-colors"
                 >
-                  <X className="h-6 w-6" />
+                  <X className="h-5 w-5 sm:h-6 sm:w-6" />
                 </button>
               </div>
             </div>
 
-            <div className="p-6 space-y-5">
+            <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
+              {reviewModalError && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  {reviewModalError}
+                </div>
+              )}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">Your Rating</label>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">Your Rating</label>
                 <div className="flex items-center space-x-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       onClick={() => setUserRating(i + 1)}
-                      className={`h-8 w-8 cursor-pointer hover:scale-110 transition-transform ${
+                      className={`h-6 w-6 sm:h-8 sm:w-8 cursor-pointer hover:scale-110 transition-transform ${
                         i < userRating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
                       }`}
                     />
@@ -601,26 +799,30 @@ export default function ResourceDetailPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">Your Review</label>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">Your Review</label>
                 <textarea
                   value={reviewComment}
                   onChange={(e) => setReviewComment(e.target.value)}
                   placeholder="Write a review..."
-                  className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 resize-none text-sm sm:text-base break-words"
-                  rows={3}
+                  maxLength={200}
+                  className="w-full px-2 py-2 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 resize-none text-xs sm:text-sm break-words"
+                  rows={4}
                 />
+                <div className="mt-1 text-xs text-gray-500 text-right">
+                  {reviewComment.length}/200 characters
+                </div>
               </div>
-              <div className="flex justify-end space-x-3 pt-4">
+              <div className="flex justify-end space-x-2 sm:space-x-3 pt-2 sm:pt-4">
                 <button
                   onClick={() => setShowReviewModal(false)}
-                  className="px-6 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                  className="px-3 py-1.5 sm:px-6 sm:py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium text-xs sm:text-base"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmitReview}
                   disabled={submittingReview}
-                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 flex items-center space-x-2 transition-all font-medium shadow-lg"
+                  className="px-3 py-1.5 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 flex items-center space-x-2 transition-all font-medium shadow-lg text-xs sm:text-base"
                 >
                   {submittingReview ? (
                     <>
@@ -639,6 +841,21 @@ export default function ResourceDetailPage() {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={deleteConfirmModal}
+        onClose={() => {
+          setDeleteConfirmModal(false);
+          setReviewToDelete(null);
+        }}
+        onConfirm={confirmDeleteReview}
+        title="Delete Review"
+        message="Are you sure you want to delete this review? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
 
       <Footer />
     </div>

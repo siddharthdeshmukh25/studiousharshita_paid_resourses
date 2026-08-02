@@ -19,12 +19,15 @@ function PaymentReturnContent() {
     if (!orderId) { setState('error'); setMessage('We could not identify this payment order.'); return; }
     const verify = async () => {
       try {
+        console.log('Verifying payment for order:', orderId);
         const response = await fetch('/api/checkout', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId }) });
         const data = await response.json() as { error?: string };
+        console.log('Payment verification response:', data);
         if (!response.ok) throw new Error(data.error || 'Payment verification failed.');
         setState('success');
         setMessage('Payment confirmed. Your resource is ready in your dashboard.');
       } catch (error) {
+        console.error('Payment verification error:', error);
         setState('error');
         setMessage(error instanceof Error ? error.message : 'Payment verification failed.');
       }

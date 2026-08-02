@@ -10,6 +10,10 @@ const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  session: {
+    strategy: 'jwt' as const,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   callbacks: {
     async signIn({ user, account, profile }: any) {
       if (account.provider === 'google') {
@@ -20,30 +24,40 @@ const authOptions = {
         
         if (!existingUser) {
           // Create new user
-          await User.create({
+          const newUser = await User.create({
             name: user.name,
             email: user.email,
             image: user.image,
             role: 'user',
             purchasedResources: [],
           });
+          // Store user data in the JWT token
+          user.id = newUser._id.toString();
+          user.role = newUser.role;
+        } else {
+          // Store existing user data in the JWT token
+          user.id = existingUser._id.toString();
+          user.role = existingUser.role;
         }
         
         return true;
       }
       return false;
     },
-    async session({ session, user }: any) {
-      await connectDB();
-      
-      // Add user ID and role to session
-      const dbUser = await User.findOne({ email: session.user.email });
-      
-      if (dbUser) {
-        session.user.id = dbUser._id.toString();
-        session.user.role = dbUser.role;
+    async jwt({ token, user }: any) {
+      // Add user data to JWT token during sign-in
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
       }
-      
+      return token;
+    },
+    async session({ session, token }: any) {
+      // Use data from JWT token instead of database query
+      if (token) {
+        session.user.id = token.id;
+        session.user.role = token.role;
+      }
       return session;
     },
   },

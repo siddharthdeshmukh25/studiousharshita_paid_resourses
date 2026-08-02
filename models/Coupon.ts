@@ -5,6 +5,7 @@ interface ICoupon {
   title: string;
   expiresAt: Date;
   discountPercentage: number;
+  minimumPurchaseAmount?: number;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -13,9 +14,10 @@ interface ICoupon {
 const CouponSchema = new Schema<ICoupon>(
   {
     code: { type: String, required: true, unique: true, trim: true, uppercase: true },
-    title: { type: String, required: true, trim: true },
+    title: { type: String, required: true, trim: true, maxlength: 50 },
     expiresAt: { type: Date, required: true },
     discountPercentage: { type: Number, required: true, min: 1, max: 100 },
+    minimumPurchaseAmount: { type: Number, min: 0, default: 0 },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }

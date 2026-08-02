@@ -1,17 +1,18 @@
 'use client';
 
-import { BookOpen, Heart, LogOut, ShoppingCart, User } from 'lucide-react';
+import { BookOpen, Heart, LogOut, User, ArrowLeft } from 'lucide-react';
 import SearchBar from '../resource/SearchBar';
 import { useSession, signOut } from 'next-auth/react';
 import { useState } from 'react';
 import LoginModal from '../auth/LoginModal';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     await signOut();
@@ -35,15 +36,14 @@ export default function Navbar() {
             </div>
 
             <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-              {session && (
-                <button onClick={() => router.push('/wishlist')} aria-label="Wishlist" className="p-2 text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#06B6D4] rounded-lg transition-colors">
-                  <Heart className="h-5 w-5" />
+              {pathname !== '/' && (
+                <button onClick={() => router.back()} aria-label="Go back" className="p-2 text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#06B6D4] rounded-lg transition-colors">
+                  <ArrowLeft className="h-5 w-5" />
                 </button>
               )}
               {session && (
-                <button onClick={() => router.push('/cart')} aria-label="Cart" className="relative p-2 text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#2563EB] rounded-lg transition-colors">
-                  <ShoppingCart className="h-5 w-5" />
-                  <span className="absolute top-0.5 right-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-[#06B6D4] px-1 text-[9px] font-bold text-white">0</span>
+                <button onClick={() => router.push('/wishlist')} aria-label="Wishlist" className={`p-2 rounded-lg transition-colors ${pathname === '/wishlist' ? 'text-[#06B6D4] bg-[#EFF6FF]' : 'text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#06B6D4]'}`}>
+                  <Heart className={`h-5 w-5 ${pathname === '/wishlist' ? 'fill-[#06B6D4]' : ''}`} />
                 </button>
               )}
 

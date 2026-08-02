@@ -7,6 +7,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
       <script src="https://sdk.cashfree.com/js/v3/cashfree.js" async />
+      <script src="https://checkout.razorpay.com/v1/checkout.js" async />
       {children}
     </SessionProvider>
   );

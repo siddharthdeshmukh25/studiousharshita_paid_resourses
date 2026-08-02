@@ -5,12 +5,9 @@ export default function ResourceCardSkeleton() {
       <div className="w-full h-32 sm:h-44 md:h-52 relative bg-[#F1F5F9] animate-pulse">
         {/* Category Badge Skeleton */}
         <div className="absolute top-2 left-2 bg-[#CBD5E1] h-5 w-16 rounded-md animate-pulse" />
-        
+
         {/* Wishlist Heart Skeleton */}
         <div className="absolute top-2 right-2 bg-[#CBD5E1] h-7 w-7 rounded-md animate-pulse" />
-        
-        {/* Cart Button Skeleton */}
-        <div className="absolute top-2 right-10 sm:right-12 bg-[#CBD5E1] h-7 w-7 rounded-md animate-pulse" />
       </div>
 
       {/* Content Section Skeleton */}

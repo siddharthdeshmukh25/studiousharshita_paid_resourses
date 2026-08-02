@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session || !session.user?.email) {
+    if (!session || !session.user?.id) {
       return NextResponse.json(
         { error: 'Unauthorized. Please login to download resources.' },
         { status: 401 }
@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
-    // Get user from database
-    const user = await User.findOne({ email: session.user.email });
+    // Get user from database using ID from JWT token
+    const user = await User.findById(session.user.id);
     if (!user) {
       return NextResponse.json(
         { error: 'User not found' },

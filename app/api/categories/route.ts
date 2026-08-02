@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import mongoose from 'mongoose';
+import connectDB from '@/lib/db/mongodb';
 import Category from '@/models/Category';
 
 // GET all categories
 export async function GET() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await connectDB();
     const categories = await Category.find().sort({ name: 1 });
     return NextResponse.json({ categories });
   } catch (error) {
@@ -17,7 +17,7 @@ export async function GET() {
 // POST create new category
 export async function POST(request: NextRequest) {
   try {
-    await mongoose.connect(process.env.MONGODB_URI!);
+    await connectDB();
     const body = await request.json();
     const { name, description } = body;
 
