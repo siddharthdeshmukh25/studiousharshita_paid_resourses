@@ -18,14 +18,22 @@ export async function GET(request: NextRequest) {
 
     await connectDB();
 
+    console.log('Fetching purchased resources for user ID:', session.user.id);
+    console.log('Session user email:', session.user.email);
+
     const user = await User.findById(session.user.id).populate('purchasedResources');
     
     if (!user) {
+      console.log('User not found with ID:', session.user.id);
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
+
+    console.log('User found:', user.email);
+    console.log('Purchased resources count:', user.purchasedResources.length);
+    console.log('Purchased resource IDs:', user.purchasedResources.map((r: any) => r._id.toString()));
 
     const resources = user.purchasedResources.map((resource: any) => ({
       _id: resource._id.toString(),

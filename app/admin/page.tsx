@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Loader2, Package, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertical, Settings } from 'lucide-react';
+import { Loader2, Package, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertical, Settings, UserCheck } from 'lucide-react';
 import PageSkeleton from '@/components/ui/PageSkeleton';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import dynamic from 'next/dynamic';
@@ -75,9 +75,18 @@ export default function AdminPage() {
   const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showGatewaySelection, setShowGatewaySelection] = useState(false);
+  const [showCaptureModal, setShowCaptureModal] = useState(false);
+  const [showGrantAccessModal, setShowGrantAccessModal] = useState(false);
+  const [showGeneralSettingsModal, setShowGeneralSettingsModal] = useState(false);
+  const [activeGeneralTab, setActiveGeneralTab] = useState<string | null>(null);
+  const [googleDriveConnected, setGoogleDriveConnected] = useState(false);
+  const [loadingDriveStatus, setLoadingDriveStatus] = useState(false);
   const [paymentSettings, setPaymentSettings] = useState<any>(null);
   const [tempPaymentSettings, setTempPaymentSettings] = useState<any>(null);
   const [savingSettings, setSavingSettings] = useState(false);
+  const [captureData, setCaptureData] = useState<any>(null);
+  const [captureLoading, setCaptureLoading] = useState(false);
+  const [retryingCapture, setRetryingCapture] = useState<string | null>(null);
   const [deleteCouponLoading, setDeleteCouponLoading] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
   const [deleteCategoryLoading, setDeleteCategoryLoading] = useState<string | null>(null);
@@ -89,6 +98,16 @@ export default function AdminPage() {
   const [itemToDelete, setItemToDelete] = useState<{ type: 'resource' | 'category' | 'coupon', id: string } | null>(null);
   const [logoutConfirmModal, setLogoutConfirmModal] = useState(false);
   const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('percentage');
+  const [grantAccessForm, setGrantAccessForm] = useState({ userId: '', resourceId: '', orderId: '', userEmail: '', resourceTitle: '' });
+  const [grantingAccess, setGrantingAccess] = useState(false);
+  const [revokingAccess, setRevokingAccess] = useState(false);
+  const [showRevokeSection, setShowRevokeSection] = useState(false);
+  const [userSearchResults, setUserSearchResults] = useState<any[]>([]);
+  const [searchingUsers, setSearchingUsers] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [resourceSearchResults, setResourceSearchResults] = useState<any[]>([]);
+  const [searchingResources, setSearchingResources] = useState(false);
+  const [showResourceDropdown, setShowResourceDropdown] = useState(false);
 
   const [newCategory, setNewCategory] = useState({
     name: '',
@@ -124,6 +143,37 @@ export default function AdminPage() {
       setLoggingOut(false);
     }
   };
+
+  useEffect(() => {
+    // Check if Google Drive connection was successful
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('google_drive_connected') === 'true') {
+      fetchGoogleDriveStatus(); // Refresh status from database
+      // Remove the parameter from URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
+  const fetchGoogleDriveStatus = async () => {
+    try {
+      setLoadingDriveStatus(true);
+      const response = await fetch('/api/google-drive/status');
+      const data = await response.json();
+      console.log('Google Drive status response:', data);
+      if (data.connected !== undefined) {
+        setGoogleDriveConnected(data.connected);
+        console.log('Set googleDriveConnected to:', data.connected);
+      }
+    } catch (error) {
+      console.error('Failed to fetch Google Drive status:', error);
+    } finally {
+      setLoadingDriveStatus(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchGoogleDriveStatus();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -266,6 +316,66 @@ export default function AdminPage() {
     setDeleteConfirmModal(true);
   };
 
+  const fetchCaptureData = async () => {
+    setCaptureLoading(true);
+    try {
+      const [failedRes, pendingRes] = await Promise.all([
+        fetch('/api/admin/payment-captures?type=failed'),
+        fetch('/api/admin/payment-captures?type=pending'),
+      ]);
+      const failedData = await failedRes.json();
+      const pendingData = await pendingRes.json();
+      setCaptureData({
+        failed: failedData.orders || [],
+        pending: pendingData.orders || [],
+      });
+    } catch (err) {
+      console.error('Failed to fetch capture data:', err);
+    } finally {
+      setCaptureLoading(false);
+    }
+  };
+
+  const handleRetryCapture = async (orderId: string) => {
+    setRetryingCapture(orderId);
+    try {
+      const response = await fetch('/api/admin/payment-captures', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId, action: 'retry' }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        await fetchCaptureData();
+      } else {
+        setError(data.error || 'Failed to retry capture');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to retry capture');
+    } finally {
+      setRetryingCapture(null);
+    }
+  };
+
+  const handleBatchRetry = async () => {
+    setCaptureLoading(true);
+    try {
+      const response = await fetch('/api/admin/payment-captures/retry', {
+        method: 'POST',
+      });
+      const data = await response.json();
+      if (response.ok) {
+        await fetchCaptureData();
+      } else {
+        setError(data.error || 'Failed to batch retry');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to batch retry');
+    } finally {
+      setCaptureLoading(false);
+    }
+  };
+
   const confirmDelete = async () => {
     if (!itemToDelete) return;
 
@@ -313,6 +423,149 @@ export default function AdminPage() {
       default:
         return 'Are you sure you want to delete this item? This action cannot be undone.';
     }
+  };
+
+  const handleGrantAccess = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setGrantingAccess(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/admin/grant-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(grantAccessForm),
+      });
+
+      const data = await response.json();
+      
+      // If user already has access, treat it as success and close modal
+      if (!response.ok) {
+        if (data.error === 'User already has access to this resource.') {
+          // Close modal and reset form
+          setShowGrantAccessModal(false);
+          setGrantAccessForm({ userId: '', resourceId: '', orderId: '', userEmail: '', resourceTitle: '' });
+          setUserSearchResults([]);
+          setResourceSearchResults([]);
+          setGrantingAccess(false);
+          return;
+        }
+        throw new Error(data.error || 'Failed to grant access.');
+      }
+
+      setShowGrantAccessModal(false);
+      setGrantAccessForm({ userId: '', resourceId: '', orderId: '', userEmail: '', resourceTitle: '' });
+      setUserSearchResults([]);
+      setResourceSearchResults([]);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to grant access');
+    } finally {
+      setGrantingAccess(false);
+    }
+  };
+
+  const handleRevokeAccess = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setRevokingAccess(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/admin/grant-access', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: grantAccessForm.userId, resourceId: grantAccessForm.resourceId }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to revoke access.');
+      }
+
+      setShowGrantAccessModal(false);
+      setGrantAccessForm({ userId: '', resourceId: '', orderId: '', userEmail: '', resourceTitle: '' });
+      setUserSearchResults([]);
+      setResourceSearchResults([]);
+      setShowRevokeSection(false);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to revoke access');
+    } finally {
+      setRevokingAccess(false);
+    }
+  };
+
+  const searchUsersByEmail = async (email: string) => {
+    if (email.length < 3) {
+      setUserSearchResults([]);
+      setShowUserDropdown(false);
+      return;
+    }
+
+    setSearchingUsers(true);
+    try {
+      const response = await fetch(`/api/admin/users/search?email=${encodeURIComponent(email)}`);
+      const data = await response.json();
+      if (response.ok) {
+        setUserSearchResults(data.users || []);
+        setShowUserDropdown(true);
+      } else {
+        setUserSearchResults([]);
+        setShowUserDropdown(false);
+      }
+    } catch (err) {
+      setUserSearchResults([]);
+      setShowUserDropdown(false);
+    } finally {
+      setSearchingUsers(false);
+    }
+  };
+
+  const selectUser = (user: any) => {
+    setGrantAccessForm({ 
+      ...grantAccessForm, 
+      userId: user._id, 
+      userEmail: user.email 
+    });
+    setShowUserDropdown(false);
+    setUserSearchResults([]);
+  };
+
+  const searchResourcesByTitle = async (title: string) => {
+    if (title.length < 2) {
+      setResourceSearchResults([]);
+      setShowResourceDropdown(false);
+      return;
+    }
+
+    setSearchingResources(true);
+    try {
+      const response = await fetch(`/api/admin/resources/search?title=${encodeURIComponent(title)}`);
+      const data = await response.json();
+      if (response.ok) {
+        setResourceSearchResults(data.resources || []);
+        setShowResourceDropdown(true);
+      } else {
+        setResourceSearchResults([]);
+        setShowResourceDropdown(false);
+      }
+    } catch (err) {
+      setResourceSearchResults([]);
+      setShowResourceDropdown(false);
+    } finally {
+      setSearchingResources(false);
+    }
+  };
+
+  const selectResource = (resource: any) => {
+    setGrantAccessForm({ 
+      ...grantAccessForm, 
+      resourceId: resource._id, 
+      resourceTitle: resource.title 
+    });
+    setShowResourceDropdown(false);
+    setResourceSearchResults([]);
   };
 
   const handleEditResource = (resource: Resource) => {
@@ -464,6 +717,7 @@ export default function AdminPage() {
 
       if (!response.ok) {
         const data = await response.json();
+        alert(data.error || (isEditing ? 'Failed to update resource' : 'Failed to create resource'));
         throw new Error(data.error || (isEditing ? 'Failed to update resource' : 'Failed to create resource'));
       }
 
@@ -479,6 +733,7 @@ export default function AdminPage() {
       setNewResource(createEmptyNewResource());
       setNewThumbnailInputType('url');
     } catch (err) {
+      // Error is already shown in alert above
       setError(err instanceof Error ? err.message : (editingResource ? 'Failed to update resource' : 'Failed to create resource'));
     } finally {
       setAddingResource(false);
@@ -535,7 +790,10 @@ export default function AdminPage() {
                       <span>Payment</span>
                     </button>
                     <button
-                      onClick={() => setShowSettingsDropdown(false)}
+                      onClick={() => {
+                        setShowSettingsDropdown(false);
+                        setShowGeneralSettingsModal(true);
+                      }}
                       className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
                     >
                       <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -1267,6 +1525,7 @@ export default function AdminPage() {
                     </div>
 
                     <div className="space-y-3">
+
                       <div className="flex justify-between items-center py-2 border-b border-blue-100">
                         <span className="text-sm text-gray-600">Client ID / Key</span>
                         <span className="text-sm font-mono font-semibold text-gray-900">
@@ -1282,6 +1541,7 @@ export default function AdminPage() {
                            paymentSettings[paymentSettings.gateway]?.hasSalt ? '••••••••••••' : 'Not configured'}
                         </span>
                       </div>
+
                     </div>
                   </div>
 
@@ -1460,6 +1720,7 @@ export default function AdminPage() {
                         className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                       />
                     </div>
+
                   </div>
                 </div>
               )}
@@ -1477,7 +1738,7 @@ export default function AdminPage() {
                         value={tempPaymentSettings?.payu?.key || ''}
                         onChange={(e) => setTempPaymentSettings({
                           ...tempPaymentSettings,
-                          payu: { ...tempPaymentSettings.payu, key: e.target.value }
+                          payu: { ...tempPaymentSettings.payu, key: e.target.value, salt: tempPaymentSettings.payu?.salt || '' }
                         })}
                         placeholder="Enter merchant key"
                         className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -1490,7 +1751,7 @@ export default function AdminPage() {
                         value={tempPaymentSettings?.payu?.salt || ''}
                         onChange={(e) => setTempPaymentSettings({
                           ...tempPaymentSettings,
-                          payu: { ...tempPaymentSettings.payu, salt: e.target.value }
+                          payu: { ...tempPaymentSettings.payu, salt: e.target.value, key: tempPaymentSettings.payu?.key || '' }
                         })}
                         placeholder="Enter merchant salt"
                         className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -1513,7 +1774,7 @@ export default function AdminPage() {
                         value={tempPaymentSettings?.cashfree?.clientId || ''}
                         onChange={(e) => setTempPaymentSettings({
                           ...tempPaymentSettings,
-                          cashfree: { ...tempPaymentSettings.cashfree, clientId: e.target.value }
+                          cashfree: { ...tempPaymentSettings.cashfree, clientId: e.target.value, clientSecret: tempPaymentSettings.cashfree?.clientSecret || '' }
                         })}
                         placeholder="Enter client ID"
                         className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -1526,12 +1787,13 @@ export default function AdminPage() {
                         value={tempPaymentSettings?.cashfree?.clientSecret || ''}
                         onChange={(e) => setTempPaymentSettings({
                           ...tempPaymentSettings,
-                          cashfree: { ...tempPaymentSettings.cashfree, clientSecret: e.target.value }
+                          cashfree: { ...tempPaymentSettings.cashfree, clientSecret: e.target.value, clientId: tempPaymentSettings.cashfree?.clientId || '' }
                         })}
                         placeholder="Enter client secret"
                         className="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                       />
                     </div>
+
                   </div>
                 </div>
               )}
@@ -1563,6 +1825,838 @@ export default function AdminPage() {
                   )}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Capture Modal */}
+      {showCaptureModal && (
+        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-gray-900/30 p-0 md:p-4">
+          <div className="h-full w-full md:max-h-[80vh] md:max-w-4xl md:rounded-2xl bg-white shadow-2xl overflow-y-auto rounded-t-none md:rounded-2xl">
+            <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-purple-600 to-indigo-600 p-6 rounded-t-none md:rounded-t-2xl">
+              <div>
+                <h2 className="text-xl font-semibold text-white">Razorpay Payment Capture Status</h2>
+                <p className="mt-1 text-sm text-purple-100">Monitor and retry Razorpay payment captures</p>
+              </div>
+              <button
+                onClick={() => setShowCaptureModal(false)}
+                className="text-white hover:text-purple-100 transition-colors"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {captureLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+                </div>
+              ) : (
+                <>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={handleBatchRetry}
+                      disabled={captureLoading}
+                      className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                    >
+                      {captureLoading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>Retrying...</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                          <span>Batch Retry All</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={fetchCaptureData}
+                      disabled={captureLoading}
+                      className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      <span>Refresh</span>
+                    </button>
+                  </div>
+
+                  {/* Failed Captures */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Failed Captures</h3>
+                    {captureData?.failed?.length === 0 ? (
+                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center text-gray-500">
+                        No failed captures
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {captureData?.failed?.map((order: any) => (
+                          <div key={order._id} className="rounded-lg border border-red-200 bg-red-50 p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <p className="font-medium text-gray-900">{order.resourceId?.title || 'Unknown Resource'}</p>
+                                <p className="text-sm text-gray-600">Custom Order: {order.cashfreeOrderId}</p>
+                                {order.razorpayOrderId && (
+                                  <p className="text-sm text-gray-600">Razorpay Order: {order.razorpayOrderId}</p>
+                                )}
+                                <p className="text-sm text-gray-600">User: {order.userId?.email || 'Unknown'}</p>
+                                <p className="text-sm text-gray-600">Amount: ₹{order.amount}</p>
+                                <p className="text-sm text-red-600 mt-1">Error: {order.captureFailureReason || 'Unknown error'}</p>
+                                <p className="text-xs text-gray-500 mt-1">Attempts: {order.captureAttempts?.length || 0}</p>
+                              </div>
+                              <button
+                                onClick={() => handleRetryCapture(order.cashfreeOrderId)}
+                                disabled={retryingCapture === order.cashfreeOrderId}
+                                className="ml-4 flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50 transition-colors"
+                              >
+                                {retryingCapture === order.cashfreeOrderId ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <>
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                    <span>Retry</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Pending Captures */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Pending Captures</h3>
+                    {captureData?.pending?.length === 0 ? (
+                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center text-gray-500">
+                        No pending captures
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {captureData?.pending?.map((order: any) => (
+                          <div key={order._id} className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <p className="font-medium text-gray-900">{order.resourceId?.title || 'Unknown Resource'}</p>
+                                <p className="text-sm text-gray-600">Custom Order: {order.cashfreeOrderId}</p>
+                                {order.razorpayOrderId && (
+                                  <p className="text-sm text-gray-600">Razorpay Order: {order.razorpayOrderId}</p>
+                                )}
+                                <p className="text-sm text-gray-600">User: {order.userId?.email || 'Unknown'}</p>
+                                <p className="text-sm text-gray-600">Amount: ₹{order.amount}</p>
+                                <p className="text-xs text-gray-500 mt-1">Created: {new Date(order.createdAt).toLocaleString()}</p>
+                              </div>
+                              <button
+                                onClick={() => handleRetryCapture(order.cashfreeOrderId)}
+                                disabled={retryingCapture === order.cashfreeOrderId}
+                                className="ml-4 flex items-center gap-1 rounded-lg bg-yellow-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-yellow-700 disabled:opacity-50 transition-colors"
+                              >
+                                {retryingCapture === order.cashfreeOrderId ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <>
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                    <span>Retry</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Grant Access Modal */}
+      {showGrantAccessModal && (
+        <div className="admin-mobile-modal fixed inset-0 bg-gray-900/30 flex items-center justify-center z-50 p-4">
+          <div className="admin-modal-card bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4">
+            <div className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-t-none md:rounded-t-2xl">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg sm:text-xl font-semibold text-white">Grant Resource Access</h2>
+                <button
+                  onClick={() => {
+                    setShowGrantAccessModal(false);
+                    setGrantAccessForm({ userId: '', resourceId: '', orderId: '', userEmail: '', resourceTitle: '' });
+                    setUserSearchResults([]);
+                    setResourceSearchResults([]);
+                    setShowUserDropdown(false);
+                    setShowResourceDropdown(false);
+                  }}
+                  className="text-white hover:text-gray-200 transition-colors"
+                >
+                  <X className="h-5 w-5 sm:h-6 sm:w-6" />
+                </button>
+              </div>
+            </div>
+
+            <form onSubmit={handleGrantAccess} className="p-4 sm:p-6 space-y-4 sm:space-y-5">
+              <div className="relative">
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">
+                  User Email
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={grantAccessForm.userEmail}
+                  onChange={(e) => {
+                    setGrantAccessForm({ ...grantAccessForm, userEmail: e.target.value, userId: '' });
+                    searchUsersByEmail(e.target.value);
+                  }}
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all text-sm"
+                  placeholder="Search user by email"
+                />
+                {showUserDropdown && userSearchResults.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                    {userSearchResults.map((user) => (
+                      <div
+                        key={user._id}
+                        onClick={() => selectUser(user)}
+                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-0"
+                      >
+                        <div className="text-sm font-medium text-gray-900">{user.email}</div>
+                        <div className="text-xs text-gray-500">{user.name || 'No name'}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {searchingUsers && (
+                  <div className="absolute right-3 top-8">
+                    <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">
+                  User ID (Auto-filled)
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={grantAccessForm.userId}
+                  readOnly
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 text-sm"
+                  placeholder="Select user from email search"
+                />
+              </div>
+
+              <div className="relative">
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">
+                  Resource Title
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={grantAccessForm.resourceTitle}
+                  onChange={(e) => {
+                    setGrantAccessForm({ ...grantAccessForm, resourceTitle: e.target.value, resourceId: '' });
+                    searchResourcesByTitle(e.target.value);
+                  }}
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all text-sm"
+                  placeholder="Search resource by title"
+                />
+                {showResourceDropdown && resourceSearchResults.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                    {resourceSearchResults.map((resource) => (
+                      <div
+                        key={resource._id}
+                        onClick={() => selectResource(resource)}
+                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-0"
+                      >
+                        <div className="text-sm font-medium text-gray-900 truncate">{resource.title}</div>
+                        <div className="text-xs text-gray-500">{resource.category}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {searchingResources && (
+                  <div className="absolute right-3 top-8">
+                    <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">
+                  Resource ID (Auto-filled)
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={grantAccessForm.resourceId}
+                  readOnly
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 text-sm"
+                  placeholder="Select resource from title search"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">
+                  Order ID (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={grantAccessForm.orderId}
+                  onChange={(e) => setGrantAccessForm({ ...grantAccessForm, orderId: e.target.value })}
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all text-sm"
+                  placeholder="Enter payment order ID if available"
+                />
+                <p className="text-xs text-gray-500 mt-1">Use this if payment was completed but webhook failed</p>
+              </div>
+
+              <div className="flex justify-end space-x-2 sm:space-x-3 pt-2 sm:pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowGrantAccessModal(false);
+                    setGrantAccessForm({ userId: '', resourceId: '', orderId: '', userEmail: '', resourceTitle: '' });
+                    setUserSearchResults([]);
+                    setResourceSearchResults([]);
+                    setShowUserDropdown(false);
+                    setShowResourceDropdown(false);
+                  }}
+                  className="px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={grantingAccess}
+                  className="px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium flex items-center gap-2"
+                >
+                  {grantingAccess ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Granting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <UserCheck className="h-4 w-4" />
+                      <span>Grant Access</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* General Settings Modal */}
+      {showGeneralSettingsModal && (
+        <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-gray-900/30 p-0 md:p-4">
+          <div className="h-full w-full md:max-h-[80vh] md:max-w-4xl md:rounded-2xl bg-white shadow-2xl overflow-y-auto rounded-t-none md:rounded-2xl">
+            <div className="flex items-center justify-between border-b border-gray-200 p-6 rounded-t-none md:rounded-t-2xl">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">General Settings</h2>
+                <p className="mt-1 text-sm text-gray-600">Manage your general platform settings</p>
+              </div>
+              <button
+                onClick={() => setShowGeneralSettingsModal(false)}
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Show list when no tab is selected */}
+              {!activeGeneralTab && (
+                <div className="space-y-2">
+                  {/* Razorpay Payment Capture */}
+                  <button
+                    onClick={() => {
+                      setActiveGeneralTab('razorpay');
+                      fetchCaptureData();
+                    }}
+                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border border-gray-200 rounded-lg"
+                  >
+                    <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    <span>Razorpay Payment Capture</span>
+                  </button>
+
+                  {/* Grant Access */}
+                  <button
+                    onClick={() => setActiveGeneralTab('grant')}
+                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border border-gray-200 rounded-lg"
+                  >
+                    <UserCheck className="h-5 w-5 text-gray-600" />
+                    <span>Grant Access</span>
+                  </button>
+
+                  {/* Google Drive Access */}
+                  <button
+                    onClick={() => setActiveGeneralTab('drive')}
+                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border border-gray-200 rounded-lg"
+                  >
+                    <svg className="h-5 w-5 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                    <span>Google Drive Access</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Tab Content with back button */}
+              {activeGeneralTab === 'razorpay' && (
+                <div>
+                  <button
+                    onClick={() => setActiveGeneralTab(null)}
+                    className="flex items-center gap-2 mb-4 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to Settings</span>
+                  </button>
+                  <div className="flex gap-4 mb-4">
+                    <button
+                      onClick={handleBatchRetry}
+                      disabled={captureLoading}
+                      className="flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50 transition-colors"
+                    >
+                      {captureLoading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>Retrying...</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                          <span>Batch Retry All</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      onClick={fetchCaptureData}
+                      disabled={captureLoading}
+                      className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      <span>Refresh</span>
+                    </button>
+                  </div>
+
+                  {captureLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="h-8 w-8 animate-spin text-gray-600" />
+                    </div>
+                  ) : (
+                    <>
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Failed Captures</h3>
+                        {captureData?.failed?.length === 0 ? (
+                          <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center text-gray-500">
+                            No failed captures
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {captureData?.failed?.map((order: any) => (
+                              <div key={order._id} className="rounded-lg border border-red-200 bg-red-50 p-4">
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <p className="font-medium text-gray-900">{order.resourceId?.title || 'Unknown Resource'}</p>
+                                    <p className="text-sm text-gray-600">Custom Order: {order.cashfreeOrderId}</p>
+                                    {order.razorpayOrderId && (
+                                      <p className="text-sm text-gray-600">Razorpay Order: {order.razorpayOrderId}</p>
+                                    )}
+                                    <p className="text-sm text-gray-600">User: {order.userId?.email || 'Unknown'}</p>
+                                    <p className="text-sm text-gray-600">Amount: ₹{order.amount}</p>
+                                    <p className="text-sm text-red-600 mt-1">Error: {order.captureFailureReason || 'Unknown error'}</p>
+                                    <p className="text-xs text-gray-500 mt-1">Attempts: {order.captureAttempts?.length || 0}</p>
+                                  </div>
+                                  <button
+                                    onClick={() => handleRetryCapture(order.cashfreeOrderId)}
+                                    disabled={retryingCapture === order.cashfreeOrderId}
+                                    className="ml-4 flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50 transition-colors"
+                                  >
+                                    {retryingCapture === order.cashfreeOrderId ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      <>
+                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                        <span>Retry</span>
+                                      </>
+                                    )}
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Pending Captures</h3>
+                        {captureData?.pending?.length === 0 ? (
+                          <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center text-gray-500">
+                            No pending captures
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {captureData?.pending?.map((order: any) => (
+                              <div key={order._id} className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
+                                <div className="flex items-start justify-between">
+                                  <div className="flex-1">
+                                    <p className="font-medium text-gray-900">{order.resourceId?.title || 'Unknown Resource'}</p>
+                                    <p className="text-sm text-gray-600">Custom Order: {order.cashfreeOrderId}</p>
+                                    {order.razorpayOrderId && (
+                                      <p className="text-sm text-gray-600">Razorpay Order: {order.razorpayOrderId}</p>
+                                    )}
+                                    <p className="text-sm text-gray-600">User: {order.userId?.email || 'Unknown'}</p>
+                                    <p className="text-sm text-gray-600">Amount: ₹{order.amount}</p>
+                                    <p className="text-xs text-gray-500 mt-1">Created: {new Date(order.createdAt).toLocaleString()}</p>
+                                  </div>
+                                  <button
+                                    onClick={() => handleRetryCapture(order.cashfreeOrderId)}
+                                    disabled={retryingCapture === order.cashfreeOrderId}
+                                    className="ml-4 flex items-center gap-1 rounded-lg bg-yellow-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-yellow-700 disabled:opacity-50 transition-colors"
+                                  >
+                                    {retryingCapture === order.cashfreeOrderId ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      <>
+                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                        <span>Retry</span>
+                                      </>
+                                    )}
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {activeGeneralTab === 'grant' && (
+                <div>
+                  <button
+                    onClick={() => setActiveGeneralTab(null)}
+                    className="flex items-center gap-2 mb-4 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to Settings</span>
+                  </button>
+                  
+                  {/* Toggle between Grant and Revoke */}
+                  <div className="flex gap-2 mb-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowRevokeSection(false)}
+                      className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${!showRevokeSection ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
+                      Grant Access
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowRevokeSection(true)}
+                      className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${showRevokeSection ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                    >
+                      Revoke Access
+                    </button>
+                  </div>
+
+                  <form onSubmit={showRevokeSection ? handleRevokeAccess : handleGrantAccess} className="space-y-4">
+                  <div className="relative">
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      User Email
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={grantAccessForm.userEmail}
+                      onChange={(e) => {
+                        setGrantAccessForm({ ...grantAccessForm, userEmail: e.target.value, userId: '' });
+                        searchUsersByEmail(e.target.value);
+                      }}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900 transition-all text-sm"
+                      placeholder="Search user by email"
+                    />
+                    {showUserDropdown && userSearchResults.length > 0 && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                        {userSearchResults.map((user) => (
+                          <div
+                            key={user._id}
+                            onClick={() => selectUser(user)}
+                            className="px-3 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-0"
+                          >
+                            <div className="text-sm font-medium text-gray-900">{user.email}</div>
+                            <div className="text-xs text-gray-500">{user.name || 'No name'}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {searchingUsers && (
+                      <div className="absolute right-3 top-8">
+                        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      User ID (Auto-filled)
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={grantAccessForm.userId}
+                      readOnly
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 text-sm"
+                      placeholder="Select user from email search"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      Resource Title
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={grantAccessForm.resourceTitle}
+                      onChange={(e) => {
+                        setGrantAccessForm({ ...grantAccessForm, resourceTitle: e.target.value, resourceId: '' });
+                        searchResourcesByTitle(e.target.value);
+                      }}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900 transition-all text-sm"
+                      placeholder="Search resource by title"
+                    />
+                    {showResourceDropdown && resourceSearchResults.length > 0 && (
+                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                        {resourceSearchResults.map((resource) => (
+                          <div
+                            key={resource._id}
+                            onClick={() => selectResource(resource)}
+                            className="px-3 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-0"
+                          >
+                            <div className="text-sm font-medium text-gray-900 truncate">{resource.title}</div>
+                            <div className="text-xs text-gray-500">{resource.category}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {searchingResources && (
+                      <div className="absolute right-3 top-8">
+                        <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      Resource ID (Auto-filled)
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={grantAccessForm.resourceId}
+                      readOnly
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 text-sm"
+                      placeholder="Select resource from title search"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      Order ID (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={grantAccessForm.orderId}
+                      onChange={(e) => setGrantAccessForm({ ...grantAccessForm, orderId: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent text-gray-900 transition-all text-sm"
+                      placeholder="Enter payment order ID if available"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Use this if payment was completed but webhook failed</p>
+                  </div>
+
+                  <div className="flex justify-end gap-3 pt-4">
+                    <button
+                      type="submit"
+                      disabled={grantingAccess || revokingAccess}
+                      className={`flex items-center gap-2 rounded-lg px-6 py-3 font-medium text-white disabled:opacity-50 transition-colors ${showRevokeSection ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-900 hover:bg-gray-800'}`}
+                    >
+                      {showRevokeSection ? (
+                        revokingAccess ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span>Revoking...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            <span>Revoke Access</span>
+                          </>
+                        )
+                      ) : (
+                        grantingAccess ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span>Granting...</span>
+                          </>
+                        ) : (
+                          <>
+                            <UserCheck className="h-4 w-4" />
+                            <span>Grant Access</span>
+                          </>
+                        )
+                      )}
+                    </button>
+                  </div>
+                </form>
+                </div>
+              )}
+
+              {activeGeneralTab === 'drive' && (
+                <div>
+                  <button
+                    onClick={() => setActiveGeneralTab(null)}
+                    className="flex items-center gap-2 mb-4 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to Settings</span>
+                  </button>
+                  
+                  {/* Connection Status */}
+                  <div className={`mb-6 p-5 rounded-xl border ${googleDriveConnected ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
+                    <div className="flex items-center gap-4">
+                      <div className={`w-4 h-4 rounded-full ${googleDriveConnected ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                      <div className="flex-1">
+                        <p className={`font-semibold text-lg ${googleDriveConnected ? 'text-green-900' : 'text-gray-900'}`}>
+                          {googleDriveConnected ? 'Google Drive Connected' : 'Google Drive Not Connected'}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {googleDriveConnected ? 'Your Google Drive account is connected and ready' : 'Connect your Google Drive to enable secure file sharing'}
+                        </p>
+                      </div>
+                      {googleDriveConnected && (
+                        <div className="text-green-600">
+                          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-xl p-5 mb-6">
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="bg-blue-100 p-2 rounded-lg">
+                        <svg className="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900 mb-1">What is Google Drive Access?</h3>
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          Securely share purchased resources with users through Google Drive integration.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="border-t border-gray-200 pt-4">
+                      <h3 className="font-semibold text-gray-900 mb-3">How it works:</h3>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2"></div>
+                          <p className="text-sm text-gray-700">Upload files to Google Drive</p>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2"></div>
+                          <p className="text-sm text-gray-700">Automatic user access</p>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2"></div>
+                          <p className="text-sm text-gray-700">Private & secure sharing</p>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2"></div>
+                          <p className="text-sm text-gray-700">Revoke access anytime</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center gap-4">
+                    {!googleDriveConnected ? (
+                      <button
+                        onClick={() => {
+                          window.location.href = '/api/google-drive/auth';
+                        }}
+                        className="flex items-center gap-3 bg-white border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 px-8 py-4 rounded-xl transition-all shadow-sm hover:shadow-md"
+                      >
+                        <svg className="h-7 w-7 text-gray-700" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                        </svg>
+                        <span className="font-semibold text-gray-800">Connect Google Drive</span>
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          onClick={async () => {
+                            try {
+                              const response = await fetch('/api/google-drive/status', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ connected: false }),
+                              });
+                              if (response.ok) {
+                                setGoogleDriveConnected(false);
+                                alert('Google Drive disconnected successfully');
+                              }
+                            } catch (error) {
+                              console.error('Failed to disconnect Google Drive');
+                              alert('Failed to disconnect Google Drive');
+                            }
+                          }}
+                          className="flex items-center gap-3 bg-red-50 border-2 border-red-200 hover:border-red-300 hover:bg-red-100 px-6 py-4 rounded-xl transition-all shadow-sm hover:shadow-md"
+                        >
+                          <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                          </svg>
+                          <span className="font-semibold text-red-700">Disconnect</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            window.location.href = '/api/google-drive/auth';
+                          }}
+                          className="flex items-center gap-3 bg-blue-50 border-2 border-blue-200 hover:border-blue-300 hover:bg-blue-100 px-6 py-4 rounded-xl transition-all shadow-sm hover:shadow-md"
+                        >
+                          <svg className="h-6 w-6 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                          </svg>
+                          <span className="font-semibold text-blue-700">Reconnect</span>
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="text-center text-sm text-gray-500 mt-5">
+                    <p>{googleDriveConnected ? '✓ Your Google Drive is connected and ready for secure file sharing' : 'Connect your Google Drive to enable secure file sharing for purchased resources'}</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

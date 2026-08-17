@@ -2,9 +2,11 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IPaymentSettings extends Document {
   gateway: 'razorpay' | 'payu' | 'cashfree';
+  environment: 'sandbox' | 'production';
   razorpay: {
     keyId: string;
     keySecret: string;
+    webhookSecret: string;
   };
   payu: {
     key: string;
@@ -13,6 +15,7 @@ export interface IPaymentSettings extends Document {
   cashfree: {
     clientId: string;
     clientSecret: string;
+    webhookSecret: string;
   };
   updatedAt: Date;
 }
@@ -23,9 +26,15 @@ const PaymentSettingsSchema = new Schema<IPaymentSettings>({
     enum: ['razorpay', 'payu', 'cashfree'],
     default: 'cashfree',
   },
+  environment: {
+    type: String,
+    enum: ['sandbox', 'production'],
+    default: 'sandbox',
+  },
   razorpay: {
     keyId: { type: String, default: '' },
     keySecret: { type: String, default: '' },
+    webhookSecret: { type: String, default: '' },
   },
   payu: {
     key: { type: String, default: '' },
@@ -34,6 +43,7 @@ const PaymentSettingsSchema = new Schema<IPaymentSettings>({
   cashfree: {
     clientId: { type: String, default: '' },
     clientSecret: { type: String, default: '' },
+    webhookSecret: { type: String, default: '' },
   },
   updatedAt: { type: Date, default: Date.now },
 });

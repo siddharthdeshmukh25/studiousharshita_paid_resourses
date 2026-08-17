@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceCard from '@/components/resource/ResourceCard';
-import { Download, Loader2, Package, Calendar } from 'lucide-react';
+import { ExternalLink, Package, Calendar } from 'lucide-react';
 import PageSkeleton from '@/components/ui/PageSkeleton';
 
 interface PurchasedResource {
@@ -26,8 +26,8 @@ export default function DashboardPage() {
   const { data: session, status } = useSession();
   const [resources, setResources] = useState<PurchasedResource[]>([]);
   const [loading, setLoading] = useState(true);
-  const [downloading, setDownloading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -58,30 +58,18 @@ export default function DashboardPage() {
   }, [status, router]);
 
   const handleDownload = async (resourceId: string) => {
-    setDownloading(resourceId);
-    setError(null);
-
+    setDownloadError(null);
     try {
-      const response = await fetch(`/api/download?resourceId=${resourceId}`);
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to download resource');
+      // Use new open-drive API for direct Google Drive access
+      const response = await fetch(`/api/resources/${resourceId}/open-drive`);
+      const data = await response.json();
+      if (response.ok && data.driveUrl) {
+        window.open(data.driveUrl, '_blank');
+      } else {
+        setDownloadError(data.error || 'Failed to open resource');
       }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `resource-${resourceId}`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Download failed');
-    } finally {
-      setDownloading(null);
+      setDownloadError('Failed to open resource. Please try again later.');
     }
   };
 
@@ -108,6 +96,18 @@ export default function DashboardPage() {
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
               {error}
+            </div>
+          )}
+
+          {downloadError && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 flex items-center justify-between">
+              <span>{downloadError}</span>
+              <button
+                onClick={() => setDownloadError(null)}
+                className="ml-4 text-red-600 hover:text-red-800 font-medium"
+              >
+                ×
+              </button>
             </div>
           )}
 
@@ -165,20 +165,10 @@ export default function DashboardPage() {
                     {/* Download Button */}
                     <button
                       onClick={() => handleDownload(resource._id)}
-                      disabled={downloading === resource._id}
-                      className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs md:text-sm"
+                      className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2 text-xs md:text-sm"
                     >
-                      {downloading === resource._id ? (
-                        <>
-                          <Loader2 className="h-3 w-3 md:h-4 md:w-4 animate-spin" />
-                          <span>Downloading...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Download className="h-3 w-3 md:h-4 md:w-4" />
-                          <span>Download</span>
-                        </>
-                      )}
+                      <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
+                      <span>Open Resource</span>
                     </button>
                   </div>
                 </div>

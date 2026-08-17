@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import Resource from '@/models/Resource';
 import Review from '@/models/Review';
+import User from '@/models/User';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function GET(request: NextRequest) {
   try {
@@ -84,6 +87,25 @@ export async function POST(request: NextRequest) {
     }
 
     await connectDB();
+
+    // Check if Google Drive is connected when linkType is google_drive or docs
+    if (linkType === 'google_drive' || linkType === 'docs') {
+      const session = await getServerSession(authOptions);
+      console.log('Session user email:', session?.user?.email);
+      
+      const adminUser = await User.findOne({ email: session?.user?.email });
+      console.log('Admin user found:', adminUser ? 'Yes' : 'No');
+      console.log('Admin user email:', adminUser?.email);
+      console.log('Admin user role:', adminUser?.role);
+      console.log('Admin googleDriveConnected:', adminUser?.googleDriveConnected);
+      
+      if (!adminUser || !adminUser.googleDriveConnected) {
+        return NextResponse.json(
+          { error: 'Google Drive is not connected. Please connect your Google Drive account in Settings before adding Google Drive resources.' },
+          { status: 400 }
+        );
+      }
+    }
 
     const resource = await Resource.create({
       title,

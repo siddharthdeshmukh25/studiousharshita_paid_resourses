@@ -14,6 +14,12 @@ const authOptions = {
     strategy: 'jwt' as const,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  secret: process.env.NEXTAUTH_SECRET || 'fallback-secret-for-development-change-in-production',
+  debug: false, // Disabled for security - prevents sensitive data in logs
+  pages: {
+    signIn: '/',
+    error: '/',
+  },
   callbacks: {
     async signIn({ user, account, profile }: any) {
       if (account.provider === 'google') {
@@ -60,9 +66,6 @@ const authOptions = {
       }
       return session;
     },
-  },
-  pages: {
-    signIn: '/',
   },
 };
 

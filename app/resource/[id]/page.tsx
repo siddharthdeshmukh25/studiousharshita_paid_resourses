@@ -7,7 +7,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceDetailSkeleton from '@/components/ui/ResourceDetailSkeleton';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
-import { Star, Download, Loader2, Send, X, Share2, Heart } from 'lucide-react';
+import { Star, Loader2, Send, X, Share2, Heart, ExternalLink } from 'lucide-react';
 
 interface Resource {
   _id: string;
@@ -66,6 +66,7 @@ export default function ResourceDetailPage() {
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
   const [reviewModalError, setReviewModalError] = useState<string | null>(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [razorpayOrderId, setRazorpayOrderId] = useState<string | null>(null);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -112,6 +113,7 @@ export default function ResourceDetailPage() {
               const purchasedIds = purchased.map((r: any) => r._id);
               console.log('Purchased resources:', purchasedIds);
               console.log('Current resource ID:', params.id);
+              console.log('Is purchased:', purchasedIds.includes(params.id));
               setIsPurchased(purchasedIds.includes(params.id));
             }
           } catch (err) {
@@ -358,6 +360,11 @@ export default function ResourceDetailPage() {
         throw new Error(data.error || 'Failed to create order');
       }
 
+      // Store Razorpay order ID if available
+      if (data.razorpayOrderId) {
+        setRazorpayOrderId(data.razorpayOrderId);
+      }
+
       // Handle different payment gateways
       if (data.gateway === 'razorpay') {
         if (!window.Razorpay) {
@@ -371,8 +378,13 @@ export default function ResourceDetailPage() {
           description: resource?.title,
           order_id: data.paymentSessionId,
           handler: function (response: any) {
-            // Handle successful payment
-            window.location.href = `/payment/return?order_id=${data.orderId}`;
+            // Handle successful payment - pass both custom order ID and Razorpay order ID
+            const returnUrl = `/payment/return?order_id=${data.orderId}`;
+            if (data.razorpayOrderId) {
+              window.location.href = `${returnUrl}&razorpay_order_id=${data.razorpayOrderId}`;
+            } else {
+              window.location.href = returnUrl;
+            }
           },
           modal: {
             ondismiss: function() {
@@ -598,11 +610,23 @@ export default function ResourceDetailPage() {
 
                 {isPurchased ? (
                   <button
-                    onClick={() => window.location.href = `/api/download?resourceId=${params.id}`}
+                    onClick={async () => {
+                      try {
+                        const response = await fetch(`/api/resources/${params.id}/open-drive`);
+                        const data = await response.json();
+                        if (response.ok && data.driveUrl) {
+                          window.open(data.driveUrl, '_blank');
+                        } else {
+                          alert(data.error || 'Failed to open resource');
+                        }
+                      } catch (error) {
+                        alert('Failed to open resource');
+                      }
+                    }}
                     className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center space-x-2"
                   >
-                    <Download className="h-5 w-5" />
-                    <span>View Resource</span>
+                    <ExternalLink className="h-5 w-5" />
+                    <span>Open Resource</span>
                   </button>
                 ) : (
                   <button
@@ -610,7 +634,7 @@ export default function ResourceDetailPage() {
                     disabled={checkoutLoading}
                     className="w-full bg-[#2563EB] text-white py-3 rounded-lg hover:bg-[#1D4ED8] transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {checkoutLoading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Opening secure payment...</span></> : <><Download className="h-5 w-5" /><span>Buy securely</span></>}
+                    {checkoutLoading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Processing payment...</span></> : <><ExternalLink className="h-5 w-5" /><span>Buy Resource</span></>}
                   </button>
                 )}
               </div>

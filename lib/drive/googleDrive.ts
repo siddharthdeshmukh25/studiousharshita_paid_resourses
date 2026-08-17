@@ -58,14 +58,58 @@ export async function getDriveFileStream(fileUrl: string) {
 export async function getDriveFileInfo(fileUrl: string) {
   try {
     const fileId = extractFileId(fileUrl);
+    console.log('Extracted file ID:', fileId);
+    console.log('Original URL:', fileUrl);
+    
     const response = await drive.files.get({
       fileId: fileId,
       fields: 'name, mimeType, size',
     });
 
+    console.log('Drive API response:', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error('Error fetching file info from Google Drive:', error);
+    console.error('Error details:', error.message);
+    console.error('Error code:', error.code);
+    
+    if (error.code === 404) {
+      throw new Error('File not found. Please ensure the file exists in Google Drive and is shared with the service account email.');
+    } else if (error.code === 403) {
+      throw new Error('Access denied. Please ensure the service account has permission to access this file.');
+    } else {
+      throw new Error(`Failed to fetch file info from Google Drive: ${error.message}`);
+    }
+  }
+}
+
+// Export Google Docs to PDF
+export async function exportDriveFileToPDF(fileUrl: string) {
+  try {
+    const fileId = extractFileId(fileUrl);
+    console.log('Exporting file to PDF:', fileId);
+    
+    const response = await drive.files.export(
+      {
+        fileId: fileId,
+        mimeType: 'application/pdf',
+      },
+      { responseType: 'stream' }
+    );
+
     return response.data;
   } catch (error) {
-    console.error('Error fetching file info from Google Drive:', error);
-    throw new Error('Failed to fetch file info from Google Drive');
+    console.error('Error exporting file to PDF:', error);
+    throw new Error('Failed to export file to PDF');
   }
+}
+
+// Check if file is a Google Doc/Sheet/Slides
+export function isGoogleDocsFile(mimeType: string): boolean {
+  const googleDocMimeTypes = [
+    'application/vnd.google-apps.document',
+    'application/vnd.google-apps.spreadsheet',
+    'application/vnd.google-apps.presentation',
+  ];
+  return googleDocMimeTypes.includes(mimeType);
 }

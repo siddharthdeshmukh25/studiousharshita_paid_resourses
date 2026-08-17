@@ -4,7 +4,7 @@ import User from '@/models/User';
 import Resource from '@/models/Resource';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
-import { getDriveFileStream, getDriveFileInfo } from '@/lib/drive/googleDrive';
+import { getDriveFileStream, getDriveFileInfo, exportDriveFileToPDF, isGoogleDocsFile } from '@/lib/drive/googleDrive';
 
 export async function GET(request: NextRequest) {
   try {
@@ -56,30 +56,64 @@ export async function GET(request: NextRequest) {
     }
 
     // Handle different link types
-    if (resource.linkType === 'notion' || resource.linkType === 'docs') {
-      // For Notion and Docs, redirect to the link
+    if (resource.linkType === 'notion') {
+      // For Notion, redirect to the link
+      console.log('Redirecting to Notion link:', resource.linkUrl);
       return NextResponse.redirect(resource.linkUrl, 302);
     }
 
     // For Google Drive, stream the file
-    // Get file info from Google Drive
-    const fileInfo = await getDriveFileInfo(resource.linkUrl);
+    console.log('Attempting to download from Google Drive:', resource.linkUrl);
+    console.log('Resource linkType:', resource.linkType);
+    
+    try {
+      // Get file info from Google Drive
+      const fileInfo = await getDriveFileInfo(resource.linkUrl);
+      console.log('File info retrieved:', fileInfo);
 
-    // Get file stream from Google Drive
-    const fileStream = await getDriveFileStream(resource.linkUrl);
+      let fileStream;
+      let mimeType;
+      let fileName;
 
-    // Create response with file stream
-    const response = new NextResponse(fileStream as any, {
-      status: 200,
-      headers: {
-        'Content-Type': fileInfo.mimeType || 'application/octet-stream',
-        'Content-Disposition': `attachment; filename="${fileInfo.name}"`,
-        'Content-Length': fileInfo.size || '0',
-        'Cache-Control': 'no-cache',
-      },
-    });
+      // Check if it's a Google Docs file (document, spreadsheet, presentation)
+      if (isGoogleDocsFile(fileInfo.mimeType)) {
+        console.log('Google Docs file detected, exporting to PDF');
+        // Export Google Docs to PDF
+        fileStream = await exportDriveFileToPDF(resource.linkUrl);
+        mimeType = 'application/pdf';
+        const originalName = fileInfo.name || 'document';
+        fileName = originalName.replace(/\.[^/.]+$/, '') + '.pdf'; // Replace extension with .pdf
+      } else {
+        // Regular file download
+        fileStream = await getDriveFileStream(resource.linkUrl);
+        mimeType = fileInfo.mimeType || 'application/octet-stream';
+        fileName = fileInfo.name || 'download';
+      }
 
-    return response;
+      // Create response with file stream
+      const response = new NextResponse(fileStream as any, {
+        status: 200,
+        headers: {
+          'Content-Type': mimeType,
+          'Content-Disposition': `attachment; filename="${fileName}"`,
+          'Cache-Control': 'no-cache',
+        },
+      });
+
+      return response;
+    } catch (driveError: any) {
+      console.error('Google Drive API failed:', driveError);
+      
+      // For security, don't expose direct Drive links even on error
+      // Return a helpful error message that guides troubleshooting
+      return NextResponse.json(
+        { 
+          error: 'File download is temporarily unavailable. Please contact the administrator or try again later.',
+          code: 'DRIVE_ACCESS_ERROR'
+        },
+        { status: 503 }
+      );
+    }
 
   } catch (error) {
     console.error('Download error:', error);

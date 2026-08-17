@@ -42,8 +42,11 @@ function razorpayHeaders(settings: any) {
 }
 
 // Cashfree functions
-function cashfreeBaseUrl() {
-  return 'https://api.cashfree.com/pg';
+function cashfreeBaseUrl(settings: any) {
+  const environment = settings?.environment || 'sandbox';
+  return environment === 'production' 
+    ? 'https://api.cashfree.com/pg' 
+    : 'https://sandbox.cashfree.com/pg';
 }
 
 function cashfreeHeaders(settings: any) {
@@ -111,6 +114,7 @@ export async function POST(request: NextRequest) {
 
     let paymentResponse;
     let paymentSessionId;
+    let razorpayOrderId; // Store actual Razorpay order ID
 
     if (settings.gateway === 'razorpay') {
       // Razorpay checkout
@@ -125,6 +129,7 @@ export async function POST(request: NextRequest) {
             userId: user._id.toString(),
             resourceId: resource._id.toString(),
             resourceTitle: resource.title,
+            customOrderId: orderId, // Store our custom order ID in notes
           },
         }),
       });
@@ -134,9 +139,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: paymentResponse.error?.description || 'Razorpay could not create the payment order.' }, { status: 502 });
       }
       paymentSessionId = paymentResponse.id;
+      razorpayOrderId = paymentResponse.id; // Store actual Razorpay order ID
     } else if (settings.gateway === 'cashfree') {
       // Cashfree checkout
-      const cashfreeResponse = await fetch(`${cashfreeBaseUrl()}/orders`, {
+      const cashfreeResponse = await fetch(`${cashfreeBaseUrl(settings)}/orders`, {
         method: 'POST',
         headers: { ...cashfreeHeaders(settings), 'x-idempotency-key': randomUUID() },
         body: JSON.stringify({
@@ -149,8 +155,17 @@ export async function POST(request: NextRequest) {
             customer_email: user.email,
             customer_phone: '9999999999', // Default phone - in production, collect from user during signup
           },
-          order_meta: { return_url: returnUrl },
+          order_meta: { 
+            return_url: returnUrl,
+            payment_methods: 'cc,dc,upi'
+          },
           order_note: `Purchase: ${resource.title}`,
+          // Add custom metadata for webhook
+          order_tags: {
+            userId: user._id.toString(),
+            resourceId: resource._id.toString(),
+            resourceTitle: resource.title,
+          },
         }),
       });
       paymentResponse = await cashfreeResponse.json();
@@ -163,27 +178,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Payment gateway not supported yet.' }, { status: 400 });
     }
 
-    await Order.create({
-      userId: user._id,
-      resourceId: resource._id,
-      cashfreeOrderId: orderId,
-      amount,
-      couponCode: coupon?.code,
-      couponDiscountPercentage: coupon?.discountPercentage,
-      status: 'pending',
-    });
+    // Note: Order will be created only after successful payment via webhook
+    // This prevents creating orders for failed/abandoned payments
 
     const responseData: any = {
       paymentSessionId,
       gateway: settings.gateway,
-      environment: 'production',
+      environment: settings.environment || 'sandbox',
       orderId,
       amount,
+      resourceTitle: resource.title,
+      resourceId: resource._id.toString(),
     };
 
-    // Add keyId for Razorpay frontend initialization
+    // Add keyId and actual Razorpay order ID for frontend
     if (settings.gateway === 'razorpay') {
       responseData.keyId = settings.razorpay.keyId;
+      responseData.razorpayOrderId = razorpayOrderId; // Add actual Razorpay order ID
     }
 
     return NextResponse.json(responseData);
@@ -195,52 +206,248 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json() as { orderId?: string };
+    const body = await request.json() as { orderId?: string; razorpayOrderId?: string; skipVerification?: boolean };
     if (!body.orderId) return NextResponse.json({ error: 'Order ID is required.' }, { status: 400 });
 
     await connectDB();
     const user = await getAuthenticatedUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized. Please login to continue.' }, { status: 401 });
 
-    const order = await Order.findOne({ cashfreeOrderId: body.orderId, userId: user._id });
-    if (!order) return NextResponse.json({ error: 'Order not found.' }, { status: 404 });
-    if (order.status === 'completed') return NextResponse.json({ success: true });
-
     const settings = await getPaymentSettings();
-    let paymentStatus = false;
+    if (!settings || !settings.gateway) {
+      return NextResponse.json({ error: 'Payment gateway not configured.' }, { status: 500 });
+    }
 
+    // Check if order already exists
+    let order = await Order.findOne({ cashfreeOrderId: body.orderId, userId: user._id });
+    
+    if (order && order.status === 'completed') {
+      return NextResponse.json({ success: true, message: 'Payment completed successfully' });
+    }
+    
+    if (order && order.status === 'failed') {
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Payment failed. Please try again or contact support.',
+        reason: order.captureFailureReason 
+      }, { status: 400 });
+    }
+
+    // Manual payment verification and capture
     if (settings.gateway === 'razorpay') {
-      // Razorpay verification (simplified - in production you'd use webhook)
-      const razorpayResponse = await fetch(`${razorpayBaseUrl()}/orders/${order.cashfreeOrderId}`, {
+      // First, try to find if we already have an order with this custom order ID
+      let existingOrder = await Order.findOne({ cashfreeOrderId: body.orderId });
+      
+      // If we have an existing order with razorpayOrderId stored, use that
+      let razorpayOrderIdToUse = existingOrder?.razorpayOrderId;
+      
+      // If razorpayOrderId is provided from frontend, use that
+      if (body.razorpayOrderId) {
+        razorpayOrderIdToUse = body.razorpayOrderId;
+        console.log('Using Razorpay order ID from frontend:', razorpayOrderIdToUse);
+      }
+      
+      // If not, we need to get payments using the custom order ID from notes
+      if (!razorpayOrderIdToUse) {
+        // Since we can't search by custom order ID in Razorpay, we need to find by receipt
+        // We'll try to search recent orders or use a different approach
+        console.log('No stored Razorpay order ID, attempting to find by receipt...');
+        
+        // Try to get payments by searching with the custom order ID as receipt
+        // Razorpay doesn't support searching by receipt directly, so we need a different approach
+        // For now, let's try to use the custom order ID directly (it might work if the format matches)
+        const paymentsResponse = await fetch(`${razorpayBaseUrl()}/orders/${body.orderId}/payments`, {
+          method: 'GET',
+          headers: razorpayHeaders(settings),
+        });
+
+        const paymentsData = await paymentsResponse.json();
+        
+        if (paymentsResponse.ok && paymentsData.count && paymentsData.items.length > 0) {
+          // It worked with custom order ID
+          const payment = paymentsData.items[0];
+          razorpayOrderIdToUse = payment.order_id; // This is the actual Razorpay order ID
+        } else {
+          return NextResponse.json({ 
+            success: false, 
+            error: 'Payment not found. The order ID may have expired or is invalid.' 
+          }, { status: 404 });
+        }
+      }
+      
+      // Now get payment details using the actual Razorpay order ID
+      const paymentsResponse = await fetch(`${razorpayBaseUrl()}/orders/${razorpayOrderIdToUse}/payments`, {
+        method: 'GET',
         headers: razorpayHeaders(settings),
-        cache: 'no-store',
       });
-      const razorpayOrder = await razorpayResponse.json();
-      if (razorpayResponse.ok && razorpayOrder.status === 'paid') {
-        paymentStatus = true;
+
+      const paymentsData = await paymentsResponse.json();
+      
+      if (!paymentsResponse.ok || !paymentsData.count || paymentsData.items.length === 0) {
+        return NextResponse.json({ 
+          success: false, 
+          error: 'Payment not found or still processing.' 
+        }, { status: 202 });
       }
+
+      const payment = paymentsData.items[0];
+      
+      // Check if payment is authorized
+      if (payment.status !== 'authorized' && payment.status !== 'captured') {
+        return NextResponse.json({ 
+          success: false, 
+          error: `Payment status: ${payment.status}. Please wait or contact support.` 
+        }, { status: 202 });
+      }
+
+      // Capture payment if not already captured
+      if (payment.status === 'authorized') {
+        console.log('Payment is authorized, attempting capture for payment ID:', payment.id);
+        const captureResponse = await fetch(`${razorpayBaseUrl()}/payments/${payment.id}/capture`, {
+          method: 'POST',
+          headers: razorpayHeaders(settings),
+          body: JSON.stringify({
+            amount: payment.amount,
+            currency: 'INR',
+          }),
+        });
+
+        const captureData = await captureResponse.json();
+        console.log('Capture response:', captureData);
+        
+        if (!captureResponse.ok) {
+          console.error('Capture failed:', captureData);
+          return NextResponse.json({ 
+            success: false, 
+            error: 'Payment capture failed. Please contact support.' 
+          }, { status: 500 });
+        }
+        console.log('✅ Payment captured successfully');
+      } else if (payment.status === 'captured') {
+        console.log('✅ Payment already captured');
+      }
+
+      // Get notes from payment to extract userId and resourceId
+      const notes = payment.notes;
+      const userId = notes?.userId;
+      const resourceId = notes?.resourceId;
+
+      if (!userId || !resourceId) {
+        return NextResponse.json({ error: 'Payment information incomplete.' }, { status: 400 });
+      }
+
+      // Create or update order
+      if (!order) {
+        order = await Order.create({
+          userId,
+          resourceId,
+          cashfreeOrderId: body.orderId,
+          razorpayOrderId: razorpayOrderIdToUse, // Store actual Razorpay order ID
+          cashfreePaymentId: payment.id,
+          amount: payment.amount / 100,
+          status: 'completed',
+          gateway: 'razorpay',
+          captureStatus: 'success',
+          paymentCaptured: true,
+        });
+        console.log('Created new order with Razorpay order ID:', razorpayOrderIdToUse);
+      } else {
+        await Order.updateOne(
+          { _id: order._id },
+          { 
+            status: 'completed',
+            captureStatus: 'success',
+            paymentCaptured: true,
+            cashfreePaymentId: payment.id,
+            razorpayOrderId: razorpayOrderIdToUse, // Update with actual Razorpay order ID
+          }
+        );
+        console.log('Updated existing order with Razorpay order ID:', razorpayOrderIdToUse);
+      }
+
+      // Grant access to user
+      const resource = await Resource.findById(resourceId);
+      if (resource && !user.purchasedResources.includes(resource._id)) {
+        console.log('Granting access to user:', user._id, 'for resource:', resourceId);
+        user.purchasedResources.push(resource._id);
+        await user.save();
+        console.log('✅ Access granted successfully');
+      } else {
+        console.log('User already has access to this resource or resource not found');
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Payment completed successfully',
+        paymentId: payment.id 
+      });
     } else if (settings.gateway === 'cashfree') {
-      // Cashfree verification
-      const cashfreeResponse = await fetch(`${cashfreeBaseUrl()}/orders/${encodeURIComponent(order.cashfreeOrderId)}`, {
+      // Similar logic for Cashfree
+      const paymentsResponse = await fetch(`${cashfreeBaseUrl(settings)}/orders/${body.orderId}/payments`, {
+        method: 'GET',
         headers: cashfreeHeaders(settings),
-        cache: 'no-store',
       });
-      const cashfreeOrder = await cashfreeResponse.json();
-      if (cashfreeResponse.ok && cashfreeOrder.order_status === 'PAID') {
-        paymentStatus = true;
+
+      const paymentsData = await paymentsResponse.json();
+      
+      if (!paymentsResponse.ok || !paymentsData.length || paymentsData[0].payment_status !== 'SUCCESS') {
+        return NextResponse.json({ 
+          success: false, 
+          error: 'Payment not successful or still processing.' 
+        }, { status: 202 });
       }
+
+      const payment = paymentsData[0];
+      const userId = payment.order_tags?.userId;
+      const resourceId = payment.order_tags?.resourceId;
+
+      if (!userId || !resourceId) {
+        return NextResponse.json({ error: 'Payment information incomplete.' }, { status: 400 });
+      }
+
+      // Create or update order
+      if (!order) {
+        order = await Order.create({
+          userId,
+          resourceId,
+          cashfreeOrderId: body.orderId,
+          cashfreePaymentId: payment.cf_payment_id,
+          amount: payment.order_amount,
+          status: 'completed',
+          gateway: 'cashfree',
+          captureStatus: 'success',
+          paymentCaptured: true,
+        });
+      } else {
+        await Order.updateOne(
+          { _id: order._id },
+          { 
+            status: 'completed',
+            captureStatus: 'success',
+            paymentCaptured: true,
+            cashfreePaymentId: payment.cf_payment_id,
+          }
+        );
+      }
+
+      // Grant access to user
+      const resource = await Resource.findById(resourceId);
+      if (resource && !user.purchasedResources.includes(resource._id)) {
+        user.purchasedResources.push(resource._id);
+        await user.save();
+      }
+
+      return NextResponse.json({ 
+        success: true, 
+        message: 'Payment completed successfully',
+        paymentId: payment.cf_payment_id 
+      });
     }
 
-    if (!paymentStatus) {
-      return NextResponse.json({ error: 'Payment was not completed.' }, { status: 400 });
-    }
+    return NextResponse.json({ error: 'Payment gateway not supported.' }, { status: 400 });
 
-    order.status = 'completed';
-    await order.save();
-    await User.findByIdAndUpdate(user._id, { $addToSet: { purchasedResources: order.resourceId } });
-    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Payment verification error:', error);
-    return NextResponse.json({ error: 'Failed to verify the payment.' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to verify payment status.' }, { status: 500 });
   }
 }

@@ -23,18 +23,21 @@ export async function GET(request: NextRequest) {
     if (!settings) {
       settings = await PaymentSettings.create({
         gateway: 'cashfree',
-        razorpay: { keyId: '', keySecret: '' },
+        environment: 'sandbox',
+        razorpay: { keyId: '', keySecret: '', webhookSecret: '' },
         payu: { key: '', salt: '' },
-        cashfree: { clientId: '', clientSecret: '' },
+        cashfree: { clientId: '', clientSecret: '', webhookSecret: '' },
       });
     }
 
     // Don't send secrets in response for security
     const safeSettings = {
       gateway: settings.gateway,
+      environment: settings.environment,
       razorpay: {
         keyId: settings.razorpay.keyId,
         hasSecret: !!settings.razorpay.keySecret,
+        hasWebhookSecret: !!settings.razorpay.webhookSecret,
       },
       payu: {
         key: settings.payu.key,
@@ -43,6 +46,7 @@ export async function GET(request: NextRequest) {
       cashfree: {
         clientId: settings.cashfree.clientId,
         hasSecret: !!settings.cashfree.clientSecret,
+        hasWebhookSecret: !!settings.cashfree.webhookSecret,
       },
     };
 
@@ -67,9 +71,11 @@ export async function PUT(request: NextRequest) {
       // Create new settings
       settings = await PaymentSettings.create({
         gateway: body.gateway || 'cashfree',
+        environment: body.environment || 'sandbox',
         razorpay: {
           keyId: body.razorpay?.keyId || '',
           keySecret: body.razorpay?.keySecret || '',
+          webhookSecret: body.razorpay?.webhookSecret || '',
         },
         payu: {
           key: body.payu?.key || '',
@@ -78,30 +84,35 @@ export async function PUT(request: NextRequest) {
         cashfree: {
           clientId: body.cashfree?.clientId || '',
           clientSecret: body.cashfree?.clientSecret || '',
+          webhookSecret: body.cashfree?.webhookSecret || '',
         },
       });
     } else {
       // Update existing settings
       const previousGateway = settings.gateway;
       settings.gateway = body.gateway || settings.gateway;
+      settings.environment = body.environment || settings.environment;
 
       // Security: Clear credentials of previous gateway when switching
       if (previousGateway !== settings.gateway) {
         if (previousGateway === 'razorpay') {
           settings.razorpay.keyId = '';
           settings.razorpay.keySecret = '';
+          settings.razorpay.webhookSecret = '';
         } else if (previousGateway === 'payu') {
           settings.payu.key = '';
           settings.payu.salt = '';
         } else if (previousGateway === 'cashfree') {
           settings.cashfree.clientId = '';
           settings.cashfree.clientSecret = '';
+          settings.cashfree.webhookSecret = '';
         }
       }
 
       if (body.razorpay) {
         settings.razorpay.keyId = body.razorpay.keyId || settings.razorpay.keyId;
         settings.razorpay.keySecret = body.razorpay.keySecret || settings.razorpay.keySecret;
+        settings.razorpay.webhookSecret = body.razorpay.webhookSecret || settings.razorpay.webhookSecret;
       }
 
       if (body.payu) {
@@ -112,6 +123,7 @@ export async function PUT(request: NextRequest) {
       if (body.cashfree) {
         settings.cashfree.clientId = body.cashfree.clientId || settings.cashfree.clientId;
         settings.cashfree.clientSecret = body.cashfree.clientSecret || settings.cashfree.clientSecret;
+        settings.cashfree.webhookSecret = body.cashfree.webhookSecret || settings.cashfree.webhookSecret;
       }
 
       await settings.save();
