@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
       let fileName;
 
       // Check if it's a Google Docs file (document, spreadsheet, presentation)
-      if (isGoogleDocsFile(fileInfo.mimeType)) {
+      if (fileInfo.mimeType && isGoogleDocsFile(fileInfo.mimeType as string)) {
         console.log('Google Docs file detected, exporting to PDF');
         // Export Google Docs to PDF
         fileStream = await exportDriveFileToPDF(resource.linkUrl);
