@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif, Poppins } from "next/font/google";
 import "./globals.css";
 import Providers from '@/components/providers';
+import NextTopLoader from 'nextjs-toploader';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -51,8 +55,19 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${poppins.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col">
+        <NextTopLoader 
+          color="#2563EB"
+          initialPosition={0.3}
+          crawl={true}
+          crawlSpeed={200}
+          height={3}
+          showSpinner={false}
+          speed={200}
+          shadow="0 0 10px rgba(37,99,235,0.5)"
+        />
         <Providers>{children}</Providers>
       </body>
     </html>

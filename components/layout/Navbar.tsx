@@ -15,7 +15,10 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const handleLogout = async () => {
-    await signOut();
+    await signOut({ 
+      callbackUrl: '/',
+      redirect: true 
+    });
     setShowDropdown(false);
   };
 

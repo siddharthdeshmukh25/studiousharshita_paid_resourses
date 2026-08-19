@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import Resource from '@/models/Resource';
 import User from '@/models/User';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { hasValidCredentials } from '@/lib/drive/tokenManager';
 
 export async function GET(
   request: NextRequest,
@@ -44,8 +47,27 @@ export async function PUT(
 
     // Check if Google Drive is connected when linkType is google_drive or docs
     if (body.linkType === 'google_drive' || body.linkType === 'docs') {
-      const adminUser = await User.findOne({ role: 'admin' });
-      if (!adminUser || !adminUser.googleDriveConnected) {
+      const session = await getServerSession(authOptions);
+      console.log('Session user email:', session?.user?.email);
+      
+      const adminUser = await User.findOne({ email: session?.user?.email });
+      console.log('Admin user found:', adminUser ? 'Yes' : 'No');
+      console.log('Admin user email:', adminUser?.email);
+      console.log('Admin user role:', adminUser?.role);
+      
+      if (!adminUser) {
+        return NextResponse.json(
+          { error: 'User not found. Please login to update resources.' },
+          { status: 401 }
+        );
+      }
+      
+      // Check separate GoogleDriveCredentials collection
+      const userId = adminUser._id.toString();
+      const hasValidCreds = await hasValidCredentials(userId);
+      console.log('Has valid Google Drive credentials:', hasValidCreds);
+      
+      if (!hasValidCreds) {
         return NextResponse.json(
           { error: 'Google Drive is not connected. Please connect your Google Drive account in Settings before adding Google Drive resources.' },
           { status: 400 }

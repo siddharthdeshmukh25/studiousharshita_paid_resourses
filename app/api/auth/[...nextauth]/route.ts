@@ -20,15 +20,29 @@ const authOptions = {
     signIn: '/',
     error: '/',
   },
+  cookies: {
+    sessionToken: {
+      name: 'next-auth.session-token',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: false, // Changed to false for development to work with HTTP
+      },
+    },
+  },
   callbacks: {
     async signIn({ user, account, profile }: any) {
       if (account.provider === 'google') {
         await connectDB();
         
+        console.log('Google sign-in attempt for email:', user.email);
+        
         // Check if user already exists
         const existingUser = await User.findOne({ email: user.email });
         
         if (!existingUser) {
+          console.log('Creating new user for email:', user.email);
           // Create new user
           const newUser = await User.create({
             name: user.name,
@@ -36,11 +50,14 @@ const authOptions = {
             image: user.image,
             role: 'user',
             purchasedResources: [],
+            googleDriveConnected: false,
           });
+          console.log('New user created successfully:', newUser.email);
           // Store user data in the JWT token
           user.id = newUser._id.toString();
           user.role = newUser.role;
         } else {
+          console.log('Existing user found:', existingUser.email);
           // Store existing user data in the JWT token
           user.id = existingUser._id.toString();
           user.role = existingUser.role;
@@ -55,6 +72,7 @@ const authOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.email = user.email;
       }
       return token;
     },
@@ -63,6 +81,7 @@ const authOptions = {
       if (token) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.email = token.email;
       }
       return session;
     },

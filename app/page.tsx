@@ -59,18 +59,6 @@ export default function Home() {
     fetchResources();
   }, [selectedCategory]);
 
-  // Prevent body scroll when category menu is open
-  useEffect(() => {
-    if (isCategoryMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isCategoryMenuOpen]);
-
   const handleResourceClick = (resourceId: string) => {
     router.push(`/resource/${resourceId}`);
   };
@@ -80,7 +68,7 @@ export default function Home() {
       <Navbar />
 
       <section className="relative overflow-hidden border-b border-[#E2E8F0] bg-gradient-to-r from-white via-[#F8FBFF] to-[#E7F1FF] py-12 sm:py-16">
-        <div aria-hidden="true" className="absolute -right-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#2563EB]/10 blur-3xl" />
+        <div aria-hidden="true" className="absolute -right-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#2563EB]/10" style={{ filter: 'blur(48px)' }} />
         <div aria-hidden="true" className="absolute right-[12%] top-0 h-full w-px bg-gradient-to-b from-transparent via-[#2563EB]/15 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl lg:max-w-[54%]">
@@ -90,17 +78,17 @@ export default function Home() {
           </div>
 
           <div aria-hidden="true" className="pointer-events-none absolute right-2 top-1/2 hidden h-[310px] w-[390px] -translate-y-1/2 lg:block xl:right-10">
-            <div className="absolute inset-3 rounded-[42%] border border-white/70 bg-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-sm" />
-            <div className="absolute bottom-3 left-1/2 h-8 w-64 -translate-x-1/2 rounded-full bg-[#2563EB]/15 blur-xl" />
+            <div className="absolute inset-3 rounded-[42%] border border-white/70 bg-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]" />
+            <div className="absolute bottom-3 left-1/2 h-8 w-64 -translate-x-1/2 rounded-full bg-[#2563EB]/15" style={{ filter: 'blur(12px)' }} />
 
-            <div className="absolute left-7 top-16 h-44 w-28 -rotate-[16deg] rounded-xl bg-gradient-to-br from-[#1649B8] to-[#2563EB] p-3 shadow-[12px_14px_0_rgba(30,64,175,0.18),0_20px_28px_rgba(37,99,235,0.25)]">
+            <div className="absolute left-7 top-16 h-44 w-28 -rotate-[16deg] rounded-xl bg-gradient-to-br from-[#1649B8] to-[#2563EB] p-3 shadow-lg">
               <div className="flex items-center justify-between text-white/90"><BookOpen className="h-5 w-5" /><span className="text-[8px] font-bold tracking-wider">STUDY</span></div>
               <div className="mt-8 h-px w-12 bg-white/40" />
               <p className="mt-2 text-sm font-bold leading-tight text-white">Focus<br />notes</p>
               <Bookmark className="absolute bottom-3 right-3 h-5 w-5 fill-[#FCD34D] text-[#FCD34D]" />
             </div>
 
-            <div className="absolute left-[105px] top-5 w-[190px] rotate-[7deg] rounded-2xl border border-white/90 bg-white p-4 shadow-[14px_18px_0_rgba(148,163,184,0.16),0_24px_36px_rgba(15,23,42,0.15)]">
+            <div className="absolute left-[105px] top-5 w-[190px] rotate-[7deg] rounded-2xl border border-white/90 bg-white p-4 shadow-lg">
               <div className="flex items-center justify-between"><span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#2563EB]">Weekly plan</span><Sparkles className="h-4 w-4 text-[#06B6D4]" /></div>
               <div className="mt-4 space-y-2.5">
                 {['Review notes', 'Practice quiz', 'Plan tomorrow'].map((task, index) => (
@@ -113,7 +101,7 @@ export default function Home() {
               <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#E2E8F0]"><div className="h-full w-2/3 rounded-full bg-[#06B6D4]" /></div>
             </div>
 
-            <div className="absolute bottom-6 right-8 rotate-[-7deg] rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 shadow-[8px_10px_0_rgba(37,99,235,0.12),0_14px_24px_rgba(37,99,235,0.16)]">
+            <div className="absolute bottom-6 right-8 rotate-[-7deg] rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 shadow-md">
               <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#2563EB]">Keep going</p>
               <p className="mt-1 text-xs font-bold text-[#0F172A]">Small steps, big goals.</p>
             </div>
@@ -144,7 +132,7 @@ export default function Home() {
                 </svg>
               </button>
               {isCategoryMenuOpen && (
-                <div role="listbox" aria-label="Filter resources by category" className="absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-xl border border-[#D7E0EC] bg-white p-1.5 shadow-lg shadow-[#0F172A]/10">
+                <div role="listbox" aria-label="Filter resources by category" className="absolute right-0 top-full z-50 mt-2 w-52 overflow-hidden rounded-xl border border-[#D7E0EC] bg-white p-1.5 shadow-lg">
                   {categories.map((category) => {
                     const isSelected = selectedCategory === category;
                     return (

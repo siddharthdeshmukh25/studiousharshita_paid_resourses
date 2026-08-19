@@ -5,9 +5,11 @@ import User from '@/models/User';
 import Resource from '@/models/Resource';
 import Order from '@/models/Order';
 import PaymentSettings from '@/models/PaymentSettings';
+import GoogleDriveCredentials from '@/models/GoogleDriveCredentials';
 import { getValidCoupon } from '@/lib/coupons';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
+import { grantFilePermission } from '@/lib/drive/googleDrive';
 
 async function getPaymentSettings() {
   await connectDB();
@@ -212,6 +214,9 @@ export async function PUT(request: NextRequest) {
     await connectDB();
     const user = await getAuthenticatedUser();
     if (!user) return NextResponse.json({ error: 'Unauthorized. Please login to continue.' }, { status: 401 });
+    
+    // Get session for admin email
+    const session = await getServerSession(authOptions);
 
     const settings = await getPaymentSettings();
     if (!settings || !settings.gateway) {
@@ -372,6 +377,29 @@ export async function PUT(request: NextRequest) {
         user.purchasedResources.push(resource._id);
         await user.save();
         console.log('✅ Access granted successfully');
+        
+        // Grant Google Drive permission if resource is Google Drive
+        if (resource.linkType === 'google_drive' || resource.linkType === 'docs') {
+          try {
+            console.log('Resource is Google Drive, granting permission to user:', user.email);
+            
+            // Find ANY user with valid Google Drive credentials (should be admin)
+            const adminWithDrive = await GoogleDriveCredentials.findOne({});
+            
+            if (adminWithDrive) {
+              console.log('Found admin with Google Drive credentials:', adminWithDrive.email);
+              await grantFilePermission(resource.linkUrl, user.email, adminWithDrive.userId);
+              console.log('✅ Google Drive permission granted successfully to:', user.email);
+            } else {
+              console.log('⚠️ No admin with Google Drive credentials found, skipping permission grant');
+              console.log('Please ensure admin has connected Google Drive in settings');
+            }
+          } catch (error) {
+            console.error('Error granting Google Drive permission:', error);
+            // Don't fail the payment if permission grant fails
+            console.log('⚠️ Payment successful but Google Drive permission grant failed');
+          }
+        }
       } else {
         console.log('User already has access to this resource or resource not found');
       }
@@ -435,6 +463,29 @@ export async function PUT(request: NextRequest) {
       if (resource && !user.purchasedResources.includes(resource._id)) {
         user.purchasedResources.push(resource._id);
         await user.save();
+        
+        // Grant Google Drive permission if resource is Google Drive
+        if (resource.linkType === 'google_drive' || resource.linkType === 'docs') {
+          try {
+            console.log('Resource is Google Drive, granting permission to user:', user.email);
+            
+            // Find the admin user who has Google Drive connected
+            // We need to find ANY user with valid Google Drive credentials
+            const adminWithDrive = await GoogleDriveCredentials.findOne({});
+            
+            if (adminWithDrive) {
+              console.log('Found admin with Google Drive credentials:', adminWithDrive.email);
+              await grantFilePermission(resource.linkUrl, user.email, adminWithDrive.userId);
+              console.log('✅ Google Drive permission granted successfully to:', user.email);
+            } else {
+              console.log('⚠️ No admin with Google Drive credentials found, skipping permission grant');
+              console.log('Please ensure admin has connected Google Drive in settings');
+            }
+          } catch (error) {
+            console.error('Error granting Google Drive permission:', error);
+            console.log('⚠️ Payment successful but Google Drive permission grant failed');
+          }
+        }
       }
 
       return NextResponse.json({ 

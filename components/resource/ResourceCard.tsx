@@ -39,7 +39,7 @@ export default function ResourceCard({ id, title, rating, reviewCount, price, di
     } catch (error) { console.error('Error toggling wishlist:', error); }
   };
 
-  return <article className="flex h-full w-full flex-col overflow-hidden rounded-lg border border-[#E2E8F0] bg-[#FFFFFF] shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_20px_rgba(15,23,42,0.03)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(15,23,42,0.05),0_16px_30px_rgba(15,23,42,0.08)]">
+  return <article className="flex h-full w-full flex-col overflow-hidden rounded-lg border border-[#E2E8F0] bg-[#FFFFFF] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
     <div className="relative h-32 w-full overflow-hidden bg-[#EFF6FF] sm:h-44 md:h-52">
       {thumbnailUrl ? <img src={thumbnailUrl} alt={title} className="h-full w-full object-cover" /> : <span className="grid h-full place-items-center text-sm text-[#64748B]">Thumbnail</span>}
       {category && <span className="absolute left-2 top-2 rounded-md bg-[#FFFFFF]/95 px-2 py-1 text-[10px] font-semibold text-[#2563EB] shadow-sm sm:px-3 sm:text-xs">{category}</span>}

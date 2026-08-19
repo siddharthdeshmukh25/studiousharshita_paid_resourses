@@ -65,10 +65,13 @@ export async function GET(request: NextRequest) {
     // For Google Drive, stream the file
     console.log('Attempting to download from Google Drive:', resource.linkUrl);
     console.log('Resource linkType:', resource.linkType);
+    console.log('User ID for Drive access:', user._id.toString());
     
     try {
       // Get file info from Google Drive
-      const fileInfo = await getDriveFileInfo(resource.linkUrl);
+      // Pass userId to use user's OAuth tokens if available
+      const userId = user._id.toString();
+      const fileInfo = await getDriveFileInfo(resource.linkUrl, userId);
       console.log('File info retrieved:', fileInfo);
 
       let fileStream;
@@ -79,13 +82,13 @@ export async function GET(request: NextRequest) {
       if (fileInfo.mimeType && isGoogleDocsFile(fileInfo.mimeType as string)) {
         console.log('Google Docs file detected, exporting to PDF');
         // Export Google Docs to PDF
-        fileStream = await exportDriveFileToPDF(resource.linkUrl);
+        fileStream = await exportDriveFileToPDF(resource.linkUrl, userId);
         mimeType = 'application/pdf';
         const originalName = fileInfo.name || 'document';
         fileName = originalName.replace(/\.[^/.]+$/, '') + '.pdf'; // Replace extension with .pdf
       } else {
         // Regular file download
-        fileStream = await getDriveFileStream(resource.linkUrl);
+        fileStream = await getDriveFileStream(resource.linkUrl, userId);
         mimeType = fileInfo.mimeType || 'application/octet-stream';
         fileName = fileInfo.name || 'download';
       }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import Wishlist from '@/models/Wishlist';
 import Review from '@/models/Review';
+import Resource from '@/models/Resource';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
 
@@ -19,8 +20,13 @@ export async function GET(request: NextRequest) {
       .sort({ createdAt: -1 });
 
     // Get ratings for each resource in wishlist
-    const wishlistWithRatings = await Promise.all(
+    const wishlistWithRatings = (await Promise.all(
       wishlistItems.map(async (item) => {
+        if (!item.resourceId) {
+          // If resource was deleted, skip this item or return null
+          return null;
+        }
+
         const reviews = await Review.find({ resourceId: item.resourceId._id.toString() });
         const avgRating = reviews.length > 0 
           ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
@@ -36,7 +42,7 @@ export async function GET(request: NextRequest) {
           }
         };
       })
-    );
+    )).filter((item): item is NonNullable<typeof item> => item !== null); // Filter out null items
 
     return NextResponse.json({ wishlist: wishlistWithRatings });
   } catch (error) {

@@ -1038,9 +1038,9 @@ export default function AdminPage() {
 
       {/* Add Resource Modal */}
       {showAddModal && (
-        <div className="admin-mobile-modal fixed inset-0 z-50 bg-slate-950/75 p-0 backdrop-blur-sm sm:bg-slate-900/45 sm:p-6">
+        <div className="admin-mobile-modal fixed inset-0 z-50 bg-slate-950/75 p-0 sm:bg-slate-900/45 sm:p-6">
           <div className="mx-auto flex h-full max-w-5xl items-center justify-center">
-            <div className="admin-modal-card h-full w-full overflow-y-auto rounded-b-[28px] rounded-t-none border border-white/20 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.35)] sm:max-h-[92vh] sm:rounded-[28px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <div className="admin-modal-card h-full w-full overflow-y-auto rounded-b-[28px] rounded-t-none border border-white/20 bg-white shadow-xl sm:max-h-[92vh] sm:rounded-[28px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <div className="border-b border-white/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-5 sm:p-6 sm:rounded-t-[28px]">
               <div className="flex items-center justify-between">
                 <div>

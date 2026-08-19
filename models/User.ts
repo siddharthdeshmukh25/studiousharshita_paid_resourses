@@ -6,9 +6,7 @@ interface IUser {
   image?: string;
   role: 'user' | 'admin';
   purchasedResources: mongoose.Types.ObjectId[];
-  googleDriveConnected?: boolean;
-  googleDriveAccessToken?: string;
-  googleDriveRefreshToken?: string;
+  googleDriveConnected?: boolean; // Kept for backward compatibility, now managed by GoogleDriveCredentials
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,12 +39,6 @@ const UserSchema = new Schema<IUser>(
     googleDriveConnected: {
       type: Boolean,
       default: false,
-    },
-    googleDriveAccessToken: {
-      type: String,
-    },
-    googleDriveRefreshToken: {
-      type: String,
     },
   },
   {
