@@ -6,7 +6,7 @@ import Resource from '@/models/Resource';
 import Order from '@/models/Order';
 import User from '@/models/User';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 // Helper function to check if user is admin/manager
 async function isAdmin(session: any) {

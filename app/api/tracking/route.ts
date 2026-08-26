@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import connectDB from '@/lib/db/mongodb';
 import ResourceAnalytics from '@/models/ResourceAnalytics';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 // Helper function to detect device type
 function detectDeviceType(userAgent: string): 'mobile' | 'tablet' | 'desktop' | 'other' {

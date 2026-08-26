@@ -3,7 +3,7 @@ import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
 import Resource from '@/models/Resource';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getDriveFileStream, getDriveFileInfo, exportDriveFileToPDF, isGoogleDocsFile } from '@/lib/drive/googleDrive';
 
 export async function GET(request: NextRequest) {

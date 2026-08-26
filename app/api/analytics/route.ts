@@ -4,7 +4,7 @@ import connectDB from '@/lib/db/mongodb';
 import ResourceAnalytics from '@/models/ResourceAnalytics';
 import Resource from '@/models/Resource';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 // Helper function to check if user is admin/manager
 async function isAdmin(session: any) {

@@ -4,7 +4,7 @@ import Wishlist from '@/models/Wishlist';
 import Review from '@/models/Review';
 import Resource from '@/models/Resource';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export async function GET(request: NextRequest) {
   try {

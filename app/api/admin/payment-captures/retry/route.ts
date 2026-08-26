@@ -3,7 +3,7 @@ import connectDB from '@/lib/db/mongodb';
 import Order from '@/models/Order';
 import { shouldRetryCapture, capturePayment } from '@/lib/paymentCapture';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 async function getAuthenticatedUser() {
   const session = await getServerSession(authOptions);

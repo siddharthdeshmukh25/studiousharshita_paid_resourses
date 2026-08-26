@@ -8,7 +8,7 @@ import PaymentSettings from '@/models/PaymentSettings';
 import GoogleDriveCredentials from '@/models/GoogleDriveCredentials';
 import { getValidCoupon } from '@/lib/coupons';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { grantFilePermission } from '@/lib/drive/googleDrive';
 
 async function getPaymentSettings() {
