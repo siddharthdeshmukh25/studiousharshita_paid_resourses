@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
 import Resource from '@/models/Resource';
+import ResourceAccessLog from '@/models/ResourceAccessLog';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
@@ -42,8 +43,9 @@ export async function GET(
       );
     }
 
-    // Verify user owns this resource
-    const hasAccess = user.purchasedResources.some(id => id.toString() === resource._id.toString());
+    // Free resources are available to every signed-in user; paid resources require ownership.
+    const isFreeResource = resource.price === 0;
+    const hasAccess = isFreeResource || user.purchasedResources.some(id => id.toString() === resource._id.toString());
     if (!hasAccess) {
       console.log('User purchased resources:', user.purchasedResources.map(id => id.toString()));
       console.log('Resource ID:', resource._id.toString());
@@ -53,6 +55,10 @@ export async function GET(
         { status: 403 }
       );
     }
+
+    // This is an access event, not a claim that the user read the whole file.
+    const source = new URL(request.url).searchParams.get('ref')?.slice(0, 80) || 'direct';
+    await ResourceAccessLog.create({ resourceId: resource._id, userId: user._id, source });
 
     // Handle different link types
     if (resource.linkType === 'notion') {

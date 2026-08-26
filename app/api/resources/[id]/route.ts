@@ -45,8 +45,10 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    // Check if Google Drive is connected when linkType is google_drive or docs
-    if (body.linkType === 'google_drive' || body.linkType === 'docs') {
+    // Keep credential validation for paid resources only. Free resources can
+    // point to a publicly shared Drive/Docs link.
+    const isPaidResource = Number(body.price) > 0;
+    if (isPaidResource && (body.linkType === 'google_drive' || body.linkType === 'docs')) {
       const session = await getServerSession(authOptions);
       console.log('Session user email:', session?.user?.email);
       

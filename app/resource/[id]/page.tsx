@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceDetailSkeleton from '@/components/ui/ResourceDetailSkeleton';
@@ -42,6 +42,7 @@ declare global {
 
 export default function ResourceDetailPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const { data: session, status } = useSession();
   const [resource, setResource] = useState<Resource | null>(null);
@@ -67,6 +68,76 @@ export default function ResourceDetailPage() {
   const [reviewModalError, setReviewModalError] = useState<string | null>(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [razorpayOrderId, setRazorpayOrderId] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [pageStartTime, setPageStartTime] = useState<number>(Date.now());
+  const isFreeResource = resource?.price === 0;
+
+  const openResource = async () => {
+    if (!session) {
+      (document.querySelector('[data-login-trigger="true"]') as HTMLButtonElement | null)?.click();
+      return;
+    }
+
+    try {
+      const source = searchParams.get('ref') || 'direct';
+      const response = await fetch(`/api/resources/${params.id}/open-drive?ref=${encodeURIComponent(source)}`);
+      const data = await response.json();
+      if (response.ok && data.driveUrl) window.open(data.driveUrl, '_blank');
+      else alert(data.error || 'Failed to open resource');
+    } catch {
+      alert('Failed to open resource');
+    }
+  };
+
+  // Automatic tracking functions
+  const trackEvent = async (eventType: 'page_view' | 'click' | 'purchase' | 'share' | 'time_on_page', additionalData?: any) => {
+    try {
+      const referrer = document.referrer;
+      const currentSessionId = sessionId || crypto.randomUUID();
+      
+      if (!sessionId) {
+        setSessionId(currentSessionId);
+      }
+
+      await fetch('/api/tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          resourceId: params.id,
+          eventType,
+          referrer,
+          sessionId: currentSessionId,
+          ...additionalData
+        })
+      });
+    } catch (error) {
+      console.error('Tracking error:', error);
+    }
+  };
+
+  // Track page view on mount
+  useEffect(() => {
+    if (params.id) {
+      setPageStartTime(Date.now());
+      trackEvent('page_view');
+    }
+  }, [params.id]);
+
+  // Track time on page when user leaves
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const timeOnPage = Math.round((Date.now() - pageStartTime) / 1000);
+      if (timeOnPage > 5) { // Only track if user spent more than 5 seconds
+        trackEvent('time_on_page', { timeOnPage });
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      handleBeforeUnload();
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [pageStartTime, sessionId]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -296,24 +367,33 @@ export default function ResourceDetailPage() {
   };
 
   const handleShare = async () => {
+    // Track share event
+    await trackEvent('share');
+    
+    // Generate tracking link automatically
+    const trackingUrl = `${window.location.origin}/resource/${params.id}?ref=shared&sid=${sessionId || crypto.randomUUID()}`;
+    
     if (navigator.share) {
       try {
         await navigator.share({
           title: resource?.title || 'Check out this resource',
           text: `Check out this amazing resource: ${resource?.title}`,
-          url: window.location.href,
+          url: trackingUrl,
         });
       } catch (error) {
         console.error('Error sharing:', error);
       }
     } else {
       // Fallback for browsers that don't support Web Share API
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+      navigator.clipboard.writeText(trackingUrl);
+      alert('Tracking link copied to clipboard!');
     }
   };
 
   const handleCheckout = async () => {
+    // Track purchase initiation
+    await trackEvent('click', { action: 'checkout_initiated' });
+    
     if (!session) {
       // Trigger login modal
       const loginButton = document.querySelector('[data-login-trigger]') as HTMLButtonElement;
@@ -550,7 +630,9 @@ export default function ResourceDetailPage() {
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-sm border border-blue-100 p-4 sm:p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    {resource.discount && resource.discount > 0 ? (
+                    {isFreeResource ? (
+                      <div><p className="text-2xl font-bold text-emerald-600 md:text-3xl">Free</p><p className="mt-1 text-sm font-medium text-emerald-700">Instant access after login</p></div>
+                    ) : resource.discount && resource.discount > 0 ? (
                       <div>
                         <p className="text-sm text-gray-500 line-through">₹{resource.price}</p>
                         <p className="text-2xl md:text-3xl font-bold text-green-600">
@@ -590,7 +672,7 @@ export default function ResourceDetailPage() {
                   </div>
                 )}
 
-                <div className="mb-4 rounded-lg border border-blue-100 bg-white/75 p-3">
+                {!isFreeResource && <div className="mb-4 rounded-lg border border-blue-100 bg-white/75 p-3">
                   <label htmlFor="resource-coupon" className="mb-2 block text-xs font-bold uppercase tracking-wide text-[#475569]">Have a coupon?</label>
                   <div className="flex gap-2">
                     <input
@@ -606,27 +688,15 @@ export default function ResourceDetailPage() {
                   </div>
                   {couponMessage && <p className={`mt-2 text-xs ${couponDiscount ? 'text-green-700' : 'text-red-600'}`}>{couponMessage}</p>}
                   {couponDiscount && <p className="mt-2 text-sm font-semibold text-green-700">You pay ₹{((resource.discount && resource.discount > 0 ? resource.price * (1 - resource.discount / 100) : resource.price) * (1 - couponDiscount / 100)).toFixed(2)} after {couponDiscount}% off.</p>}
-                </div>
+                </div>}
 
-                {isPurchased ? (
+                {isPurchased || isFreeResource ? (
                   <button
-                    onClick={async () => {
-                      try {
-                        const response = await fetch(`/api/resources/${params.id}/open-drive`);
-                        const data = await response.json();
-                        if (response.ok && data.driveUrl) {
-                          window.open(data.driveUrl, '_blank');
-                        } else {
-                          alert(data.error || 'Failed to open resource');
-                        }
-                      } catch (error) {
-                        alert('Failed to open resource');
-                      }
-                    }}
+                    onClick={openResource}
                     className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center space-x-2"
                   >
                     <ExternalLink className="h-5 w-5" />
-                    <span>Open Resource</span>
+                    <span>{isFreeResource ? 'Get Free Resource' : 'Open Resource'}</span>
                   </button>
                 ) : (
                   <button
@@ -653,7 +723,7 @@ export default function ResourceDetailPage() {
             </div>
 
             {/* Comments Block */}
-            <div className="order-3 lg:col-start-1 lg:row-start-2 w-full mt-1">
+            <div className="order-3 mt-1 w-full lg:col-start-1 lg:row-start-1 lg:mt-[calc(100%+2rem)]">
               <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-3 sm:p-6 border border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-gray-900 text-lg flex items-center">

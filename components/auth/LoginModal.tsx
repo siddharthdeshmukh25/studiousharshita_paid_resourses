@@ -15,12 +15,18 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
+      // Keep the page width unchanged when the browser scrollbar is hidden.
+      // Without this, desktop content shifts sideways as soon as the modal opens.
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     } else {
       document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
     }
     return () => {
       document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
     };
   }, [isOpen]);
 
@@ -39,7 +45,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-none p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/30 backdrop-blur-none p-4">
       <div className="bg-[#FFFFFF] rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-[#E2E8F0]">
         <div className="bg-[#2563EB] px-6 sm:px-8 py-6">
           <div className="flex items-center justify-between">

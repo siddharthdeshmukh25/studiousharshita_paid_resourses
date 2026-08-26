@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Loader2, Package, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertical, Settings, UserCheck } from 'lucide-react';
+import { Loader2, Package, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertical, Settings, UserCheck, Eye, BarChart3 } from 'lucide-react';
 import PageSkeleton from '@/components/ui/PageSkeleton';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import dynamic from 'next/dynamic';
@@ -42,6 +42,14 @@ interface Stats {
   totalResources: number;
 }
 
+interface ResourceMetrics { totalOpens: number; uniqueUsers: number; buyers: number; }
+interface ResourceAnalytics {
+  resource: { title: string; isFree: boolean };
+  summary: { totalOpens: number; uniqueUsers: number; buyers: number; buyersWhoOpened: number };
+  accesses: { userId: string; name?: string; email?: string; opens: number; firstOpenedAt: string; lastOpenedAt: string; sources?: string[] }[];
+  buyers: { _id: string; name?: string; email?: string; purchasedAt?: string; amount?: number }[];
+}
+
 export default function AdminPage() {
   const createEmptyNewResource = () => ({
     title: '',
@@ -56,6 +64,10 @@ export default function AdminPage() {
     category: '',
   });
   const [resources, setResources] = useState<Resource[]>([]);
+  const [resourceMetrics, setResourceMetrics] = useState<Record<string, ResourceMetrics>>({});
+  const [resourceAnalytics, setResourceAnalytics] = useState<ResourceAnalytics | null>(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+  const [analyticsResourceId, setAnalyticsResourceId] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [stats, setStats] = useState<Stats>({ totalRevenue: 0, totalUsers: 0, totalResources: 0 });
@@ -98,6 +110,7 @@ export default function AdminPage() {
   const [itemToDelete, setItemToDelete] = useState<{ type: 'resource' | 'category' | 'coupon', id: string } | null>(null);
   const [logoutConfirmModal, setLogoutConfirmModal] = useState(false);
   const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('percentage');
+  const [resourceAccess, setResourceAccess] = useState<'free' | 'paid'>('paid');
   const [grantAccessForm, setGrantAccessForm] = useState({ userId: '', resourceId: '', orderId: '', userEmail: '', resourceTitle: '' });
   const [grantingAccess, setGrantingAccess] = useState(false);
   const [revokingAccess, setRevokingAccess] = useState(false);
@@ -178,12 +191,13 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [resourcesRes, statsRes, categoriesRes, couponsRes, paymentSettingsRes] = await Promise.all([
+        const [resourcesRes, statsRes, categoriesRes, couponsRes, paymentSettingsRes, analyticsRes] = await Promise.all([
           fetch('/api/resources'),
           fetch('/api/admin/stats'),
           fetch('/api/categories'),
           fetch('/api/admin/coupons'),
           fetch('/api/admin/payment-settings'),
+          fetch('/api/admin/resources/analytics'),
         ]);
 
         const resourcesData = await resourcesRes.json();
@@ -191,12 +205,14 @@ export default function AdminPage() {
         const categoriesData = await categoriesRes.json();
         const couponsData = await couponsRes.json();
         const paymentSettingsData = await paymentSettingsRes.json();
+        const analyticsData = await analyticsRes.json();
 
         setResources(resourcesData.resources || []);
         setStats(statsData || { totalRevenue: 0, totalUsers: 0, totalResources: 0 });
         setCategories(categoriesData.categories || []);
         setCoupons(couponsData.coupons || []);
         setPaymentSettings(paymentSettingsData.settings || null);
+        setResourceMetrics(analyticsRes.ok ? analyticsData.metrics || {} : {});
       } catch (err) {
         console.error('Failed to fetch data:', err);
         setError('Failed to load data');
@@ -570,6 +586,7 @@ export default function AdminPage() {
 
   const handleEditResource = (resource: Resource) => {
     setEditingResource(resource);
+    setResourceAccess(resource.price === 0 ? 'free' : 'paid');
     setNewResource({
       title: resource.title,
       description: resource.description,
@@ -584,6 +601,22 @@ export default function AdminPage() {
     });
     setDiscountType('percentage');
     setShowAddModal(true);
+  };
+
+  const viewResourceAnalytics = async (resourceId: string) => {
+    setAnalyticsLoading(true);
+    setAnalyticsResourceId(resourceId);
+    setResourceAnalytics(null);
+    try {
+      const response = await fetch(`/api/admin/resources/${resourceId}/analytics`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to load analytics');
+      setResourceAnalytics(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load analytics');
+    } finally {
+      setAnalyticsLoading(false);
+    }
   };
 
   const handleEditCategory = (category: Category) => {
@@ -710,8 +743,8 @@ export default function AdminPage() {
         body: JSON.stringify({
           ...newResource,
           thumbnailUrl: newResource.thumbnailUrl,
-          price: parseFloat(newResource.price),
-          discount: newResource.discount ? parseFloat(newResource.discount) : 0,
+          price: resourceAccess === 'free' ? 0 : parseFloat(newResource.price),
+          discount: resourceAccess === 'free' ? 0 : (newResource.discount ? parseFloat(newResource.discount) : 0),
         }),
       });
 
@@ -731,6 +764,7 @@ export default function AdminPage() {
       setShowAddModal(false);
       setEditingResource(null);
       setNewResource(createEmptyNewResource());
+      setResourceAccess('paid');
       setNewThumbnailInputType('url');
     } catch (err) {
       // Error is already shown in alert above
@@ -862,7 +896,7 @@ export default function AdminPage() {
           {/* Add Resource Button with Dropdown */}
           <div className="mb-5 grid grid-cols-3 gap-2 sm:relative sm:z-20 sm:mb-6 sm:flex sm:items-center sm:gap-4">
             <button
-              onClick={() => setShowAddModal(true)}
+              onClick={() => { setEditingResource(null); setNewResource(createEmptyNewResource()); setResourceAccess('paid'); setShowAddModal(true); }}
               className="flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-base"
             >
               <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -951,7 +985,7 @@ export default function AdminPage() {
               </div>
             ) : (
               <div className="max-h-[420px] overflow-x-auto overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                <table className="min-w-[720px] w-full">
+                <table className="min-w-[900px] w-full">
                   <thead className="sticky top-0 z-10 bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -963,6 +997,8 @@ export default function AdminPage() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Price
                       </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Opens</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buyers</th>
                       <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                       </th>
@@ -997,7 +1033,9 @@ export default function AdminPage() {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {resource.discount && resource.discount > 0 ? (
+                          {resource.price === 0 ? (
+                            <span className="inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">Free</span>
+                          ) : resource.discount && resource.discount > 0 ? (
                             <div>
                               <span className="line-through text-gray-400 mr-2">₹{resource.price}</span>
                               <span className="text-green-600 font-semibold">₹{(resource.price * (1 - resource.discount / 100)).toFixed(2)}</span>
@@ -1007,7 +1045,14 @@ export default function AdminPage() {
                             <span>₹{resource.price}</span>
                           )}
                         </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {resourceMetrics[resource._id]?.totalOpens ? <><span className="text-sm font-semibold text-gray-900">{resourceMetrics[resource._id].totalOpens}</span><span className="ml-1 text-xs text-gray-500">({resourceMetrics[resource._id].uniqueUsers} users)</span></> : <span className="text-sm text-gray-400">—</span>}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          {resource.price === 0 ? <span className="text-gray-400">—</span> : resourceMetrics[resource._id]?.buyers ? <span className="font-semibold text-gray-900">{resourceMetrics[resource._id].buyers}</span> : <span className="text-gray-400">—</span>}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button onClick={() => viewResourceAnalytics(resource._id)} className="mr-3 inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-900" title="View analytics"><BarChart3 className="h-4 w-4" /><span className="hidden lg:inline">Analytics</span></button>
                           <button
                             onClick={() => handleEditResource(resource)}
                             className="text-blue-600 hover:text-blue-900 mr-3"
@@ -1036,6 +1081,30 @@ export default function AdminPage() {
         </div>
       </main>
 
+      {(analyticsLoading || resourceAnalytics) && (
+        <div className="fixed inset-0 z-[70] flex items-end bg-slate-950/45 p-0 sm:items-center sm:justify-center sm:p-6">
+          <div className="max-h-[92vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl sm:max-w-4xl sm:rounded-3xl">
+            <div className="sticky top-0 z-10 flex items-start justify-between border-b border-slate-100 bg-white px-5 py-5 sm:px-7">
+              <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-600">Resource analytics</p><h2 className="mt-1 text-xl font-bold text-slate-900">{resourceAnalytics?.resource.title || 'Loading analytics...'}</h2></div>
+              <div className="flex items-center gap-2"><button onClick={() => { setResourceAnalytics(null); setAnalyticsLoading(false); setAnalyticsResourceId(null); }} className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900" aria-label="Close analytics"><X className="h-5 w-5" /></button></div>
+            </div>
+            {analyticsLoading || !resourceAnalytics ? <div className="grid min-h-72 place-items-center"><Loader2 className="h-7 w-7 animate-spin text-indigo-600" /></div> : <div className="p-5 sm:p-7">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {[['Total opens', resourceAnalytics.summary.totalOpens], ['Unique users', resourceAnalytics.summary.uniqueUsers], ['Buyers', resourceAnalytics.resource.isFree ? null : resourceAnalytics.summary.buyers], ['Buyers opened', resourceAnalytics.resource.isFree ? null : resourceAnalytics.summary.buyersWhoOpened]].map(([label, value]) => <div key={String(label)} className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><p className="text-xs font-semibold text-slate-500">{label}</p><p className="mt-1 text-2xl font-bold text-slate-900">{value ?? '—'}</p></div>)}
+              </div>
+
+              <section className="mt-7"><div className="mb-3 flex items-center gap-2"><Eye className="h-4 w-4 text-indigo-600" /><h3 className="font-bold text-slate-900">Access log</h3></div>
+                {resourceAnalytics.accesses.length === 0 ? <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">— No one has opened this resource yet.</div> : <div className="overflow-x-auto rounded-2xl border border-slate-200"><table className="min-w-[720px] w-full text-left text-sm"><thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500"><tr><th className="px-4 py-3">User</th><th className="px-4 py-3">Source</th><th className="px-4 py-3">Total opens</th><th className="px-4 py-3">Last opened</th></tr></thead><tbody>{resourceAnalytics.accesses.map((access) => <tr key={access.userId} className="border-t border-slate-100"><td className="px-4 py-3"><p className="font-semibold text-slate-900">{access.name || '—'}</p><p className="text-xs text-slate-500">{access.email || '—'}</p></td><td className="px-4 py-3 text-slate-600">{access.sources?.filter(Boolean).join(', ') || 'direct'}</td><td className="px-4 py-3 font-semibold text-slate-900">{access.opens || '—'}</td><td className="px-4 py-3 text-slate-600">{access.lastOpenedAt ? new Date(access.lastOpenedAt).toLocaleString() : '—'}</td></tr>)}</tbody></table></div>}
+              </section>
+
+              {!resourceAnalytics.resource.isFree && <section className="mt-7"><div className="mb-3 flex items-center gap-2"><Users className="h-4 w-4 text-indigo-600" /><h3 className="font-bold text-slate-900">Buyers</h3></div>
+                {resourceAnalytics.buyers.length === 0 ? <div className="rounded-2xl border border-dashed border-slate-200 py-8 text-center text-sm text-slate-500">— No completed purchases yet.</div> : <div className="grid gap-2 sm:grid-cols-2">{resourceAnalytics.buyers.map((user) => <div key={user._id} className="rounded-xl border border-slate-200 p-3"><p className="font-semibold text-slate-900">{user.name || '—'}</p><p className="truncate text-sm text-slate-500">{user.email || '—'}</p><p className="mt-1 text-xs text-slate-500">{user.purchasedAt ? new Date(user.purchasedAt).toLocaleDateString() : '—'} {user.amount ? `• ₹${user.amount}` : ''}</p></div>)}</div>}
+              </section>}
+            </div>}
+          </div>
+        </div>
+      )}
+
       {/* Add Resource Modal */}
       {showAddModal && (
         <div className="admin-mobile-modal fixed inset-0 z-50 bg-slate-950/75 p-0 sm:bg-slate-900/45 sm:p-6">
@@ -1054,6 +1123,7 @@ export default function AdminPage() {
                     setEditingResource(null);
                     setNewResource(createEmptyNewResource());
                     setNewThumbnailInputType('url');
+                    setResourceAccess('paid');
                   }}
                   className="rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
                 >
@@ -1088,11 +1158,20 @@ export default function AdminPage() {
                   onChange={(value) => setNewResource({ ...newResource, description: value })}
                   placeholder="Enter resource description with formatting..."
                   className="w-full"
-                  maxLength={1000}
+                  maxLength={10000}
                 />
               </div>
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                <label className="text-sm font-semibold text-gray-900">Resource type</label>
+                <div role="tablist" aria-label="Choose whether this resource is free or paid" className="relative grid h-10 w-44 grid-cols-2 rounded-xl bg-[#EAF1FB] p-1">
+                  <span aria-hidden="true" className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-transform duration-300 ease-out ${resourceAccess === 'free' ? 'translate-x-1' : 'translate-x-[calc(100%+3px)]'}`} />
+                  <button type="button" role="tab" aria-selected={resourceAccess === 'free'} onClick={() => { setResourceAccess('free'); setNewResource({ ...newResource, price: '0', discount: '' }); }} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceAccess === 'free' ? 'text-emerald-700' : 'text-[#64748B]'}`}>Free</button>
+                  <button type="button" role="tab" aria-selected={resourceAccess === 'paid'} onClick={() => { setResourceAccess('paid'); setNewResource({ ...newResource, price: newResource.price === '0' ? '' : newResource.price }); }} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceAccess === 'paid' ? 'text-[#2563EB]' : 'text-[#64748B]'}`}>Paid</button>
+                </div>
+              </div>
+
+              {resourceAccess === 'paid' && <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div>
                   <label className="block text-sm font-semibold text-gray-900 mb-2">
@@ -1154,7 +1233,7 @@ export default function AdminPage() {
                   />
                 </div>
               </div>
-              </div>
+              </div>}
 
               <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <label className="block text-sm font-semibold text-gray-900 mb-2">

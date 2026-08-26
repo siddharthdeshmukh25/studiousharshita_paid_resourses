@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import LinkExtension from '@tiptap/extension-link';
+import UnderlineExtension from '@tiptap/extension-underline';
 import { 
   Bold, 
   Italic, 
@@ -38,19 +40,21 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const editor = useEditor({
     extensions: [
       StarterKit,
+      UnderlineExtension,
+      LinkExtension.configure({
+        openOnClick: false,
+        autolink: true,
+        linkOnPaste: true,
+      }),
     ],
     content: value,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       const textOnly = html.replace(/<[^>]*>/g, '');
       setCharCount(textOnly.length);
-      if (textOnly.length <= maxLength) {
-        onChange(html);
-      } else {
-        // Truncate to max length
-        const truncated = textOnly.substring(0, maxLength);
-        onChange(editor.getHTML().replace(/<[^>]*>/g, truncated));
-      }
+      // Do not truncate pasted HTML here: truncating it destroys headings,
+      // bullets and bold text copied from ChatGPT or other editors.
+      onChange(html);
     },
     editorProps: {
       attributes: {
@@ -217,7 +221,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       {/* Character Count */}
       <div className="bg-white px-4 py-2 border-t border-gray-200">
         <div className="text-xs text-gray-500 text-right">
-          {charCount}/{maxLength} characters
+          <span className={charCount > maxLength ? 'text-amber-600 font-medium' : ''}>{charCount}/{maxLength} characters</span>
         </div>
       </div>
 

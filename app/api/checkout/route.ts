@@ -88,6 +88,7 @@ export async function POST(request: NextRequest) {
     const resource = await Resource.findById(body.resourceId);
     console.log('Found resource:', resource);
     if (!resource) return NextResponse.json({ error: 'Resource not found.' }, { status: 404 });
+    if (resource.price === 0) return NextResponse.json({ error: 'This is a free resource. Open it directly from its page.' }, { status: 400 });
     if (user.purchasedResources.some((item) => item.toString() === resource._id.toString())) {
       return NextResponse.json({ error: 'You have already purchased this resource.' }, { status: 400 });
     }
