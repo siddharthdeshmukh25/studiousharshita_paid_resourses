@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import Resource from '@/models/Resource';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { hasAdminSession } from '@/lib/auth/admin';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user?.id) {
+    if (!(await hasAdminSession(request))) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -18,19 +15,18 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const title = searchParams.get('title');
 
-    if (!title) {
-      return NextResponse.json(
-        { error: 'Title parameter is required' },
-        { status: 400 }
-      );
-    }
-
     await connectDB();
 
-    // Search resources by title (case-insensitive partial match)
-    const resources = await Resource.find({
-      title: { $regex: title, $options: 'i' }
-    }).select('_id title category').limit(10);
+    // If no title provided, return all paid resources (for coupon selection)
+    // If title provided, search by title (case-insensitive partial match)
+    const query = title 
+      ? { title: { $regex: title, $options: 'i' }, price: { $gt: 0 } }
+      : { price: { $gt: 0 } };
+
+    const resources = await Resource.find(query)
+      .select('_id title category price')
+      .sort({ title: 1 })
+      .limit(title ? 10 : 50);
 
     return NextResponse.json({ resources });
   } catch (error) {

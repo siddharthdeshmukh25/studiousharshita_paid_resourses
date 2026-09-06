@@ -15,8 +15,11 @@ async function verifyAdminToken(request: NextRequest): Promise<boolean> {
     const token = request.cookies.get('admin_token')?.value;
     if (!token) return false;
 
-    const secret = new TextEncoder().encode(process.env.ADMIN_JWT_SECRET || 'your-secret-key');
-    const { payload } = await jwtVerify(token, secret);
+    // Fail closed: a missing secret must never fall back to a hardcoded value.
+    const secret = process.env.ADMIN_JWT_SECRET;
+    if (!secret) return false;
+
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
     
     // Check if the token is for admin
     return payload.username !== undefined;
@@ -24,6 +27,13 @@ async function verifyAdminToken(request: NextRequest): Promise<boolean> {
     console.error('JWT verification error:', error);
     return false;
   }
+}
+
+// Reject oversized or non-image uploads before buffering them.
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+function isAllowedImage(file: File): boolean {
+  return typeof file.type === 'string' && file.type.startsWith('image/');
 }
 
 export async function POST(request: NextRequest) {
@@ -43,6 +53,20 @@ export async function POST(request: NextRequest) {
     if (!file) {
       return NextResponse.json(
         { error: 'No file provided' },
+        { status: 400 }
+      );
+    }
+
+    if (!isAllowedImage(file)) {
+      return NextResponse.json(
+        { error: 'Only image files are allowed.' },
+        { status: 400 }
+      );
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: 'File is too large. Maximum allowed size is 10 MB.' },
         { status: 400 }
       );
     }

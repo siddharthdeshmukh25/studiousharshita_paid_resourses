@@ -1,20 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import PaymentSettings from '@/models/PaymentSettings';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-
-async function getAuthenticatedUser() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) return null;
-  // You might want to check if user is admin here
-  return session;
-}
+import { hasAdminSession } from '@/lib/auth/admin';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getAuthenticatedUser();
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!(await hasAdminSession(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     await connectDB();
     let settings = await PaymentSettings.findOne();
@@ -59,8 +50,7 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getAuthenticatedUser();
-    if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!(await hasAdminSession(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await request.json();
     await connectDB();

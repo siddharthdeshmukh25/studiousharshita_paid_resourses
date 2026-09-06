@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import Category from '@/models/Category';
+import { hasAdminSession } from '@/lib/auth/admin';
 
 // GET all categories
 export async function GET() {
@@ -15,8 +16,18 @@ export async function GET() {
 }
 
 // POST create new category
+// Note: the admin panel writes through this endpoint, so writes are gated by
+// the admin JWT cookie. GET stays public for the storefront category filter.
 export async function POST(request: NextRequest) {
   try {
+    const isAdmin = await hasAdminSession(request);
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: 'Unauthorized. Admin access required to create categories.' },
+        { status: 401 }
+      );
+    }
+
     await connectDB();
     const body = await request.json();
     const { name, description } = body;

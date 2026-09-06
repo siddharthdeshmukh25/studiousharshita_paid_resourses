@@ -5,6 +5,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceCard from '@/components/resource/ResourceCard';
 import ResourceCardSkeleton from '@/components/resource/ResourceCardSkeleton';
+import BlueDotLoader from '@/components/ui/BlueDotLoader';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { BookOpen, Bookmark, Check, Sparkles } from 'lucide-react';
 
@@ -14,7 +15,8 @@ interface Resource {
   description: string;
   price: number;
   discount?: number;
-  thumbnailUrl: string;
+  images?: string[];
+  thumbnailUrl?: string;
   category: string;
   avgRating?: number;
   totalReviews?: number;
@@ -27,7 +29,7 @@ function HomeContent() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   // Keep the active tab in the URL so refresh and browser Back preserve it.
-  const resourceType: 'free' | 'paid' = searchParams.get('type') === 'free' ? 'free' : 'paid';
+  const resourceType: 'free' | 'paid' = searchParams.get('type') === 'paid' ? 'paid' : 'free';
   const [categories, setCategories] = useState<string[]>(['All']);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   // Cache each tab/category result for this visit. A browser refresh intentionally
@@ -193,7 +195,7 @@ function HomeContent() {
             </div>
           </div>
           {loading ? (
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 w-full">
+            <div className="grid grid-cols-2 min-[600px]:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 w-full">
               {[...Array(8)].map((_, i) => (
                 <ResourceCardSkeleton key={i} />
               ))}
@@ -208,7 +210,7 @@ function HomeContent() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 w-full">
+            <div className="grid grid-cols-2 min-[600px]:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 w-full">
               {resources.map((resource) => (
                 <div
                   key={resource._id}
@@ -223,6 +225,7 @@ function HomeContent() {
                     price={resource.price}
                     discount={resource.discount}
                     thumbnailUrl={resource.thumbnailUrl}
+                    images={resource.images}
                     category={resource.category}
                     onGetResource={() => handleResourceClick(resource._id)}
                   />
@@ -240,7 +243,7 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="grid min-h-screen place-items-center" role="status" aria-label="Loading"><BlueDotLoader className="h-20 w-20" /></div>}>
       <HomeContent />
     </Suspense>
   );

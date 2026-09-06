@@ -1,6 +1,7 @@
 'use client';
 
 import { X, AlertTriangle, Info, AlertCircle } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -23,6 +24,22 @@ export default function ConfirmationModal({
   cancelText = 'Cancel',
   variant = 'danger'
 }: ConfirmationModalProps) {
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const variantStyles = {

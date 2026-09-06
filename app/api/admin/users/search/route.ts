@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { hasAdminSession } from '@/lib/auth/admin';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session || !session.user?.id) {
+    if (!(await hasAdminSession(request))) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

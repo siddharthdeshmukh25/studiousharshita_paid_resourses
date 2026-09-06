@@ -9,6 +9,33 @@
   --teal-light: #E0F2FE;
   --paper-blue: #EFF6FF;
   --line: #E2E8F0;
+  --neon-lime: #84CC16;
+  --neon-lime-light: #FEF9C3;
+  --neon-lime-dark: #65A30D;
+  --card-bg: #FFFFFF;
+  --card-border: #E2E8F0;
+  --text-primary: #0F172A;
+  --text-secondary: #64748B;
+  --text-muted: #94A3B8;
+}
+
+.dark {
+  --background: #0F172A;
+  --foreground: #F8FAFC;
+  --ink: #3B82F6;
+  --ink-deep: #F8FAFC;
+  --teal: #22D3EE;
+  --teal-light: #0E7490;
+  --paper-blue: #1E293B;
+  --line: #334155;
+  --neon-lime: #84CC16;
+  --neon-lime-light: #1E293B;
+  --neon-lime-dark: #65A30D;
+  --card-bg: #1E293B;
+  --card-border: #334155;
+  --text-primary: #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted: #64748B;
 }
 
 * {
@@ -24,7 +51,40 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.font-inter {
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Admin workspace: restrained, compact SaaS information density. */
+.admin-shell { background: #f8faf7; font-family: var(--font-poppins), sans-serif; font-size: 14px; }
+.admin-sidebar { background: #ffffff; border-color: #e6eae4; font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+.admin-sidebar-brand { height: 76px; border-bottom: 1px solid #e6eae4; }
+.admin-sidebar-footer { border-top: 1px solid #e6eae4; }
+.admin-navbar { border-bottom: 1px solid #e6eae4; background: rgba(255,255,255,.88); font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+.admin-search { border: 1px solid #e1e6de; background: #f7f9f5; color: #172017; font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+.admin-search::placeholder { color: #7a8478; }
+.admin-search:focus { border-color: #88b800; box-shadow: 0 0 0 3px rgba(184,255,0,.15); }
+.admin-kpi-card { background: #fff; border-color: #e4e8e1; box-shadow: none; font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+.admin-popover { border: 1px solid #e4e8e1; background: #fff; box-shadow: 0 14px 30px rgba(20,28,17,.12); font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+
+.dark .admin-shell { background: #030707; font-family: var(--font-poppins), sans-serif; font-size: 14px; }
+.dark .admin-sidebar { background: #060a0a; border-color: #1b2423; font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+.dark .admin-sidebar-brand { border-color: #1b2423; }
+.dark .admin-sidebar-footer { border-color: #1b2423; }
+.dark .admin-navbar { border-color: #1b2423; background: rgba(3,7,7,.9); font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+.dark .admin-search { border-color: #202a29; background: #0b1010; color: #edf1eb; font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+.dark .admin-search::placeholder { color: #737b76; }
+.dark .admin-search:focus { border-color: #638800; box-shadow: 0 0 0 3px rgba(184,255,0,.12); }
+.dark .admin-kpi-card { background: #080d0d; border-color: #202928; font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+.dark .admin-popover { border-color: #202928; background: #0b1010; box-shadow: 0 14px 30px rgba(0,0,0,.35); font-family: var(--font-poppins), sans-serif; font-size: 13px; }
+/* Normalize legacy Tailwind slate surfaces inside admin so tables do not turn navy. */
+.dark .admin-shell .dark\:bg-slate-900 { background-color: #080d0d !important; }
+.dark .admin-shell .dark\:bg-slate-800 { background-color: #0d1413 !important; }
+.dark .admin-shell .dark\:border-slate-700 { border-color: #202928 !important; }
+.dark .admin-shell .dark\:divide-gray-700 { --tw-divide-opacity: 1; border-color: rgb(32 41 40 / var(--tw-divide-opacity)) !important; }
 
 .academic-surface {
   background:
@@ -38,8 +98,7 @@ button, a, input {
 }
 
 button:focus-visible, a:focus-visible, input:focus-visible {
-  outline: 2px solid var(--teal);
-  outline-offset: 2px;
+  outline: none;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -102,6 +161,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .description-content p {
   margin-bottom: 0.75rem;
   color: #374151;
+  overflow-wrap: anywhere;
 }
 
 .description-content ul {
@@ -119,6 +179,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .description-content li {
   margin-bottom: 0.25rem;
   color: #374151;
+  overflow-wrap: anywhere;
 }
 
 .description-content strong {
@@ -134,6 +195,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 .description-content a {
   color: #2563EB;
   text-decoration: underline;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .description-content blockquote {
@@ -172,4 +235,186 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 .description-content u {
   text-decoration: underline;
+}
+
+/* Modern SaaS Dashboard Styles */
+.dashboard-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.kpi-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  transition: all 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.sidebar {
+  background: var(--card-bg);
+  border-right: 1px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+
+.sidebar-item {
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+
+.sidebar-item:hover {
+  background: var(--neon-lime-light);
+  color: var(--text-primary);
+}
+
+.sidebar-item.active {
+  background: var(--neon-lime);
+  color: white;
+}
+
+.neon-accent {
+  color: var(--neon-lime);
+}
+
+.neon-bg {
+  background: var(--neon-lime);
+}
+
+.neon-border {
+  border-color: var(--neon-lime);
+}
+
+.thin-border {
+  border-width: 1px;
+}
+
+.compact-spacing {
+  gap: 0.5rem;
+}
+
+.modern-btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.modern-btn:hover {
+  transform: translateY(-1px);
+}
+
+.modern-btn-primary {
+  background: var(--neon-lime);
+  color: white;
+}
+
+.modern-btn-primary:hover {
+  background: var(--neon-lime-dark);
+  box-shadow: 0 4px 12px rgba(132, 204, 22, 0.3);
+}
+
+.modern-btn-secondary {
+  background: var(--card-bg);
+  border: 1px solid transparent;
+  color: var(--text-primary);
+}
+
+.modern-btn-secondary:hover {
+  background: var(--neon-lime-light);
+  color: var(--neon-lime);
+}
+
+/* Compact table styles */
+.modern-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.modern-table th {
+  background: var(--paper-blue);
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid transparent;
+}
+
+.modern-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid transparent;
+  color: var(--text-primary);
+}
+
+.modern-table tr:hover td {
+  background: var(--neon-lime-light);
+}
+
+/* Status badges */
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-badge-success {
+  background: rgba(132, 204, 22, 0.1);
+  color: var(--neon-lime);
+  border: 1px solid rgba(132, 204, 22, 0.2);
+}
+
+.status-badge-warning {
+  background: rgba(251, 191, 36, 0.1);
+  color: #F59E0B;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.status-badge-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Input styles */
+.modern-input {
+  background: var(--card-bg);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 0.625rem 0.875rem;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.modern-input:focus {
+  outline: none;
+  border-color: var(--neon-lime);
+  box-shadow: 0 0 0 3px rgba(132, 204, 22, 0.1);
+}
+
+.modern-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

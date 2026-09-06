@@ -7,7 +7,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceDetailSkeleton from '@/components/ui/ResourceDetailSkeleton';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
-import { Star, Loader2, Send, X, Share2, Heart, ExternalLink } from 'lucide-react';
+import { Star, Loader2, Send, X, Share2, Heart, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Resource {
   _id: string;
@@ -15,7 +15,8 @@ interface Resource {
   description: string;
   price: number;
   discount?: number;
-  thumbnailUrl: string;
+  images?: string[];
+  thumbnailUrl?: string;
   category: string;
   linkType?: string;
   linkUrl?: string;
@@ -62,6 +63,9 @@ export default function ResourceDetailPage() {
   const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
   const [couponMessage, setCouponMessage] = useState<string | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
+  const [openResourceLoading, setOpenResourceLoading] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [shareLoading, setShareLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
@@ -70,7 +74,46 @@ export default function ResourceDetailPage() {
   const [razorpayOrderId, setRazorpayOrderId] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [pageStartTime, setPageStartTime] = useState<number>(Date.now());
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const isFreeResource = resource?.price === 0;
+  const galleryImages = resource?.images && resource.images.length > 0 ? resource.images : resource?.thumbnailUrl ? [resource.thumbnailUrl] : [];
+  const currentImage = galleryImages[selectedImageIndex] || '/placeholder.png';
+  const imageCount = galleryImages.length;
+
+  // Prevent body scroll when modals are open
+  useEffect(() => {
+    const anyModalOpen = showImageModal || showReviewModal || deleteConfirmModal;
+    
+    if (anyModalOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+    };
+  }, [showImageModal, showReviewModal, deleteConfirmModal]);
+
+  // Reset selected image when navigating between resources
+  useEffect(() => {
+    setSelectedImageIndex(0);
+  }, [params.id]);
+
+  // Keyboard navigation for the image lightbox
+  useEffect(() => {
+    if (!showImageModal) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowImageModal(false);
+      else if (e.key === 'ArrowLeft' && imageCount > 1) setSelectedImageIndex((i) => (i - 1 + imageCount) % imageCount);
+      else if (e.key === 'ArrowRight' && imageCount > 1) setSelectedImageIndex((i) => (i + 1) % imageCount);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [showImageModal, imageCount]);
 
   const openResource = async () => {
     if (!session) {
@@ -78,6 +121,7 @@ export default function ResourceDetailPage() {
       return;
     }
 
+    setOpenResourceLoading(true);
     try {
       const source = searchParams.get('ref') || 'direct';
       const response = await fetch(`/api/resources/${params.id}/open-drive?ref=${encodeURIComponent(source)}`);
@@ -86,6 +130,8 @@ export default function ResourceDetailPage() {
       else alert(data.error || 'Failed to open resource');
     } catch {
       alert('Failed to open resource');
+    } finally {
+      setOpenResourceLoading(false);
     }
   };
 
@@ -115,11 +161,19 @@ export default function ResourceDetailPage() {
     }
   };
 
-  // Track page view on mount
+  // Track page view on mount - count on all navigation except refresh
   useEffect(() => {
     if (params.id) {
       setPageStartTime(Date.now());
-      trackEvent('page_view');
+      
+      // Check if this is a page refresh (no referrer or referrer is the same page)
+      const referrer = document.referrer;
+      const isRefresh = !referrer || referrer.includes(window.location.href);
+      
+      // Only track if it's not a page refresh
+      if (!isRefresh) {
+        trackEvent('page_view');
+      }
     }
   }, [params.id]);
 
@@ -349,6 +403,7 @@ export default function ResourceDetailPage() {
       return;
     }
 
+    setWishlistLoading(true);
     try {
       const response = isWishlisted 
         ? await fetch(`/api/wishlist?resourceId=${params.id}`, { method: 'DELETE' })
@@ -363,30 +418,37 @@ export default function ResourceDetailPage() {
       }
     } catch (error) {
       console.error('Error toggling wishlist:', error);
+    } finally {
+      setWishlistLoading(false);
     }
   };
 
   const handleShare = async () => {
-    // Track share event
-    await trackEvent('share');
-    
-    // Generate tracking link automatically
-    const trackingUrl = `${window.location.origin}/resource/${params.id}?ref=shared&sid=${sessionId || crypto.randomUUID()}`;
-    
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: resource?.title || 'Check out this resource',
-          text: `Check out this amazing resource: ${resource?.title}`,
-          url: trackingUrl,
-        });
-      } catch (error) {
-        console.error('Error sharing:', error);
+    setShareLoading(true);
+    try {
+      // Track share event
+      await trackEvent('share');
+      
+      // Generate tracking link automatically
+      const trackingUrl = `${window.location.origin}/resource/${params.id}?ref=shared&sid=${sessionId || crypto.randomUUID()}`;
+      
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: resource?.title || 'Check out this resource',
+            text: `Check out this amazing resource: ${resource?.title}`,
+            url: trackingUrl,
+          });
+        } catch (error) {
+          console.error('Error sharing:', error);
+        }
+      } else {
+        // Fallback for browsers that don't support Web Share API
+        navigator.clipboard.writeText(trackingUrl);
+        alert('Tracking link copied to clipboard!');
       }
-    } else {
-      // Fallback for browsers that don't support Web Share API
-      navigator.clipboard.writeText(trackingUrl);
-      alert('Tracking link copied to clipboard!');
+    } finally {
+      setShareLoading(false);
     }
   };
 
@@ -566,27 +628,75 @@ export default function ResourceDetailPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 overflow-x-hidden">
       <Navbar />
 
       <main className="flex-1 py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Thumbnail Block */}
-            <div className="order-1 lg:col-start-1 lg:row-start-1">
-              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl shadow-sm overflow-hidden border border-gray-200">
-                <div className="aspect-square w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 cursor-pointer" onClick={() => setShowImageModal(true)}>
-                  <img
-                    src={resource.thumbnailUrl}
-                    alt={resource.title}
-                    className="h-full w-full object-contain"
-                  />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+            {/* Image Gallery */}
+            <div className="order-1 lg:col-start-1 lg:row-start-1 min-w-0">
+              <div className="flex flex-col gap-2 lg:flex-row lg:gap-3">
+                {/* Main Image */}
+                <div className="relative min-w-0 lg:flex-1">
+                  <div className="group relative aspect-square w-full overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 shadow-sm">
+                    <img
+                      src={currentImage}
+                      alt={resource.title}
+                      className="h-full w-full cursor-zoom-in object-contain"
+                      onClick={() => setShowImageModal(true)}
+                    />
+
+                    {imageCount > 1 && (
+                      <>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setSelectedImageIndex((selectedImageIndex - 1 + imageCount) % imageCount); }}
+                          className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/85 p-1.5 sm:p-2 text-gray-800 shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-white"
+                          aria-label="Previous image"
+                        >
+                          <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setSelectedImageIndex((selectedImageIndex + 1) % imageCount); }}
+                          className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/85 p-1.5 sm:p-2 text-gray-800 shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-white"
+                          aria-label="Next image"
+                        >
+                          <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </button>
+                        <span className="absolute right-2 sm:right-3 top-2 sm:top-3 rounded-full bg-black/60 px-2 py-0.5 text-xs font-semibold text-white">
+                          {selectedImageIndex + 1} / {imageCount}
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
+
+                {/* Thumbnails — vertical column on desktop, horizontal scroller on mobile */}
+                {imageCount > 1 && (
+                  <div className="flex gap-2 overflow-x-auto pb-1 snap-x lg:w-[72px] lg:shrink-0 lg:flex-col lg:gap-3 lg:overflow-y-auto lg:overflow-x-hidden lg:pb-0 lg:max-h-[32rem]">
+                    {galleryImages.map((imageUrl, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`flex-shrink-0 w-16 h-16 lg:w-[72px] lg:h-[72px] rounded-lg overflow-hidden border-2 transition-all snap-start ${
+                          selectedImageIndex === index ? 'border-blue-500 ring-2 ring-blue-200' : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        aria-label={`View image ${index + 1}`}
+                      >
+                        <img
+                          src={imageUrl}
+                          alt={`${resource.title} - Image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Details & Price Block */}
-            <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 space-y-3 sm:space-y-3">
+            <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 space-y-3 sm:space-y-3 min-w-0">
               <div>
                 <div className="flex items-center gap-3 mb-3">
                   <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
@@ -599,17 +709,22 @@ export default function ResourceDetailPage() {
                   )}
                   <button
                     onClick={toggleWishlist}
-                    className="ml-auto p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+                    disabled={wishlistLoading}
+                    className="ml-auto p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                   >
-                    <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                    {wishlistLoading ? (
+                      <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                    ) : (
+                      <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                    )}
                   </button>
                 </div>
                 <h1 className="text-xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 leading-tight">
                   {resource.title}
                 </h1>
                 {/* Overall Rating */}
-                <div className="flex items-center space-x-2">
+                {avgRating > 0 && reviews.length > 0 && <div className="flex items-center space-x-2">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
                       <Star
@@ -623,7 +738,7 @@ export default function ResourceDetailPage() {
                   <span className="text-gray-600 text-base">
                     {avgRating.toFixed(1)} ({reviews.length} reviews)
                   </span>
-                </div>
+                </div>}
               </div>
 
               {/* Price and Checkout */}
@@ -648,10 +763,15 @@ export default function ResourceDetailPage() {
                   </div>
                   <button
                     onClick={handleShare}
-                    className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                    disabled={shareLoading}
+                    className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Share"
                   >
-                    <Share2 className="h-5 w-5 text-gray-600" />
+                    {shareLoading ? (
+                      <Loader2 className="h-5 w-5 text-gray-600 animate-spin" />
+                    ) : (
+                      <Share2 className="h-5 w-5 text-gray-600" />
+                    )}
                   </button>
                 </div>
 
@@ -693,10 +813,20 @@ export default function ResourceDetailPage() {
                 {isPurchased || isFreeResource ? (
                   <button
                     onClick={openResource}
-                    className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center space-x-2"
+                    disabled={openResourceLoading}
+                    className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <ExternalLink className="h-5 w-5" />
-                    <span>{isFreeResource ? 'Get Free Resource' : 'Open Resource'}</span>
+                    {openResourceLoading ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        <span>Opening...</span>
+                      </>
+                    ) : (
+                      <>
+                        <ExternalLink className="h-5 w-5" />
+                        <span>{isFreeResource ? 'Get Free Resource' : 'Open Resource'}</span>
+                      </>
+                    )}
                   </button>
                 ) : (
                   <button
@@ -710,20 +840,20 @@ export default function ResourceDetailPage() {
               </div>
 
               {/* Description */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-4 sm:p-6 border border-blue-100">
+              <div className="min-w-0 overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-4 sm:p-6 border border-blue-100">
                 <h3 className="font-semibold text-gray-900 mb-2 sm:mb-3 text-base sm:text-lg flex items-center">
                   <span className="w-1 h-5 sm:h-6 bg-blue-600 rounded-full mr-2 sm:mr-3"></span>
                   Description
                 </h3>
                 <div 
-                  className="text-gray-700 leading-relaxed text-sm sm:text-base max-w-none description-content"
+                  className="min-w-0 max-w-none text-sm leading-relaxed text-gray-700 description-content sm:text-base"
                   dangerouslySetInnerHTML={{ __html: resource.description }}
                 />
               </div>
             </div>
 
             {/* Comments Block */}
-            <div className="order-3 mt-1 w-full lg:col-start-1 lg:row-start-1 lg:mt-[calc(100%+2rem)]">
+            <div className="order-3 mt-1 w-full min-w-0">
               <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-3 sm:p-6 border border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-gray-900 text-lg flex items-center">
@@ -828,20 +958,50 @@ export default function ResourceDetailPage() {
         </div>
       </main>
 
-      {/* Image Modal */}
+      {/* Image Lightbox */}
       {showImageModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setShowImageModal(false)}>
-          <div className="relative max-w-2xl max-h-[80vh] w-full">
-            <button
-              onClick={() => setShowImageModal(false)}
-              className="absolute -top-12 right-0 text-white hover:text-gray-200 transition-colors"
-            >
-              <X className="h-8 w-8" />
-            </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" onClick={() => setShowImageModal(false)}>
+          <div className="relative w-full max-w-3xl">
+            <div className="absolute -top-12 inset-x-0 flex items-center justify-between text-white">
+              {imageCount > 1 ? (
+                <span className="rounded-full bg-white/15 px-3 py-1 text-sm font-semibold">
+                  {selectedImageIndex + 1} / {imageCount}
+                </span>
+              ) : (
+                <span />
+              )}
+              <button
+                onClick={() => setShowImageModal(false)}
+                className="transition-colors hover:text-gray-200"
+                aria-label="Close preview"
+              >
+                <X className="h-8 w-8" />
+              </button>
+            </div>
+
+            {imageCount > 1 && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setSelectedImageIndex((selectedImageIndex - 1 + imageCount) % imageCount); }}
+                  className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white transition-colors hover:bg-white/40"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setSelectedImageIndex((selectedImageIndex + 1) % imageCount); }}
+                  className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white transition-colors hover:bg-white/40"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </>
+            )}
+
             <img
-              src={resource.thumbnailUrl}
-              alt={resource.title}
-              className="w-full h-full object-contain rounded-lg"
+              src={currentImage}
+              alt={`${resource.title} - Image ${selectedImageIndex + 1}`}
+              className="max-h-[80vh] w-full rounded-lg object-contain"
               onClick={(e) => e.stopPropagation()}
             />
           </div>

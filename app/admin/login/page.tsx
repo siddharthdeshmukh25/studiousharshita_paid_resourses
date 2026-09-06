@@ -1,20 +1,21 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
+import { Shield, Lock, Loader2, Eye, EyeOff } from "lucide-react";
 import { useRouter } from 'next/navigation';
-import { Loader2, Lock, Shield } from 'lucide-react';
 
-export default function AdminLoginPage() {
+export default function AdminLogin() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const response = await fetch('/api/admin/auth/login', {
@@ -40,93 +41,127 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
-        {/* Logo/Branding */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
-            <Shield className="h-8 w-8 text-white" />
+    // Background updated to dark slate/black to match the dashboard theme
+    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-4 font-sans text-slate-800">
+      
+      {/* Top Header Section */}
+      <div className="flex flex-col items-center mb-6 sm:mb-8 text-white">
+        {/* Changed shield background to match the dark theme and icon color to neon green */}
+        <div className="bg-[#1a1a1a] p-2.5 sm:p-3 rounded-full mb-3 sm:mb-4 shadow-[0_0_15px_rgba(163,230,53,0.15)] border border-slate-700/50">
+          <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-[#a3e635]" strokeWidth={1.5} />
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-1.5 sm:mb-2 text-gray-100">Admin Portal</h1>
+        <p className="text-slate-400 text-xs sm:text-sm">Secure access for administrators only</p>
+      </div>
+
+      {/* Main Login Card - Updated to dark theme colors */}
+      <div className="bg-[#0d0d0d] w-full max-w-md rounded-[20px] shadow-2xl p-5 sm:p-8 border border-[#1a1a1a]">
+        
+        {error && (
+          <div className="mb-6 p-4 bg-red-900/50 border border-red-800 rounded-lg text-red-200 text-sm">
+            {error}
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Admin Portal</h1>
-          <p className="text-gray-400">Secure access for administrators only</p>
+        )}
+
+        <div className="flex items-center gap-2 mb-6 sm:mb-8">
+          {/* Changed lock icon color to neon green */}
+          <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-[#a3e635]" strokeWidth={2} />
+          <h2 className="text-base sm:text-lg font-semibold text-gray-100">Administrator Login</h2>
         </div>
 
-        {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <div className="flex items-center mb-6">
-            <Lock className="h-6 w-6 text-blue-600 mr-2" />
-            <h2 className="text-xl font-semibold text-gray-900">Administrator Login</h2>
+        <form className="space-y-4 sm:space-y-6" onSubmit={handleLogin}>
+          {/* Username Input */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-slate-300">
+              Username
+            </label>
+            <input 
+              type="text" 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              // Updated input styling for dark theme
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-[#151515] border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-[#a3e635]/50 focus:border-[#a3e635] transition-all text-xs sm:text-sm font-medium"
+              style={{
+                WebkitBoxShadow: '0 0 0 1000px #151515 inset',
+                WebkitTextFillColor: '#ffffff',
+                color: '#ffffff',
+                caretColor: '#a3e635',
+                transition: 'background-color 5000s ease-in-out 0s'
+              }}
+              required
+              disabled={loading}
+              autoComplete="off"
+            />
           </div>
 
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-900 mb-2">
-                Username
-              </label>
-              <input
-                id="username"
-                type="text"
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900"
-                placeholder="Enter your username"
-                disabled={loading}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                required
+          {/* Password Input */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-slate-300">
+              Password
+            </label>
+            <div className="relative">
+              <input 
+                type={showPassword ? "text" : "password"} 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900"
-                placeholder="Enter your password"
+                // Updated input styling for dark theme
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-[#151515] border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-[#a3e635]/50 focus:border-[#a3e635] transition-all text-xs sm:text-sm pr-10 sm:pr-12 font-medium"
+                style={{
+                  WebkitBoxShadow: '0 0 0 1000px #151515 inset',
+                  WebkitTextFillColor: '#ffffff',
+                  color: '#ffffff',
+                  caretColor: '#a3e635',
+                  transition: 'background-color 5000s ease-in-out 0s'
+                }}
+                required
                 disabled={loading}
+                autoComplete="off"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
+                disabled={loading}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
+                ) : (
+                  <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                )}
+              </button>
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Authenticating...</span>
-                </>
-              ) : (
-                <span>Secure Login</span>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center">
-              This is a secure administrative portal. Unauthorized access is prohibited.
-            </p>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="mt-8 text-center">
-          <p className="text-gray-500 text-sm">
-            © 2024 studiousharshita. All rights reserved.
+          {/* Submit Button - Updated to neon green accent */}
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-[#a3e635] hover:bg-[#84cc16] text-[#0f172a] font-semibold py-2 sm:py-3 rounded-lg transition-colors mt-2 text-xs sm:text-sm shadow-md shadow-[#a3e635]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
+                <span>Authenticating...</span>
+              </>
+            ) : (
+              <span>Secure Login</span>
+            )}
+          </button>
+        </form>
+
+        {/* Card Footer Warning */}
+        <div className="mt-8 pt-6 border-t border-[#1a1a1a]">
+          <p className="text-[11px] text-center text-slate-500 leading-relaxed px-4">
+            This is a secure administrative portal. Unauthorized access is prohibited.
           </p>
         </div>
       </div>
+
+      {/* Bottom Footer */}
+      <div className="mt-10 text-center text-xs text-slate-600">
+        &copy; 2024 studiousharshita. All rights reserved.
+      </div>
+
     </div>
   );
 }

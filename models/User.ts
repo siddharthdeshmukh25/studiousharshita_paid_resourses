@@ -7,6 +7,8 @@ interface IUser {
   role: 'user' | 'admin';
   purchasedResources: mongoose.Types.ObjectId[];
   googleDriveConnected?: boolean; // Kept for backward compatibility, now managed by GoogleDriveCredentials
+  country?: string; // Country code (e.g., 'IN', 'US', 'UK')
+  ipAddress?: string; // Last known IP address
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,6 +41,14 @@ const UserSchema = new Schema<IUser>(
     googleDriveConnected: {
       type: Boolean,
       default: false,
+    },
+    country: {
+      type: String,
+      default: null,
+    },
+    ipAddress: {
+      type: String,
+      default: null,
     },
   },
   {

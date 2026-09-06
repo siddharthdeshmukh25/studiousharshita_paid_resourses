@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'This coupon is invalid, expired, or does not meet the minimum purchase requirement.' }, { status: 400 });
     }
     const amount = coupon
-      ? Number((resourceAmount * (1 - coupon.discountPercentage / 100)).toFixed(2))
+      ? Number((resourceAmount * (1 - (coupon.discountPercentage ?? 0) / 100)).toFixed(2))
       : resourceAmount;
 
     // Ensure minimum price of ₹1 for payment gateway compatibility
@@ -342,6 +342,26 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({ error: 'Payment information incomplete.' }, { status: 400 });
       }
 
+      // Only ever grant access to the user who owns this session — never to a
+      // payment that belongs to someone else.
+      if (userId !== user._id.toString()) {
+        console.error('Payment user mismatch:', { sessionUserId: user._id.toString(), paymentUserId: userId });
+        return NextResponse.json({ error: 'Payment does not belong to this account.' }, { status: 403 });
+      }
+
+      // Dedupe: the webhook may have already created this order keyed by the
+      // Razorpay order id (stored in cashfreeOrderId), while an earlier PUT
+      // would have keyed it by the custom order id.
+      if (!order) {
+        order = await Order.findOne({
+          $or: [
+            { cashfreeOrderId: body.orderId },
+            { cashfreeOrderId: razorpayOrderIdToUse },
+            { razorpayOrderId: razorpayOrderIdToUse },
+          ],
+        });
+      }
+
       // Create or update order
       if (!order) {
         order = await Order.create({
@@ -432,6 +452,12 @@ export async function PUT(request: NextRequest) {
 
       if (!userId || !resourceId) {
         return NextResponse.json({ error: 'Payment information incomplete.' }, { status: 400 });
+      }
+
+      // Only ever grant access to the user who owns this session.
+      if (userId !== user._id.toString()) {
+        console.error('Payment user mismatch:', { sessionUserId: user._id.toString(), paymentUserId: userId });
+        return NextResponse.json({ error: 'Payment does not belong to this account.' }, { status: 403 });
       }
 
       // Create or update order

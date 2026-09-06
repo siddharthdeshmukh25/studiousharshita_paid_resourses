@@ -26,16 +26,17 @@ export async function POST(request: NextRequest) {
     }
 
     const settings = await PaymentSettings.findOne();
-    
-    // Skip signature verification if webhook secret is not configured (for development)
-    if (settings?.razorpay?.webhookSecret) {
-      const isValid = verifyRazorpayWebhookSignature(body, signature, settings.razorpay.webhookSecret);
-      if (!isValid) {
-        console.error('Invalid Razorpay webhook signature');
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-      }
-    } else {
-      console.warn('Razorpay webhook secret not configured - skipping signature verification (development mode)');
+
+    // Fail closed: never process an unverifiable webhook.
+    if (!settings?.razorpay?.webhookSecret) {
+      console.error('Razorpay webhook secret not configured - refusing unverifiable webhook');
+      return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
+    }
+
+    const isValid = verifyRazorpayWebhookSignature(body, signature, settings.razorpay.webhookSecret);
+    if (!isValid) {
+      console.error('Invalid Razorpay webhook signature');
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
 
     const event = JSON.parse(body);

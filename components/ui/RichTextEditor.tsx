@@ -16,7 +16,11 @@ import {
   Heading1, 
   Heading2, 
   Heading3,
-  RemoveFormatting 
+  RemoveFormatting,
+  Code,
+  Quote,
+  Undo,
+  Redo
 } from 'lucide-react';
 
 interface RichTextEditorProps {
@@ -39,7 +43,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        link: false,
+        underline: false,
+      }),
       UnderlineExtension,
       LinkExtension.configure({
         openOnClick: false,
@@ -48,17 +55,16 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       }),
     ],
     content: value,
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       const textOnly = html.replace(/<[^>]*>/g, '');
       setCharCount(textOnly.length);
-      // Do not truncate pasted HTML here: truncating it destroys headings,
-      // bullets and bold text copied from ChatGPT or other editors.
       onChange(html);
     },
     editorProps: {
       attributes: {
-        class: 'min-h-[200px] focus:outline-none prose prose-sm max-w-none',
+        class: 'min-h-[200px] focus:outline-none prose dark:prose-invert prose-sm max-w-none',
       },
     },
   });
@@ -106,8 +112,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       title={title}
       className={`p-2 rounded transition-colors ${
         active 
-          ? 'bg-blue-100 text-blue-600' 
-          : 'text-gray-600 hover:bg-gray-100'
+          ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' 
+          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700'
       }`}
     >
       {children}
@@ -115,11 +121,11 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   );
 
   return (
-    <div className={`rich-text-editor border border-gray-300 rounded-xl overflow-hidden ${className}`}>
+    <div className={`rich-text-editor border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden ${className}`}>
       {/* Toolbar */}
-      <div className="border-b border-gray-200 bg-gray-50 p-2 flex flex-wrap gap-1">
+      <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-800 p-2 flex flex-wrap gap-1">
         {/* Headings */}
-        <div className="flex gap-1 border-r border-gray-200 pr-2">
+        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             active={editor.isActive('heading', { level: 1 })}
@@ -144,7 +150,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Text Formatting */}
-        <div className="flex gap-1 border-r border-gray-200 pr-2">
+        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBold().run()}
             active={editor.isActive('bold')}
@@ -169,7 +175,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Lists */}
-        <div className="flex gap-1 border-r border-gray-200 pr-2">
+        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             active={editor.isActive('bulletList')}
@@ -186,8 +192,26 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           </ToolbarButton>
         </div>
 
+        {/* Code & Quote */}
+        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            active={editor.isActive('codeBlock')}
+            title="Code Block"
+          >
+            <Code className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            active={editor.isActive('blockquote')}
+            title="Blockquote"
+          >
+            <Quote className="h-4 w-4" />
+          </ToolbarButton>
+        </div>
+
         {/* Link */}
-        <div className="flex gap-1 border-r border-gray-200 pr-2">
+        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
           <ToolbarButton
             onClick={() => {
               const url = window.prompt('Enter URL:');
@@ -199,6 +223,22 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
             title="Add Link"
           >
             <Link className="h-4 w-4" />
+          </ToolbarButton>
+        </div>
+
+        {/* Undo/Redo */}
+        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().undo().run()}
+            title="Undo"
+          >
+            <Undo className="h-4 w-4" />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().redo().run()}
+            title="Redo"
+          >
+            <Redo className="h-4 w-4" />
           </ToolbarButton>
         </div>
 
@@ -214,13 +254,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       </div>
 
       {/* Editor */}
-      <div className="bg-white">
+      <div className="bg-white dark:bg-slate-900">
         <EditorContent editor={editor} />
       </div>
 
       {/* Character Count */}
-      <div className="bg-white px-4 py-2 border-t border-gray-200">
-        <div className="text-xs text-gray-500 text-right">
+      <div className="bg-white dark:bg-slate-900 px-4 py-2 border-t border-gray-200 dark:border-gray-700">
+        <div className="text-xs text-gray-500 dark:text-gray-400 text-right">
           <span className={charCount > maxLength ? 'text-amber-600 font-medium' : ''}>{charCount}/{maxLength} characters</span>
         </div>
       </div>
@@ -254,17 +294,26 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           margin-bottom: 1rem;
           color: #111827;
         }
+        .dark .rich-text-editor .ProseMirror h1 {
+          color: #f3f4f6;
+        }
         .rich-text-editor .ProseMirror h2 {
           font-size: 1.25rem;
           font-weight: bold;
           margin-bottom: 0.75rem;
           color: #111827;
         }
+        .dark .rich-text-editor .ProseMirror h2 {
+          color: #f3f4f6;
+        }
         .rich-text-editor .ProseMirror h3 {
           font-size: 1.125rem;
           font-weight: bold;
           margin-bottom: 0.5rem;
           color: #111827;
+        }
+        .dark .rich-text-editor .ProseMirror h3 {
+          color: #f3f4f6;
         }
         .rich-text-editor .ProseMirror ul {
           list-style-type: disc;
@@ -278,10 +327,23 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         }
         .rich-text-editor .ProseMirror li {
           margin-bottom: 0.25rem;
+          color: #374151;
+        }
+        .dark .rich-text-editor .ProseMirror li {
+          color: #d1d5db;
+        }
+        .rich-text-editor .ProseMirror p {
+          color: #374151;
+        }
+        .dark .rich-text-editor .ProseMirror p {
+          color: #d1d5db;
         }
         .rich-text-editor .ProseMirror a {
           color: #2563EB;
           text-decoration: underline;
+        }
+        .dark .rich-text-editor .ProseMirror a {
+          color: #60a5fa;
         }
         .rich-text-editor .ProseMirror strong {
           font-weight: bold;

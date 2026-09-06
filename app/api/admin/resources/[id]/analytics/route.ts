@@ -17,19 +17,36 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     await connectDB();
     const { id } = await params;
+    const { searchParams } = new URL(request.url);
+    const filter = searchParams.get('filter') || 'all';
+    
     const resource = await Resource.findById(id).select('title price');
     if (!resource) return NextResponse.json({ error: 'Resource not found.' }, { status: 404 });
 
+    // Calculate date filter
+    let dateFilter: any = {};
+    if (filter === '7days') {
+      dateFilter = { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) };
+    } else if (filter === '30days') {
+      dateFilter = { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) };
+    } else if (filter === '90days') {
+      dateFilter = { $gte: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000) };
+    }
+
     const [accesses, orders] = await Promise.all([
       ResourceAccessLog.aggregate([
-        { $match: { resourceId: resource._id } },
+        { $match: { resourceId: resource._id, ...(filter !== 'all' ? { openedAt: dateFilter } : {}) } },
         { $group: { _id: '$userId', opens: { $sum: 1 }, firstOpenedAt: { $min: '$openedAt' }, lastOpenedAt: { $max: '$openedAt' }, sources: { $addToSet: '$source' } } },
         { $lookup: { from: 'users', localField: '_id', foreignField: '_id', as: 'user' } },
         { $unwind: { path: '$user', preserveNullAndEmptyArrays: true } },
         { $project: { _id: 0, userId: '$_id', name: '$user.name', email: '$user.email', opens: 1, firstOpenedAt: 1, lastOpenedAt: 1, sources: 1 } },
         { $sort: { lastOpenedAt: -1 } },
       ]),
-      Order.find({ resourceId: resource._id, $or: [{ status: 'completed' }, { paymentCaptured: true }] }).sort({ createdAt: -1 }).populate('userId', 'name email').lean(),
+      Order.find({ 
+        resourceId: resource._id, 
+        $or: [{ status: 'completed' }, { paymentCaptured: true }],
+        ...(filter !== 'all' ? { createdAt: dateFilter } : {})
+      }).sort({ createdAt: -1 }).populate('userId', 'name email').lean(),
     ]);
     const buyersById = new Map<string, { _id: string; name?: string; email?: string; purchasedAt: Date; amount: number }>();
     orders.forEach((order: any) => {

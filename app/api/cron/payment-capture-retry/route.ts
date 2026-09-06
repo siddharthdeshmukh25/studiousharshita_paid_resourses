@@ -7,9 +7,17 @@ import { runPaymentCaptureRetryJob } from '@/lib/cronScheduler';
 
 export async function GET(request: NextRequest) {
   try {
-    // Verify this is called by cron (add your authentication here)
+    // Verify this is called by cron. Fail closed: never fall back to a
+    // hardcoded secret that ships in the source code.
     const authHeader = request.headers.get('authorization');
-    const cronSecret = process.env.CRON_SECRET || 'your-cron-secret-here';
+    const cronSecret = process.env.CRON_SECRET;
+    
+    if (!cronSecret) {
+      return NextResponse.json(
+        { error: 'CRON_SECRET is not configured. Set it in the environment before enabling the cron endpoint.' },
+        { status: 500 }
+      );
+    }
     
     if (authHeader !== `Bearer ${cronSecret}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

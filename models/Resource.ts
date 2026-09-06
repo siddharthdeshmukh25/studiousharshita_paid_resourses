@@ -5,7 +5,8 @@ interface IResource {
   description: string;
   price: number;
   discount?: number;
-  thumbnailUrl: string;
+  images?: string[];
+  thumbnailUrl?: string;
   linkType: 'google_drive' | 'notion' | 'docs';
   linkUrl: string;
   category: string;
@@ -32,9 +33,20 @@ const ResourceSchema = new Schema<IResource>(
       required: false,
       default: 0,
     },
+    images: {
+      type: [String],
+      required: false,
+      default: [],
+      validate: {
+        validator: function(v: string[]) {
+          return v.length <= 5;
+        },
+        message: 'Resource can have maximum 5 images',
+      },
+    },
     thumbnailUrl: {
       type: String,
-      required: true,
+      required: false,
     },
     linkType: {
       type: String,
@@ -55,7 +67,10 @@ const ResourceSchema = new Schema<IResource>(
   }
 );
 
-// Prevent model recompilation in development
-const Resource: Model<IResource> = mongoose.models.Resource || mongoose.model<IResource>('Resource', ResourceSchema);
+// Force model recompilation to pick up schema changes
+delete (mongoose.models as any).Resource;
+delete (mongoose.connection.models as any).Resource;
+
+const Resource: Model<IResource> = mongoose.model<IResource>('Resource', ResourceSchema);
 
 export default Resource;

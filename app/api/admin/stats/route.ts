@@ -3,8 +3,11 @@ import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
 import Resource from '@/models/Resource';
 import Order from '@/models/Order';
+import { hasAdminSession } from '@/lib/auth/admin';
 
 export async function GET(request: NextRequest) {
+  if (!(await hasAdminSession(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     await connectDB();
 

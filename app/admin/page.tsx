@@ -1,24 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Loader2, Package, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertical, Settings, UserCheck, Eye, BarChart3 } from 'lucide-react';
-import PageSkeleton from '@/components/ui/PageSkeleton';
+import { useSearchParams } from 'next/navigation';
+import { Loader2, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertical, Settings, UserCheck, Package } from 'lucide-react';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
-import dynamic from 'next/dynamic';
-
-const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor'), { ssr: false });
-
-interface Resource {
-  _id: string;
-  title: string;
-  description: string;
-  price: number;
-  discount?: number;
-  thumbnailUrl: string;
-  category: string;
-  linkType?: string;
-  linkUrl?: string;
-}
+import AdminLayout from '@/components/admin/AdminLayout';
+import KPICard from '@/components/admin/KPICard';
 
 interface Category {
   _id: string;
@@ -40,46 +27,20 @@ interface Stats {
   totalRevenue: number;
   totalUsers: number;
   totalResources: number;
-}
-
-interface ResourceMetrics { totalOpens: number; uniqueUsers: number; buyers: number; }
-interface ResourceAnalytics {
-  resource: { title: string; isFree: boolean };
-  summary: { totalOpens: number; uniqueUsers: number; buyers: number; buyersWhoOpened: number };
-  accesses: { userId: string; name?: string; email?: string; opens: number; firstOpenedAt: string; lastOpenedAt: string; sources?: string[] }[];
-  buyers: { _id: string; name?: string; email?: string; purchasedAt?: string; amount?: number }[];
+  totalOrders?: number;
 }
 
 export default function AdminPage() {
-  const createEmptyNewResource = () => ({
-    title: '',
-    description: '',
-    price: '',
-    discount: '',
-    thumbnailUrl: '',
-    thumbnailFile: null as File | null,
-    uploadingImage: false,
-    linkType: 'google_drive' as 'google_drive' | 'notion' | 'docs',
-    linkUrl: '',
-    category: '',
-  });
-  const [resources, setResources] = useState<Resource[]>([]);
-  const [resourceMetrics, setResourceMetrics] = useState<Record<string, ResourceMetrics>>({});
-  const [resourceAnalytics, setResourceAnalytics] = useState<ResourceAnalytics | null>(null);
-  const [analyticsLoading, setAnalyticsLoading] = useState(false);
-  const [analyticsResourceId, setAnalyticsResourceId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
   const [categories, setCategories] = useState<Category[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [stats, setStats] = useState<Stats>({ totalRevenue: 0, totalUsers: 0, totalResources: 0 });
   const [loading, setLoading] = useState(true);
-  const [showAddModal, setShowAddModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showCouponModal, setShowCouponModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [editingResource, setEditingResource] = useState<Resource | null>(null);
-  const [addingResource, setAddingResource] = useState(false);
   const [addingCategory, setAddingCategory] = useState(false);
   const [addingCoupon, setAddingCoupon] = useState(false);
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
@@ -98,19 +59,37 @@ export default function AdminPage() {
   const [savingSettings, setSavingSettings] = useState(false);
   const [captureData, setCaptureData] = useState<any>(null);
   const [captureLoading, setCaptureLoading] = useState(false);
+
+  // Prevent body scroll when any modal is open
+  useEffect(() => {
+    const anyModalOpen = showCategoryModal || showEditCategoryModal || 
+                        showCategoryDropdown || showCouponModal || showPaymentModal || 
+                        showGatewaySelection || showCaptureModal || showGrantAccessModal || 
+                        showGeneralSettingsModal;
+    
+    if (anyModalOpen) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    } else {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+    };
+  }, [showCategoryModal, showEditCategoryModal, showCategoryDropdown, 
+      showCouponModal, showPaymentModal, showGatewaySelection, showCaptureModal, 
+      showGrantAccessModal, showGeneralSettingsModal]);
   const [retryingCapture, setRetryingCapture] = useState<string | null>(null);
   const [deleteCouponLoading, setDeleteCouponLoading] = useState<string | null>(null);
-  const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
   const [deleteCategoryLoading, setDeleteCategoryLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [couponModalError, setCouponModalError] = useState<string | null>(null);
-  const [newThumbnailInputType, setNewThumbnailInputType] = useState<'url' | 'upload'>('url');
-  const [newResource, setNewResource] = useState(createEmptyNewResource());
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<{ type: 'resource' | 'category' | 'coupon', id: string } | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<{ type: 'category' | 'coupon', id: string } | null>(null);
   const [logoutConfirmModal, setLogoutConfirmModal] = useState(false);
-  const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('percentage');
-  const [resourceAccess, setResourceAccess] = useState<'free' | 'paid'>('paid');
   const [grantAccessForm, setGrantAccessForm] = useState({ userId: '', resourceId: '', orderId: '', userEmail: '', resourceTitle: '' });
   const [grantingAccess, setGrantingAccess] = useState(false);
   const [revokingAccess, setRevokingAccess] = useState(false);
@@ -122,13 +101,31 @@ export default function AdminPage() {
   const [searchingResources, setSearchingResources] = useState(false);
   const [showResourceDropdown, setShowResourceDropdown] = useState(false);
 
+  useEffect(() => {
+    const performNavigation = (action: string) => {
+      if (action === 'grant-access') window.location.assign('/admin/grant-access');
+      if (action === 'settings') window.location.assign('/admin/settings');
+      if (action === 'categories') window.location.assign('/admin/categories');
+      if (action === 'coupons') setShowCouponModal(true);
+      if (action === 'revenue') document.getElementById('dashboard-overview')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    const onAdminNavigate = (event: Event) => performNavigation((event as CustomEvent<string>).detail);
+    window.addEventListener('admin:navigate', onAdminNavigate);
+    const action = searchParams.get('action');
+    if (action) {
+      performNavigation(action);
+      window.history.replaceState({}, '', '/admin');
+    }
+    return () => window.removeEventListener('admin:navigate', onAdminNavigate);
+  }, [searchParams]);
+
   const [newCategory, setNewCategory] = useState({
     name: '',
     description: '',
   });
 
   const [newCoupon, setNewCoupon] = useState({ code: '', title: '', expiresAt: '', discountPercentage: '', minimumPurchaseAmount: '' });
-  const hasNewThumbnailPreview = Boolean(newResource.thumbnailUrl.trim());
 
   const handleLogout = async () => {
     setLogoutConfirmModal(true);
@@ -191,28 +188,22 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [resourcesRes, statsRes, categoriesRes, couponsRes, paymentSettingsRes, analyticsRes] = await Promise.all([
-          fetch('/api/resources'),
+        const [statsRes, categoriesRes, couponsRes, paymentSettingsRes] = await Promise.all([
           fetch('/api/admin/stats'),
           fetch('/api/categories'),
           fetch('/api/admin/coupons'),
           fetch('/api/admin/payment-settings'),
-          fetch('/api/admin/resources/analytics'),
         ]);
 
-        const resourcesData = await resourcesRes.json();
         const statsData = await statsRes.json();
         const categoriesData = await categoriesRes.json();
         const couponsData = await couponsRes.json();
         const paymentSettingsData = await paymentSettingsRes.json();
-        const analyticsData = await analyticsRes.json();
 
-        setResources(resourcesData.resources || []);
         setStats(statsData || { totalRevenue: 0, totalUsers: 0, totalResources: 0 });
         setCategories(categoriesData.categories || []);
         setCoupons(couponsData.coupons || []);
         setPaymentSettings(paymentSettingsData.settings || null);
-        setResourceMetrics(analyticsRes.ok ? analyticsData.metrics || {} : {});
       } catch (err) {
         console.error('Failed to fetch data:', err);
         setError('Failed to load data');
@@ -322,11 +313,6 @@ export default function AdminPage() {
     setDeleteConfirmModal(true);
   };
 
-  const handleDeleteResource = async (id: string) => {
-    setItemToDelete({ type: 'resource', id });
-    setDeleteConfirmModal(true);
-  };
-
   const handleDeleteCategory = async (id: string) => {
     setItemToDelete({ type: 'category', id });
     setDeleteConfirmModal(true);
@@ -402,13 +388,6 @@ export default function AdminPage() {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Failed to delete coupon.');
         setCoupons((current) => current.filter((c) => c._id !== itemToDelete.id));
-      } else if (itemToDelete.type === 'resource') {
-        setDeleteLoading(itemToDelete.id);
-        const response = await fetch(`/api/resources/${itemToDelete.id}`, { method: 'DELETE' });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Failed to delete resource.');
-        setResources(resources.filter((r) => r._id !== itemToDelete.id));
-        setStats((prev) => ({ ...prev, totalResources: prev.totalResources - 1 }));
       } else if (itemToDelete.type === 'category') {
         setDeleteCategoryLoading(itemToDelete.id);
         const response = await fetch(`/api/categories/${itemToDelete.id}`, { method: 'DELETE' });
@@ -420,7 +399,6 @@ export default function AdminPage() {
       setError(err instanceof Error ? err.message : 'Failed to delete item');
     } finally {
       setDeleteCouponLoading(null);
-      setDeleteLoading(null);
       setDeleteCategoryLoading(null);
       setItemToDelete(null);
       setDeleteConfirmModal(false);
@@ -432,8 +410,6 @@ export default function AdminPage() {
     switch (itemToDelete.type) {
       case 'coupon':
         return 'Are you sure you want to delete this coupon? This action cannot be undone.';
-      case 'resource':
-        return 'Are you sure you want to delete this resource? This action cannot be undone.';
       case 'category':
         return 'Are you sure you want to delete this category? This action cannot be undone.';
       default:
@@ -584,41 +560,6 @@ export default function AdminPage() {
     setResourceSearchResults([]);
   };
 
-  const handleEditResource = (resource: Resource) => {
-    setEditingResource(resource);
-    setResourceAccess(resource.price === 0 ? 'free' : 'paid');
-    setNewResource({
-      title: resource.title,
-      description: resource.description,
-      price: resource.price.toString(),
-      discount: resource.discount?.toString() || '',
-      thumbnailUrl: resource.thumbnailUrl,
-      thumbnailFile: null,
-      uploadingImage: false,
-      linkType: (resource.linkType || 'google_drive') as 'google_drive' | 'notion' | 'docs',
-      linkUrl: resource.linkUrl || '',
-      category: resource.category,
-    });
-    setDiscountType('percentage');
-    setShowAddModal(true);
-  };
-
-  const viewResourceAnalytics = async (resourceId: string) => {
-    setAnalyticsLoading(true);
-    setAnalyticsResourceId(resourceId);
-    setResourceAnalytics(null);
-    try {
-      const response = await fetch(`/api/admin/resources/${resourceId}/analytics`);
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Failed to load analytics');
-      setResourceAnalytics(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load analytics');
-    } finally {
-      setAnalyticsLoading(false);
-    }
-  };
-
   const handleEditCategory = (category: Category) => {
     setEditingCategory(category);
     setNewCategory({ name: category.name, description: category.description || '' });
@@ -687,166 +628,43 @@ export default function AdminPage() {
     }
   };
 
-  const handleImageUpload = async (file: File) => {
-    setNewResource((current) => ({ ...current, uploadingImage: true }));
-    setError(null);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to upload image');
-      }
-
-      const data = await response.json();
-      setNewResource((current) => ({
-        ...current,
-        thumbnailUrl: data.secure_url,
-        uploadingImage: false,
-      }));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to upload image');
-      setNewResource((current) => ({ ...current, uploadingImage: false }));
-    }
-  };
-
-  const handleAddResource = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newResource.uploadingImage) {
-      setError('Please wait for the thumbnail upload to finish.');
-      return;
-    }
-    if (!newResource.thumbnailUrl.trim()) {
-      setError(newThumbnailInputType === 'upload' ? 'Please upload a thumbnail image.' : 'Please add a thumbnail URL.');
-      return;
-    }
-    setAddingResource(true);
-    setError(null);
-
-    try {
-      const isEditing = editingResource !== null;
-      const url = isEditing ? `/api/resources/${editingResource._id}` : '/api/resources';
-      const method = isEditing ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...newResource,
-          thumbnailUrl: newResource.thumbnailUrl,
-          price: resourceAccess === 'free' ? 0 : parseFloat(newResource.price),
-          discount: resourceAccess === 'free' ? 0 : (newResource.discount ? parseFloat(newResource.discount) : 0),
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        alert(data.error || (isEditing ? 'Failed to update resource' : 'Failed to create resource'));
-        throw new Error(data.error || (isEditing ? 'Failed to update resource' : 'Failed to create resource'));
-      }
-
-      const data = await response.json();
-      if (isEditing) {
-        setResources(resources.map((r) => (r._id === editingResource._id ? data.resource : r)));
-      } else {
-        setResources([data.resource, ...resources]);
-        setStats((prev) => ({ ...prev, totalResources: prev.totalResources + 1 }));
-      }
-      setShowAddModal(false);
-      setEditingResource(null);
-      setNewResource(createEmptyNewResource());
-      setResourceAccess('paid');
-      setNewThumbnailInputType('url');
-    } catch (err) {
-      // Error is already shown in alert above
-      setError(err instanceof Error ? err.message : (editingResource ? 'Failed to update resource' : 'Failed to create resource'));
-    } finally {
-      setAddingResource(false);
-    }
-  };
-
   if (loading) {
-    return <PageSkeleton cards={6} />;
+    return (
+      <AdminLayout>
+        <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Loading admin dashboard">
+          <Loader2 className="h-10 w-10 animate-spin text-green-600 dark:text-green-400" />
+        </div>
+      </AdminLayout>
+    );
   }
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-gray-50">
-
-      <main className="flex-1 py-6 sm:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <AdminLayout>
+      <div id="dashboard-overview" className="space-y-6 scroll-mt-24">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Workspace overview</p><h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Admin Dashboard</h1><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">A quick view of how your store is performing today.</p></div>
+          <button onClick={handleLogout} disabled={loggingOut} className="inline-flex items-center gap-2 self-start rounded-md border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"><LogOut className="h-4 w-4" />{loggingOut ? 'Logging out…' : 'Logout'}</button>
+        </div>
+        {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">{error}</div>}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><KPICard title="Total revenue" value={`₹${stats.totalRevenue}`} icon={<IndianRupee className="h-5 w-5" />} /><KPICard title="Registered users" value={stats.totalUsers} icon={<Users className="h-5 w-5" />} /><KPICard title="Live resources" value={stats.totalResources} icon={<Package className="h-5 w-5" />} /><KPICard title="Orders" value={stats.totalOrders ?? 0} icon={<UserCheck className="h-5 w-5" />} /></div>
+        <section className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900"><div><h2 className="font-semibold text-gray-900 dark:text-gray-100">Manage workspace</h2><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Open a focused section to manage your store.</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><button onClick={() => window.location.href = '/admin/resources'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-green-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Package className="h-5 w-5 text-green-600 dark:text-green-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Resources</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Add and edit products</p></button><button onClick={() => window.location.href = '/admin/users'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-green-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Users className="h-5 w-5 text-green-600 dark:text-green-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Users</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Profiles and activity</p></button><button onClick={() => window.location.href = '/admin/analytics'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-green-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><IndianRupee className="h-5 w-5 text-green-600 dark:text-green-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Analytics</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Revenue and traffic</p></button><button onClick={() => setShowCouponModal(true)} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-green-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Plus className="h-5 w-5 text-green-600 dark:text-green-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Create coupon</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Create a promotion</p></button></div></section>
+      </div>
+      <div className="hidden">
           {/* Header */}
-          <div className="mb-5 flex items-start justify-between gap-3 sm:mb-8 sm:items-center">
+          <div className="flex items-start justify-between gap-6">
             <div>
-              <h1 className="text-xl font-bold text-gray-900 sm:text-3xl mb-1 sm:mb-2">
+              <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">
                 Admin Dashboard
               </h1>
-              <p className="text-xs text-gray-600 sm:text-base">
+              <p className="text-base text-gray-600 dark:text-gray-400 font-normal">
                 Manage your resources and users
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <button
-                  onClick={() => setShowSettingsDropdown(!showSettingsDropdown)}
-                  className="flex shrink-0 items-center justify-center space-x-1.5 rounded-lg bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 sm:px-4 sm:py-2 sm:text-sm"
-                >
-                  <Settings className="h-4 w-4" />
-                  <span className="hidden sm:inline">Settings</span>
-                </button>
-                {showSettingsDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-lg bg-white shadow-lg border border-gray-200 z-50">
-                    <button
-                      onClick={() => {
-                        setShowSettingsDropdown(false);
-                        setShowPaymentModal(true);
-                      }}
-                      className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                    >
-                      <img
-                        src={
-                          paymentSettings?.gateway === 'razorpay' ? 'https://razorpay.com/favicon.png' :
-                          paymentSettings?.gateway === 'payu' ? 'https://payu.in/favicon.ico' :
-                          paymentSettings?.gateway === 'cashfree' ? 'https://cashfree.com/favicon.ico' :
-                          'https://cashfree.com/favicon.ico'
-                        }
-                        alt="Payment"
-                        className="h-5 w-5"
-                      />
-                      <span>Payment</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowSettingsDropdown(false);
-                        setShowGeneralSettingsModal(true);
-                      }}
-                      className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                    >
-                      <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                      <span>General</span>
-                    </button>
-                    <button
-                      onClick={() => setShowSettingsDropdown(false)}
-                      className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
-                    >
-                      <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
-                      <span>Notifications</span>
-                    </button>
-                  </div>
-                )}
-              </div>
+            <div className="flex items-center gap-3">
               <button
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="flex shrink-0 items-center justify-center space-x-1.5 rounded-lg bg-red-600 px-3 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70 sm:px-4 sm:py-2 sm:text-sm"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loggingOut ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
                 <span className="hidden sm:inline">{loggingOut ? 'Logging out...' : 'Logout'}</span>
@@ -855,99 +673,73 @@ export default function AdminPage() {
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+            <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
               {error}
             </div>
           )}
 
           {/* Stats Cards */}
-          <div className="mb-5 grid grid-cols-3 gap-2 sm:mb-8 sm:gap-6">
-            <div className="rounded-lg border border-gray-200 bg-white p-3.5 shadow-sm sm:rounded-xl sm:p-6 sm:shadow-md">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="mb-1 text-xs font-medium leading-tight text-gray-500 sm:text-sm">Resources</p>
-                  <p className="text-lg font-bold text-gray-900 sm:text-3xl">{stats.totalResources}</p>
-                </div>
-                <Package className="h-5 w-5 text-blue-600 sm:h-12 sm:w-12" />
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-gray-200 bg-white p-3.5 shadow-sm sm:rounded-xl sm:p-6 sm:shadow-md">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="mb-1 text-xs font-medium leading-tight text-gray-500 sm:text-sm">Users</p>
-                  <p className="text-lg font-bold text-gray-900 sm:text-3xl">{stats.totalUsers}</p>
-                </div>
-                <Users className="h-5 w-5 text-green-600 sm:h-12 sm:w-12" />
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-gray-200 bg-white p-3.5 shadow-sm sm:rounded-xl sm:p-6 sm:shadow-md">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="mb-1 text-xs font-medium leading-tight text-gray-500 sm:text-sm">Revenue</p>
-                  <p className="text-lg font-bold text-gray-900 sm:text-3xl">₹{stats.totalRevenue}</p>
-                </div>
-                <IndianRupee className="h-5 w-5 text-purple-600 sm:h-12 sm:w-12" />
-              </div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <KPICard
+              title="Users"
+              value={stats.totalUsers}
+              icon={<Users className="h-5 w-5 lg:h-6 lg:w-6" />}
+            />
+            <KPICard
+              title="Revenue"
+              value={`₹${stats.totalRevenue}`}
+              icon={<IndianRupee className="h-5 w-5 lg:h-6 lg:w-6" />}
+            />
           </div>
 
-          {/* Add Resource Button with Dropdown */}
-          <div className="mb-5 grid grid-cols-3 gap-2 sm:relative sm:z-20 sm:mb-6 sm:flex sm:items-center sm:gap-4">
-            <button
-              onClick={() => { setEditingResource(null); setNewResource(createEmptyNewResource()); setResourceAccess('paid'); setShowAddModal(true); }}
-              className="flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-base"
-            >
-              <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="sm:hidden">Resource</span><span className="hidden sm:inline">Add New Resource</span>
-            </button>
-            <div className="relative sm:w-auto">
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative">
               <button
                 onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-                className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-gray-600 px-3 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-gray-700 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-base"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"
               >
-                <MoreVertical className="h-4 w-4 sm:h-5 sm:w-5" />
+                <MoreVertical className="h-4 w-4" />
                 <span>Categories</span>
               </button>
               {showCategoryDropdown && (
-                <div className="mobile-category-sheet fixed inset-0 z-40 flex flex-col overflow-y-auto bg-[#F8FAFC] sm:absolute sm:inset-auto sm:top-full sm:right-0 sm:z-50 sm:mt-2 sm:max-h-80 sm:w-64 sm:overflow-y-auto sm:rounded-xl sm:border sm:border-gray-200 sm:bg-white sm:shadow-xl">
-                  <div className="flex items-center justify-between border-b border-[#E2E8F0] bg-white px-5 py-4 sm:hidden">
-                    <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-[#2563EB]">Admin tools</p><h2 className="mt-1 text-xl font-bold text-[#0F172A]">Manage categories</h2></div>
-                    <button onClick={() => setShowCategoryDropdown(false)} className="grid h-10 w-10 place-items-center rounded-full bg-[#EFF6FF] text-[#2563EB]" aria-label="Close categories"><X className="h-5 w-5" /></button>
+                <div className="mobile-category-sheet fixed inset-0 z-40 flex flex-col overflow-y-auto bg-gray-50 dark:bg-gray-900 sm:absolute sm:inset-auto sm:top-full sm:right-0 sm:z-50 sm:mt-2 sm:max-h-80 sm:w-64 sm:overflow-y-auto sm:rounded-xl sm:border sm:border-gray-200 dark:sm:border-gray-700 sm:bg-white dark:sm:bg-gray-900 sm:shadow-xl">
+                  <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-5 py-4 sm:hidden">
+                    <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-green-600 dark:text-green-400">Admin tools</p><h2 className="mt-1 text-xl font-bold text-gray-900 dark:text-gray-100">Manage categories</h2></div>
+                    <button onClick={() => setShowCategoryDropdown(false)} className="grid h-10 w-10 place-items-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400" aria-label="Close categories"><X className="h-5 w-5" /></button>
                   </div>
                   <button
                     onClick={() => {
                       setShowCategoryModal(true);
                       setShowCategoryDropdown(false);
                     }}
-                    className="mx-4 mt-5 flex w-auto items-center justify-center space-x-2 rounded-xl bg-[#2563EB] px-4 py-3 text-left font-semibold text-white shadow-sm hover:bg-[#1D4ED8] sm:m-0 sm:w-full sm:justify-start sm:rounded-none sm:bg-transparent sm:px-4 sm:text-gray-700 sm:shadow-none sm:hover:bg-gray-50"
+                    className="mx-4 mt-5 flex w-auto items-center justify-center space-x-2 rounded-xl bg-green-500 px-4 py-3 text-left font-semibold text-white shadow-sm hover:bg-green-600 sm:m-0 sm:w-full sm:justify-start sm:rounded-none sm:bg-transparent sm:px-4 sm:text-gray-700 dark:sm:text-gray-300 sm:shadow-none sm:hover:bg-gray-100 dark:sm:hover:bg-gray-800"
                   >
                     <Plus className="h-4 w-4" />
                     <span className="font-medium">Add New Category</span>
                   </button>
                   {categories.length > 0 && (
                     <>
-                      <div className="mt-5 border-b border-[#E2E8F0] bg-white px-5 py-3 sm:mt-0 sm:px-4 sm:py-2">
-                        <span className="text-xs font-semibold text-gray-500 uppercase">Categories</span>
+                      <div className="mt-5 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-5 py-3 sm:mt-0 sm:px-4 sm:py-2">
+                        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Categories</span>
                       </div>
                       {categories.map((category) => (
                         <div
                           key={category._id}
-                          className="mx-4 flex items-center justify-between border-b border-[#E2E8F0] bg-white px-4 py-4 last:border-b-0 sm:mx-0 sm:px-4 sm:py-3 sm:hover:bg-gray-50"
+                          className="mx-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-4 last:border-b-0 sm:mx-0 sm:px-4 sm:py-3 sm:hover:bg-gray-100 dark:sm:hover:bg-gray-800"
                         >
-                          <span className="text-sm text-gray-700 flex-1">{category.name}</span>
+                          <span className="text-sm text-gray-700 dark:text-gray-300 flex-1">{category.name}</span>
                           <div className="flex items-center space-x-1">
                             <button
                               onClick={() => handleEditCategory(category)}
-                              className="p-1 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded"
+                              className="p-1 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
                             >
                               <Edit className="h-4 w-4" />
                             </button>
                             <button
                               onClick={() => handleDeleteCategory(category._id)}
                               disabled={deleteCategoryLoading === category._id}
-                              className="p-1 text-red-600 hover:text-red-900 hover:bg-red-50 rounded disabled:opacity-50"
+                              className="p-1 text-red-600 hover:text-red-900 hover:bg-red-50 dark:hover:bg-red-900/20 rounded disabled:opacity-50"
                             >
                               {deleteCategoryLoading === category._id ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -965,476 +757,47 @@ export default function AdminPage() {
             </div>
             <button
               onClick={() => setShowCouponModal(true)}
-              className="flex items-center justify-center gap-1.5 rounded-lg bg-purple-600 px-3 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-purple-700 sm:w-auto sm:gap-2 sm:px-6 sm:py-3 sm:text-base"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"
             >
-              <Plus className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="sm:hidden">Coupon</span><span className="hidden sm:inline">Create Coupon</span>
+              <Plus className="h-4 w-4" />
+              <span>Create Coupon</span>
             </button>
           </div>
 
-          {/* Resources Table */}
-          <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 mb-8">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900">Resources</h2>
+          {/* Resources Quick Link */}
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+            <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Resources</h2>
+              <button
+                onClick={() => window.location.href = '/admin/resources'}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-medium text-sm transition-all"
+              >
+                <Package className="h-4 w-4" />
+                <span>Manage Resources</span>
+              </button>
             </div>
-
-            {resources.length === 0 ? (
-              <div className="p-12 text-center">
-                <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">No resources found</p>
-              </div>
-            ) : (
-              <div className="max-h-[420px] overflow-x-auto overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                <table className="min-w-[900px] w-full">
-                  <thead className="sticky top-0 z-10 bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Resource
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Category
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Price
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Opens</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buyers</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {resources.map((resource) => (
-                      <tr key={resource._id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <img
-                              src={resource.thumbnailUrl}
-                              alt={resource.title}
-                              className="h-10 w-10 rounded-lg object-cover mr-3"
-                            />
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                {resource.title}
-                              </div>
-                              <div 
-                                className="text-sm text-gray-500 truncate max-w-xs"
-                                dangerouslySetInnerHTML={{ 
-                                  __html: resource.description.replace(/<[^>]*>/g, '').substring(0, 100) 
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                            {resource.category}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {resource.price === 0 ? (
-                            <span className="inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">Free</span>
-                          ) : resource.discount && resource.discount > 0 ? (
-                            <div>
-                              <span className="line-through text-gray-400 mr-2">₹{resource.price}</span>
-                              <span className="text-green-600 font-semibold">₹{(resource.price * (1 - resource.discount / 100)).toFixed(2)}</span>
-                              <span className="text-xs text-red-500 ml-1">({Math.round(resource.discount)}% off)</span>
-                            </div>
-                          ) : (
-                            <span>₹{resource.price}</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {resourceMetrics[resource._id]?.totalOpens ? <><span className="text-sm font-semibold text-gray-900">{resourceMetrics[resource._id].totalOpens}</span><span className="ml-1 text-xs text-gray-500">({resourceMetrics[resource._id].uniqueUsers} users)</span></> : <span className="text-sm text-gray-400">—</span>}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          {resource.price === 0 ? <span className="text-gray-400">—</span> : resourceMetrics[resource._id]?.buyers ? <span className="font-semibold text-gray-900">{resourceMetrics[resource._id].buyers}</span> : <span className="text-gray-400">—</span>}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button onClick={() => viewResourceAnalytics(resource._id)} className="mr-3 inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-900" title="View analytics"><BarChart3 className="h-4 w-4" /><span className="hidden lg:inline">Analytics</span></button>
-                          <button
-                            onClick={() => handleEditResource(resource)}
-                            className="text-blue-600 hover:text-blue-900 mr-3"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteResource(resource._id)}
-                            disabled={deleteLoading === resource._id}
-                            className="text-red-600 hover:text-red-900 disabled:opacity-50"
-                          >
-                            {deleteLoading === resource._id ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Trash2 className="h-4 w-4" />
-                            )}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
-
-      {(analyticsLoading || resourceAnalytics) && (
-        <div className="fixed inset-0 z-[70] flex items-end bg-slate-950/45 p-0 sm:items-center sm:justify-center sm:p-6">
-          <div className="max-h-[92vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl sm:max-w-4xl sm:rounded-3xl">
-            <div className="sticky top-0 z-10 flex items-start justify-between border-b border-slate-100 bg-white px-5 py-5 sm:px-7">
-              <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-600">Resource analytics</p><h2 className="mt-1 text-xl font-bold text-slate-900">{resourceAnalytics?.resource.title || 'Loading analytics...'}</h2></div>
-              <div className="flex items-center gap-2"><button onClick={() => { setResourceAnalytics(null); setAnalyticsLoading(false); setAnalyticsResourceId(null); }} className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900" aria-label="Close analytics"><X className="h-5 w-5" /></button></div>
+            <div className="p-6 text-center text-gray-600 dark:text-gray-400 text-sm">
+              <p>Go to Resources page to manage your resources</p>
             </div>
-            {analyticsLoading || !resourceAnalytics ? <div className="grid min-h-72 place-items-center"><Loader2 className="h-7 w-7 animate-spin text-indigo-600" /></div> : <div className="p-5 sm:p-7">
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {[['Total opens', resourceAnalytics.summary.totalOpens], ['Unique users', resourceAnalytics.summary.uniqueUsers], ['Buyers', resourceAnalytics.resource.isFree ? null : resourceAnalytics.summary.buyers], ['Buyers opened', resourceAnalytics.resource.isFree ? null : resourceAnalytics.summary.buyersWhoOpened]].map(([label, value]) => <div key={String(label)} className="rounded-2xl border border-slate-200 bg-slate-50 p-4"><p className="text-xs font-semibold text-slate-500">{label}</p><p className="mt-1 text-2xl font-bold text-slate-900">{value ?? '—'}</p></div>)}
-              </div>
-
-              <section className="mt-7"><div className="mb-3 flex items-center gap-2"><Eye className="h-4 w-4 text-indigo-600" /><h3 className="font-bold text-slate-900">Access log</h3></div>
-                {resourceAnalytics.accesses.length === 0 ? <div className="rounded-2xl border border-dashed border-slate-200 py-10 text-center text-sm text-slate-500">— No one has opened this resource yet.</div> : <div className="overflow-x-auto rounded-2xl border border-slate-200"><table className="min-w-[720px] w-full text-left text-sm"><thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500"><tr><th className="px-4 py-3">User</th><th className="px-4 py-3">Source</th><th className="px-4 py-3">Total opens</th><th className="px-4 py-3">Last opened</th></tr></thead><tbody>{resourceAnalytics.accesses.map((access) => <tr key={access.userId} className="border-t border-slate-100"><td className="px-4 py-3"><p className="font-semibold text-slate-900">{access.name || '—'}</p><p className="text-xs text-slate-500">{access.email || '—'}</p></td><td className="px-4 py-3 text-slate-600">{access.sources?.filter(Boolean).join(', ') || 'direct'}</td><td className="px-4 py-3 font-semibold text-slate-900">{access.opens || '—'}</td><td className="px-4 py-3 text-slate-600">{access.lastOpenedAt ? new Date(access.lastOpenedAt).toLocaleString() : '—'}</td></tr>)}</tbody></table></div>}
-              </section>
-
-              {!resourceAnalytics.resource.isFree && <section className="mt-7"><div className="mb-3 flex items-center gap-2"><Users className="h-4 w-4 text-indigo-600" /><h3 className="font-bold text-slate-900">Buyers</h3></div>
-                {resourceAnalytics.buyers.length === 0 ? <div className="rounded-2xl border border-dashed border-slate-200 py-8 text-center text-sm text-slate-500">— No completed purchases yet.</div> : <div className="grid gap-2 sm:grid-cols-2">{resourceAnalytics.buyers.map((user) => <div key={user._id} className="rounded-xl border border-slate-200 p-3"><p className="font-semibold text-slate-900">{user.name || '—'}</p><p className="truncate text-sm text-slate-500">{user.email || '—'}</p><p className="mt-1 text-xs text-slate-500">{user.purchasedAt ? new Date(user.purchasedAt).toLocaleDateString() : '—'} {user.amount ? `• ₹${user.amount}` : ''}</p></div>)}</div>}
-              </section>}
-            </div>}
           </div>
-        </div>
-      )}
+      </div>
 
-      {/* Add Resource Modal */}
-      {showAddModal && (
-        <div className="admin-mobile-modal fixed inset-0 z-50 bg-slate-950/75 p-0 sm:bg-slate-900/45 sm:p-6">
-          <div className="mx-auto flex h-full max-w-5xl items-center justify-center">
-            <div className="admin-modal-card h-full w-full overflow-y-auto rounded-b-[28px] rounded-t-none border border-white/20 bg-white shadow-xl sm:max-h-[92vh] sm:rounded-[28px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            <div className="border-b border-white/20 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-5 sm:p-6 sm:rounded-t-[28px]">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="hidden text-xs font-semibold uppercase tracking-[0.18em] text-blue-100 sm:block">Admin</p>
-                  <h2 className="mt-1 text-xl font-semibold text-white sm:text-2xl">{editingResource ? 'Edit Resource' : 'Add New Resource'}</h2>
-                  <p className="mt-1 text-sm text-blue-100/90">{editingResource ? 'Update resource details and information.' : 'Create a polished listing with thumbnail, price and delivery link.'}</p>
-                </div>
-                <button
-                  onClick={() => {
-                    setShowAddModal(false);
-                    setEditingResource(null);
-                    setNewResource(createEmptyNewResource());
-                    setNewThumbnailInputType('url');
-                    setResourceAccess('paid');
-                  }}
-                  className="rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20"
-                >
-                  <X className="h-6 w-6" />
-                </button>
-              </div>
-            </div>
-
-            <form onSubmit={handleAddResource} className="bg-slate-50/80 p-4 sm:p-6 overflow-x-hidden">
-              <div className="grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.95fr)]">
-              <div className="space-y-5">
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newResource.title}
-                  onChange={(e) => setNewResource({ ...newResource, title: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all"
-                  placeholder="Enter resource title"
-                />
-              </div>
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Description
-                </label>
-                <RichTextEditor
-                  value={newResource.description}
-                  onChange={(value) => setNewResource({ ...newResource, description: value })}
-                  placeholder="Enter resource description with formatting..."
-                  className="w-full"
-                  maxLength={10000}
-                />
-              </div>
-
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-                <label className="text-sm font-semibold text-gray-900">Resource type</label>
-                <div role="tablist" aria-label="Choose whether this resource is free or paid" className="relative grid h-10 w-44 grid-cols-2 rounded-xl bg-[#EAF1FB] p-1">
-                  <span aria-hidden="true" className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-transform duration-300 ease-out ${resourceAccess === 'free' ? 'translate-x-1' : 'translate-x-[calc(100%+3px)]'}`} />
-                  <button type="button" role="tab" aria-selected={resourceAccess === 'free'} onClick={() => { setResourceAccess('free'); setNewResource({ ...newResource, price: '0', discount: '' }); }} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceAccess === 'free' ? 'text-emerald-700' : 'text-[#64748B]'}`}>Free</button>
-                  <button type="button" role="tab" aria-selected={resourceAccess === 'paid'} onClick={() => { setResourceAccess('paid'); setNewResource({ ...newResource, price: newResource.price === '0' ? '' : newResource.price }); }} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceAccess === 'paid' ? 'text-[#2563EB]' : 'text-[#64748B]'}`}>Paid</button>
-                </div>
-              </div>
-
-              {resourceAccess === 'paid' && <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Price (₹)
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    min="0"
-                    step="0.01"
-                    value={newResource.price}
-                    onChange={(e) => setNewResource({ ...newResource, price: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all"
-                    placeholder="0.00"
-                  />
-                </div>
-                </div>
-
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    Discount Type
-                  </label>
-                  <div className="flex gap-1 mb-3 relative bg-gray-200 rounded-md p-0.5">
-                    <div className={`absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] bg-blue-500 rounded-sm transition-all duration-300 ease-in-out ${discountType === 'percentage' ? 'left-0.5' : 'left-[calc(50%+1px)]'}`} />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDiscountType('percentage');
-                        setNewResource({ ...newResource, discount: '' });
-                      }}
-                      className={`flex-1 py-1.5 px-3 rounded-sm transition-all duration-300 z-10 text-xs font-medium ${discountType === 'percentage' ? 'text-white' : 'text-gray-700'}`}
-                    >
-                      Percentage (%)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setDiscountType('fixed');
-                        setNewResource({ ...newResource, discount: '' });
-                      }}
-                      className={`flex-1 py-1.5 px-3 rounded-sm transition-all duration-300 z-10 text-xs font-medium ${discountType === 'fixed' ? 'text-white' : 'text-gray-700'}`}
-                    >
-                      Fixed Price (₹)
-                    </button>
-                  </div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">
-                    {discountType === 'percentage' ? 'Discount Percentage (%)' : 'Discount Amount (₹)'}
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    max={discountType === 'percentage' ? 100 : undefined}
-                    step="0.01"
-                    value={newResource.discount}
-                    onChange={(e) => setNewResource({ ...newResource, discount: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all"
-                    placeholder={discountType === 'percentage' ? 'No discount' : 'No discount'}
-                  />
-                </div>
-              </div>
-              </div>}
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Link Type
-                </label>
-                <select
-                  required
-                  value={newResource.linkType}
-                  onChange={(e) => setNewResource({ ...newResource, linkType: e.target.value as 'google_drive' | 'notion' | 'docs' })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all bg-white"
-                >
-                  <option value="google_drive">Google Drive</option>
-                  <option value="notion">Notion</option>
-                  <option value="docs">Google Docs</option>
-                </select>
-              </div>
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  {newResource.linkType === 'google_drive' ? 'Google Drive File Link' : newResource.linkType === 'notion' ? 'Notion Page Link' : 'Google Docs Link'}
-                </label>
-                <input
-                  type="url"
-                  required
-                  value={newResource.linkUrl}
-                  onChange={(e) => setNewResource({ ...newResource, linkUrl: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all"
-                  placeholder={newResource.linkType === 'google_drive' ? 'https://drive.google.com/file/d/...' : newResource.linkType === 'notion' ? 'https://notion.so/...' : 'https://docs.google.com/document/d/...'}
-                />
-              </div>
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Category
-                </label>
-                <select
-                  required
-                  value={newResource.category}
-                  onChange={(e) => setNewResource({ ...newResource, category: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all bg-white"
-                >
-                  <option value="">Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat._id} value={cat.name}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-                {categories.length === 0 && (
-                  <p className="text-sm text-red-500 mt-1">No categories available. Please add a category first.</p>
-                )}
-              </div>
-              </div>
-
-              <div className="space-y-5">
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <div className="mb-4">
-                    <h3 className="text-base font-semibold text-slate-900">Thumbnail</h3>
-                    <p className="mt-1 text-sm text-slate-500">Desktop card ko cleaner look dene ke liye yahan live preview dikh raha hai.</p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <label className={`cursor-pointer rounded-xl border px-3 py-2 text-center text-sm font-medium transition-all ${newThumbnailInputType === 'url' ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'}`}>
-                      <input
-                        type="radio"
-                        name="thumbnailType"
-                        checked={newThumbnailInputType === 'url'}
-                        onChange={() => {
-                          setNewThumbnailInputType('url');
-                          setNewResource((current) => ({ ...current, thumbnailFile: null }));
-                        }}
-                        className="sr-only"
-                      />
-                      <span>URL</span>
-                    </label>
-                    <label className={`cursor-pointer rounded-xl border px-3 py-2 text-center text-sm font-medium transition-all ${newThumbnailInputType === 'upload' ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'}`}>
-                      <input
-                        type="radio"
-                        name="thumbnailType"
-                        checked={newThumbnailInputType === 'upload'}
-                        onChange={() => setNewThumbnailInputType('upload')}
-                        className="sr-only"
-                      />
-                      <span>Upload</span>
-                    </label>
-                  </div>
-
-                  {newThumbnailInputType === 'url' ? (
-                    <div className="mt-4">
-                      <label className="mb-2 block text-sm font-medium text-slate-700">Image URL</label>
-                      <input
-                        type="url"
-                        required={newThumbnailInputType === 'url'}
-                        value={newResource.thumbnailUrl}
-                        onChange={(e) => setNewResource({ ...newResource, thumbnailUrl: e.target.value, thumbnailFile: null })}
-                        className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 transition-all focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                        placeholder="https://example.com/image.jpg"
-                      />
-                    </div>
-                  ) : (
-                    <div className="mt-4">
-                      <label className="mb-2 block text-sm font-medium text-slate-700">Upload image</label>
-                      <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          setNewResource((current) => ({ ...current, thumbnailFile: file }));
-                          handleImageUpload(file);
-                        }
-                      }}
-                      disabled={newResource.uploadingImage}
-                      className="block w-full text-sm text-slate-600 file:mr-4 file:rounded-xl file:border-0 file:bg-blue-600 file:px-4 file:py-2.5 file:font-medium file:text-white hover:file:bg-blue-700 disabled:cursor-not-allowed"
-                    />
-                    {newResource.uploadingImage && (
-                          <p className="mt-3 text-sm font-medium text-blue-600">Uploading image...</p>
-                    )}
-                  </div>
-                    </div>
-                  )}
-
-                  <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-slate-800">Preview</p>
-                      <span className="text-xs font-medium text-slate-500">16:10 recommended</span>
-                    </div>
-                    <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-100 to-slate-200">
-                      {hasNewThumbnailPreview ? (
-                        <img
-                          src={newResource.thumbnailUrl}
-                          alt="Thumbnail preview"
-                          className="aspect-[16/10] h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex aspect-[16/10] items-center justify-center px-6 text-center text-sm text-slate-500">
-                          Add a thumbnail URL or upload an image to preview it here.
-                        </div>
-                      )}
-                    </div>
-                    <p className="mt-3 text-xs text-slate-500">
-                      {newResource.uploadingImage ? 'Image upload in progress.' : hasNewThumbnailPreview ? 'Thumbnail ready for desktop card preview.' : 'PNG or JPG image works best.'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-5 shadow-sm">
-                  <h3 className="text-base font-semibold text-slate-900">Quick Tips</h3>
-                  <ul className="mt-3 space-y-2 text-sm text-slate-600">
-                    <li>Use a bright thumbnail so the resource card stands out.</li>
-                    <li>Keep title short and description crisp for better readability.</li>
-                    <li>Check the delivery link before saving the resource.</li>
-                  </ul>
-                </div>
-              </div>
-                </div>
-
-              <div className="mt-6 flex flex-col-reverse gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:justify-end">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="rounded-xl border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={addingResource}
-                  className="flex items-center justify-center space-x-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-3 font-medium text-white shadow-lg transition-all hover:from-blue-700 hover:to-purple-700 disabled:opacity-50"
-                >
-                  {addingResource ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Adding...</span>
-                    </>
-                  ) : (
-                    <span>{editingResource ? 'Save' : 'Add Resource'}</span>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        </div>
-      )}
-      <section className="mx-auto mb-8 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md">
-          <div className="flex flex-col gap-3 border-b border-gray-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <section id="coupons" className="hidden mx-auto mb-8 max-w-7xl scroll-mt-24 px-4 sm:px-6 lg:px-8">
+        <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm">
+          <div className="flex flex-col gap-3 border-b border-gray-200 dark:border-gray-700 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">Coupons</h2>
-              <p className="mt-1 text-sm text-gray-500">Active coupons can be applied to any resource.</p>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Coupons</h2>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Active coupons can be applied to any resource.</p>
             </div>
-            <button onClick={() => setShowCouponModal(true)} className="w-full rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700 sm:w-auto">Create Coupon</button>
+            <button onClick={() => setShowCouponModal(true)} className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 sm:w-auto">Create Coupon</button>
           </div>
           {coupons.length === 0 ? (
-            <p className="p-8 text-center text-sm text-gray-500">No coupons created yet.</p>
+            <p className="p-8 text-center text-sm text-gray-600 dark:text-gray-400">No coupons created yet.</p>
           ) : (
             <div className="max-h-[320px] overflow-x-auto overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               <table className="min-w-[650px] w-full text-left text-sm">
-                <thead className="sticky top-0 z-10 bg-gray-50 text-xs uppercase tracking-wide text-gray-500"><tr><th className="px-6 py-3">Code</th><th className="px-6 py-3">Title</th><th className="px-6 py-3">Discount</th><th className="px-6 py-3">Min Purchase</th><th className="px-6 py-3">Expires</th><th className="px-6 py-3 text-right">Action</th></tr></thead>
-                <tbody>{coupons.map((coupon) => <tr key={coupon._id} className="border-t border-gray-100"><td className="px-6 py-4 font-bold tracking-wide text-purple-700">{coupon.code}</td><td className="px-6 py-4 text-gray-700">{coupon.title}</td><td className="px-6 py-4 font-semibold text-green-700">{coupon.discountPercentage}%</td><td className="px-6 py-4 text-gray-600">{coupon.minimumPurchaseAmount ? `₹${coupon.minimumPurchaseAmount}` : 'No limit'}</td><td className="px-6 py-4 text-gray-600">{new Date(coupon.expiresAt).toLocaleDateString()}</td><td className="px-6 py-4 text-right"><button onClick={() => handleEditCoupon(coupon)} className="mr-2 rounded p-1 text-blue-600 hover:bg-blue-50"><Edit className="h-4 w-4" /></button><button onClick={() => handleDeleteCoupon(coupon._id)} disabled={deleteCouponLoading === coupon._id} className="rounded p-1 text-red-600 hover:bg-red-50 disabled:opacity-50">{deleteCouponLoading === coupon._id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}</button></td></tr>)}</tbody>
+                <thead className="sticky top-0 z-10 bg-gray-50 dark:bg-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"><tr><th className="px-6 py-3">Code</th><th className="px-6 py-3">Title</th><th className="px-6 py-3">Discount</th><th className="px-6 py-3">Min Purchase</th><th className="px-6 py-3">Expires</th><th className="px-6 py-3 text-right">Action</th></tr></thead>
+                <tbody>{coupons.map((coupon) => <tr key={coupon._id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"><td className="px-6 py-4 font-bold tracking-wide text-green-600 dark:text-green-400">{coupon.code}</td><td className="px-6 py-4 text-gray-700 dark:text-gray-300">{coupon.title}</td><td className="px-6 py-4 font-semibold text-green-700 dark:text-green-400">{coupon.discountPercentage}%</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{coupon.minimumPurchaseAmount ? `₹${coupon.minimumPurchaseAmount}` : 'No limit'}</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{new Date(coupon.expiresAt).toLocaleDateString()}</td><td className="px-6 py-4 text-right"><button onClick={() => handleEditCoupon(coupon)} className="mr-2 rounded p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"><Edit className="h-4 w-4" /></button><button onClick={() => handleDeleteCoupon(coupon._id)} disabled={deleteCouponLoading === coupon._id} className="rounded p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50">{deleteCouponLoading === coupon._id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}</button></td></tr>)}</tbody>
               </table>
             </div>
           )}
@@ -1444,17 +807,17 @@ export default function AdminPage() {
       {/* Edit Category Modal */}
       {showEditCategoryModal && (
         <div className="admin-mobile-modal fixed inset-0 bg-gray-900/30 flex items-center justify-center z-50 p-4">
-          <div className="admin-modal-card bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4">
-            <div className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-t-none md:rounded-t-2xl">
+          <div className="admin-modal-card bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm max-w-sm w-full mx-4">
+            <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-t-none md:rounded-t-2xl">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg sm:text-xl font-semibold text-white">Edit Category</h2>
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">Edit Category</h2>
                 <button
                   onClick={() => {
                     setShowEditCategoryModal(false);
                     setEditingCategory(null);
                     setNewCategory({ name: '', description: '' });
                   }}
-                  className="text-white hover:text-gray-200 transition-colors"
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                 >
                   <X className="h-5 w-5 sm:h-6 sm:w-6" />
                 </button>
@@ -1463,7 +826,7 @@ export default function AdminPage() {
 
             <form onSubmit={handleUpdateCategory} className="p-4 sm:p-6 space-y-4 sm:space-y-5">
               <div>
-                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   Category Name
                 </label>
                 <input
@@ -1472,13 +835,13 @@ export default function AdminPage() {
                   maxLength={50}
                   value={newCategory.name}
                   onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-gray-900 transition-all text-sm"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#84CC16] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 transition-all text-sm"
                   placeholder="Enter category name"
                 />
               </div>
 
               <div>
-                <label className="block text-xs sm:text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-xs sm:text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   Description (Optional)
                 </label>
                 <textarea
@@ -1486,7 +849,7 @@ export default function AdminPage() {
                   value={newCategory.description}
                   onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
                   rows={2}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-gray-900 transition-all resize-none text-sm"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#84CC16] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 transition-all resize-none text-sm"
                   placeholder="Enter category description"
                 />
               </div>
@@ -1499,14 +862,14 @@ export default function AdminPage() {
                     setEditingCategory(null);
                     setNewCategory({ name: '', description: '' });
                   }}
-                  className="px-3 py-1.5 sm:px-6 sm:py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium text-xs sm:text-sm"
+                  className="px-3 py-1.5 sm:px-6 sm:py-3 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium text-xs sm:text-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={addingCategory}
-                  className="px-3 py-1.5 sm:px-6 sm:py-3 bg-gradient-to-r from-yellow-600 to-orange-600 text-white rounded-xl hover:from-yellow-700 hover:to-orange-700 disabled:opacity-50 flex items-center space-x-2 transition-all font-medium shadow-lg text-xs sm:text-sm"
+                  className="px-3 py-1.5 sm:px-6 sm:py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl disabled:opacity-50 flex items-center space-x-2 transition-all font-medium text-xs sm:text-sm"
                 >
                   {addingCategory ? (
                     <>
@@ -1525,31 +888,31 @@ export default function AdminPage() {
 
       {showCouponModal && (
         <div className="admin-mobile-modal fixed inset-0 z-50 flex items-center justify-center bg-gray-900/30 p-4 sm:p-4">
-          <div className="admin-modal-card max-h-[90vh] w-full overflow-y-auto bg-white rounded-2xl shadow-2xl sm:max-w-lg sm:mx-4 sm:rounded-xl">
-            <div className="flex items-center justify-between bg-gradient-to-r from-purple-600 to-indigo-600 p-6 sm:rounded-t-xl">
-              <div><h2 className="text-xl font-semibold text-white">{editingCoupon ? 'Edit Coupon' : 'Create Coupon'}</h2><p className="mt-1 text-sm text-purple-100">{editingCoupon ? 'Update coupon details and discount.' : 'Applies to every resource purchase.'}</p></div>
+          <div className="admin-modal-card max-h-[90vh] w-full overflow-y-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm sm:max-w-lg sm:mx-4 sm:rounded-xl">
+            <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 sm:rounded-t-xl">
+              <div><h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{editingCoupon ? 'Edit Coupon' : 'Create Coupon'}</h2><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{editingCoupon ? 'Update coupon details and discount.' : 'Applies to every resource purchase.'}</p></div>
               <button onClick={() => {
                 setShowCouponModal(false);
                 setEditingCoupon(null);
                 setNewCoupon({ code: '', title: '', expiresAt: '', discountPercentage: '', minimumPurchaseAmount: '' });
                 setCouponModalError(null);
-              }} className="text-white hover:text-purple-100"><X className="h-6 w-6" /></button>
+              }} className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"><X className="h-6 w-6" /></button>
             </div>
             <form onSubmit={handleAddCoupon} className="space-y-5 p-6">
               {couponModalError && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
                   {couponModalError}
                 </div>
               )}
-              <div><label className="mb-2 block text-sm font-semibold text-gray-900">Coupon code</label><input required minLength={3} maxLength={30} value={newCoupon.code} onChange={(event) => setNewCoupon({ ...newCoupon, code: event.target.value.toUpperCase() })} placeholder="WELCOME20" className="w-full rounded-xl border border-gray-300 px-4 py-3 font-bold uppercase text-gray-900 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 sm:rounded-lg sm:border-gray-200 sm:px-3 sm:py-2.5" /></div>
-              <div><label className="mb-2 block text-sm font-semibold text-gray-900">Coupon title</label><input required maxLength={50} value={newCoupon.title} onChange={(event) => setNewCoupon({ ...newCoupon, title: event.target.value })} placeholder="Welcome discount" className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 sm:rounded-lg sm:border-gray-200 sm:px-3 sm:py-2.5" /></div>
-              <div className="grid grid-cols-2 gap-4"><div><label className="mb-2 block text-sm font-semibold text-gray-900">Expiry date</label><input required type="date" value={newCoupon.expiresAt} onChange={(event) => setNewCoupon({ ...newCoupon, expiresAt: event.target.value })} className="w-full rounded-xl border border-gray-300 px-3 py-3 text-gray-900 outline-none focus:border-purple-500 sm:rounded-lg sm:border-gray-200 sm:px-3 sm:py-2.5" /></div><div><label className="mb-2 block text-sm font-semibold text-gray-900">Discount %</label><input required type="number" min="1" max="100" value={newCoupon.discountPercentage} onChange={(event) => setNewCoupon({ ...newCoupon, discountPercentage: event.target.value })} placeholder="20" className="w-full rounded-xl border border-gray-300 px-3 py-3 text-gray-900 outline-none focus:border-purple-500 sm:rounded-lg sm:border-gray-200 sm:px-3 sm:py-2.5" /></div></div>
-              <div><label className="mb-2 block text-sm font-semibold text-gray-900">Minimum purchase amount (₹) <span className="text-gray-400 font-normal">(Optional - coupon only works above this amount)</span></label><input type="number" min="0" step="0.01" value={newCoupon.minimumPurchaseAmount} onChange={(event) => setNewCoupon({ ...newCoupon, minimumPurchaseAmount: event.target.value })} placeholder="0" className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-100 sm:rounded-lg sm:border-gray-200 sm:px-3 sm:py-2.5" /></div>
+              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Coupon code</label><input required minLength={3} maxLength={30} value={newCoupon.code} onChange={(event) => setNewCoupon({ ...newCoupon, code: event.target.value.toUpperCase() })} placeholder="WELCOME20" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 font-bold uppercase text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
+              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Coupon title</label><input required maxLength={50} value={newCoupon.title} onChange={(event) => setNewCoupon({ ...newCoupon, title: event.target.value })} placeholder="Welcome discount" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
+              <div className="grid grid-cols-2 gap-4"><div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Expiry date</label><input required type="date" value={newCoupon.expiresAt} onChange={(event) => setNewCoupon({ ...newCoupon, expiresAt: event.target.value })} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div><div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Discount %</label><input required type="number" min="1" max="100" value={newCoupon.discountPercentage} onChange={(event) => setNewCoupon({ ...newCoupon, discountPercentage: event.target.value })} placeholder="20" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div></div>
+              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Minimum purchase amount (₹) <span className="text-gray-400 dark:text-gray-500 font-normal">(Optional - coupon only works above this amount)</span></label><input type="number" min="0" step="0.01" value={newCoupon.minimumPurchaseAmount} onChange={(event) => setNewCoupon({ ...newCoupon, minimumPurchaseAmount: event.target.value })} placeholder="0" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
               <div className="flex justify-end gap-3 pt-2"><button type="button" onClick={() => {
                 setShowCouponModal(false);
                 setEditingCoupon(null);
                 setNewCoupon({ code: '', title: '', expiresAt: '', discountPercentage: '', minimumPurchaseAmount: '' });
-              }} className="rounded-xl border border-gray-300 px-5 py-3 font-medium text-gray-700 hover:bg-gray-50 sm:rounded-lg sm:px-4 sm:py-2.5">Cancel</button><button type="submit" disabled={addingCoupon} className="flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-3 font-medium text-white hover:bg-purple-700 disabled:opacity-50 sm:rounded-lg sm:px-4 sm:py-2.5">{addingCoupon && <Loader2 className="h-4 w-4 animate-spin" />}{editingCoupon ? 'Update Coupon' : 'Create Coupon'}</button></div>
+              }} className="rounded-xl border border-gray-200 dark:border-gray-700 px-5 py-3 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 sm:rounded-lg sm:px-4 sm:py-2.5">Cancel</button><button type="submit" disabled={addingCoupon} className="flex items-center gap-2 rounded-xl bg-green-500 hover:bg-green-600 px-5 py-3 font-medium text-white disabled:opacity-50 sm:rounded-lg sm:px-4 sm:py-2.5">{addingCoupon && <Loader2 className="h-4 w-4 animate-spin" />}{editingCoupon ? 'Update Coupon' : 'Create Coupon'}</button></div>
             </form>
           </div>
         </div>
@@ -1559,7 +922,7 @@ export default function AdminPage() {
       {showPaymentModal && !showGatewaySelection && (
         <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-gray-900/30 p-0 md:p-4">
           <div className="h-full w-full md:max-h-[80vh] md:max-w-lg md:rounded-2xl bg-white shadow-2xl overflow-y-auto rounded-t-none md:rounded-2xl">
-            <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-t-none md:rounded-t-2xl">
+            <div className="flex items-center justify-between border-b border-blue-500 bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-t-none md:rounded-t-2xl">
               <div>
                 <h2 className="text-xl font-semibold text-white">Payment Settings</h2>
                 <p className="mt-1 text-sm text-blue-100">Current payment configuration</p>
@@ -1576,10 +939,10 @@ export default function AdminPage() {
               {paymentSettings && (
                 <div className="space-y-4">
                   {/* Current Gateway Display */}
-                  <div className="rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
+                  <div className="rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 dark:border-blue-800 dark:from-blue-900/20 dark:to-indigo-900/20">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="rounded-full bg-blue-100 p-3">
+                        <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/30">
                           <img
                             src={
                               paymentSettings.gateway === 'razorpay' ? 'https://razorpay.com/favicon.png' :
@@ -1592,30 +955,30 @@ export default function AdminPage() {
                           />
                         </div>
                         <div>
-                          <h3 className="text-lg font-bold text-gray-900 capitalize">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 capitalize">
                             {paymentSettings.gateway === 'razorpay' ? 'Razorpay' :
                              paymentSettings.gateway === 'payu' ? 'PayU' :
                              paymentSettings.gateway === 'cashfree' ? 'Cashfree' :
                              paymentSettings.gateway}
                           </h3>
-                          <p className="text-sm text-gray-500">Active Payment Gateway</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Active Payment Gateway</p>
                         </div>
                       </div>
                     </div>
 
                     <div className="space-y-3">
 
-                      <div className="flex justify-between items-center py-2 border-b border-blue-100">
-                        <span className="text-sm text-gray-600">Client ID / Key</span>
-                        <span className="text-sm font-mono font-semibold text-gray-900">
+                      <div className="flex justify-between items-center py-2 border-b border-blue-100 dark:border-blue-800">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Client ID / Key</span>
+                        <span className="text-sm font-mono font-semibold text-gray-900 dark:text-gray-100">
                           {paymentSettings[paymentSettings.gateway]?.clientId ||
                            paymentSettings[paymentSettings.gateway]?.keyId ||
                            paymentSettings[paymentSettings.gateway]?.key || 'Not configured'}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center py-2 border-b border-blue-100">
-                        <span className="text-sm text-gray-600">Secret Key</span>
-                        <span className="text-sm font-mono font-semibold text-gray-900">
+                      <div className="flex justify-between items-center py-2 border-b border-blue-100 dark:border-blue-800">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Secret Key</span>
+                        <span className="text-sm font-mono font-semibold text-gray-900 dark:text-gray-100">
                           {paymentSettings[paymentSettings.gateway]?.hasSecret ||
                            paymentSettings[paymentSettings.gateway]?.hasSalt ? '••••••••••••' : 'Not configured'}
                         </span>
@@ -1684,7 +1047,7 @@ export default function AdminPage() {
       {showGatewaySelection && (
         <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-gray-900/30 p-0 md:p-4">
           <div className="h-full w-full md:max-h-[80vh] md:max-w-2xl md:rounded-2xl bg-white shadow-2xl overflow-y-auto rounded-t-none md:rounded-2xl">
-            <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-t-none md:rounded-t-2xl">
+            <div className="flex items-center justify-between border-b border-blue-500 bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-t-none md:rounded-t-2xl">
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => {
@@ -1722,7 +1085,7 @@ export default function AdminPage() {
                     className={`rounded-xl border-2 p-4 transition-all ${
                       tempPaymentSettings?.gateway === 'razorpay'
                         ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-200 bg-white hover:border-gray-300'
+                        : 'border-gray-200 bg-white hover:bg-gray-100'
                     }`}
                   >
                     <div className="flex flex-col items-center space-y-2">
@@ -1738,7 +1101,7 @@ export default function AdminPage() {
                     className={`rounded-xl border-2 p-4 transition-all ${
                       tempPaymentSettings?.gateway === 'payu'
                         ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-200 bg-white hover:border-gray-300'
+                        : 'border-gray-200 bg-white hover:bg-gray-100'
                     }`}
                   >
                     <div className="flex flex-col items-center space-y-2">
@@ -1754,7 +1117,7 @@ export default function AdminPage() {
                     className={`rounded-xl border-2 p-4 transition-all ${
                       tempPaymentSettings?.gateway === 'cashfree'
                         ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-200 bg-white hover:border-gray-300'
+                        : 'border-gray-200 bg-white hover:bg-gray-100'
                     }`}
                   >
                     <div className="flex flex-col items-center space-y-2">
@@ -1769,7 +1132,7 @@ export default function AdminPage() {
 
               {/* Razorpay Settings */}
               {tempPaymentSettings?.gateway === 'razorpay' && (
-                <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 space-y-4">
+                <div className="rounded-xl border-none bg-gray-50 p-4 space-y-4">
                   <h3 className="font-semibold text-gray-900">Razorpay Configuration</h3>
 
                   <div className="space-y-3">
@@ -1806,7 +1169,7 @@ export default function AdminPage() {
 
               {/* PayU Settings */}
               {tempPaymentSettings?.gateway === 'payu' && (
-                <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 space-y-4">
+                <div className="rounded-xl border-none bg-gray-50 p-4 space-y-4">
                   <h3 className="font-semibold text-gray-900">PayU Configuration</h3>
 
                   <div className="space-y-3">
@@ -1842,7 +1205,7 @@ export default function AdminPage() {
 
               {/* Cashfree Settings */}
               {tempPaymentSettings?.gateway === 'cashfree' && (
-                <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 space-y-4">
+                <div className="rounded-xl border-none bg-gray-50 p-4 space-y-4">
                   <h3 className="font-semibold text-gray-900">Cashfree Configuration</h3>
 
                   <div className="space-y-3">
@@ -1884,7 +1247,7 @@ export default function AdminPage() {
                     setShowGatewaySelection(false);
                     setTempPaymentSettings(null);
                   }}
-                  className="rounded-xl border border-gray-300 px-6 py-3 font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="rounded-xl border border-gray-300 px-6 py-3 font-medium text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   Cancel
                 </button>
@@ -1913,7 +1276,7 @@ export default function AdminPage() {
       {showCaptureModal && (
         <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-gray-900/30 p-0 md:p-4">
           <div className="h-full w-full md:max-h-[80vh] md:max-w-4xl md:rounded-2xl bg-white shadow-2xl overflow-y-auto rounded-t-none md:rounded-2xl">
-            <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-purple-600 to-indigo-600 p-6 rounded-t-none md:rounded-t-2xl">
+            <div className="flex items-center justify-between border-b border-purple-500 bg-gradient-to-r from-purple-600 to-indigo-600 p-6 rounded-t-none md:rounded-t-2xl">
               <div>
                 <h2 className="text-xl font-semibold text-white">Razorpay Payment Capture Status</h2>
                 <p className="mt-1 text-sm text-purple-100">Monitor and retry Razorpay payment captures</p>
@@ -1954,7 +1317,7 @@ export default function AdminPage() {
                     <button
                       onClick={fetchCaptureData}
                       disabled={captureLoading}
-                      className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                      className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 transition-colors"
                     >
                       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                       <span>Refresh</span>
@@ -1965,7 +1328,7 @@ export default function AdminPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Failed Captures</h3>
                     {captureData?.failed?.length === 0 ? (
-                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center text-gray-500">
+                      <div className="rounded-lg border-none bg-gray-50 p-6 text-center text-gray-500">
                         No failed captures
                       </div>
                     ) : (
@@ -2009,7 +1372,7 @@ export default function AdminPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-3">Pending Captures</h3>
                     {captureData?.pending?.length === 0 ? (
-                      <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center text-gray-500">
+                      <div className="rounded-lg border-none bg-gray-50 p-6 text-center text-gray-500">
                         No pending captures
                       </div>
                     ) : (
@@ -2203,7 +1566,7 @@ export default function AdminPage() {
                     setShowUserDropdown(false);
                     setShowResourceDropdown(false);
                   }}
-                  className="px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium"
+                  className="px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-sm font-medium"
                 >
                   Cancel
                 </button>
@@ -2257,7 +1620,7 @@ export default function AdminPage() {
                       setActiveGeneralTab('razorpay');
                       fetchCaptureData();
                     }}
-                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border border-gray-200 rounded-lg"
+                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2 border border-gray-200 rounded-lg"
                   >
                     <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -2268,7 +1631,7 @@ export default function AdminPage() {
                   {/* Grant Access */}
                   <button
                     onClick={() => setActiveGeneralTab('grant')}
-                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border border-gray-200 rounded-lg"
+                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2 border border-gray-200 rounded-lg"
                   >
                     <UserCheck className="h-5 w-5 text-gray-600" />
                     <span>Grant Access</span>
@@ -2277,7 +1640,7 @@ export default function AdminPage() {
                   {/* Google Drive Access */}
                   <button
                     onClick={() => setActiveGeneralTab('drive')}
-                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 border border-gray-200 rounded-lg"
+                    className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2 border border-gray-200 rounded-lg"
                   >
                     <svg className="h-5 w-5 text-gray-600" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
@@ -2320,7 +1683,7 @@ export default function AdminPage() {
                     <button
                       onClick={fetchCaptureData}
                       disabled={captureLoading}
-                      className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                      className="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50 transition-colors"
                     >
                       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                       <span>Refresh</span>
@@ -2336,7 +1699,7 @@ export default function AdminPage() {
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-3">Failed Captures</h3>
                         {captureData?.failed?.length === 0 ? (
-                          <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center text-gray-500">
+                          <div className="rounded-lg border-none bg-gray-50 p-6 text-center text-gray-500">
                             No failed captures
                           </div>
                         ) : (
@@ -2379,7 +1742,7 @@ export default function AdminPage() {
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-3">Pending Captures</h3>
                         {captureData?.pending?.length === 0 ? (
-                          <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 text-center text-gray-500">
+                          <div className="rounded-lg border-none bg-gray-50 p-6 text-center text-gray-500">
                             No pending captures
                           </div>
                         ) : (
@@ -2683,7 +2046,7 @@ export default function AdminPage() {
                         onClick={() => {
                           window.location.href = '/api/google-drive/auth';
                         }}
-                        className="flex items-center gap-3 bg-white border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 px-8 py-4 rounded-xl transition-all shadow-sm hover:shadow-md"
+                        className="flex items-center gap-3 bg-white border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 px-8 py-4 rounded-xl transition-all shadow-sm hover:shadow-md"
                       >
                         <svg className="h-7 w-7 text-gray-700" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
@@ -2791,7 +2154,7 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={() => setShowCategoryModal(false)}
-                  className="px-3 py-1.5 sm:px-6 sm:py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-medium text-xs sm:text-sm"
+                  className="px-3 py-1.5 sm:px-6 sm:py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium text-xs sm:text-sm"
                 >
                   Cancel
                 </button>
@@ -2841,6 +2204,6 @@ export default function AdminPage() {
         cancelText="Cancel"
         variant="warning"
       />
-    </div>
+    </AdminLayout>
   );
 }

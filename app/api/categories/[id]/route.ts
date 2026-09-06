@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import Category from '@/models/Category';
+import { hasAdminSession } from '@/lib/auth/admin';
 
 // PUT update category
 export async function PUT(
@@ -8,6 +9,14 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const isAdmin = await hasAdminSession(request);
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: 'Unauthorized. Admin access required to update categories.' },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     await connectDB();
     const body = await request.json();
@@ -39,6 +48,14 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const isAdmin = await hasAdminSession(request);
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: 'Unauthorized. Admin access required to delete categories.' },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     console.log('DELETE request received for category ID:', id);
 

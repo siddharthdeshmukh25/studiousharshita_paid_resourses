@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Poppins } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif, Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import Providers from '@/components/providers';
 import NextTopLoader from 'nextjs-toploader';
@@ -29,6 +29,13 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || "https://resources.studiousharshita.com"),
   title: {
@@ -54,10 +61,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${poppins.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${poppins.variable} ${inter.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-[#F8FAFC]">
         <NextTopLoader 
           color="#2563EB"
           initialPosition={0.3}

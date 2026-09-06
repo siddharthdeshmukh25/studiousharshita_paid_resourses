@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
+import { getClientIP, getCountryFromIP } from '@/lib/geoLocation';
 
 const authOptions = {
   providers: [
@@ -32,7 +33,7 @@ const authOptions = {
     },
   },
   callbacks: {
-    async signIn({ user, account, profile }: any) {
+    async signIn({ user, account, profile, req }: any) {
       if (account.provider === 'google') {
         await connectDB();
         

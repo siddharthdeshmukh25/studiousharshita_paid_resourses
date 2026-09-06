@@ -7,11 +7,14 @@ import Resource from '@/models/Resource';
 import PaymentSettings from '@/models/PaymentSettings';
 import { capturePayment } from '@/lib/paymentCapture';
 
-function verifyCashfreeWebhookSignature(payload: string, signature: string, secret: string): boolean {
+function verifyCashfreeWebhookSignature(payload: string, signature: string, timestamp: string, secret: string): boolean {
+  // Cashfree signs `<timestamp><rawBody>` with the API client secret and sends
+  // the result base64-encoded in the x-webhook-signature header.
+  const signedPayload = timestamp + payload;
   const expectedSignature = crypto
     .createHmac('sha256', secret)
-    .update(payload)
-    .digest('hex');
+    .update(signedPayload)
+    .digest('base64');
   return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
 }
 
@@ -19,23 +22,27 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.text();
     const signature = request.headers.get('x-webhook-signature');
+    const timestamp = request.headers.get('x-webhook-timestamp');
 
-    if (!signature) {
-      console.error('Missing Cashfree webhook signature');
-      return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
+    if (!signature || !timestamp) {
+      console.error('Missing Cashfree webhook signature or timestamp');
+      return NextResponse.json({ error: 'Missing signature or timestamp' }, { status: 400 });
     }
 
     const settings = await PaymentSettings.findOne();
-    
-    // Skip signature verification if webhook secret is not configured (for development)
-    if (settings?.cashfree?.webhookSecret) {
-      const isValid = verifyCashfreeWebhookSignature(body, signature, settings.cashfree.webhookSecret);
-      if (!isValid) {
-        console.error('Invalid Cashfree webhook signature');
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
-      }
-    } else {
-      console.warn('Cashfree webhook secret not configured - skipping signature verification (development mode)');
+
+    // Fail closed: never process an unverifiable webhook. Cashfree signs with
+    // the client secret; webhookSecret is kept as a fallback for older setups.
+    const secret = settings?.cashfree?.clientSecret || settings?.cashfree?.webhookSecret;
+    if (!secret) {
+      console.error('Cashfree webhook secret not configured - refusing unverifiable webhook');
+      return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
+    }
+
+    const isValid = verifyCashfreeWebhookSignature(body, signature, timestamp, secret);
+    if (!isValid) {
+      console.error('Invalid Cashfree webhook signature');
+      return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
 
     const event = JSON.parse(body);

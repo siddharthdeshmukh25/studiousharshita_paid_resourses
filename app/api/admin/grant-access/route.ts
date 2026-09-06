@@ -3,8 +3,11 @@ import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
 import Resource from '@/models/Resource';
 import Order from '@/models/Order';
+import { hasAdminSession } from '@/lib/auth/admin';
 
 export async function POST(request: NextRequest) {
+  if (!(await hasAdminSession(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body = await request.json() as { userId: string; resourceId: string; orderId?: string };
     const { userId, resourceId, orderId } = body;
@@ -76,6 +79,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  if (!(await hasAdminSession(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body = await request.json() as { userId: string; resourceId: string };
     const { userId, resourceId } = body;
