@@ -123,7 +123,7 @@ export default function DashboardPage() {
               </p>
               <button
                 onClick={() => router.push('/')}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="bg-[var(--accent)] text-white px-6 py-3 rounded-lg hover:bg-[var(--accent-deep)] transition-colors font-medium"
               >
                 Browse Resources
               </button>
@@ -146,7 +146,7 @@ export default function DashboardPage() {
 
                   {/* Content */}
                   <div className="p-3 md:p-4">
-                    <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-[10px] md:text-xs font-medium mb-2">
+                    <span className="inline-block px-2 py-1 bg-[var(--accent-soft-2)] text-[var(--accent-text)] rounded-full text-[10px] md:text-xs font-medium mb-2">
                       {resource.category}
                     </span>
                     <h3 className="text-sm md:text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
@@ -165,7 +165,7 @@ export default function DashboardPage() {
                     {/* Download Button */}
                     <button
                       onClick={() => handleDownload(resource._id)}
-                      className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2 text-xs md:text-sm"
+                      className="w-full bg-[var(--accent)] text-white py-2 rounded-lg hover:bg-[var(--accent-deep)] transition-colors font-medium flex items-center justify-center space-x-2 text-xs md:text-sm"
                     >
                       <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
                       <span>Open Resource</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Loader2, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertical, Settings, UserCheck, Package } from 'lucide-react';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
@@ -30,7 +30,7 @@ interface Stats {
   totalOrders?: number;
 }
 
-export default function AdminPage() {
+function AdminPageContent() {
   const searchParams = useSearchParams();
   const [categories, setCategories] = useState<Category[]>([]);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
@@ -2205,5 +2205,13 @@ export default function AdminPage() {
         variant="warning"
       />
     </AdminLayout>
+  );
+}
+
+export default function AdminPage() {
+  return (
+    <Suspense fallback={<div className="grid min-h-screen place-items-center bg-white dark:bg-[#0a0a0a]" />}>
+      <AdminPageContent />
+    </Suspense>
   );
 }

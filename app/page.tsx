@@ -99,20 +99,20 @@ function HomeContent() {
       <Navbar />
 
       <section className="relative overflow-hidden border-b border-[#E2E8F0] bg-gradient-to-r from-white via-[#F8FBFF] to-[#E7F1FF] py-12 sm:py-16">
-        <div aria-hidden="true" className="absolute -right-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[#2563EB]/10" style={{ filter: 'blur(48px)' }} />
-        <div aria-hidden="true" className="absolute right-[12%] top-0 h-full w-px bg-gradient-to-b from-transparent via-[#2563EB]/15 to-transparent" />
+        <div aria-hidden="true" className="absolute -right-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-[var(--accent)]/10" style={{ filter: 'blur(48px)' }} />
+        <div aria-hidden="true" className="absolute right-[12%] top-0 h-full w-px bg-gradient-to-b from-transparent via-[var(--accent)]/15 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl lg:max-w-[54%]">
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[#2563EB]">Designed for ambitious students</p>
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-[var(--accent)]">Designed for ambitious students</p>
             <h1 className="font-serif text-4xl italic leading-[1.08] text-[#0F172A] sm:text-5xl md:text-6xl">Everything you need to study, stay organized, and achieve more.</h1>
             <p className="mt-5 max-w-2xl font-[family-name:var(--font-poppins)] text-sm leading-7 text-[#64748B] sm:text-base">Carefully crafted digital resources to help you stay organized, build better study habits, and make steady progress toward your academic and career goals.</p>
           </div>
 
           <div aria-hidden="true" className="pointer-events-none absolute right-2 top-1/2 hidden h-[310px] w-[390px] -translate-y-1/2 lg:block xl:right-10">
             <div className="absolute inset-3 rounded-[42%] border border-white/70 bg-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]" />
-            <div className="absolute bottom-3 left-1/2 h-8 w-64 -translate-x-1/2 rounded-full bg-[#2563EB]/15" style={{ filter: 'blur(12px)' }} />
+            <div className="absolute bottom-3 left-1/2 h-8 w-64 -translate-x-1/2 rounded-full bg-[var(--accent)]/15" style={{ filter: 'blur(12px)' }} />
 
-            <div className="absolute left-7 top-16 h-44 w-28 -rotate-[16deg] rounded-xl bg-gradient-to-br from-[#1649B8] to-[#2563EB] p-3 shadow-lg">
+            <div className="absolute left-7 top-16 h-44 w-28 -rotate-[16deg] rounded-xl bg-gradient-to-br from-[var(--accent-deep)] to-[var(--accent)] p-3 shadow-lg">
               <div className="flex items-center justify-between text-white/90"><BookOpen className="h-5 w-5" /><span className="text-[8px] font-bold tracking-wider">STUDY</span></div>
               <div className="mt-8 h-px w-12 bg-white/40" />
               <p className="mt-2 text-sm font-bold leading-tight text-white">Focus<br />notes</p>
@@ -120,11 +120,11 @@ function HomeContent() {
             </div>
 
             <div className="absolute left-[105px] top-5 w-[190px] rotate-[7deg] rounded-2xl border border-white/90 bg-white p-4 shadow-lg">
-              <div className="flex items-center justify-between"><span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#2563EB]">Weekly plan</span><Sparkles className="h-4 w-4 text-[#06B6D4]" /></div>
+              <div className="flex items-center justify-between"><span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--accent)]">Weekly plan</span><Sparkles className="h-4 w-4 text-[var(--accent)]" /></div>
               <div className="mt-4 space-y-2.5">
                 {['Review notes', 'Practice quiz', 'Plan tomorrow'].map((task, index) => (
                   <div key={task} className="flex items-center gap-2 text-[10px] font-medium text-[#475569]">
-                    <span className={`grid h-4 w-4 place-items-center rounded-full ${index < 2 ? 'bg-[#DBEAFE] text-[#2563EB]' : 'border border-[#CBD5E1] text-transparent'}`}><Check className="h-2.5 w-2.5 stroke-[3]" /></span>
+                    <span className={`grid h-4 w-4 place-items-center rounded-full ${index < 2 ? 'bg-[var(--accent-soft-2)] text-[var(--accent)]' : 'border border-[#CBD5E1] text-transparent'}`}><Check className="h-2.5 w-2.5 stroke-[3]" /></span>
                     <span>{task}</span>
                   </div>
                 ))}
@@ -132,8 +132,8 @@ function HomeContent() {
               <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[#E2E8F0]"><div className="h-full w-2/3 rounded-full bg-[#06B6D4]" /></div>
             </div>
 
-            <div className="absolute bottom-6 right-8 rotate-[-7deg] rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 shadow-md">
-              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[#2563EB]">Keep going</p>
+            <div className="absolute bottom-6 right-8 rotate-[-7deg] rounded-xl border border-[var(--accent-soft-2)] bg-[var(--accent-soft)] px-4 py-3 shadow-md">
+              <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--accent)]">Keep going</p>
               <p className="mt-1 text-xs font-bold text-[#0F172A]">Small steps, big goals.</p>
             </div>
           </div>
@@ -145,14 +145,14 @@ function HomeContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6 flex flex-col gap-4 border-b border-[#E2E8F0] pb-5 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
             <div className="min-w-0">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#2563EB]">Browse resources</p>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--accent)]">Browse resources</p>
               <h2 className="mt-1 text-xl font-bold text-[#0F172A] sm:text-2xl">Find your next study resource</h2>
             </div>
             <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
               <div role="tablist" aria-label="Choose resource type" className="relative grid h-10 flex-1 grid-cols-2 rounded-xl bg-[#EAF1FB] p-1 sm:w-48 sm:flex-none">
                 <span aria-hidden="true" className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-transform duration-300 ease-out ${resourceType === 'free' ? 'translate-x-1' : 'translate-x-[calc(100%+3px)]'}`} />
                 <button type="button" role="tab" aria-selected={resourceType === 'free'} onClick={() => setResourceType('free')} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceType === 'free' ? 'text-emerald-700' : 'text-[#64748B]'}`}>Free</button>
-                <button type="button" role="tab" aria-selected={resourceType === 'paid'} onClick={() => setResourceType('paid')} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceType === 'paid' ? 'text-[#2563EB]' : 'text-[#64748B]'}`}>Paid</button>
+                <button type="button" role="tab" aria-selected={resourceType === 'paid'} onClick={() => setResourceType('paid')} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceType === 'paid' ? 'text-[var(--accent)]' : 'text-[#64748B]'}`}>Paid</button>
               </div>
             <div className="relative z-40 shrink-0">
               <button
@@ -160,11 +160,11 @@ function HomeContent() {
                 aria-haspopup="listbox"
                 aria-expanded={isCategoryMenuOpen}
                 onClick={() => setIsCategoryMenuOpen((isOpen) => !isOpen)}
-                className="flex h-10 items-center gap-2 rounded-lg border border-[#D7E0EC] bg-white py-2 pl-3 pr-2 text-sm shadow-sm transition-all hover:border-[#2563EB] hover:shadow focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20"
+                className="flex h-10 items-center gap-2 rounded-lg border border-[#D7E0EC] bg-white py-2 pl-3 pr-2 text-sm shadow-sm transition-all hover:border-[var(--accent)] hover:shadow focus:outline-none focus:ring-2 focus:ring-[var(--accent-ring)]"
               >
                 <span className="hidden text-[10px] font-bold uppercase tracking-[0.1em] text-[#64748B] sm:inline">Category</span>
                 <span className="max-w-20 truncate font-semibold text-[#0F172A] sm:max-w-28">{selectedCategory === 'All' ? 'All' : selectedCategory}</span>
-                <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" className={`ml-1 h-4 w-4 text-[#2563EB] transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`}>
+                <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" className={`ml-1 h-4 w-4 text-[var(--accent)] transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`}>
                 <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clipRule="evenodd" />
                 </svg>
               </button>
@@ -182,10 +182,10 @@ function HomeContent() {
                           setSelectedCategory(category);
                           setIsCategoryMenuOpen(false);
                         }}
-                        className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${isSelected ? 'bg-[#EFF6FF] font-semibold text-[#2563EB]' : 'text-[#334155] hover:bg-[#F8FAFC]'}`}
+                        className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${isSelected ? 'bg-[var(--accent-soft)] font-semibold text-[var(--accent)]' : 'text-[#334155] hover:bg-[#F8FAFC]'}`}
                       >
                         {category === 'All' ? 'All resources' : category}
-                        {isSelected && <span aria-hidden="true" className="text-[#2563EB]">✓</span>}
+                        {isSelected && <span aria-hidden="true" className="text-[var(--accent)]">✓</span>}
                       </button>
                     );
                   })}

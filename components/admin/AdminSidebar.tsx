@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { 
   LayoutDashboard, 
@@ -12,11 +12,14 @@ import {
   Settings, 
   BarChart3,
   RefreshCw,
+  LifeBuoy,
+  Bell,
   Menu,
   X,
   Sun,
   Moon,
-  Lock
+  Lock,
+  FileText
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -47,9 +50,11 @@ const navItems: NavItem[] = [
   { id: 'users', label: 'Users', icon: <Users className="h-5 w-5" />, path: '/admin/users' },
   { id: 'revenue', label: 'Revenue', icon: <IndianRupee className="h-5 w-5" />, path: '/admin/revenue' },
   { id: 'payment-captures', label: 'Payment Captures', icon: <RefreshCw className="h-5 w-5" />, path: '/admin/payment-captures' },
+  { id: 'support', label: 'Support', icon: <LifeBuoy className="h-5 w-5" />, path: '/admin/support' },
   { id: 'categories', label: 'Categories', icon: <Tag className="h-5 w-5" />, path: '/admin/categories' },
   { id: 'coupons', label: 'Coupons', icon: <Ticket className="h-5 w-5" />, path: '/admin/coupons' },
   { id: 'analytics', label: 'Analytics', icon: <BarChart3 className="h-5 w-5" />, path: '/admin/analytics' },
+  { id: 'notifications', label: 'Notifications', icon: <Bell className="h-5 w-5" />, path: '/admin/notifications' },
   { id: 'settings', label: 'Settings', icon: <Settings className="h-5 w-5" />, path: '/admin/settings' },
 ];
 
@@ -57,9 +62,27 @@ export default function AdminSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [showLockMessage, setShowLockMessage] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useThemeSafe();
+
+  // Live unread badge for the notifications item
+  useEffect(() => {
+    const loadUnread = async () => {
+      try {
+        const response = await fetch('/api/admin/notifications?limit=1');
+        if (!response.ok) return;
+        const data = await response.json();
+        setUnreadCount(data.unreadCount || 0);
+      } catch {
+        /* ignore */
+      }
+    };
+    loadUnread();
+    const interval = setInterval(loadUnread, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleNavClick = (item: NavItem) => {
     if (item.path) router.push(item.path);
@@ -72,9 +95,11 @@ export default function AdminSidebar() {
 
   const getActiveItem = () => {
     if (pathname === '/admin/analytics') return 'analytics';
+    if (pathname === '/admin/notifications') return 'notifications';
     if (pathname === '/admin/users') return 'users';
     if (pathname === '/admin/revenue') return 'revenue';
     if (pathname === '/admin/payment-captures') return 'payment-captures';
+    if (pathname === '/admin/support') return 'support';
     if (pathname === '/admin/coupons') return 'coupons';
     if (pathname === '/admin/categories') return 'categories';
     if (pathname === '/admin/settings') return 'settings';
@@ -119,7 +144,10 @@ export default function AdminSidebar() {
               <div className="grid h-8 w-8 place-items-center rounded-lg bg-[#b8ff00] text-[#071000]">
                 <LayoutDashboard className="h-[18px] w-[18px]" />
               </div>
-              <span className="text-[17px] font-semibold tracking-[-0.04em] text-gray-900 dark:text-gray-100">ResourceOS</span>
+              <div className="flex flex-col">
+                <span className="text-[17px] font-semibold tracking-[-0.04em] text-gray-900 dark:text-gray-100 leading-tight">ResourceOS</span>
+                <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium">v2.0.0</span>
+              </div>
             </div>
           )}
           <button
@@ -153,6 +181,11 @@ export default function AdminSidebar() {
             >
               {item.icon}
               {!isCollapsed && <span className="font-medium">{item.label}</span>}
+              {!isCollapsed && item.id === 'notifications' && unreadCount > 0 && (
+                <span className="ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-red-500 px-1.5 text-[11px] font-bold text-white">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
             </button>
           ))}
         </nav>
@@ -192,6 +225,26 @@ export default function AdminSidebar() {
               </button>
             </div>
           )}
+
+          {/* Developer Notes Button */}
+          <button
+            onClick={() => router.push('/admin/developer-notes')}
+            className={`
+              w-full flex items-center gap-3 px-3 py-2.5 rounded-lg mt-2
+              text-gray-600 dark:text-gray-400
+              hover:bg-gray-100 dark:hover:bg-gray-800
+              transition-all duration-200
+              ${isCollapsed ? 'justify-center' : ''}
+            `}
+            title="Developer Notes"
+          >
+            <FileText className="h-5 w-5" />
+            {!isCollapsed && (
+              <span className="font-medium text-[15px]">
+                Developer Notes
+              </span>
+            )}
+          </button>
         </div>
       </aside>
     </>

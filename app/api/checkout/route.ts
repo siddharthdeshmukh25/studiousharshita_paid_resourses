@@ -133,6 +133,8 @@ export async function POST(request: NextRequest) {
             resourceId: resource._id.toString(),
             resourceTitle: resource.title,
             customOrderId: orderId, // Store our custom order ID in notes
+            merchantName: 'studiousharshita', // Business branding to reduce payment rejection flags
+            merchantContact: 'support@studiousharshita.com',
           },
         }),
       });
@@ -162,7 +164,7 @@ export async function POST(request: NextRequest) {
             return_url: returnUrl,
             payment_methods: 'cc,dc,upi'
           },
-          order_note: `Purchase: ${resource.title}`,
+          order_note: `Purchase: ${resource.title} — studiousharshita (educational digital resource)`,
           // Add custom metadata for webhook
           order_tags: {
             userId: user._id.toString(),

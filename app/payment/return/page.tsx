@@ -75,16 +75,16 @@ function PaymentReturnContent() {
     verifyPayment();
   }, [searchParams]);
 
-  return <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+  return <div className="min-h-screen flex flex-col bg-gradient-to-br from-[var(--accent-soft)] via-white to-[var(--accent-soft-2)]">
     <Navbar />
     <main className="flex-1 flex items-center justify-center px-4 py-16">
       <section className="w-full max-w-lg">
         {/* Main Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}
-          <div className={`bg-gradient-to-r px-8 py-6 ${state === 'success' ? 'from-blue-600 to-indigo-600' :
+          <div className={`bg-gradient-to-r px-8 py-6 ${state === 'success' ? 'from-[var(--accent)] to-[var(--accent-deep)]' :
               state === 'error' ? 'from-red-500 to-rose-600' :
-                'from-blue-500 to-indigo-600'
+                'from-[var(--accent)] to-[var(--accent-deep)]'
             }`}>
             <div className="flex items-center justify-center">
               {state === 'verifying' && (
@@ -137,7 +137,7 @@ function PaymentReturnContent() {
                         className="text-gray-400 hover:text-gray-600 transition-colors"
                         title="Copy Order ID"
                       >
-                        {copied ? <Check className="h-3 w-3 text-blue-500" /> : <Copy className="h-3 w-3" />}
+                        {copied ? <Check className="h-3 w-3 text-[var(--accent)]" /> : <Copy className="h-3 w-3" />}
                       </button>
                     </div>
                   </div>
@@ -155,7 +155,7 @@ function PaymentReturnContent() {
                           className="text-gray-400 hover:text-gray-600 transition-colors"
                           title="Copy Razorpay Order ID"
                         >
-                          {copied ? <Check className="h-3 w-3 text-blue-500" /> : <Copy className="h-3 w-3" />}
+                          {copied ? <Check className="h-3 w-3 text-[var(--accent)]" /> : <Copy className="h-3 w-3" />}
                         </button>
                       </div>
                     </div>
@@ -174,7 +174,7 @@ function PaymentReturnContent() {
                           className="text-gray-400 hover:text-gray-600 transition-colors"
                           title="Copy Payment ID"
                         >
-                          {copied ? <Check className="h-3 w-3 text-blue-500" /> : <Copy className="h-3 w-3" />}
+                          {copied ? <Check className="h-3 w-3 text-[var(--accent)]" /> : <Copy className="h-3 w-3" />}
                         </button>
                       </div>
                     </div>
@@ -186,9 +186,9 @@ function PaymentReturnContent() {
             {/* Info Pills */}
             {state === 'success' && (
               <div className="flex gap-2 mb-6">
-                <div className="flex-1 bg-blue-50 rounded-lg p-3 flex items-center gap-2">
+                <div className="flex-1 bg-[var(--accent-soft)] rounded-lg p-3 flex items-center gap-2">
                   <Shield className="h-4 w-4 text-blue-600" />
-                  <span className="text-xs text-blue-700">Secure Payment</span>
+                  <span className="text-xs text-[var(--accent-text)]">Secure Payment</span>
                 </div>
                 <div className="flex-1 bg-indigo-50 rounded-lg p-3 flex items-center gap-2">
                   <Clock className="h-4 w-4 text-indigo-600" />
@@ -202,8 +202,8 @@ function PaymentReturnContent() {
               <button
                 onClick={() => router.push(state === 'success' ? '/dashboard' : '/')}
                 className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all transform hover:scale-[1.02] active:scale-[0.98] ${state === 'success'
-                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
-                    : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700'
+                    ? 'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] hover:from-[var(--accent-deep)] hover:to-[var(--accent-deep)]'
+                    : 'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] hover:from-blue-600 hover:to-indigo-700'
                   }`}
               >
                 {state === 'success' ? 'Go to Dashboard' : 'Return Home'}
@@ -267,10 +267,16 @@ function PaymentReturnContent() {
 
         {/* Support Info */}
         {state === 'error' && (
-          <div className="mt-4 text-center">
+          <div className="mt-4 space-y-3 text-center">
+            <button
+              onClick={() => router.push(`/support?orderId=${encodeURIComponent(orderDetails?.orderId || '')}`)}
+              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-blue-600 hover:bg-[var(--accent-deep)] transition-colors"
+            >
+              Raise a Support Ticket
+            </button>
             <p className="text-sm text-gray-500">
               Need help? Contact us at{' '}
-              <a href="mailto:support@studiousharshita.com" className="text-blue-600 hover:underline">
+              <a href="mailto:support@studiousharshita.com" className="text-[var(--accent)] hover:underline">
                 support@studiousharshita.com
               </a>
             </p>
@@ -283,5 +289,5 @@ function PaymentReturnContent() {
 }
 
 export default function PaymentReturnPage() {
-  return <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50" />}><PaymentReturnContent /></Suspense>;
+  return <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-[var(--accent-soft)] via-white to-[var(--accent-soft-2)]" />}><PaymentReturnContent /></Suspense>;
 }

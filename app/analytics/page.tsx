@@ -101,7 +101,7 @@ export default function AnalyticsDashboard() {
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--accent)]"></div>
       </div>
     );
   }
@@ -113,7 +113,7 @@ export default function AnalyticsDashboard() {
           <p className="text-red-600 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="bg-[var(--accent)] text-white px-4 py-2 rounded-lg hover:bg-[var(--accent-deep)]"
           >
             Retry
           </button>
@@ -151,7 +151,7 @@ export default function AnalyticsDashboard() {
               <select
                 value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
               >
                 <option value="7d">Last 7 days</option>
                 <option value="30d">Last 30 days</option>
@@ -266,7 +266,7 @@ export default function AnalyticsDashboard() {
             Conversion Funnel
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-blue-50 rounded-lg p-4">
+            <div className="bg-[var(--accent-soft)] rounded-lg p-4">
               <p className="text-sm text-blue-600 font-medium">Page Views</p>
               <p className="text-2xl font-bold text-blue-900">{formatNumber(analytics.conversionFunnel.pageViews)}</p>
             </div>
@@ -327,7 +327,7 @@ export default function AnalyticsDashboard() {
             {analytics.recentActivity.map((activity, index) => (
               <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700 capitalize">
+                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-[var(--accent-soft-2)] text-[var(--accent-text)] capitalize">
                     {activity.eventType.replace('_', ' ')}
                   </span>
                   <span className="text-sm text-gray-600 capitalize">{activity.trafficSource.replace('_', ' ')}</span>
@@ -354,7 +354,7 @@ export default function AnalyticsDashboard() {
               return (
                 <div key={index} className="flex-1 flex flex-col items-center gap-1">
                   <div 
-                    className="w-full bg-blue-500 rounded-t hover:bg-blue-600 transition-colors relative group"
+                    className="w-full bg-[var(--accent)] rounded-t hover:bg-[var(--accent-deep)] transition-colors relative group"
                     style={{ height: `${Math.max(height, 5)}%` }}
                   >
                     <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 whitespace-nowrap">
@@ -377,7 +377,7 @@ export default function AnalyticsDashboard() {
 
 function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: string; color: string }) {
   const colorClasses: Record<string, string> = {
-    blue: 'bg-blue-50 text-blue-600 border-blue-200',
+    blue: 'bg-[var(--accent-soft)] text-[var(--accent)] border-[var(--accent-soft-2)]',
     green: 'bg-green-50 text-green-600 border-green-200',
     purple: 'bg-purple-50 text-purple-600 border-purple-200',
     pink: 'bg-pink-50 text-pink-600 border-pink-200',

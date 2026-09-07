@@ -1,6 +1,6 @@
 'use client';
 
-import { BookOpen, Heart, LogOut, User, ArrowLeft, Search, X } from 'lucide-react';
+import { BookOpen, LogOut, User, ArrowLeft, Search, X } from 'lucide-react';
 import SearchBar from '../resource/SearchBar';
 import SearchResults from '../resource/SearchResults';
 import { useSession, signOut } from 'next-auth/react';
@@ -154,7 +154,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 sm:h-16 items-center justify-between gap-3">
             <button onClick={() => router.push('/')} className="flex shrink-0 items-center gap-2 text-left group">
-              <span className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-lg bg-[#2563EB] text-[#F8FAFC] group-hover:bg-[#1D4ED8] transition-colors">
+              <span className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-lg bg-[var(--accent)] text-[#F8FAFC] group-hover:bg-[var(--accent-deep)] transition-colors">
                 <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
               </span>
               <span className="text-sm sm:text-base lg:text-lg font-bold tracking-tight text-[#0F172A] font-inter">
@@ -181,25 +181,20 @@ export default function Navbar() {
             </div>
 
             <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-              <button onClick={() => setShowSearchModal(true)} aria-label="Search" className="md:hidden p-1.5 text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#06B6D4] rounded-lg transition-colors">
+              <button onClick={() => setShowSearchModal(true)} aria-label="Search" className="md:hidden p-1.5 text-[#64748B] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)] rounded-lg transition-colors">
                 <Search className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
               {pathname !== '/' && (
-                <button onClick={() => router.back()} aria-label="Go back" className="p-1.5 text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#06B6D4] rounded-lg transition-colors">
+                <button onClick={() => router.back()} aria-label="Go back" className="p-1.5 text-[#64748B] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)] rounded-lg transition-colors">
                   <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-                </button>
-              )}
-              {session && (
-                <button onClick={() => router.push('/wishlist')} aria-label="Wishlist" className={`p-1.5 rounded-lg transition-colors ${pathname === '/wishlist' ? 'text-[#06B6D4] bg-[#EFF6FF]' : 'text-[#64748B] hover:bg-[#EFF6FF] hover:text-[#06B6D4]'}`}>
-                  <Heart className={`h-4 w-4 sm:h-5 sm:w-5 ${pathname === '/wishlist' ? 'fill-[#06B6D4]' : ''}`} />
                 </button>
               )}
 
               {status === 'loading' ? (
-                <div className="h-8 w-16 sm:h-9 sm:w-20 rounded-lg bg-[#EFF6FF] animate-pulse" />
+                <div className="h-8 w-16 sm:h-9 sm:w-20 rounded-lg bg-[var(--accent-soft)] animate-pulse" />
               ) : session ? (
                 <div className="relative z-[60]">
-                  <button onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-2 rounded-lg py-1 pl-1 pr-1.5 sm:py-1.5 sm:pl-1.5 sm:pr-2 hover:bg-[#EFF6FF] transition-colors">
+                  <button onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-2 rounded-lg py-1 pl-1 pr-1.5 sm:py-1.5 sm:pl-1.5 sm:pr-2 hover:bg-[var(--accent-soft)] transition-colors">
                     {session.user?.image ? (
                       <img src={session.user.image} alt={session.user.name || 'User'} className="h-6 w-6 sm:h-7 sm:w-7 rounded-full border-none object-cover" referrerPolicy="no-referrer" />
                     ) : (
@@ -213,13 +208,13 @@ export default function Navbar() {
                         <p className="truncate text-sm font-semibold text-[#0F172A]">{session.user?.name || session.user?.email}</p>
                         <p className="truncate text-xs text-[#64748B]">{session.user?.email}</p>
                       </div>
-                      <button onClick={() => { router.push('/dashboard'); setShowDropdown(false); }} className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-[#334155] hover:bg-[#F8FAFC] transition-colors"><User className="h-4 w-4" />Dashboard</button>
+                      <button onClick={() => { router.push('/profile'); setShowDropdown(false); }} className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-[#334155] hover:bg-[#F8FAFC] transition-colors"><User className="h-4 w-4" />Profile</button>
                       <button onClick={handleLogout} className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-[#334155] hover:bg-[#F8FAFC] transition-colors"><LogOut className="h-4 w-4" />Logout</button>
                     </div>
                   )}
                 </div>
               ) : (
-                <button onClick={() => setShowLoginModal(true)} data-login-trigger="true" className="rounded-lg bg-[#2563EB] px-3 py-1.5 sm:px-3.5 sm:py-2 text-sm font-semibold text-white hover:bg-[#1D4ED8] transition-colors">Login</button>
+                <button onClick={() => setShowLoginModal(true)} data-login-trigger="true" className="rounded-lg bg-[var(--accent)] px-3 py-1.5 sm:px-3.5 sm:py-2 text-sm font-semibold text-white hover:bg-[var(--accent-deep)] transition-colors">Login</button>
               )}
             </div>
           </div>
@@ -237,7 +232,7 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => setShowSearchModal(false)}
-                className="p-2 text-[#64748B] hover:bg-[#EFF6FF] rounded-lg transition-colors"
+                className="p-2 text-[#64748B] hover:bg-[var(--accent-soft)] rounded-lg transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>

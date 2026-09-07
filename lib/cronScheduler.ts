@@ -33,6 +33,7 @@
 import { capturePayment, shouldRetryCapture } from './paymentCapture';
 import connectDB from '@/lib/db/mongodb';
 import Order from '@/models/Order';
+import { createAdminNotification } from './notifications';
 
 export async function runPaymentCaptureRetryJob() {
   try {
@@ -68,6 +69,18 @@ export async function runPaymentCaptureRetryJob() {
         results.successful++;
       } else {
         results.failed++;
+
+        // Notify admins when a capture keeps failing so it can be resolved manually.
+        try {
+          await createAdminNotification({
+            type: 'capture_failed',
+            title: 'Payment capture failed',
+            message: `Order ${order.cashfreeOrderId} — ${result.error || 'capture failed'}`,
+            link: '/admin/payment-captures',
+          });
+        } catch (error) {
+          console.error('Failed to create capture failure notification:', error);
+        }
       }
     }
 

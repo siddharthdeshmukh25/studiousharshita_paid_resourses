@@ -1,5 +1,6 @@
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import ContactForm from '@/components/contact/ContactForm';
 
 export default function Contact() {
   return (
@@ -23,13 +24,13 @@ export default function Contact() {
                 <div className="mt-4 space-y-4">
                   <div className="bg-white p-6 rounded-lg border border-gray-200">
                     <h3 className="font-semibold text-gray-900 mb-2">Official Email</h3>
-                    <p className="text-lg text-[#2563EB]">support@studiousharshita.com</p>
+                    <p className="text-lg text-[var(--accent)]">support@studiousharshita.com</p>
                     <p className="text-sm text-gray-500 mt-1">For general inquiries, support, and technical assistance</p>
                   </div>
                   
                   <div className="bg-white p-6 rounded-lg border border-gray-200">
                     <h3 className="font-semibold text-gray-900 mb-2">Phone Number</h3>
-                    <p className="text-lg text-[#2563EB]">+91 95122 15337</p>
+                    <p className="text-lg text-[var(--accent)]">+91 95122 15337</p>
                     <p className="text-sm text-gray-500 mt-1">Available for urgent matters during business hours (9 AM - 6 PM IST)</p>
                   </div>
                 </div>
@@ -66,6 +67,15 @@ export default function Contact() {
                 </ul>
               </section>
             </div>
+
+              <section>
+                <h2 className="text-xl font-semibold text-gray-900 mb-3">Write to us</h2>
+                <p className="leading-relaxed text-justify text-gray-700 mb-6">
+                  Have a query about a resource, your payment, or a student project you are working on?
+                  Send it through the form below and we will respond within 24-48 business hours.
+                </p>
+                <ContactForm />
+              </section>
 
             <div className="mt-8 pt-6 border-t border-gray-200">
               <p className="text-sm text-gray-500">

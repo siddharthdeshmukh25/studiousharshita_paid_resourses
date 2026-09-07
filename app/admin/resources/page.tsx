@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Loader2, Package, Plus, Trash2, Edit, BarChart3 } from 'lucide-react';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
@@ -40,7 +40,7 @@ interface ResourceAnalytics {
   buyers: { _id: string; name?: string; email?: string; purchasedAt?: string; amount?: number }[];
 }
 
-export default function ResourcesPage() {
+function ResourcesPageContent() {
   const searchParams = useSearchParams();
   const createEmptyNewResource = () => ({
     title: '',
@@ -903,5 +903,13 @@ export default function ResourcesPage() {
         variant="danger"
       />
     </AdminLayout>
+  );
+}
+
+export default function ResourcesPage() {
+  return (
+    <Suspense fallback={<div className="grid min-h-screen place-items-center bg-white dark:bg-[#0a0a0a]" />}>
+      <ResourcesPageContent />
+    </Suspense>
   );
 }

@@ -159,7 +159,7 @@ export default function AdminLogin() {
 
       {/* Bottom Footer */}
       <div className="mt-10 text-center text-xs text-slate-600">
-        &copy; 2024 studiousharshita. All rights reserved.
+        &copy; 2026 studiousharshita. All rights reserved.
       </div>
 
     </div>

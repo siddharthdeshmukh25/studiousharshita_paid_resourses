@@ -60,8 +60,8 @@ export default function About() {
                   We are constantly working to expand our library and improve our platform. Follow us on social media for updates, study tips, and educational content:
                 </p>
                 <div className="mt-4 space-y-2">
-                  <p><strong>Instagram:</strong> <a href="https://www.instagram.com/studious_harshita" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">@studious_harshita</a></p>
-                  <p><strong>YouTube:</strong> <a href="https://youtube.com/@studious_harshita" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">@studious_harshita</a></p>
+                  <p><strong>Instagram:</strong> <a href="https://www.instagram.com/studious_harshita" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">@studious_harshita</a></p>
+                  <p><strong>YouTube:</strong> <a href="https://youtube.com/@studious_harshita" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">@studious_harshita</a></p>
                 </div>
                 <p className="leading-relaxed mt-4 text-justify">
                   For support, reach out to us at support@studiousharshita.com

@@ -61,7 +61,7 @@ export default function ConfirmationModal({
       icon: Info,
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-600',
-      confirm: 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600',
+      confirm: 'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] hover:from-[var(--accent-deep)] hover:to-[var(--accent-deep)]',
       confirmShadow: 'shadow-lg shadow-blue-500/30'
     }
   };

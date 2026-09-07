@@ -6,6 +6,7 @@ import User from '@/models/User';
 import Resource from '@/models/Resource';
 import PaymentSettings from '@/models/PaymentSettings';
 import { capturePayment } from '@/lib/paymentCapture';
+import { createAdminNotification } from '@/lib/notifications';
 
 function verifyRazorpayWebhookSignature(payload: string, signature: string, secret: string): boolean {
   const expectedSignature = crypto
@@ -162,6 +163,17 @@ export async function POST(request: NextRequest) {
         }
       }
 
+      try {
+        await createAdminNotification({
+          type: 'new_order',
+          title: 'New order completed',
+          message: `${notes?.resourceTitle || 'Resource'} purchased — ₹${(payment.amount / 100).toFixed(2)}`,
+          link: '/admin/revenue',
+        });
+      } catch (error) {
+        console.error('Failed to create order notification:', error);
+      }
+
       return NextResponse.json({ success: true });
     }
 
@@ -198,6 +210,17 @@ export async function POST(request: NextRequest) {
             status: 'failed',
           }
         );
+      }
+
+      try {
+        await createAdminNotification({
+          type: 'payment_failed',
+          title: 'Payment failed',
+          message: `${notes?.resourceTitle || 'Resource'} — ₹${(payment.amount / 100).toFixed(2)} (${payment.error_description || 'Payment failed'})`,
+          link: '/admin/payment-captures',
+        });
+      } catch (error) {
+        console.error('Failed to create payment failure notification:', error);
       }
 
       return NextResponse.json({ success: true });

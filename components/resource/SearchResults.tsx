@@ -114,7 +114,7 @@ export default function SearchResults({ searchQuery, onResultClick, searchHistor
                 <button
                   key={index}
                   onClick={() => handleHistoryClick(query)}
-                  className="flex w-full items-center gap-3 px-4 py-3 bg-[#F8FAFC] rounded-xl text-left hover:bg-[#EFF6FF] transition-colors"
+                  className="flex w-full items-center gap-3 px-4 py-3 bg-[#F8FAFC] rounded-xl text-left hover:bg-[var(--accent-soft)] transition-colors"
                 >
                   <Clock className="h-4 w-4 text-[#94A3B8]" />
                   <span className="text-sm text-[#334155]">{query}</span>

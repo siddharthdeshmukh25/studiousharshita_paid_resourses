@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import ResourceDetailSkeleton from '@/components/ui/ResourceDetailSkeleton';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import { Star, Loader2, Send, X, Share2, Heart, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useWishlist } from '@/contexts/WishlistContext';
 
 interface Resource {
   _id: string;
@@ -32,20 +33,12 @@ interface Review {
   createdAt: string;
 }
 
-declare global {
-  interface Window {
-    Cashfree?: (config: { mode: 'sandbox' | 'production' }) => {
-      checkout: (options: { paymentSessionId: string; redirectTarget: '_self' }) => Promise<unknown>;
-    };
-    Razorpay?: any;
-  }
-}
-
 export default function ResourceDetailPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { isResourceWishlisted, refreshWishlist } = useWishlist();
   const [resource, setResource] = useState<Resource | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [avgRating, setAvgRating] = useState(0);
@@ -70,11 +63,10 @@ export default function ResourceDetailPage() {
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
   const [reviewModalError, setReviewModalError] = useState<string | null>(null);
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  const [razorpayOrderId, setRazorpayOrderId] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [pageStartTime, setPageStartTime] = useState<number>(Date.now());
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const isWishlisted = isResourceWishlisted(params.id as string);
   const isFreeResource = resource?.price === 0;
   const galleryImages = resource?.images && resource.images.length > 0 ? resource.images : resource?.thumbnailUrl ? [resource.thumbnailUrl] : [];
   const currentImage = galleryImages[selectedImageIndex] || '/placeholder.png';
@@ -244,21 +236,6 @@ export default function ResourceDetailPage() {
           } catch (err) {
             console.error('Error checking purchased status:', err);
           }
-
-          // Check if resource is wishlisted
-          try {
-            const wishlistRes = await fetch('/api/wishlist');
-            if (wishlistRes.ok) {
-              const wishlistData = await wishlistRes.json();
-              const wishlist = wishlistData.wishlist || [];
-              const wishlistedIds = wishlist.map((item: any) => 
-                typeof item.resourceId === 'string' ? item.resourceId : item.resourceId._id
-              );
-              setIsWishlisted(wishlistedIds.includes(params.id));
-            }
-          } catch (err) {
-            console.error('Error checking wishlist status:', err);
-          }
         }
       } catch (err) {
         console.error('Error fetching resource:', err);
@@ -414,7 +391,7 @@ export default function ResourceDetailPage() {
           });
 
       if (response.ok) {
-        setIsWishlisted(!isWishlisted);
+        await refreshWishlist();
       }
     } catch (error) {
       console.error('Error toggling wishlist:', error);
@@ -452,120 +429,6 @@ export default function ResourceDetailPage() {
     }
   };
 
-  const handleCheckout = async () => {
-    // Track purchase initiation
-    await trackEvent('click', { action: 'checkout_initiated' });
-    
-    if (!session) {
-      // Trigger login modal
-      const loginButton = document.querySelector('[data-login-trigger]') as HTMLButtonElement;
-      if (loginButton) {
-        loginButton.click();
-      }
-      return;
-    }
-
-    // Check if session is about to expire or has expired
-    const sessionExpiry = session.expires;
-    if (sessionExpiry && new Date(sessionExpiry) < new Date()) {
-      // Session expired, force logout
-      await signOut({ callbackUrl: '/' });
-      return;
-    }
-
-    setCheckoutLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ resourceId: params.id, couponCode: couponDiscount ? couponCode : undefined }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        // Handle specific payment errors
-        if (data.error === 'Payment gateway is not configured.' || data.error === 'Payment gateway not supported yet.') {
-          throw new Error('Payment service is not available at this time. Please contact admin or try again later.');
-        }
-        
-        // Handle unauthorized error - session expired
-        if (response.status === 401) {
-          await signOut({ callbackUrl: '/' });
-          throw new Error('Your session has expired. Please login again.');
-        }
-        
-        throw new Error(data.error || 'Failed to create order');
-      }
-
-      // Store Razorpay order ID if available
-      if (data.razorpayOrderId) {
-        setRazorpayOrderId(data.razorpayOrderId);
-      }
-
-      // Handle different payment gateways
-      if (data.gateway === 'razorpay') {
-        if (!window.Razorpay) {
-          throw new Error('Razorpay checkout is still loading. Please try again in a moment.');
-        }
-        const options = {
-          key: data.keyId,
-          amount: data.amount * 100, // Razorpay expects amount in paise
-          currency: 'INR',
-          name: 'Studiousharshita',
-          description: resource?.title,
-          order_id: data.paymentSessionId,
-          handler: function (response: any) {
-            // Handle successful payment - pass both custom order ID and Razorpay order ID
-            const returnUrl = `/payment/return?order_id=${data.orderId}`;
-            if (data.razorpayOrderId) {
-              window.location.href = `${returnUrl}&razorpay_order_id=${data.razorpayOrderId}`;
-            } else {
-              window.location.href = returnUrl;
-            }
-          },
-          modal: {
-            ondismiss: function() {
-              // Handle when payment popup is closed/cancelled
-              setCheckoutLoading(false);
-              setPaymentError('Payment cancelled. You can try again when ready.');
-            },
-            onclose: function() {
-              // Handle when payment popup is closed
-              setCheckoutLoading(false);
-            }
-          },
-          prefill: {
-            name: session?.user?.name,
-            email: session?.user?.email,
-          },
-          theme: {
-            color: '#2563EB',
-          },
-        };
-        const rzp = new window.Razorpay(options);
-        rzp.open();
-      } else if (data.gateway === 'cashfree') {
-        if (!window.Cashfree) {
-          throw new Error('Cashfree checkout is still loading. Please try again in a moment.');
-        }
-        const cashfree = window.Cashfree({ mode: data.environment });
-        await cashfree.checkout({ paymentSessionId: data.paymentSessionId, redirectTarget: '_self' });
-      } else {
-        throw new Error('Payment gateway not supported yet.');
-      }
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to initiate checkout';
-      console.error('Checkout error:', errorMessage);
-      setPaymentError(errorMessage);
-      setCheckoutLoading(false);
-    }
-  };
-
   const applyCoupon = async () => {
     if (!couponCode.trim() || !resource) return;
     setCouponLoading(true);
@@ -599,6 +462,24 @@ export default function ResourceDetailPage() {
     } finally {
       setCouponLoading(false);
     }
+  };
+
+  const handleCheckout = async () => {
+    // Track purchase initiation
+    await trackEvent('click', { action: 'checkout_initiated' });
+
+    if (!session) {
+      // Trigger login modal
+      const loginButton = document.querySelector('[data-login-trigger]') as HTMLButtonElement;
+      if (loginButton) {
+        loginButton.click();
+      }
+      return;
+    }
+
+    setCheckoutLoading(true);
+    const couponParam = couponDiscount ? `?coupon=${encodeURIComponent(couponCode)}` : '';
+    router.push(`/checkout/${params.id}${couponParam}`);
   };
 
   if (loading) {
@@ -832,7 +713,7 @@ export default function ResourceDetailPage() {
                   <button
                     onClick={handleCheckout}
                     disabled={checkoutLoading}
-                    className="w-full bg-[#2563EB] text-white py-3 rounded-lg hover:bg-[#1D4ED8] transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-[var(--accent)] text-white py-3 rounded-lg hover:bg-[var(--accent-deep)] transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {checkoutLoading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Processing payment...</span></> : <><ExternalLink className="h-5 w-5" /><span>Buy Resource</span></>}
                   </button>

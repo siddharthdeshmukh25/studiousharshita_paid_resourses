@@ -47,7 +47,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/30 backdrop-blur-none p-4">
       <div className="bg-[#FFFFFF] rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-[#E2E8F0]">
-        <div className="bg-[#2563EB] px-6 sm:px-8 py-6">
+        <div className="bg-[var(--accent)] px-6 sm:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
@@ -68,11 +68,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           {/* Features */}
           <div className="space-y-3 mb-8">
             <div className="flex items-center text-sm text-[#64748B]">
-              <Shield className="h-4 w-4 text-[#06B6D4] mr-3" />
+              <Shield className="h-4 w-4 text-[var(--accent)] mr-3" />
               <span>Secure and safe login</span>
             </div>
             <div className="flex items-center text-sm text-[#64748B]">
-              <Lock className="h-4 w-4 text-[#06B6D4] mr-3" />
+              <Lock className="h-4 w-4 text-[var(--accent)] mr-3" />
               <span>Your data is protected</span>
             </div>
           </div>
@@ -117,11 +117,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <div className="mt-6 pt-6 border-t border-[#EFF6FF]">
             <p className="text-xs text-[#64748B] text-center leading-relaxed">
               By continuing, you agree to our{' '}
-              <a href="/terms-of-service" className="text-[#2563EB] hover:text-[#0F172A] underline">
+              <a href="/terms-of-service" className="text-[var(--accent)] hover:text-[#0F172A] underline">
                 Terms of Service
               </a>{' '}
               and{' '}
-              <a href="/privacy-policy" className="text-[#2563EB] hover:text-[#0F172A] underline">
+              <a href="/privacy-policy" className="text-[var(--accent)] hover:text-[#0F172A] underline">
                 Privacy Policy
               </a>
             </p>

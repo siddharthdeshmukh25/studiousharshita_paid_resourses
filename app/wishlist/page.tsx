@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Heart, X } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceCard from '@/components/resource/ResourceCard';
 import PageSkeleton from '@/components/ui/PageSkeleton';
+import { useWishlist } from '@/contexts/WishlistContext';
 
 interface WishlistItem {
   _id: string;
@@ -24,49 +24,13 @@ interface WishlistItem {
 
 export default function WishlistPage() {
   const router = useRouter();
-  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchWishlist();
-  }, []);
-
-  const fetchWishlist = async () => {
-    try {
-      const response = await fetch('/api/wishlist');
-      if (response.ok) {
-        const data = await response.json();
-        setWishlist(data.wishlist || []);
-      } else {
-        const errorData = await response.json();
-        setError(errorData.error || 'Failed to fetch wishlist');
-      }
-    } catch (err) {
-      setError('Failed to fetch wishlist');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const removeFromWishlist = async (resourceId: string) => {
-    try {
-      const response = await fetch(`/api/wishlist?resourceId=${resourceId}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        setWishlist(wishlist.filter((item) => item.resourceId._id !== resourceId));
-      }
-    } catch (err) {
-      console.error('Failed to remove from wishlist:', err);
-    }
-  };
+  const { wishlist, isLoading, error } = useWishlist();
 
   const handleResourceClick = (resourceId: string) => {
     router.push(`/resource/${resourceId}`);
   };
 
-  if (loading) {
+  if (isLoading) {
     return <PageSkeleton />;
   }
 
@@ -98,7 +62,7 @@ export default function WishlistPage() {
             <p className="text-gray-600 mb-4">Start adding resources you love!</p>
             <button
               onClick={() => router.push('/')}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-[var(--accent)] text-white px-6 py-3 rounded-lg hover:bg-[var(--accent-deep)] transition-colors"
             >
               Browse Resources
             </button>
@@ -108,19 +72,19 @@ export default function WishlistPage() {
             {wishlist.map((item) => (
               <div
                 key={item._id}
-                onClick={() => router.push(`/resource/${item.resourceId._id}`)}
+                onClick={() => router.push(`/resource/${(typeof item.resourceId === 'string' ? item.resourceId : item.resourceId._id)}`)}
                 className="cursor-pointer w-full"
               >
                 <ResourceCard
-                  id={item.resourceId._id}
-                  title={item.resourceId.title}
-                  rating={item.resourceId.avgRating || 0}
-                  reviewCount={item.resourceId.totalReviews || 0}
-                  price={item.resourceId.price}
-                  discount={item.resourceId.discount}
-                  thumbnailUrl={item.resourceId.thumbnailUrl}
-                  category={item.resourceId.category}
-                  onGetResource={() => router.push(`/resource/${item.resourceId._id}`)}
+                  id={typeof item.resourceId === 'string' ? item.resourceId : item.resourceId._id}
+                  title={typeof item.resourceId === 'string' ? '' : item.resourceId.title}
+                  rating={typeof item.resourceId === 'string' ? 0 : (item.resourceId.avgRating || 0)}
+                  reviewCount={typeof item.resourceId === 'string' ? 0 : (item.resourceId.totalReviews || 0)}
+                  price={typeof item.resourceId === 'string' ? 0 : item.resourceId.price}
+                  discount={typeof item.resourceId === 'string' ? undefined : item.resourceId.discount}
+                  thumbnailUrl={typeof item.resourceId === 'string' ? undefined : item.resourceId.thumbnailUrl}
+                  category={typeof item.resourceId === 'string' ? undefined : item.resourceId.category}
+                  onGetResource={() => router.push(`/resource/${typeof item.resourceId === 'string' ? item.resourceId : item.resourceId._id}`)}
                 />
               </div>
             ))}

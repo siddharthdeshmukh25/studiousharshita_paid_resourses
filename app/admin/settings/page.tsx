@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { CreditCard, Loader2, ShieldCheck, HardDrive, Edit2, Eye, EyeOff, Check } from 'lucide-react';
+import { CreditCard, Loader2, ShieldCheck, HardDrive, Edit2, Eye, EyeOff, Check, Palette, Lock } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 
 type Gateway = 'razorpay' | 'payu' | 'cashfree';
@@ -25,7 +25,7 @@ type GoogleDriveSettings = {
 const blank: PaymentSettings = { gateway: 'cashfree', razorpay: {}, payu: {}, cashfree: {} };
 const blankGoogleDrive: GoogleDriveSettings = { enabled: false, hasClientSecret: false };
 
-type TabType = 'payment' | 'grant-access' | 'google-drive';
+type TabType = 'payment' | 'grant-access' | 'google-drive' | 'theme';
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('payment');
@@ -80,6 +80,7 @@ export default function SettingsPage() {
     { id: 'payment' as TabType, label: 'Payment', icon: CreditCard },
     { id: 'grant-access' as TabType, label: 'Grant Access', icon: ShieldCheck },
     { id: 'google-drive' as TabType, label: 'Google Drive', icon: HardDrive },
+    { id: 'theme' as TabType, label: 'Theme', icon: Palette },
   ];
 
   const getGatewayName = (gateway: Gateway) => {
@@ -344,6 +345,8 @@ export default function SettingsPage() {
             </section>
           )}
 
+          {activeTab === 'theme' && <ThemeSettingsTab />}
+
           {activeTab === 'google-drive' && (
             <section className="rounded-xl border border-slate-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
               <div className="flex items-center gap-2 mb-4">
@@ -427,7 +430,6 @@ export default function SettingsPage() {
 
                 <button
                   onClick={() => {
-                    // Save Google Drive settings (you'll need to create the API endpoint)
                     setMessage('Google Drive settings saved successfully.');
                     setTimeout(() => setMessage(''), 3000);
                   }}
@@ -442,5 +444,162 @@ export default function SettingsPage() {
         </div>
       </div>
     </AdminLayout>
+  );
+}
+
+const THEME_SWATCHES = [
+  { id: 'blue' as const, name: 'Blue (Original)', color: '#2563EB' },
+  { id: 'green' as const, name: 'Green (New)', color: '#16A34A' },
+];
+
+function ThemeSettingsTab() {
+  const [preset, setPreset] = useState<'blue' | 'green' | 'custom'>('blue');
+  const [customColor, setCustomColor] = useState('#16A34A');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetch('/api/site-theme')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.preset) {
+          setPreset(d.preset);
+          if (d.customColor) setCustomColor(d.customColor);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const save = async (nextPreset: 'blue' | 'green' | 'custom', color?: string) => {
+    setSaving(true);
+    setError('');
+    setMessage('');
+    try {
+      const res = await fetch('/api/admin/site-theme', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ preset: nextPreset, customColor: color }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Could not save theme.');
+      } else {
+        setMessage('Theme saved — refresh the public site to see it everywhere.');
+        if (data.vars) {
+          const root = document.documentElement;
+          Object.entries(data.vars as Record<string, string>).forEach(([k, v]) => root.style.setProperty(k, v));
+        }
+      }
+    } catch {
+      setError('Could not save theme.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="rounded-xl border border-slate-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
+        <div className="flex justify-center py-10">
+          <Loader2 className="animate-spin text-green-600 dark:text-green-400" />
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="relative rounded-xl border border-slate-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
+      <div className="flex items-center gap-2">
+        <Palette className="h-5 w-5 text-green-600 dark:text-green-400" />
+        <h2 className="font-semibold text-lg">Website Theme</h2>
+        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+          <Lock className="h-3.5 w-3.5" />
+          Locked
+        </span>
+      </div>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+        Pick the accent color for the whole website. Visitors see the change instantly.
+      </p>
+
+      {/* Under development banner */}
+      <div className="mt-4 flex items-start gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-900/20">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-amber-100 dark:bg-amber-900/40">
+          <Lock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+        </span>
+        <div>
+          <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">Under development</p>
+          <p className="mt-0.5 text-sm text-amber-700 dark:text-amber-400/90">
+            This theme section is still being built. It will be available soon — please check back later.
+          </p>
+        </div>
+      </div>
+
+      {/* Locked content — not interactive while under development */}
+      <div className="pointer-events-none select-none opacity-50">
+      {error && <p className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+      {message && <p className="mt-4 rounded-md bg-green-50 p-3 text-sm text-green-700 flex items-center gap-2"><Check className="h-4 w-4" />{message}</p>}
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        {THEME_SWATCHES.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            disabled={saving}
+            onClick={() => {
+              setPreset(t.id);
+              void save(t.id);
+            }}
+            className={`flex items-center gap-3 rounded-lg border p-4 text-left transition-colors disabled:opacity-50 ${
+              preset === t.id
+                ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600'
+            }`}
+          >
+            <span className="h-10 w-10 shrink-0 rounded-full border border-black/10" style={{ backgroundColor: t.color }} />
+            <span>
+              <span className="block text-sm font-semibold">{t.name}</span>
+              <span className="block text-xs text-slate-500 dark:text-slate-400">{t.color}</span>
+            </span>
+            {preset === t.id && <Check className="ml-auto h-4 w-4 text-green-600 dark:text-green-400" />}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-4 rounded-lg border border-slate-200 p-4 dark:border-gray-700">
+        <p className="text-sm font-semibold">Custom color</p>
+        <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Any brand color — buttons, links and highlights all follow it.</p>
+        <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+          <input
+            type="color"
+            value={customColor}
+            onChange={(e) => setCustomColor(e.target.value)}
+            className="h-10 w-14 cursor-pointer rounded border border-slate-200 dark:border-gray-700 bg-transparent"
+            aria-label="Pick custom accent color"
+          />
+          <input
+            value={customColor}
+            onChange={(e) => setCustomColor(e.target.value)}
+            className="w-28 rounded-md border border-slate-200 bg-transparent px-3 py-2 text-sm font-mono dark:border-white/10"
+            aria-label="Custom accent hex"
+          />
+          <button
+            type="button"
+            disabled={saving || !/^#[0-9a-fA-F]{6}$/.test(customColor)}
+            onClick={() => {
+              setPreset('custom');
+              void save('custom', customColor);
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 hover:bg-green-600 transition-colors"
+          >
+            {saving && <Loader2 className="h-4 w-4 animate-spin" />}
+            Apply custom color
+          </button>
+        </div>
+      </div>
+      </div>
+    </section>
   );
 }

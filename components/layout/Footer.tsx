@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid gap-6 sm:gap-10 sm:grid-cols-[1.35fr_1fr]">
           <div className="max-w-md">
             <div className="flex items-center gap-2.5 mb-3">
-              <span className="grid h-9 w-9 place-items-center bg-[#E0F2FE] text-[#2563EB] rounded-lg">
+              <span className="grid h-9 w-9 place-items-center bg-[#E0F2FE] text-[var(--accent)] rounded-lg">
                 <BookOpen className="h-5 w-5" />
               </span>
               <span className="text-lg font-bold tracking-normal">studiousharshita</span>
