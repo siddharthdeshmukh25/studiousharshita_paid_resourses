@@ -15,7 +15,7 @@ interface NotificationItem {
 }
 
 const TYPE_ICON_CLASS: Record<string, string> = {
-  new_order: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  new_order: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
   payment_failed: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
   new_ticket: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
   ticket_reply: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
@@ -178,7 +178,7 @@ export default function AdminNavbar() {
                       <button
                         onClick={markAllRead}
                         disabled={markingAll}
-                        className="inline-flex items-center gap-1 text-xs font-medium text-green-600 hover:text-green-700 dark:text-green-400"
+                        className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
                       >
                         {markingAll ? <Loader2 className="h-3 w-3 animate-spin" /> : <CheckCheck className="h-3.5 w-3.5" />}
                         Mark all read
@@ -201,7 +201,7 @@ export default function AdminNavbar() {
                         key={notification._id}
                         onClick={() => openNotification(notification)}
                         className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
-                          !notification.read ? 'bg-green-50/60 dark:bg-green-900/10' : ''
+                          !notification.read ? 'bg-blue-50/60 dark:bg-blue-900/10' : ''
                         }`}
                       >
                         <span className={`mt-0.5 grid h-7 w-7 flex-shrink-0 place-items-center rounded-full text-[10px] font-bold uppercase ${TYPE_ICON_CLASS[notification.type] || TYPE_ICON_CLASS.system}`}>
@@ -218,7 +218,7 @@ export default function AdminNavbar() {
                             {timeAgo(notification.createdAt)}
                           </span>
                         </span>
-                        {!notification.read && <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-green-500" />}
+                        {!notification.read && <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500" />}
                       </button>
                     ))
                   )}
@@ -230,7 +230,7 @@ export default function AdminNavbar() {
                       setShowNotifications(false);
                       router.push('/admin/notifications');
                     }}
-                    className="w-full flex items-center justify-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20 transition-colors"
+                    className="w-full flex items-center justify-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors"
                   >
                     View all notifications
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -246,7 +246,7 @@ export default function AdminNavbar() {
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               className="flex items-center gap-2 rounded-md p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
-              <div className="grid h-8 w-8 place-items-center rounded-full bg-[#b8ff00]">
+              <div className="grid h-8 w-8 place-items-center rounded-full bg-[#60A5FA]">
                 <User className="h-4 w-4 text-[#101400]" />
               </div>
               <span className="hidden sm:block text-sm font-medium text-gray-900 dark:text-gray-100">

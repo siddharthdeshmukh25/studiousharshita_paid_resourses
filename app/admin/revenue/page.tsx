@@ -26,7 +26,7 @@ export default function RevenuePage() {
   return <AdminLayout>
     <div className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Finance</p>
+        <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Finance</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Revenue</h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Completed payments and recent orders.</p>
       </div>

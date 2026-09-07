@@ -341,14 +341,14 @@ export default function CouponsPage() {
     res.title.toLowerCase().includes(resourceSearch.toLowerCase())
   );
 
-  const inputClass = 'w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 transition-colors font-poppins';
-  const checkboxClass = 'w-4 h-4 rounded border-slate-300 text-green-600 focus:ring-green-500 dark:border-gray-600 dark:text-green-400 dark:focus:ring-green-500';
+  const inputClass = 'w-full px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors font-poppins';
+  const checkboxClass = 'w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:text-blue-400 dark:focus:ring-blue-500';
 
   return (
     <AdminLayout>
       <div className="space-y-6 font-poppins overflow-x-hidden">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Promotions</p>
+          <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Promotions</p>
           <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Coupons</h1>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Create discounts and manage active offers.</p>
         </div>
@@ -356,7 +356,7 @@ export default function CouponsPage() {
         <section className="rounded-xl border border-gray-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
           <div className="flex items-center justify-between">
             <h2 className="flex items-center gap-2 font-semibold">
-              {editingCoupon ? <Edit2 className="h-4 w-4 text-green-600 dark:text-green-400" /> : <Plus className="h-4 w-4 text-green-600 dark:text-green-400" />}
+              {editingCoupon ? <Edit2 className="h-4 w-4 text-blue-600 dark:text-blue-400" /> : <Plus className="h-4 w-4 text-blue-600 dark:text-blue-400" />}
               {editingCoupon ? 'Edit coupon' : 'Create coupon'}
             </h2>
             
@@ -430,7 +430,7 @@ export default function CouponsPage() {
                     onClick={() => setForm({ ...form, discountType: 'percentage' })}
                     className={`flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-medium transition-colors rounded-md ${
                       form.discountType === 'percentage'
-                        ? 'bg-white dark:bg-gray-800 text-green-600 dark:text-green-400 shadow-sm'
+                        ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow-sm'
                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
                     }`}
                   >
@@ -442,7 +442,7 @@ export default function CouponsPage() {
                     onClick={() => setForm({ ...form, discountType: 'fixed' })}
                     className={`flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-medium transition-colors rounded-md ${
                       form.discountType === 'fixed'
-                        ? 'bg-white dark:bg-gray-800 text-green-600 dark:text-green-400 shadow-sm'
+                        ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow-sm'
                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'
                     }`}
                   >
@@ -479,7 +479,7 @@ export default function CouponsPage() {
                         value={form.discountAmount} 
                         onChange={e => setForm({ ...form, discountAmount: e.target.value })} 
                         placeholder="50" 
-                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 transition-colors font-poppins"
+                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors font-poppins"
                       />
                     </div>
                   </div>
@@ -509,7 +509,7 @@ export default function CouponsPage() {
                     value={form.minimumPurchaseAmount} 
                     onChange={e => setForm({ ...form, minimumPurchaseAmount: e.target.value })} 
                     placeholder="0" 
-                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 transition-colors font-poppins"
+                    className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors font-poppins"
                   />
                 </div>
               </div>
@@ -567,7 +567,7 @@ export default function CouponsPage() {
                 {form.applicableCategories.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-2">
                     {form.applicableCategories.map(categoryName => (
-                      <div key={categoryName} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-sm">
+                      <div key={categoryName} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-sm">
                         <span>{categoryName}</span>
                         <button
                           type="button"
@@ -594,7 +594,7 @@ export default function CouponsPage() {
                       }}
                       onFocus={() => setShowCategoryDropdown(true)}
                       placeholder="Search categories..."
-                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 transition-colors font-poppins"
+                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors font-poppins"
                     />
                     {categorySearch && (
                       <button
@@ -632,7 +632,7 @@ export default function CouponsPage() {
                         >
                           {category.name}
                           {form.applicableCategories.includes(category.name) && (
-                            <span className="ml-2 text-xs text-green-600 dark:text-green-400">(Added)</span>
+                            <span className="ml-2 text-xs text-blue-600 dark:text-blue-400">(Added)</span>
                           )}
                         </button>
                       ))}
@@ -654,7 +654,7 @@ export default function CouponsPage() {
                     {form.applicableResources.map(resourceId => {
                       const resource = paidResources.find(r => r._id === resourceId);
                       return resource ? (
-                        <div key={resourceId} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-sm max-w-[200px]">
+                        <div key={resourceId} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 text-sm max-w-[200px]">
                           <span className="truncate">{resource.title}</span>
                           <button
                             type="button"
@@ -682,7 +682,7 @@ export default function CouponsPage() {
                       }}
                       onFocus={() => setShowResourceDropdown(true)}
                       placeholder="Search resources..."
-                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 transition-colors font-poppins"
+                      className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors font-poppins"
                     />
                     {resourceSearch && (
                       <button
@@ -721,7 +721,7 @@ export default function CouponsPage() {
                           <div className="flex items-center justify-between">
                             <span className="truncate flex-1">{resource.title}</span>
                             {form.applicableResources.includes(resource._id) && (
-                              <span className="ml-2 text-xs text-green-600 dark:text-green-400 flex-shrink-0">(Added)</span>
+                              <span className="ml-2 text-xs text-blue-600 dark:text-blue-400 flex-shrink-0">(Added)</span>
                             )}
                           </div>
                           {resource.category && (
@@ -756,7 +756,7 @@ export default function CouponsPage() {
               <button 
                 type="submit" 
                 disabled={loading}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-green-500 px-6 py-2.5 text-sm font-semibold text-white hover:bg-green-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-500 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : (editingCoupon ? <Edit2 className="h-4 w-4" /> : <Plus className="h-4 w-4" />)}
                 {loading ? (editingCoupon ? 'Updating...' : 'Creating...') : (editingCoupon ? 'Update Coupon' : 'Create Coupon')}
@@ -767,7 +767,7 @@ export default function CouponsPage() {
 
         <section className="rounded-xl border border-gray-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
           <h2 className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100">
-            <Ticket className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <Ticket className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             Active coupons
           </h2>
           
@@ -827,7 +827,7 @@ export default function CouponsPage() {
                           onClick={() => toggleActive(coupon._id, coupon.isActive)}
                           className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-colors ${
                             coupon.isActive
-                              ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
                               : 'bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-400'
                           }`}
                         >
@@ -839,7 +839,7 @@ export default function CouponsPage() {
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => startEdit(coupon)}
-                            className="p-1.5 rounded-md text-slate-400 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors"
+                            className="p-1.5 rounded-md text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                             title="Edit coupon"
                           >
                             <Edit2 className="h-4 w-4" />
@@ -864,7 +864,7 @@ export default function CouponsPage() {
         {/* Image Section */}
         <section className="rounded-xl border border-gray-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
           <h2 className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100 mb-4">
-            <Ticket className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <Ticket className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             Coupon Promotion Image
           </h2>
 
@@ -942,7 +942,7 @@ export default function CouponsPage() {
                     type="button"
                     onClick={triggerFilePicker}
                     disabled={uploadingImage}
-                    className="inline-flex items-center justify-center gap-2 rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600 disabled:opacity-50 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-600 disabled:opacity-50 transition-colors"
                   >
                     {uploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
                     {uploadingImage ? 'Uploading...' : 'Upload Image'}

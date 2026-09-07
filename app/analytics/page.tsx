@@ -225,7 +225,7 @@ export default function AnalyticsDashboard() {
           {/* Device Types */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Monitor className="h-5 w-5 text-green-600" />
+              <Monitor className="h-5 w-5 text-blue-600" />
               Device Types
             </h3>
             <div className="space-y-3">
@@ -274,9 +274,9 @@ export default function AnalyticsDashboard() {
               <p className="text-sm text-purple-600 font-medium">Clicks</p>
               <p className="text-2xl font-bold text-purple-900">{formatNumber(analytics.conversionFunnel.clicks)}</p>
             </div>
-            <div className="bg-green-50 rounded-lg p-4">
-              <p className="text-sm text-green-600 font-medium">Purchases</p>
-              <p className="text-2xl font-bold text-green-900">{formatNumber(analytics.conversionFunnel.purchases)}</p>
+            <div className="bg-blue-50 rounded-lg p-4">
+              <p className="text-sm text-blue-600 font-medium">Purchases</p>
+              <p className="text-2xl font-bold text-blue-900">{formatNumber(analytics.conversionFunnel.purchases)}</p>
             </div>
             <div className="bg-orange-50 rounded-lg p-4">
               <p className="text-sm text-orange-600 font-medium">Conversion Rate</p>
@@ -378,7 +378,7 @@ export default function AnalyticsDashboard() {
 function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: string; color: string }) {
   const colorClasses: Record<string, string> = {
     blue: 'bg-[var(--accent-soft)] text-[var(--accent)] border-[var(--accent-soft-2)]',
-    green: 'bg-green-50 text-green-600 border-green-200',
+    green: 'bg-blue-50 text-blue-600 border-blue-200',
     purple: 'bg-purple-50 text-purple-600 border-purple-200',
     pink: 'bg-pink-50 text-pink-600 border-pink-200',
     orange: 'bg-orange-50 text-orange-600 border-orange-200',

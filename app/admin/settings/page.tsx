@@ -122,7 +122,7 @@ export default function SettingsPage() {
     <AdminLayout>
       <div className="space-y-6 font-poppins">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Configuration</p>
+          <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Configuration</p>
           <h1 className="mt-1 text-xl sm:text-2xl font-semibold tracking-[-.045em]">General Settings</h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage payment mode, API keys and platform access.</p>
         </div>
@@ -138,7 +138,7 @@ export default function SettingsPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === tab.id
-                      ? 'border-green-500 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20'
+                      ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                   }`}
                 >
@@ -157,13 +157,13 @@ export default function SettingsPage() {
             <section className="rounded-xl border border-slate-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  <CreditCard className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   <h2 className="font-semibold text-lg">Payment Configuration</h2>
                 </div>
                 {!isEditing && (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-green-600 dark:hover:text-green-400 transition-colors self-start"
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors self-start"
                   >
                     <Edit2 className="h-4 w-4" />
                     Edit
@@ -173,19 +173,19 @@ export default function SettingsPage() {
 
               {loading ? (
                 <div className="flex justify-center py-10">
-                  <Loader2 className="animate-spin text-green-600 dark:text-green-400" />
+                  <Loader2 className="animate-spin text-blue-600 dark:text-blue-400" />
                 </div>
               ) : (
                 <div className="mt-5 space-y-5">
                   {error && <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p>}
-                  {message && <p className="rounded-md bg-green-50 p-3 text-sm text-green-700 flex items-center gap-2"><Check className="h-4 w-4" />{message}</p>}
+                  {message && <p className="rounded-md bg-blue-50 p-3 text-sm text-blue-700 flex items-center gap-2"><Check className="h-4 w-4" />{message}</p>}
 
                   {/* Current Platform Display */}
                   {!isEditing && (
                     <div className="bg-slate-50 dark:bg-white/5 rounded-lg p-4 space-y-3">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Current Platform</span>
-                        <span className="text-sm font-semibold text-green-600 dark:text-green-400">{getGatewayName(settings.gateway)}</span>
+                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">{getGatewayName(settings.gateway)}</span>
                       </div>
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <span className="text-sm font-medium text-slate-600 dark:text-slate-400">API Key</span>
@@ -203,7 +203,7 @@ export default function SettingsPage() {
                       </div>
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Secret Status</span>
-                        <span className={`text-sm font-medium ${hasSecret() ? 'text-green-600' : 'text-amber-600'}`}>
+                        <span className={`text-sm font-medium ${hasSecret() ? 'text-blue-600' : 'text-amber-600'}`}>
                           {hasSecret() ? 'Configured' : 'Not configured'}
                         </span>
                       </div>
@@ -223,7 +223,7 @@ export default function SettingsPage() {
                               onClick={() => setSettings({ ...settings, gateway })}
                               className={`rounded-md border px-4 py-3 text-sm font-semibold capitalize transition-colors ${
                                 settings.gateway === gateway
-                                  ? 'border-green-500 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                  ? 'border-blue-500 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
                                   : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600'
                               }`}
                             >
@@ -307,7 +307,7 @@ export default function SettingsPage() {
                         <button
                           onClick={() => void save()}
                           disabled={saving}
-                          className="inline-flex items-center justify-center gap-2 rounded-md bg-green-500 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50 hover:bg-green-600 transition-colors"
+                          className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50 hover:bg-blue-600 transition-colors"
                         >
                           {saving && <Loader2 className="h-4 w-4 animate-spin" />}
                           {saving ? 'Saving...' : 'Save Changes'}
@@ -329,7 +329,7 @@ export default function SettingsPage() {
           {activeTab === 'grant-access' && (
             <section className="rounded-xl border border-slate-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
               <div className="flex items-center gap-2 mb-4">
-                <ShieldCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+                <ShieldCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <h2 className="font-semibold text-lg">Resource Access Management</h2>
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
@@ -337,7 +337,7 @@ export default function SettingsPage() {
               </p>
               <button
                 onClick={() => window.location.assign('/admin/grant-access')}
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-green-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-600 transition-colors w-full sm:w-auto"
+                className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 transition-colors w-full sm:w-auto"
               >
                 <ShieldCheck className="h-4 w-4" />
                 Manage Access
@@ -350,7 +350,7 @@ export default function SettingsPage() {
           {activeTab === 'google-drive' && (
             <section className="rounded-xl border border-slate-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
               <div className="flex items-center gap-2 mb-4">
-                <HardDrive className="h-5 w-5 text-green-600 dark:text-green-400" />
+                <HardDrive className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <h2 className="font-semibold text-lg">Google Drive Integration</h2>
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
@@ -367,7 +367,7 @@ export default function SettingsPage() {
                   </div>
                   <div className={`px-3 py-1 rounded-full text-xs font-medium self-start sm:self-auto ${
                     googleDriveSettings.enabled 
-                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' 
                       : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
                   }`}>
                     {googleDriveSettings.enabled ? 'Active' : 'Inactive'}
@@ -422,7 +422,7 @@ export default function SettingsPage() {
                       type="checkbox"
                       checked={googleDriveSettings.enabled}
                       onChange={e => setGoogleDriveSettings({ ...googleDriveSettings, enabled: e.target.checked })}
-                      className="w-4 h-4 rounded border-slate-300 text-green-600 focus:ring-green-500 dark:border-gray-600 dark:text-green-400 dark:focus:ring-green-500"
+                      className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:text-blue-400 dark:focus:ring-blue-500"
                     />
                     <span className="text-sm font-medium">Enable Google Drive Integration</span>
                   </label>
@@ -433,7 +433,7 @@ export default function SettingsPage() {
                     setMessage('Google Drive settings saved successfully.');
                     setTimeout(() => setMessage(''), 3000);
                   }}
-                  className="inline-flex items-center justify-center gap-2 rounded-md bg-green-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-600 transition-colors w-full sm:w-auto"
+                  className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 transition-colors w-full sm:w-auto"
                 >
                   <HardDrive className="h-4 w-4" />
                   Save Google Drive Settings
@@ -504,7 +504,7 @@ function ThemeSettingsTab() {
     return (
       <section className="rounded-xl border border-slate-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex justify-center py-10">
-          <Loader2 className="animate-spin text-green-600 dark:text-green-400" />
+          <Loader2 className="animate-spin text-blue-600 dark:text-blue-400" />
         </div>
       </section>
     );
@@ -513,7 +513,7 @@ function ThemeSettingsTab() {
   return (
     <section className="relative rounded-xl border border-slate-200 bg-gray-50 p-4 sm:p-5 dark:border-gray-800 dark:bg-gray-900">
       <div className="flex items-center gap-2">
-        <Palette className="h-5 w-5 text-green-600 dark:text-green-400" />
+        <Palette className="h-5 w-5 text-blue-600 dark:text-blue-400" />
         <h2 className="font-semibold text-lg">Website Theme</h2>
         <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
           <Lock className="h-3.5 w-3.5" />
@@ -540,7 +540,7 @@ function ThemeSettingsTab() {
       {/* Locked content — not interactive while under development */}
       <div className="pointer-events-none select-none opacity-50">
       {error && <p className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p>}
-      {message && <p className="mt-4 rounded-md bg-green-50 p-3 text-sm text-green-700 flex items-center gap-2"><Check className="h-4 w-4" />{message}</p>}
+      {message && <p className="mt-4 rounded-md bg-blue-50 p-3 text-sm text-blue-700 flex items-center gap-2"><Check className="h-4 w-4" />{message}</p>}
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         {THEME_SWATCHES.map((t) => (
@@ -554,7 +554,7 @@ function ThemeSettingsTab() {
             }}
             className={`flex items-center gap-3 rounded-lg border p-4 text-left transition-colors disabled:opacity-50 ${
               preset === t.id
-                ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                 : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600'
             }`}
           >
@@ -563,7 +563,7 @@ function ThemeSettingsTab() {
               <span className="block text-sm font-semibold">{t.name}</span>
               <span className="block text-xs text-slate-500 dark:text-slate-400">{t.color}</span>
             </span>
-            {preset === t.id && <Check className="ml-auto h-4 w-4 text-green-600 dark:text-green-400" />}
+            {preset === t.id && <Check className="ml-auto h-4 w-4 text-blue-600 dark:text-blue-400" />}
           </button>
         ))}
       </div>
@@ -592,7 +592,7 @@ function ThemeSettingsTab() {
               setPreset('custom');
               void save('custom', customColor);
             }}
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-green-500 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 hover:bg-green-600 transition-colors"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 hover:bg-blue-600 transition-colors"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />}
             Apply custom color

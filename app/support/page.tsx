@@ -39,7 +39,7 @@ const CATEGORIES = [
 const STATUS_META: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
   open: { label: 'Open', className: 'bg-[var(--accent-soft-2)] text-[var(--accent-text)]', icon: <Circle className="h-3.5 w-3.5" /> },
   in_progress: { label: 'In progress', className: 'bg-amber-100 text-amber-800', icon: <Clock className="h-3.5 w-3.5" /> },
-  resolved: { label: 'Resolved', className: 'bg-green-100 text-green-800', icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
+  resolved: { label: 'Resolved', className: 'bg-blue-100 text-blue-800', icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
   closed: { label: 'Closed', className: 'bg-gray-100 text-gray-700', icon: <Circle className="h-3.5 w-3.5" /> },
 };
 
@@ -136,8 +136,8 @@ function SupportPageContent() {
         <Navbar />
         <main className="flex-1 flex items-center justify-center px-4">
           <div className="text-center max-w-md">
-            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-green-100">
-              <LifeBuoy className="h-8 w-8 text-green-600" />
+            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-blue-100">
+              <LifeBuoy className="h-8 w-8 text-blue-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Support Center</h1>
             <p className="text-base text-gray-600 mb-6">
@@ -145,7 +145,7 @@ function SupportPageContent() {
             </p>
             <button
               onClick={() => signIn('google', { callbackUrl: '/support' })}
-              className="bg-green-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-green-700 transition-colors"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-blue-700 transition-colors"
             >
               Login to continue
             </button>
@@ -164,9 +164,9 @@ function SupportPageContent() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-600">Support Center</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Support Center</p>
             <h1 className="mt-1 text-2xl md:text-3xl font-bold text-gray-900 flex items-center gap-3">
-              <LifeBuoy className="h-7 w-7 text-green-600" />
+              <LifeBuoy className="h-7 w-7 text-blue-600" />
               How can we help?
             </h1>
             <p className="mt-1 text-base text-gray-600">
@@ -177,7 +177,7 @@ function SupportPageContent() {
           {/* Create ticket */}
           <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8 mb-8">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-1">
-              <MessageSquarePlus className="h-5 w-5 text-green-600" />
+              <MessageSquarePlus className="h-5 w-5 text-blue-600" />
               Open a new ticket
             </h2>
             <p className="text-sm text-gray-600 mb-6">
@@ -188,7 +188,7 @@ function SupportPageContent() {
               <div className="mb-5 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{formError}</div>
             )}
             {success && (
-              <div className="mb-5 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">{success}</div>
+              <div className="mb-5 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800">{success}</div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -202,7 +202,7 @@ function SupportPageContent() {
                   onChange={(e) => setSubject(e.target.value)}
                   placeholder="Brief summary of your issue"
                   maxLength={200}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
 
@@ -215,7 +215,7 @@ function SupportPageContent() {
                     id="ticket-category"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                   >
                     {CATEGORIES.map((c) => (
                       <option key={c.value} value={c.value}>{c.label}</option>
@@ -231,7 +231,7 @@ function SupportPageContent() {
                     value={orderId}
                     onChange={(e) => setOrderId(e.target.value)}
                     placeholder="e.g. razorpay_1727..."
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                   />
                 </div>
               </div>
@@ -247,7 +247,7 @@ function SupportPageContent() {
                   placeholder="Tell us what happened. If your payment failed, mention the error you saw and any transaction reference."
                   maxLength={5000}
                   rows={5}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 resize-y"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-y"
                 />
               </div>
 
@@ -255,7 +255,7 @@ function SupportPageContent() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-green-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                   Submit ticket
@@ -287,7 +287,7 @@ function SupportPageContent() {
                     <button
                       key={ticket._id}
                       onClick={() => router.push(`/support/${ticket._id}`)}
-                      className="w-full text-left bg-white rounded-2xl border border-gray-200 shadow-sm p-5 transition-colors hover:border-green-400"
+                      className="w-full text-left bg-white rounded-2xl border border-gray-200 shadow-sm p-5 transition-colors hover:border-blue-400"
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="min-w-0">

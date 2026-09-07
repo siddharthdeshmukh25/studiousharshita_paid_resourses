@@ -30,18 +30,18 @@ function LineGraph({ data }: { data: { label: string; views: number; actions: nu
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-[205px] w-full overflow-visible">
         <defs>
           <linearGradient id="analyticsFill" x1="0" x2="0" y1="0" y2="1">
-            <stop stopColor="#b8ff00" stopOpacity=".24"/>
-            <stop offset="1" stopColor="#b8ff00" stopOpacity="0"/>
+            <stop stopColor="#60A5FA" stopOpacity=".24"/>
+            <stop offset="1" stopColor="#60A5FA" stopOpacity="0"/>
           </linearGradient>
         </defs>
         {[20, 44, 68, 92].map((y) => (
           <line key={y} x1="0" x2="100" y1={y} y2={y} stroke="currentColor" className="text-slate-200 dark:text-white/10" strokeWidth=".35" />
         ))}
         <polygon points={`0,92 ${points('views')} 100,92`} fill="url(#analyticsFill)"/>
-        <polyline points={points('views')} fill="none" stroke="#b8ff00" strokeWidth="1.35" vectorEffect="non-scaling-stroke"/>
+        <polyline points={points('views')} fill="none" stroke="#60A5FA" strokeWidth="1.35" vectorEffect="non-scaling-stroke"/>
         <polyline points={points('actions')} fill="none" stroke="#76a9fa" strokeWidth="1.15" strokeDasharray="4 3" vectorEffect="non-scaling-stroke"/>
         {data.map((item, index) => (
-          <circle key={`${item.label}-${index}`} cx={(index / Math.max(1, data.length - 1)) * 100} cy={92 - (item.views / max) * 72} r="1.3" fill="#b8ff00" vectorEffect="non-scaling-stroke" />
+          <circle key={`${item.label}-${index}`} cx={(index / Math.max(1, data.length - 1)) * 100} cy={92 - (item.views / max) * 72} r="1.3" fill="#60A5FA" vectorEffect="non-scaling-stroke" />
         ))}
       </svg>
       <div className="flex justify-between text-[11px] text-slate-400">
@@ -92,15 +92,15 @@ function WorldMap({ countries, locationData }: { countries: Country[]; locationD
           const size = 6 + (country.events / max) * 12;
           return (
             <g key={country.country}>
-              <circle cx={`${x}%`} cy={`${y}%`} r={size} fill="#b8ff00" fillOpacity=".18"/>
-              <circle cx={`${x}%`} cy={`${y}%`} r="4" fill="#b8ff00"/>
+              <circle cx={`${x}%`} cy={`${y}%`} r={size} fill="#60A5FA" fillOpacity=".18"/>
+              <circle cx={`${x}%`} cy={`${y}%`} r="4" fill="#60A5FA"/>
               <title>{country.country}: {country.users || country.events} users</title>
             </g>
           );
         })}
       </svg>
       <div className="absolute bottom-3 left-4 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-        <span className="h-2 w-2 rounded-full bg-[#b8ff00]" />
+        <span className="h-2 w-2 rounded-full bg-[#60A5FA]" />
         User activity by country
       </div>
     </div>
@@ -120,7 +120,7 @@ function BreakdownBars({ title, data }: { title: string; data: Breakdown[] }) {
               <span className="font-medium text-gray-900 dark:text-gray-100">{item.value}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-white/10">
-              <div className="h-full rounded-full bg-green-500" style={{ width: `${(item.value / max) * 100}%` }} />
+              <div className="h-full rounded-full bg-blue-500" style={{ width: `${(item.value / max) * 100}%` }} />
             </div>
           </div>
         ))}
@@ -184,7 +184,7 @@ export default function AdminAnalyticsPage() {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Performance</p>
+          <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Performance</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Analytics</h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Daily store engagement, conversion signals and visitor geography.</p>
         </div>
@@ -208,7 +208,7 @@ export default function AdminAnalyticsPage() {
                 </div>
                 <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400">
                   <span className="flex items-center gap-1.5">
-                    <i className="h-2 w-2 rounded-full bg-green-500" />
+                    <i className="h-2 w-2 rounded-full bg-blue-500" />
                     Page views
                   </span>
                   <span className="flex items-center gap-1.5">

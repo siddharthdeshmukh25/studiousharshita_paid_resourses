@@ -298,7 +298,7 @@ function ResourcesPageContent() {
     return (
       <AdminLayout>
         <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Loading resources">
-          <Loader2 className="h-10 w-10 animate-spin text-green-600 dark:text-green-400" />
+          <Loader2 className="h-10 w-10 animate-spin text-blue-600 dark:text-blue-400" />
         </div>
       </AdminLayout>
     );
@@ -319,7 +319,7 @@ function ResourcesPageContent() {
           </div>
           <button
             onClick={() => { setEditingResource(null); setNewResource(createEmptyNewResource()); setResourceAccess('paid'); setShowAddModal(true); }}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-medium text-sm transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm transition-all"
           >
             <Plus className="h-4 w-4" />
             <span>Add Resource</span>
@@ -398,7 +398,7 @@ function ResourcesPageContent() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800">
+                        <span className="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
                           {resource.category}
                         </span>
                       </td>
@@ -408,7 +408,7 @@ function ResourcesPageContent() {
                         ) : resource.discount && resource.discount > 0 ? (
                           <div>
                             <span className="line-through text-gray-400 dark:text-gray-500 mr-1 text-xs">₹{resource.price}</span>
-                            <span className="text-green-600 dark:text-green-400 font-semibold text-sm">₹{(resource.price * (1 - resource.discount / 100)).toFixed(2)}</span>
+                            <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">₹{(resource.price * (1 - resource.discount / 100)).toFixed(2)}</span>
                             <span className="text-xs text-red-500 ml-1">({Math.round(resource.discount)}% off)</span>
                           </div>
                         ) : (
@@ -422,7 +422,7 @@ function ResourcesPageContent() {
                         {resource.price === 0 ? <span className="text-gray-400 dark:text-gray-500">—</span> : resourceMetrics[resource._id]?.buyers ? <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">{resourceMetrics[resource._id].buyers}</span> : <span className="text-gray-400 dark:text-gray-500">—</span>}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button onClick={() => viewResourceAnalytics(resource._id)} className="mr-3 inline-flex items-center gap-1 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300" title="View analytics"><BarChart3 className="h-4 w-4" /><span className="hidden lg:inline">Analytics</span></button>
+                        <button onClick={() => viewResourceAnalytics(resource._id)} className="mr-3 inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300" title="View analytics"><BarChart3 className="h-4 w-4" /><span className="hidden lg:inline">Analytics</span></button>
                         <button
                           onClick={() => handleEditResource(resource)}
                           className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3"
@@ -455,10 +455,10 @@ function ResourcesPageContent() {
         <div className="fixed inset-0 z-[70] flex items-end bg-gray-900/45 p-0 sm:items-center sm:justify-center sm:p-6">
           <div className="max-h-[92vh] w-full overflow-y-auto rounded-t-3xl bg-white dark:bg-gray-900 shadow-2xl sm:max-w-4xl sm:rounded-3xl border border-gray-200 dark:border-gray-700">
             <div className="sticky top-0 z-10 flex items-start justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-5 py-5 sm:px-7">
-              <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-green-600 dark:text-green-400">Resource analytics</p><h2 className="mt-1 text-xl font-bold text-gray-900 dark:text-gray-100">{resourceAnalytics?.resource.title || 'Loading analytics...'}</h2></div>
+              <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-600 dark:text-blue-400">Resource analytics</p><h2 className="mt-1 text-xl font-bold text-gray-900 dark:text-gray-100">{resourceAnalytics?.resource.title || 'Loading analytics...'}</h2></div>
               <div className="flex items-center gap-2"><button onClick={() => { setResourceAnalytics(null); setAnalyticsLoading(false); setAnalyticsResourceId(null); }} className="rounded-full p-2 text-gray-500 dark:text-gray-400 transition-colors hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white" aria-label="Close analytics"><Package className="h-5 w-5" /></button></div>
             </div>
-            {analyticsLoading || !resourceAnalytics ? <div className="grid min-h-72 place-items-center"><Loader2 className="h-7 w-7 animate-spin text-green-600 dark:text-green-400" /></div> : <div className="p-5 sm:p-7 space-y-6">
+            {analyticsLoading || !resourceAnalytics ? <div className="grid min-h-72 place-items-center"><Loader2 className="h-7 w-7 animate-spin text-blue-600 dark:text-blue-400" /></div> : <div className="p-5 sm:p-7 space-y-6">
               {/* Time Filter */}
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Time filter:</span>
@@ -466,7 +466,7 @@ function ResourcesPageContent() {
                   <button
                     key={filter}
                     onClick={() => analyticsResourceId && viewResourceAnalyticsWithFilter(analyticsResourceId, filter)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${analyticsTimeFilter === filter ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${analyticsTimeFilter === filter ? 'bg-blue-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                   >
                     {filter === 'all' ? 'All time' : filter === '7days' ? '7 days' : filter === '30days' ? '30 days' : '90 days'}
                   </button>
@@ -501,7 +501,7 @@ function ResourcesPageContent() {
                           <tr key={idx} className="hover:bg-gray-100 dark:hover:bg-slate-800">
                             <td className="px-5 py-3 font-medium text-gray-900 dark:text-gray-100">{access.name || 'Anonymous'}</td>
                             <td className="px-5 py-3 text-gray-600 dark:text-gray-400">{access.email || '—'}</td>
-                            <td className="px-5 py-3 font-semibold text-green-600 dark:text-green-400">{access.opens}</td>
+                            <td className="px-5 py-3 font-semibold text-blue-600 dark:text-blue-400">{access.opens}</td>
                             <td className="px-5 py-3 text-gray-600 dark:text-gray-400 text-xs">{new Date(access.firstOpenedAt).toLocaleDateString()}</td>
                             <td className="px-5 py-3 text-gray-600 dark:text-gray-400 text-xs">{new Date(access.lastOpenedAt).toLocaleDateString()}</td>
                           </tr>
@@ -533,7 +533,7 @@ function ResourcesPageContent() {
                           <tr key={idx} className="hover:bg-gray-100 dark:hover:bg-slate-800">
                             <td className="px-5 py-3 font-medium text-gray-900 dark:text-gray-100">{buyer.name || '—'}</td>
                             <td className="px-5 py-3 text-gray-600 dark:text-gray-400">{buyer.email || '—'}</td>
-                            <td className="px-5 py-3 font-semibold text-green-600 dark:text-green-400">₹{buyer.amount}</td>
+                            <td className="px-5 py-3 font-semibold text-blue-600 dark:text-blue-400">₹{buyer.amount}</td>
                             <td className="px-5 py-3 text-gray-600 dark:text-gray-400 text-xs">{buyer.purchasedAt ? new Date(buyer.purchasedAt).toLocaleDateString() : '—'}</td>
                           </tr>
                         ))}
@@ -552,7 +552,7 @@ function ResourcesPageContent() {
         <div className="admin-mobile-modal fixed inset-0 z-50 bg-slate-950/75 p-0 sm:bg-slate-900/45 sm:p-6">
           <div className="mx-auto flex h-full max-w-5xl items-center justify-center">
             <div className="admin-modal-card h-full w-full overflow-y-auto rounded-b-[28px] rounded-t-none border border-gray-200 bg-white dark:bg-slate-900 shadow-xl sm:max-h-[92vh] sm:rounded-[28px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            <div className="border-b border-gray-200 bg-gradient-to-r from-[#84CC16] via-[#65A30D] to-[#84CC16] p-5 sm:p-6 sm:rounded-t-[28px]">
+            <div className="border-b border-gray-200 bg-gradient-to-r from-[#60A5FA] via-[#3B82F6] to-[#60A5FA] p-5 sm:p-6 sm:rounded-t-[28px]">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="hidden text-xs font-semibold uppercase tracking-[0.18em] text-white/80 sm:block">Admin</p>
@@ -586,7 +586,7 @@ function ResourcesPageContent() {
                   required
                   value={newResource.title}
                   onChange={(e) => setNewResource({ ...newResource, title: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#84CC16] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 transition-all"
                   placeholder="Enter resource title"
                 />
               </div>
@@ -608,8 +608,8 @@ function ResourcesPageContent() {
                 <label className="text-sm font-semibold text-gray-900 dark:text-gray-100">Resource type</label>
                 <div role="tablist" aria-label="Choose whether this resource is free or paid" className="relative grid h-10 w-44 grid-cols-2 rounded-xl bg-gray-100 dark:bg-slate-800 p-1">
                   <span aria-hidden="true" className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white dark:bg-slate-700 shadow-sm transition-transform duration-300 ease-out ${resourceAccess === 'free' ? 'translate-x-1' : 'translate-x-[calc(100%+3px)]'}`} />
-                  <button type="button" role="tab" aria-selected={resourceAccess === 'free'} onClick={() => { setResourceAccess('free'); setNewResource({ ...newResource, price: '0', discount: '' }); }} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceAccess === 'free' ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>Free</button>
-                  <button type="button" role="tab" aria-selected={resourceAccess === 'paid'} onClick={() => { setResourceAccess('paid'); }} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceAccess === 'paid' ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>Paid</button>
+                  <button type="button" role="tab" aria-selected={resourceAccess === 'free'} onClick={() => { setResourceAccess('free'); setNewResource({ ...newResource, price: '0', discount: '' }); }} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceAccess === 'free' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`}>Free</button>
+                  <button type="button" role="tab" aria-selected={resourceAccess === 'paid'} onClick={() => { setResourceAccess('paid'); }} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceAccess === 'paid' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`}>Paid</button>
                 </div>
               </div>
 
@@ -626,7 +626,7 @@ function ResourcesPageContent() {
                     step="0.01"
                     value={newResource.price}
                     onChange={(e) => setNewResource({ ...newResource, price: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#84CC16] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 transition-all"
                     placeholder="0.00"
                   />
                 </div>
@@ -638,7 +638,7 @@ function ResourcesPageContent() {
                     Discount Type
                   </label>
                   <div className="flex gap-1 mb-3 relative bg-gray-200 dark:bg-slate-700 rounded-md p-0.5">
-                    <div className={`absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] bg-green-500 rounded-sm transition-all duration-300 ease-in-out ${discountType === 'percentage' ? 'left-0.5' : 'left-[calc(50%+1px)]'}`} />
+                    <div className={`absolute top-0.5 bottom-0.5 w-[calc(50%-2px)] bg-blue-500 rounded-sm transition-all duration-300 ease-in-out ${discountType === 'percentage' ? 'left-0.5' : 'left-[calc(50%+1px)]'}`} />
                     <button
                       type="button"
                       onClick={() => {
@@ -812,7 +812,7 @@ function ResourcesPageContent() {
                                   });
                                 }
                               }}
-                              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-medium transition-colors"
+                              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-medium transition-colors"
                             >
                               Add
                             </button>

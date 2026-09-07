@@ -141,7 +141,7 @@ export default function AdminSidebar() {
         <div className="admin-sidebar-brand flex items-center justify-between px-5">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
-              <div className="grid h-8 w-8 place-items-center rounded-lg bg-[#b8ff00] text-[#071000]">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-[#60A5FA] text-[#0B1524]">
                 <LayoutDashboard className="h-[18px] w-[18px]" />
               </div>
               <div className="flex flex-col">
@@ -172,7 +172,7 @@ export default function AdminSidebar() {
                 w-full flex items-center gap-3 px-3 py-2 rounded-md text-[15px]
                 transition-all duration-200
                 ${activeItem === item.id
-                  ? 'bg-[#b8ff00]/12 text-[#b8ff00]'
+                  ? 'bg-[#60A5FA]/12 text-[#60A5FA]'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
                 }
                 ${isCollapsed ? 'justify-center' : ''}
@@ -209,7 +209,7 @@ export default function AdminSidebar() {
                 Dark Mode
               </span>
             )}
-            <Lock className="h-4 w-4 text-green-500 ml-auto" />
+            <Lock className="h-4 w-4 text-blue-500 ml-auto" />
           </button>
           
           {/* Lock message popup */}
@@ -219,7 +219,7 @@ export default function AdminSidebar() {
               <p className="text-gray-300">Light mode toggle is currently disabled for the admin panel. This feature will be available in a future update.</p>
               <button
                 onClick={() => setShowLockMessage(false)}
-                className="mt-2 text-green-400 hover:text-green-300 font-medium"
+                className="mt-2 text-blue-400 hover:text-blue-300 font-medium"
               >
                 Got it
               </button>

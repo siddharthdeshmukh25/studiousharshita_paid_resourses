@@ -38,7 +38,7 @@ const PRIORITY_OPTIONS = ['low', 'medium', 'high'];
 const STATUS_META: Record<string, { label: string; className: string }> = {
   todo: { label: 'To do', className: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' },
   in_progress: { label: 'In progress', className: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' },
-  done: { label: 'Done', className: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' },
+  done: { label: 'Done', className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },
 };
 
 const PRIORITY_META: Record<string, { label: string; className: string; rank: number }> = {
@@ -182,7 +182,7 @@ export default function DeveloperNotesPage() {
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Developer Tools</p>
+            <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Developer Tools</p>
             <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Developer Notes</h1>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               Keep track of features, ideas and tasks for your project.
@@ -190,7 +190,7 @@ export default function DeveloperNotesPage() {
           </div>
           <button
             onClick={() => document.getElementById('note-input')?.focus()}
-            className="inline-flex items-center gap-2 rounded-lg bg-green-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-600 transition-colors"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 transition-colors"
           >
             <Plus className="h-4 w-4" />
             New Note
@@ -209,7 +209,7 @@ export default function DeveloperNotesPage() {
             { label: 'Total notes', value: stats.total, className: 'text-gray-900 dark:text-gray-100' },
             { label: 'To do', value: stats.todo, className: 'text-gray-500 dark:text-gray-400' },
             { label: 'In progress', value: stats.in_progress, className: 'text-amber-600 dark:text-amber-400' },
-            { label: 'Done', value: stats.done, className: 'text-green-600 dark:text-green-400' },
+            { label: 'Done', value: stats.done, className: 'text-blue-600 dark:text-blue-400' },
           ].map((stat) => (
             <div key={stat.label} className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#111111]">
               <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{stat.label}</p>
@@ -221,7 +221,7 @@ export default function DeveloperNotesPage() {
         {/* Create Note Card */}
         <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-[#111111]">
           <div className="flex items-center gap-2 mb-4">
-            <div className="h-2 w-2 rounded-full bg-green-500"></div>
+            <div className="h-2 w-2 rounded-full bg-blue-500"></div>
             <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Create a new note</h2>
           </div>
           <div className="space-y-4">
@@ -232,7 +232,7 @@ export default function DeveloperNotesPage() {
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
                 placeholder="Describe a feature, bug, idea or improvement..."
-                className="w-full min-h-[90px] rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                className="w-full min-h-[90px] rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -241,7 +241,7 @@ export default function DeveloperNotesPage() {
                 <select
                   value={newPriority}
                   onChange={(e) => setNewPriority(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   {PRIORITY_OPTIONS.map((p) => (
                     <option key={p} value={p} className="capitalize">{p} priority</option>
@@ -254,7 +254,7 @@ export default function DeveloperNotesPage() {
                   value={newTags}
                   onChange={(e) => setNewTags(e.target.value)}
                   placeholder="frontend, payment, ui"
-                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -262,7 +262,7 @@ export default function DeveloperNotesPage() {
               <button
                 onClick={addNote}
                 disabled={adding || !newNote.trim()}
-                className="inline-flex items-center gap-2 rounded-lg bg-green-500 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-600 transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600 transition-colors"
               >
                 {adding ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
                 Add Note
@@ -280,7 +280,7 @@ export default function DeveloperNotesPage() {
                 onClick={() => setStatusFilter(s)}
                 className={`px-3.5 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
                   statusFilter === s
-                    ? 'bg-green-600 text-white border-green-600'
+                    ? 'bg-blue-600 text-white border-blue-600'
                     : 'bg-white text-gray-700 border-gray-200 dark:bg-[#111111] dark:text-gray-300 dark:border-gray-700'
                 }`}
               >
@@ -294,7 +294,7 @@ export default function DeveloperNotesPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search notes…"
-              className="w-full sm:w-56 rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-green-500 dark:border-gray-700 dark:bg-[#111111] dark:text-gray-100"
+              className="w-full sm:w-56 rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#111111] dark:text-gray-100"
             />
           </div>
         </div>
@@ -307,7 +307,7 @@ export default function DeveloperNotesPage() {
             </div>
           ) : notes.length === 0 ? (
             <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-700 dark:bg-[#111111]">
-              <div className="h-2 w-2 rounded-full bg-green-500 mx-auto mb-4"></div>
+              <div className="h-2 w-2 rounded-full bg-blue-500 mx-auto mb-4"></div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">No developer notes yet</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">
                 Start capturing ideas, features and improvements for your project.
@@ -330,7 +330,7 @@ export default function DeveloperNotesPage() {
                   key={note._id}
                   className={`rounded-xl border p-5 transition-all ${
                     note.status === 'done'
-                      ? 'bg-green-50/50 border-green-200 dark:bg-green-900/10 dark:border-green-800/50'
+                      ? 'bg-blue-50/50 border-blue-200 dark:bg-blue-900/10 dark:border-blue-800/50'
                       : 'bg-white border-gray-200 dark:bg-[#111111] dark:border-gray-700'
                   }`}
                 >
@@ -338,7 +338,7 @@ export default function DeveloperNotesPage() {
                     <div className="flex items-start gap-3 flex-1">
                       <button onClick={() => toggleStatus(note)} className="mt-0.5 flex-shrink-0" title="Cycle status">
                         {note.status === 'done' ? (
-                          <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                          <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                         ) : note.status === 'in_progress' ? (
                           <Loader2 className="h-5 w-5 text-amber-500" />
                         ) : (
@@ -352,12 +352,12 @@ export default function DeveloperNotesPage() {
                               value={editContent}
                               onChange={(e) => setEditContent(e.target.value)}
                               rows={2}
-                              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500"
+                              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-[#0a0a0a] dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <div className="flex gap-2">
                               <button
                                 onClick={() => saveEdit(note)}
-                                className="inline-flex items-center gap-1 rounded-md bg-green-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-green-700"
+                                className="inline-flex items-center gap-1 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
                               >
                                 <Check className="h-3.5 w-3.5" /> Save
                               </button>
@@ -414,7 +414,7 @@ export default function DeveloperNotesPage() {
                         {!isEditing && (
                           <button
                             onClick={() => { setEditingId(note._id); setEditContent(note.content); }}
-                            className="text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors p-1"
+                            className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1"
                             title="Edit note"
                           >
                             <Pencil className="h-4 w-4" />

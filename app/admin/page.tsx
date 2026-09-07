@@ -632,7 +632,7 @@ function AdminPageContent() {
     return (
       <AdminLayout>
         <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Loading admin dashboard">
-          <Loader2 className="h-10 w-10 animate-spin text-green-600 dark:text-green-400" />
+          <Loader2 className="h-10 w-10 animate-spin text-blue-600 dark:text-blue-400" />
         </div>
       </AdminLayout>
     );
@@ -642,12 +642,12 @@ function AdminPageContent() {
     <AdminLayout>
       <div id="dashboard-overview" className="space-y-6 scroll-mt-24">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Workspace overview</p><h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Admin Dashboard</h1><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">A quick view of how your store is performing today.</p></div>
+          <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Workspace overview</p><h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Admin Dashboard</h1><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">A quick view of how your store is performing today.</p></div>
           <button onClick={handleLogout} disabled={loggingOut} className="inline-flex items-center gap-2 self-start rounded-md border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"><LogOut className="h-4 w-4" />{loggingOut ? 'Logging out…' : 'Logout'}</button>
         </div>
         {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">{error}</div>}
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><KPICard title="Total revenue" value={`₹${stats.totalRevenue}`} icon={<IndianRupee className="h-5 w-5" />} /><KPICard title="Registered users" value={stats.totalUsers} icon={<Users className="h-5 w-5" />} /><KPICard title="Live resources" value={stats.totalResources} icon={<Package className="h-5 w-5" />} /><KPICard title="Orders" value={stats.totalOrders ?? 0} icon={<UserCheck className="h-5 w-5" />} /></div>
-        <section className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900"><div><h2 className="font-semibold text-gray-900 dark:text-gray-100">Manage workspace</h2><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Open a focused section to manage your store.</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><button onClick={() => window.location.href = '/admin/resources'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-green-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Package className="h-5 w-5 text-green-600 dark:text-green-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Resources</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Add and edit products</p></button><button onClick={() => window.location.href = '/admin/users'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-green-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Users className="h-5 w-5 text-green-600 dark:text-green-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Users</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Profiles and activity</p></button><button onClick={() => window.location.href = '/admin/analytics'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-green-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><IndianRupee className="h-5 w-5 text-green-600 dark:text-green-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Analytics</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Revenue and traffic</p></button><button onClick={() => setShowCouponModal(true)} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-green-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Plus className="h-5 w-5 text-green-600 dark:text-green-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Create coupon</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Create a promotion</p></button></div></section>
+        <section className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900"><div><h2 className="font-semibold text-gray-900 dark:text-gray-100">Manage workspace</h2><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Open a focused section to manage your store.</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><button onClick={() => window.location.href = '/admin/resources'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Package className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Resources</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Add and edit products</p></button><button onClick={() => window.location.href = '/admin/users'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Users className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Users</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Profiles and activity</p></button><button onClick={() => window.location.href = '/admin/analytics'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><IndianRupee className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Analytics</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Revenue and traffic</p></button><button onClick={() => setShowCouponModal(true)} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Plus className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Create coupon</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Create a promotion</p></button></div></section>
       </div>
       <div className="hidden">
           {/* Header */}
@@ -705,15 +705,15 @@ function AdminPageContent() {
               {showCategoryDropdown && (
                 <div className="mobile-category-sheet fixed inset-0 z-40 flex flex-col overflow-y-auto bg-gray-50 dark:bg-gray-900 sm:absolute sm:inset-auto sm:top-full sm:right-0 sm:z-50 sm:mt-2 sm:max-h-80 sm:w-64 sm:overflow-y-auto sm:rounded-xl sm:border sm:border-gray-200 dark:sm:border-gray-700 sm:bg-white dark:sm:bg-gray-900 sm:shadow-xl">
                   <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-5 py-4 sm:hidden">
-                    <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-green-600 dark:text-green-400">Admin tools</p><h2 className="mt-1 text-xl font-bold text-gray-900 dark:text-gray-100">Manage categories</h2></div>
-                    <button onClick={() => setShowCategoryDropdown(false)} className="grid h-10 w-10 place-items-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400" aria-label="Close categories"><X className="h-5 w-5" /></button>
+                    <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-blue-600 dark:text-blue-400">Admin tools</p><h2 className="mt-1 text-xl font-bold text-gray-900 dark:text-gray-100">Manage categories</h2></div>
+                    <button onClick={() => setShowCategoryDropdown(false)} className="grid h-10 w-10 place-items-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400" aria-label="Close categories"><X className="h-5 w-5" /></button>
                   </div>
                   <button
                     onClick={() => {
                       setShowCategoryModal(true);
                       setShowCategoryDropdown(false);
                     }}
-                    className="mx-4 mt-5 flex w-auto items-center justify-center space-x-2 rounded-xl bg-green-500 px-4 py-3 text-left font-semibold text-white shadow-sm hover:bg-green-600 sm:m-0 sm:w-full sm:justify-start sm:rounded-none sm:bg-transparent sm:px-4 sm:text-gray-700 dark:sm:text-gray-300 sm:shadow-none sm:hover:bg-gray-100 dark:sm:hover:bg-gray-800"
+                    className="mx-4 mt-5 flex w-auto items-center justify-center space-x-2 rounded-xl bg-blue-500 px-4 py-3 text-left font-semibold text-white shadow-sm hover:bg-blue-600 sm:m-0 sm:w-full sm:justify-start sm:rounded-none sm:bg-transparent sm:px-4 sm:text-gray-700 dark:sm:text-gray-300 sm:shadow-none sm:hover:bg-gray-100 dark:sm:hover:bg-gray-800"
                   >
                     <Plus className="h-4 w-4" />
                     <span className="font-medium">Add New Category</span>
@@ -732,7 +732,7 @@ function AdminPageContent() {
                           <div className="flex items-center space-x-1">
                             <button
                               onClick={() => handleEditCategory(category)}
-                              className="p-1 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
+                              className="p-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
                             >
                               <Edit className="h-4 w-4" />
                             </button>
@@ -770,7 +770,7 @@ function AdminPageContent() {
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Resources</h2>
               <button
                 onClick={() => window.location.href = '/admin/resources'}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-medium text-sm transition-all"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm transition-all"
               >
                 <Package className="h-4 w-4" />
                 <span>Manage Resources</span>
@@ -797,7 +797,7 @@ function AdminPageContent() {
             <div className="max-h-[320px] overflow-x-auto overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               <table className="min-w-[650px] w-full text-left text-sm">
                 <thead className="sticky top-0 z-10 bg-gray-50 dark:bg-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"><tr><th className="px-6 py-3">Code</th><th className="px-6 py-3">Title</th><th className="px-6 py-3">Discount</th><th className="px-6 py-3">Min Purchase</th><th className="px-6 py-3">Expires</th><th className="px-6 py-3 text-right">Action</th></tr></thead>
-                <tbody>{coupons.map((coupon) => <tr key={coupon._id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"><td className="px-6 py-4 font-bold tracking-wide text-green-600 dark:text-green-400">{coupon.code}</td><td className="px-6 py-4 text-gray-700 dark:text-gray-300">{coupon.title}</td><td className="px-6 py-4 font-semibold text-green-700 dark:text-green-400">{coupon.discountPercentage}%</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{coupon.minimumPurchaseAmount ? `₹${coupon.minimumPurchaseAmount}` : 'No limit'}</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{new Date(coupon.expiresAt).toLocaleDateString()}</td><td className="px-6 py-4 text-right"><button onClick={() => handleEditCoupon(coupon)} className="mr-2 rounded p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"><Edit className="h-4 w-4" /></button><button onClick={() => handleDeleteCoupon(coupon._id)} disabled={deleteCouponLoading === coupon._id} className="rounded p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50">{deleteCouponLoading === coupon._id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}</button></td></tr>)}</tbody>
+                <tbody>{coupons.map((coupon) => <tr key={coupon._id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"><td className="px-6 py-4 font-bold tracking-wide text-blue-600 dark:text-blue-400">{coupon.code}</td><td className="px-6 py-4 text-gray-700 dark:text-gray-300">{coupon.title}</td><td className="px-6 py-4 font-semibold text-blue-700 dark:text-blue-400">{coupon.discountPercentage}%</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{coupon.minimumPurchaseAmount ? `₹${coupon.minimumPurchaseAmount}` : 'No limit'}</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{new Date(coupon.expiresAt).toLocaleDateString()}</td><td className="px-6 py-4 text-right"><button onClick={() => handleEditCoupon(coupon)} className="mr-2 rounded p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"><Edit className="h-4 w-4" /></button><button onClick={() => handleDeleteCoupon(coupon._id)} disabled={deleteCouponLoading === coupon._id} className="rounded p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50">{deleteCouponLoading === coupon._id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}</button></td></tr>)}</tbody>
               </table>
             </div>
           )}
@@ -835,7 +835,7 @@ function AdminPageContent() {
                   maxLength={50}
                   value={newCategory.name}
                   onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#84CC16] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 transition-all text-sm"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 transition-all text-sm"
                   placeholder="Enter category name"
                 />
               </div>
@@ -849,7 +849,7 @@ function AdminPageContent() {
                   value={newCategory.description}
                   onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
                   rows={2}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#84CC16] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 transition-all resize-none text-sm"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 transition-all resize-none text-sm"
                   placeholder="Enter category description"
                 />
               </div>
@@ -869,7 +869,7 @@ function AdminPageContent() {
                 <button
                   type="submit"
                   disabled={addingCategory}
-                  className="px-3 py-1.5 sm:px-6 sm:py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl disabled:opacity-50 flex items-center space-x-2 transition-all font-medium text-xs sm:text-sm"
+                  className="px-3 py-1.5 sm:px-6 sm:py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl disabled:opacity-50 flex items-center space-x-2 transition-all font-medium text-xs sm:text-sm"
                 >
                   {addingCategory ? (
                     <>
@@ -904,15 +904,15 @@ function AdminPageContent() {
                   {couponModalError}
                 </div>
               )}
-              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Coupon code</label><input required minLength={3} maxLength={30} value={newCoupon.code} onChange={(event) => setNewCoupon({ ...newCoupon, code: event.target.value.toUpperCase() })} placeholder="WELCOME20" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 font-bold uppercase text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
-              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Coupon title</label><input required maxLength={50} value={newCoupon.title} onChange={(event) => setNewCoupon({ ...newCoupon, title: event.target.value })} placeholder="Welcome discount" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
-              <div className="grid grid-cols-2 gap-4"><div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Expiry date</label><input required type="date" value={newCoupon.expiresAt} onChange={(event) => setNewCoupon({ ...newCoupon, expiresAt: event.target.value })} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div><div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Discount %</label><input required type="number" min="1" max="100" value={newCoupon.discountPercentage} onChange={(event) => setNewCoupon({ ...newCoupon, discountPercentage: event.target.value })} placeholder="20" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div></div>
-              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Minimum purchase amount (₹) <span className="text-gray-400 dark:text-gray-500 font-normal">(Optional - coupon only works above this amount)</span></label><input type="number" min="0" step="0.01" value={newCoupon.minimumPurchaseAmount} onChange={(event) => setNewCoupon({ ...newCoupon, minimumPurchaseAmount: event.target.value })} placeholder="0" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
+              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Coupon code</label><input required minLength={3} maxLength={30} value={newCoupon.code} onChange={(event) => setNewCoupon({ ...newCoupon, code: event.target.value.toUpperCase() })} placeholder="WELCOME20" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 font-bold uppercase text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
+              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Coupon title</label><input required maxLength={50} value={newCoupon.title} onChange={(event) => setNewCoupon({ ...newCoupon, title: event.target.value })} placeholder="Welcome discount" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
+              <div className="grid grid-cols-2 gap-4"><div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Expiry date</label><input required type="date" value={newCoupon.expiresAt} onChange={(event) => setNewCoupon({ ...newCoupon, expiresAt: event.target.value })} className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div><div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Discount %</label><input required type="number" min="1" max="100" value={newCoupon.discountPercentage} onChange={(event) => setNewCoupon({ ...newCoupon, discountPercentage: event.target.value })} placeholder="20" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-3 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div></div>
+              <div><label className="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">Minimum purchase amount (₹) <span className="text-gray-400 dark:text-gray-500 font-normal">(Optional - coupon only works above this amount)</span></label><input type="number" min="0" step="0.01" value={newCoupon.minimumPurchaseAmount} onChange={(event) => setNewCoupon({ ...newCoupon, minimumPurchaseAmount: event.target.value })} placeholder="0" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 sm:rounded-lg sm:border-gray-200 dark:sm:border-gray-700 sm:px-3 sm:py-2.5" /></div>
               <div className="flex justify-end gap-3 pt-2"><button type="button" onClick={() => {
                 setShowCouponModal(false);
                 setEditingCoupon(null);
                 setNewCoupon({ code: '', title: '', expiresAt: '', discountPercentage: '', minimumPurchaseAmount: '' });
-              }} className="rounded-xl border border-gray-200 dark:border-gray-700 px-5 py-3 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 sm:rounded-lg sm:px-4 sm:py-2.5">Cancel</button><button type="submit" disabled={addingCoupon} className="flex items-center gap-2 rounded-xl bg-green-500 hover:bg-green-600 px-5 py-3 font-medium text-white disabled:opacity-50 sm:rounded-lg sm:px-4 sm:py-2.5">{addingCoupon && <Loader2 className="h-4 w-4 animate-spin" />}{editingCoupon ? 'Update Coupon' : 'Create Coupon'}</button></div>
+              }} className="rounded-xl border border-gray-200 dark:border-gray-700 px-5 py-3 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 sm:rounded-lg sm:px-4 sm:py-2.5">Cancel</button><button type="submit" disabled={addingCoupon} className="flex items-center gap-2 rounded-xl bg-blue-500 hover:bg-blue-600 px-5 py-3 font-medium text-white disabled:opacity-50 sm:rounded-lg sm:px-4 sm:py-2.5">{addingCoupon && <Loader2 className="h-4 w-4 animate-spin" />}{editingCoupon ? 'Update Coupon' : 'Create Coupon'}</button></div>
             </form>
           </div>
         </div>
@@ -1105,7 +1105,7 @@ function AdminPageContent() {
                     }`}
                   >
                     <div className="flex flex-col items-center space-y-2">
-                      <div className="rounded-full bg-green-100 p-3">
+                      <div className="rounded-full bg-blue-100 p-3">
                         <img src="https://payu.in/favicon.ico" alt="PayU" className="h-8 w-8" />
                       </div>
                       <span className="text-sm font-semibold text-gray-900">PayU</span>
@@ -1982,11 +1982,11 @@ function AdminPageContent() {
                   </button>
                   
                   {/* Connection Status */}
-                  <div className={`mb-6 p-5 rounded-xl border ${googleDriveConnected ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
+                  <div className={`mb-6 p-5 rounded-xl border ${googleDriveConnected ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
                     <div className="flex items-center gap-4">
-                      <div className={`w-4 h-4 rounded-full ${googleDriveConnected ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                      <div className={`w-4 h-4 rounded-full ${googleDriveConnected ? 'bg-blue-500' : 'bg-gray-400'}`}></div>
                       <div className="flex-1">
-                        <p className={`font-semibold text-lg ${googleDriveConnected ? 'text-green-900' : 'text-gray-900'}`}>
+                        <p className={`font-semibold text-lg ${googleDriveConnected ? 'text-blue-900' : 'text-gray-900'}`}>
                           {googleDriveConnected ? 'Google Drive Connected' : 'Google Drive Not Connected'}
                         </p>
                         <p className="text-sm text-gray-600">
@@ -1994,7 +1994,7 @@ function AdminPageContent() {
                         </p>
                       </div>
                       {googleDriveConnected && (
-                        <div className="text-green-600">
+                        <div className="text-blue-600">
                           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
@@ -2108,7 +2108,7 @@ function AdminPageContent() {
       {showCategoryModal && (
         <div className="admin-mobile-modal fixed inset-0 bg-gray-900/30 flex items-center justify-center z-50 p-4">
           <div className="admin-modal-card bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4">
-            <div className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-green-600 to-teal-600 rounded-t-none md:rounded-t-2xl">
+            <div className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-600 to-teal-600 rounded-t-none md:rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg sm:text-xl font-semibold text-white">Add New Category</h2>
                 <button
@@ -2131,7 +2131,7 @@ function AdminPageContent() {
                   maxLength={50}
                   value={newCategory.name}
                   onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 transition-all text-sm"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all text-sm"
                   placeholder="Enter category name"
                 />
               </div>
@@ -2145,7 +2145,7 @@ function AdminPageContent() {
                   value={newCategory.description}
                   onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
                   rows={2}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900 transition-all resize-none text-sm"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 transition-all resize-none text-sm"
                   placeholder="Enter category description"
                 />
               </div>
@@ -2161,7 +2161,7 @@ function AdminPageContent() {
                 <button
                   type="submit"
                   disabled={addingCategory}
-                  className="px-3 py-1.5 sm:px-6 sm:py-3 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl hover:from-green-700 hover:to-teal-700 disabled:opacity-50 flex items-center space-x-2 transition-all font-medium shadow-lg text-xs sm:text-sm"
+                  className="px-3 py-1.5 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-xl hover:from-blue-700 hover:to-teal-700 disabled:opacity-50 flex items-center space-x-2 transition-all font-medium shadow-lg text-xs sm:text-sm"
                 >
                   {addingCategory ? (
                     <>

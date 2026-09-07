@@ -135,7 +135,7 @@ export default function PaymentCapturesPage() {
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Finance</p>
+            <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Finance</p>
             <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Payment Captures</h1>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               Authorized Razorpay payments awaiting capture. Retry failed or pending captures manually.
@@ -153,7 +153,7 @@ export default function PaymentCapturesPage() {
             <button
               onClick={() => void retryAll()}
               disabled={batchRunning || (failed.length === 0 && pending.length === 0)}
-              className="inline-flex items-center gap-2 rounded-md bg-green-500 px-3.5 py-2 text-sm font-semibold text-white hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-md bg-blue-500 px-3.5 py-2 text-sm font-semibold text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {batchRunning ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
               {batchRunning ? 'Retrying…' : 'Retry all eligible'}
@@ -171,7 +171,7 @@ export default function PaymentCapturesPage() {
           <div className="rounded-xl border border-slate-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-900">
             <div className="flex items-center justify-between">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
-                <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 Batch retry finished
               </h2>
               <button onClick={() => setBatchResult(null)} className="text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
@@ -181,7 +181,7 @@ export default function PaymentCapturesPage() {
             <div className="mt-3 grid gap-3 text-sm sm:grid-cols-4">
               <div><p className="text-xs text-slate-500">Scanned</p><p className="font-semibold">{batchResult.total}</p></div>
               <div><p className="text-xs text-slate-500">Retried</p><p className="font-semibold">{batchResult.retried}</p></div>
-              <div><p className="text-xs font-medium text-green-600 dark:text-green-400">Captured</p><p className="font-semibold text-green-600 dark:text-green-400">{batchResult.successful}</p></div>
+              <div><p className="text-xs font-medium text-blue-600 dark:text-blue-400">Captured</p><p className="font-semibold text-blue-600 dark:text-blue-400">{batchResult.successful}</p></div>
               <div><p className="text-xs text-slate-500">Failed / skipped</p><p className="font-semibold">{batchResult.failed} / {batchResult.skipped}</p></div>
             </div>
             {batchResult.details.length > 0 && (
@@ -190,7 +190,7 @@ export default function PaymentCapturesPage() {
                   <div key={`${detail.orderId}-${index}`} className="flex items-start gap-2 border-b border-slate-100 px-3 py-2 last:border-0 dark:border-gray-700">
                     <span className={`mt-0.5 shrink-0 rounded px-1.5 py-0.5 font-medium ${
                       detail.status === 'success'
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
                         : detail.status === 'failed'
                         ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                         : 'bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-400'
@@ -248,11 +248,11 @@ export default function PaymentCapturesPage() {
 
           {loading ? (
             <div className="grid min-h-56 place-items-center">
-              <Loader2 className="h-7 w-7 animate-spin text-green-600 dark:text-green-400" />
+              <Loader2 className="h-7 w-7 animate-spin text-blue-600 dark:text-blue-400" />
             </div>
           ) : orders.length === 0 ? (
             <div className="p-12 text-center">
-              <ShieldAlert className="mx-auto h-12 w-12 text-green-500/60" />
+              <ShieldAlert className="mx-auto h-12 w-12 text-blue-500/60" />
               <p className="mt-3 text-base font-medium text-gray-900 dark:text-gray-100">
                 No {tab} captures 🎉
               </p>
@@ -309,7 +309,7 @@ export default function PaymentCapturesPage() {
                         <button
                           onClick={() => void retryOne(order.cashfreeOrderId)}
                           disabled={retrying === order.cashfreeOrderId}
-                          className="inline-flex items-center gap-1.5 rounded-md border border-green-500/60 px-3 py-1.5 text-xs font-semibold text-green-600 hover:bg-green-500 hover:text-white disabled:opacity-50 dark:text-green-400 dark:hover:text-white"
+                          className="inline-flex items-center gap-1.5 rounded-md border border-blue-500/60 px-3 py-1.5 text-xs font-semibold text-blue-600 hover:bg-blue-500 hover:text-white disabled:opacity-50 dark:text-blue-400 dark:hover:text-white"
                         >
                           {retrying === order.cashfreeOrderId ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RotateCcw className="h-3.5 w-3.5" />}
                           Retry

@@ -40,7 +40,7 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Customers</p>
+          <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Customers</p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">Users</h1>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">View customer profiles, visits and resource activity.</p>
         </div>
@@ -50,7 +50,7 @@ export default function AdminUsersPage() {
             value={query} 
             onChange={(event) => setQuery(event.target.value)} 
             placeholder="Search name or email" 
-            className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-green-500 dark:border-gray-700 dark:bg-gray-900" 
+            className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-gray-900" 
           />
         </form>
       </div>
@@ -92,7 +92,7 @@ export default function AdminUsersPage() {
                   </td>
                   <td className="px-5 py-3 text-gray-600 dark:text-gray-400">
                     {user.country ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
                         {user.country}
                       </span>
                     ) : (
@@ -106,7 +106,7 @@ export default function AdminUsersPage() {
                   <td className="px-5 py-3 text-right">
                     <button 
                       onClick={() => router.push(`/admin/users/${user._id}`)} 
-                      className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold hover:border-green-500 dark:border-gray-700"
+                      className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold hover:border-blue-500 dark:border-gray-700"
                     >
                       View profile
                     </button>

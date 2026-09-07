@@ -46,9 +46,9 @@ export default function AdminLogin() {
       
       {/* Top Header Section */}
       <div className="flex flex-col items-center mb-6 sm:mb-8 text-white">
-        {/* Changed shield background to match the dark theme and icon color to neon green */}
+        {/* Changed shield background to match the dark theme and icon color to light blue */}
         <div className="bg-[#1a1a1a] p-2.5 sm:p-3 rounded-full mb-3 sm:mb-4 shadow-[0_0_15px_rgba(163,230,53,0.15)] border border-slate-700/50">
-          <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-[#a3e635]" strokeWidth={1.5} />
+          <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-[#60A5FA]" strokeWidth={1.5} />
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-1.5 sm:mb-2 text-gray-100">Admin Portal</h1>
         <p className="text-slate-400 text-xs sm:text-sm">Secure access for administrators only</p>
@@ -64,8 +64,8 @@ export default function AdminLogin() {
         )}
 
         <div className="flex items-center gap-2 mb-6 sm:mb-8">
-          {/* Changed lock icon color to neon green */}
-          <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-[#a3e635]" strokeWidth={2} />
+          {/* Changed lock icon color to light blue */}
+          <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-[#60A5FA]" strokeWidth={2} />
           <h2 className="text-base sm:text-lg font-semibold text-gray-100">Administrator Login</h2>
         </div>
 
@@ -80,12 +80,12 @@ export default function AdminLogin() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               // Updated input styling for dark theme
-              className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-[#151515] border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-[#a3e635]/50 focus:border-[#a3e635] transition-all text-xs sm:text-sm font-medium"
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-[#151515] border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-[#60A5FA]/50 focus:border-[#60A5FA] transition-all text-xs sm:text-sm font-medium"
               style={{
                 WebkitBoxShadow: '0 0 0 1000px #151515 inset',
                 WebkitTextFillColor: '#ffffff',
                 color: '#ffffff',
-                caretColor: '#a3e635',
+                caretColor: '#60A5FA',
                 transition: 'background-color 5000s ease-in-out 0s'
               }}
               required
@@ -105,12 +105,12 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 // Updated input styling for dark theme
-                className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-[#151515] border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-[#a3e635]/50 focus:border-[#a3e635] transition-all text-xs sm:text-sm pr-10 sm:pr-12 font-medium"
+                className="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg bg-[#151515] border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-[#60A5FA]/50 focus:border-[#60A5FA] transition-all text-xs sm:text-sm pr-10 sm:pr-12 font-medium"
                 style={{
                   WebkitBoxShadow: '0 0 0 1000px #151515 inset',
                   WebkitTextFillColor: '#ffffff',
                   color: '#ffffff',
-                  caretColor: '#a3e635',
+                  caretColor: '#60A5FA',
                   transition: 'background-color 5000s ease-in-out 0s'
                 }}
                 required
@@ -132,11 +132,11 @@ export default function AdminLogin() {
             </div>
           </div>
 
-          {/* Submit Button - Updated to neon green accent */}
+          {/* Submit Button - Updated to light blue accent */}
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full bg-[#a3e635] hover:bg-[#84cc16] text-[#0f172a] font-semibold py-2 sm:py-3 rounded-lg transition-colors mt-2 text-xs sm:text-sm shadow-md shadow-[#a3e635]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full bg-[#60A5FA] hover:bg-[#3B82F6] text-[#0f172a] font-semibold py-2 sm:py-3 rounded-lg transition-colors mt-2 text-xs sm:text-sm shadow-md shadow-[#60A5FA]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
               <>

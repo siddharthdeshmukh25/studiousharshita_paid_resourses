@@ -584,7 +584,7 @@ export default function ResourceDetailPage() {
                     {resource.category}
                   </span>
                   {isPurchased && (
-                    <span className="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold border-2 border-green-500">
+                    <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-bold border-2 border-blue-500">
                       PAID
                     </span>
                   )}
@@ -627,11 +627,11 @@ export default function ResourceDetailPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     {isFreeResource ? (
-                      <div><p className="text-2xl font-bold text-emerald-600 md:text-3xl">Free</p><p className="mt-1 text-sm font-medium text-emerald-700">Instant access after login</p></div>
+                      <div><p className="text-2xl font-bold text-blue-600 md:text-3xl">Free</p><p className="mt-1 text-sm font-medium text-blue-700">Instant access after login</p></div>
                     ) : resource.discount && resource.discount > 0 ? (
                       <div>
                         <p className="text-sm text-gray-500 line-through">₹{resource.price}</p>
-                        <p className="text-2xl md:text-3xl font-bold text-green-600">
+                        <p className="text-2xl md:text-3xl font-bold text-blue-600">
                           ₹{(resource.price * (1 - resource.discount / 100)).toFixed(2)}
                         </p>
                         <p className="text-sm text-red-500 font-semibold">{Math.round(resource.discount)}% OFF</p>
@@ -687,15 +687,15 @@ export default function ResourceDetailPage() {
                       {couponLoading ? 'Checking' : 'Apply'}
                     </button>
                   </div>
-                  {couponMessage && <p className={`mt-2 text-xs ${couponDiscount ? 'text-green-700' : 'text-red-600'}`}>{couponMessage}</p>}
-                  {couponDiscount && <p className="mt-2 text-sm font-semibold text-green-700">You pay ₹{((resource.discount && resource.discount > 0 ? resource.price * (1 - resource.discount / 100) : resource.price) * (1 - couponDiscount / 100)).toFixed(2)} after {couponDiscount}% off.</p>}
+                  {couponMessage && <p className={`mt-2 text-xs ${couponDiscount ? 'text-blue-700' : 'text-red-600'}`}>{couponMessage}</p>}
+                  {couponDiscount && <p className="mt-2 text-sm font-semibold text-blue-700">You pay ₹{((resource.discount && resource.discount > 0 ? resource.price * (1 - resource.discount / 100) : resource.price) * (1 - couponDiscount / 100)).toFixed(2)} after {couponDiscount}% off.</p>}
                 </div>}
 
                 {isPurchased || isFreeResource ? (
                   <button
                     onClick={openResource}
                     disabled={openResourceLoading}
-                    className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {openResourceLoading ? (
                       <>

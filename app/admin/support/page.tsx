@@ -62,7 +62,7 @@ const PRIORITY_OPTIONS = ['low', 'normal', 'high'];
 const STATUS_META: Record<string, { label: string; className: string }> = {
   open: { label: 'Open', className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },
   in_progress: { label: 'In progress', className: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300' },
-  resolved: { label: 'Resolved', className: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' },
+  resolved: { label: 'Resolved', className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },
   closed: { label: 'Closed', className: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400' },
 };
 
@@ -223,7 +223,7 @@ function AdminSupportPageContent() {
           onClick={() => setStatusFilter(s)}
           className={`px-3.5 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
             statusFilter === s
-              ? 'bg-green-600 text-white border-green-600'
+              ? 'bg-blue-600 text-white border-blue-600'
               : 'bg-white text-gray-700 border-gray-200 dark:bg-[#0d1413] dark:text-gray-300 dark:border-gray-700'
           }`}
         >
@@ -264,7 +264,7 @@ function AdminSupportPageContent() {
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">
+            <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">
               Customer Care
             </p>
             <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">
@@ -274,8 +274,8 @@ function AdminSupportPageContent() {
               Resolve payment, access and refund queries from your customers.
             </p>
           </div>
-          <div className="hidden sm:grid h-12 w-12 place-items-center rounded-xl bg-green-600/10">
-            <LifeBuoy className="h-6 w-6 text-green-600" />
+          <div className="hidden sm:grid h-12 w-12 place-items-center rounded-xl bg-blue-600/10">
+            <LifeBuoy className="h-6 w-6 text-blue-600" />
           </div>
         </div>
 
@@ -290,7 +290,7 @@ function AdminSupportPageContent() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search tickets…"
-                className="w-56 rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-green-500 dark:border-gray-700 dark:bg-[#0d1413] dark:text-gray-100"
+                className="w-56 rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0d1413] dark:text-gray-100"
               />
             </div>
           </div>
@@ -324,7 +324,7 @@ function AdminSupportPageContent() {
                     key={ticket._id}
                     onClick={() => openTicket(ticket._id)}
                     className={`w-full flex items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-[#0d1413] ${
-                      selectedId === ticket._id ? 'bg-green-50 dark:bg-green-900/10' : ''
+                      selectedId === ticket._id ? 'bg-blue-50 dark:bg-blue-900/10' : ''
                     }`}
                   >
                     <div className="min-w-0">
@@ -425,7 +425,7 @@ function AdminSupportPageContent() {
                 {detail.orderContext && (
                   <div className="rounded-xl border border-gray-200 p-5 dark:border-gray-700">
                     <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                      <BadgeCheck className="h-4 w-4 text-green-600" />
+                      <BadgeCheck className="h-4 w-4 text-blue-600" />
                       Order context
                     </h4>
                     <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
@@ -444,14 +444,14 @@ function AdminSupportPageContent() {
                       <button
                         onClick={grantAccess}
                         disabled={granting}
-                        className="mt-4 inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-60"
+                        className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
                       >
                         {granting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
                         Grant access manually
                       </button>
                     )}
                     {detail.hasAccess && (
-                      <p className="mt-4 inline-flex items-center gap-2 rounded-lg bg-green-100 px-4 py-2.5 text-sm font-semibold text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                      <p className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-100 px-4 py-2.5 text-sm font-semibold text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
                         <CheckCircle2 className="h-4 w-4" />
                         User already has access
                       </p>
@@ -466,10 +466,10 @@ function AdminSupportPageContent() {
                     return (
                       <div key={index} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-[85%] rounded-2xl p-4 ${isUser
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-blue-600 text-white'
                           : 'border border-gray-200 bg-gray-50 text-gray-900 dark:border-gray-700 dark:bg-[#0d1413] dark:text-gray-100'
                         }`}>
-                          <div className={`flex items-center gap-2 mb-2 ${isUser ? 'text-green-100' : 'text-gray-500 dark:text-gray-400'}`}>
+                          <div className={`flex items-center gap-2 mb-2 ${isUser ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>
                             {isUser ? <User className="h-3.5 w-3.5" /> : <ShieldCheck className="h-3.5 w-3.5" />}
                             <span className="text-xs font-semibold uppercase tracking-wide">
                               {isUser ? detail.ticket.userId?.name || 'Customer' : 'You'}
@@ -495,13 +495,13 @@ function AdminSupportPageContent() {
                     placeholder="Reply to the customer…"
                     rows={3}
                     maxLength={5000}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-green-500 dark:border-gray-700 dark:bg-[#0d1413] dark:text-gray-100 resize-y"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0d1413] dark:text-gray-100 resize-y"
                   />
                   <div className="flex justify-end">
                     <button
                       type="submit"
                       disabled={sending || !reply.trim() || detail.ticket.status === 'closed'}
-                      className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-60"
+                      className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
                     >
                       {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                       Send reply

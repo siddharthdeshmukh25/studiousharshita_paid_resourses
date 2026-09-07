@@ -67,11 +67,11 @@ export default function ContactForm() {
       </p>
 
       {success && (
-        <div className="mb-5 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3">
-          <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+        <div className="mb-5 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
+          <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-semibold text-green-800">Message sent!</p>
-            <p className="text-sm text-green-700">Thank you for reaching out. We will reply to your email shortly.</p>
+            <p className="font-semibold text-blue-800">Message sent!</p>
+            <p className="text-sm text-blue-700">Thank you for reaching out. We will reply to your email shortly.</p>
           </div>
         </div>
       )}
@@ -89,7 +89,7 @@ export default function ContactForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Full name"
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <div>
@@ -100,7 +100,7 @@ export default function ContactForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function ContactForm() {
               id="contact-topic"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
             >
               {TOPICS.map((t) => (
                 <option key={t.value} value={t.value}>{t.label}</option>
@@ -127,7 +127,7 @@ export default function ContactForm() {
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Brief summary"
               maxLength={200}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function ContactForm() {
             placeholder="Write your query or project details here…"
             rows={6}
             maxLength={5000}
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 resize-y"
+            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-y"
           />
         </div>
 
@@ -149,7 +149,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-green-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
             Send message

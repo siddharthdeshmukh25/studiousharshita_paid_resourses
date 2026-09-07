@@ -18,7 +18,7 @@ export default function KPICard({ title, value, icon, trend, className = '' }: K
     <div className={`
       admin-kpi-card border rounded-lg p-4 lg:p-5
       transition-all duration-200
-      hover:border-[#b8ff00]/40
+      hover:border-[#60A5FA]/40
       ${className}
     `}>
       <div className="flex items-start justify-between">
@@ -31,14 +31,14 @@ export default function KPICard({ title, value, icon, trend, className = '' }: K
           </p>
           {trend && (
             <div className={`flex items-center gap-1 mt-2 text-xs font-medium ${
-              trend.isPositive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+              trend.isPositive ? 'text-blue-600 dark:text-blue-400' : 'text-red-600 dark:text-red-400'
             }`}>
               <span>{trend.isPositive ? '↑' : '↓'}</span>
               <span>{trend.value}</span>
             </div>
           )}
         </div>
-        <div className="grid h-10 w-10 place-items-center rounded-md bg-[#b8ff00]/10 text-[#b8ff00]">
+        <div className="grid h-10 w-10 place-items-center rounded-md bg-[#60A5FA]/10 text-[#60A5FA]">
           {icon}
         </div>
       </div>

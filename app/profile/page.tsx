@@ -94,7 +94,7 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
 ];
 
 const STATUS_META: Record<string, { label: string; className: string }> = {
-  completed: { label: 'Completed', className: 'bg-green-100 text-green-800' },
+  completed: { label: 'Completed', className: 'bg-blue-100 text-blue-800' },
   pending: { label: 'Pending', className: 'bg-amber-100 text-amber-800' },
   failed: { label: 'Failed', className: 'bg-red-100 text-red-800' },
 };
@@ -102,7 +102,7 @@ const STATUS_META: Record<string, { label: string; className: string }> = {
 const TICKET_STATUS: Record<string, { label: string; className: string }> = {
   open: { label: 'Open', className: 'bg-[var(--accent-soft-2)] text-[var(--accent-text)]' },
   in_progress: { label: 'In progress', className: 'bg-amber-100 text-amber-800' },
-  resolved: { label: 'Resolved', className: 'bg-green-100 text-green-800' },
+  resolved: { label: 'Resolved', className: 'bg-blue-100 text-blue-800' },
   closed: { label: 'Closed', className: 'bg-gray-100 text-gray-700' },
 };
 
@@ -196,14 +196,14 @@ export default function ProfilePage() {
         <Navbar />
         <main className="flex-1 flex items-center justify-center px-4">
           <div className="text-center max-w-md">
-            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-green-100">
-              <User className="h-8 w-8 text-green-600" />
+            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-blue-100">
+              <User className="h-8 w-8 text-blue-600" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">My Profile</h1>
             <p className="text-base text-gray-600 mb-6">Login to view your resources, orders and support tickets.</p>
             <button
               onClick={() => signIn('google', { callbackUrl: '/profile' })}
-              className="bg-green-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-green-700 transition-colors"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-blue-700 transition-colors"
             >
               Login to continue
             </button>
@@ -222,7 +222,7 @@ export default function ProfilePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-600">Account</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Account</p>
             <h1 className="mt-1 text-2xl md:text-3xl font-bold text-gray-900">My Profile</h1>
             <p className="mt-1 text-base text-gray-600">
               Manage your resources, watchlist, orders and support tickets.
@@ -247,7 +247,7 @@ export default function ProfilePage() {
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <div className="grid h-16 w-16 lg:h-20 lg:w-20 place-items-center rounded-full bg-green-600 text-2xl font-bold text-white">
+                    <div className="grid h-16 w-16 lg:h-20 lg:w-20 place-items-center rounded-full bg-blue-600 text-2xl font-bold text-white">
                       {session.user?.name?.charAt(0) || 'U'}
                     </div>
                   )}
@@ -281,8 +281,8 @@ export default function ProfilePage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors ${
                       activeTab === tab.id
-                        ? 'bg-green-600 text-white'
-                        : 'bg-white text-gray-700 border border-gray-200 hover:border-green-400'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white text-gray-700 border border-gray-200 hover:border-blue-400'
                     }`}
                   >
                     {tab.icon}
@@ -313,7 +313,7 @@ export default function ProfilePage() {
                           <div key={stat.label} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
                             <div className="flex items-center justify-between mb-3">
                               <span className="text-sm text-gray-600">{stat.label}</span>
-                              <span className="text-green-600">{stat.icon}</span>
+                              <span className="text-blue-600">{stat.icon}</span>
                             </div>
                             <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
                           </div>
@@ -322,7 +322,7 @@ export default function ProfilePage() {
 
                       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                          <ShieldCheck className="h-5 w-5 text-green-600" />
+                          <ShieldCheck className="h-5 w-5 text-blue-600" />
                           Account details
                         </h3>
                         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-base">
@@ -357,7 +357,7 @@ export default function ProfilePage() {
                           <p className="text-sm text-gray-600 mb-5">Browse our collection and unlock your first resource.</p>
                           <button
                             onClick={() => router.push('/')}
-                            className="bg-green-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                            className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                           >
                             Browse resources
                           </button>
@@ -370,7 +370,7 @@ export default function ProfilePage() {
                                 <img src={resource.thumbnailUrl} alt={resource.title} className="w-full h-full object-cover" />
                               </div>
                               <div className="p-5">
-                                <span className="inline-block px-2 py-0.5 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
                                   {resource.category}
                                 </span>
                                 <h4 className="mt-2 text-base font-semibold text-gray-900 line-clamp-1">{resource.title}</h4>
@@ -380,7 +380,7 @@ export default function ProfilePage() {
                                 </p>
                                 <button
                                   onClick={() => openResource(resource._id)}
-                                  className="mt-4 w-full bg-green-600 text-white py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-green-700 transition-colors"
+                                  className="mt-4 w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
                                 >
                                   <ExternalLink className="h-4 w-4" />
                                   Open Resource
@@ -403,7 +403,7 @@ export default function ProfilePage() {
                           <p className="text-sm text-gray-600 mb-5">Save resources you like and find them here later.</p>
                           <button
                             onClick={() => router.push('/')}
-                            className="bg-green-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                            className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                           >
                             Browse resources
                           </button>
@@ -428,7 +428,7 @@ export default function ProfilePage() {
                                   <div className="mt-4 flex gap-2">
                                     <button
                                       onClick={() => router.push(`/resource/${id}`)}
-                                      className="flex-1 bg-green-600 text-white py-2.5 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                                      className="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
                                     >
                                       View
                                     </button>
@@ -505,7 +505,7 @@ export default function ProfilePage() {
                         <h3 className="text-lg font-semibold text-gray-900">Your tickets</h3>
                         <button
                           onClick={() => router.push('/support')}
-                          className="text-sm font-semibold text-green-600 hover:text-green-700"
+                          className="text-sm font-semibold text-blue-600 hover:text-blue-700"
                         >
                           + Open a ticket
                         </button>
@@ -524,7 +524,7 @@ export default function ProfilePage() {
                               <button
                                 key={ticket._id}
                                 onClick={() => router.push(`/support/${ticket._id}`)}
-                                className="w-full text-left bg-white rounded-2xl border border-gray-200 shadow-sm p-5 transition-colors hover:border-green-400"
+                                className="w-full text-left bg-white rounded-2xl border border-gray-200 shadow-sm p-5 transition-colors hover:border-blue-400"
                               >
                                 <div className="flex items-start justify-between gap-4">
                                   <div className="min-w-0">

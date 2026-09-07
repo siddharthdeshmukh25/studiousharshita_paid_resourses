@@ -36,7 +36,7 @@ interface Ticket {
 const STATUS_META: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
   open: { label: 'Open', className: 'bg-[var(--accent-soft-2)] text-[var(--accent-text)]', icon: <Circle className="h-3.5 w-3.5" /> },
   in_progress: { label: 'In progress', className: 'bg-amber-100 text-amber-800', icon: <Clock className="h-3.5 w-3.5" /> },
-  resolved: { label: 'Resolved', className: 'bg-green-100 text-green-800', icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
+  resolved: { label: 'Resolved', className: 'bg-blue-100 text-blue-800', icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
   closed: { label: 'Closed', className: 'bg-gray-100 text-gray-700', icon: <Circle className="h-3.5 w-3.5" /> },
 };
 
@@ -170,10 +170,10 @@ export default function TicketDetailPage() {
               return (
                 <div key={index} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] rounded-2xl p-4 ${isUser
-                    ? 'bg-green-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-white border border-gray-200 shadow-sm text-gray-900'
                   }`}>
-                    <div className={`flex items-center gap-2 mb-2 ${isUser ? 'text-green-100' : 'text-gray-500'}`}>
+                    <div className={`flex items-center gap-2 mb-2 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
                       {isUser ? <User className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
                       <span className="text-xs font-semibold uppercase tracking-wide">
                         {isUser ? (session?.user?.name || 'You') : 'Support team'}
@@ -207,13 +207,13 @@ export default function TicketDetailPage() {
                 placeholder="Write your reply…"
                 rows={4}
                 maxLength={5000}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 resize-y"
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-y"
               />
               <div className="flex justify-end mt-3">
                 <button
                   type="submit"
                   disabled={sending || !reply.trim()}
-                  className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-2.5 rounded-lg text-base font-semibold hover:bg-green-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-lg text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {sending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                   Send message

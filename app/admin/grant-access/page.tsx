@@ -94,17 +94,17 @@ export default function GrantAccessPage() {
     setMessage(data.message || (mode === 'grant' ? 'Access granted successfully.' : 'Access revoked successfully.')); setForm(emptyForm); setUsers([]); setResources([]);
   };
 
-  const inputClass = 'w-full rounded-md border border-slate-200 bg-transparent px-3 py-2.5 text-sm dark:border-gray-700 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-all';
+  const inputClass = 'w-full rounded-md border border-slate-200 bg-transparent px-3 py-2.5 text-sm dark:border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all';
   const dropdownClass = 'absolute z-50 mt-2 w-full max-h-60 overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-900 custom-scrollbar';
 
-  return <AdminLayout><div className="mx-auto max-w-3xl space-y-6 font-poppins"><div><p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">Access control</p><h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Resource Access</h1><p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Grant or revoke an existing user's access to a resource.</p></div>
+  return <AdminLayout><div className="mx-auto max-w-3xl space-y-6 font-poppins"><div><p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Access control</p><h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Resource Access</h1><p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Grant or revoke an existing user's access to a resource.</p></div>
     <form onSubmit={submit} className="space-y-5 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 dark:border-gray-700 dark:bg-gray-900">
       <div className="flex gap-2 rounded-lg bg-slate-100 p-1 dark:bg-white/5">
-        <button type="button" onClick={() => { setMode('grant'); setError(''); setMessage(''); }} className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${mode === 'grant' ? 'bg-green-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'}`}>Grant access</button>
+        <button type="button" onClick={() => { setMode('grant'); setError(''); setMessage(''); }} className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${mode === 'grant' ? 'bg-blue-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'}`}>Grant access</button>
         <button type="button" onClick={() => { setMode('revoke'); setError(''); setMessage(''); }} className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors ${mode === 'revoke' ? 'bg-red-500 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10'}`}>Revoke access</button>
       </div>
       {error && <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p>}
-      {message && <p className="flex items-center gap-2 rounded-md bg-green-50 p-3 text-sm text-green-700"><Check className="h-4 w-4" />{message}</p>}
+      {message && <p className="flex items-center gap-2 rounded-md bg-blue-50 p-3 text-sm text-blue-700"><Check className="h-4 w-4" />{message}</p>}
       
       {/* User Search with Improved Dropdown */}
       <div className="relative" ref={userDropdownRef}>
@@ -146,7 +146,7 @@ export default function GrantAccessPage() {
                   onClick={() => selectUser(user)}
                   className="flex items-center gap-3 w-full px-3 py-3 text-left text-sm hover:bg-slate-50 dark:hover:bg-white/5 transition-colors border-b border-slate-100 dark:border-white/5 last:border-0"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
                     <User className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -200,7 +200,7 @@ export default function GrantAccessPage() {
                   onClick={() => selectResource(resource)}
                   className="flex items-center gap-3 w-full px-3 py-3 text-left text-sm hover:bg-slate-50 dark:hover:bg-white/5 transition-colors border-b border-slate-100 dark:border-white/5 last:border-0"
                 >
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
                     <FileText className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -218,7 +218,7 @@ export default function GrantAccessPage() {
       
       <button 
         disabled={saving || !form.userId || !form.resourceId} 
-        className={`inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 transition-colors w-full sm:w-auto ${mode === 'grant' ? 'bg-green-500 text-white hover:bg-green-600' : 'bg-red-500 text-white hover:bg-red-600'}`}
+        className={`inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50 transition-colors w-full sm:w-auto ${mode === 'grant' ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-red-500 text-white hover:bg-red-600'}`}
       >
         {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserCheck className="h-4 w-4" />}
         {saving ? (mode === 'grant' ? 'Granting...' : 'Revoking...') : mode === 'grant' ? 'Grant Access' : 'Revoke Access'}

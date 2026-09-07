@@ -151,7 +151,7 @@ function HomeContent() {
             <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
               <div role="tablist" aria-label="Choose resource type" className="relative grid h-10 flex-1 grid-cols-2 rounded-xl bg-[#EAF1FB] p-1 sm:w-48 sm:flex-none">
                 <span aria-hidden="true" className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-transform duration-300 ease-out ${resourceType === 'free' ? 'translate-x-1' : 'translate-x-[calc(100%+3px)]'}`} />
-                <button type="button" role="tab" aria-selected={resourceType === 'free'} onClick={() => setResourceType('free')} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceType === 'free' ? 'text-emerald-700' : 'text-[#64748B]'}`}>Free</button>
+                <button type="button" role="tab" aria-selected={resourceType === 'free'} onClick={() => setResourceType('free')} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceType === 'free' ? 'text-blue-700' : 'text-[#64748B]'}`}>Free</button>
                 <button type="button" role="tab" aria-selected={resourceType === 'paid'} onClick={() => setResourceType('paid')} className={`relative z-10 rounded-lg text-sm font-bold transition-colors ${resourceType === 'paid' ? 'text-[var(--accent)]' : 'text-[#64748B]'}`}>Paid</button>
               </div>
             <div className="relative z-40 shrink-0">

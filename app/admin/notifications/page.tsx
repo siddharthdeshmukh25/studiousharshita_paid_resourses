@@ -38,7 +38,7 @@ const TYPES = [
 ];
 
 const TYPE_META: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
-  new_order: { label: 'New order', className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300', icon: <IndianRupee className="h-4 w-4" /> },
+  new_order: { label: 'New order', className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', icon: <IndianRupee className="h-4 w-4" /> },
   payment_failed: { label: 'Payment failed', className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300', icon: <CircleAlert className="h-4 w-4" /> },
   new_ticket: { label: 'Support ticket', className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', icon: <LifeBuoy className="h-4 w-4" /> },
   ticket_reply: { label: 'Ticket reply', className: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300', icon: <MessageSquare className="h-4 w-4" /> },
@@ -131,7 +131,7 @@ export default function AdminNotificationsPage() {
         {/* Header */}
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[.16em] text-green-600 dark:text-green-400">
+            <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">
               Activity
             </p>
             <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">
@@ -145,7 +145,7 @@ export default function AdminNotificationsPage() {
             <button
               onClick={markAllRead}
               disabled={markingAll}
-              className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-green-700 disabled:opacity-60 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition-colors"
             >
               {markingAll ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCheck className="h-4 w-4" />}
               Mark all as read ({unreadCount})
@@ -161,7 +161,7 @@ export default function AdminNotificationsPage() {
               onClick={() => setTypeFilter(type.value)}
               className={`px-3.5 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
                 typeFilter === type.value
-                  ? 'bg-green-600 text-white border-green-600'
+                  ? 'bg-blue-600 text-white border-blue-600'
                   : 'bg-white text-gray-700 border-gray-200 dark:bg-[#0d1413] dark:text-gray-300 dark:border-gray-700'
               }`}
             >
@@ -194,7 +194,7 @@ export default function AdminNotificationsPage() {
                     key={notification._id}
                     onClick={() => markRead(notification)}
                     className={`w-full flex items-start gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-[#0d1413] ${
-                      !notification.read ? 'bg-green-50/50 dark:bg-green-900/10' : ''
+                      !notification.read ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
                     }`}
                   >
                     <span className={`mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-full ${meta.className}`}>
@@ -213,7 +213,7 @@ export default function AdminNotificationsPage() {
                       </span>
                     </span>
                     <span className="flex flex-col items-end gap-2 flex-shrink-0">
-                      {!notification.read && <span className="h-2.5 w-2.5 rounded-full bg-green-500" />}
+                      {!notification.read && <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />}
                       {notification.link && <ArrowRight className="h-4 w-4 text-gray-400" />}
                     </span>
                   </button>
