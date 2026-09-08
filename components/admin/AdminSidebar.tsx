@@ -18,7 +18,6 @@ import {
   X,
   Sun,
   Moon,
-  Lock,
   FileText
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -29,7 +28,7 @@ function useThemeSafe() {
     return useTheme();
   } catch {
     return {
-      theme: 'light' as const,
+      theme: 'dark' as const,
       toggleTheme: () => {},
       setTheme: () => {}
     };
@@ -61,7 +60,6 @@ const navItems: NavItem[] = [
 export default function AdminSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [showLockMessage, setShowLockMessage] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
@@ -190,10 +188,10 @@ export default function AdminSidebar() {
           ))}
         </nav>
 
-        {/* Theme lock indicator */}
-        <div className="admin-sidebar-footer p-3 relative">
+        {/* Theme toggle */}
+        <div className="admin-sidebar-footer p-3">
           <button
-            onClick={() => setShowLockMessage(!showLockMessage)}
+            onClick={toggleTheme}
             className={`
               w-full flex items-center gap-3 px-3 py-2.5 rounded-lg
               text-gray-600 dark:text-gray-400
@@ -201,30 +199,15 @@ export default function AdminSidebar() {
               transition-all duration-200
               ${isCollapsed ? 'justify-center' : ''}
             `}
-            title="Dark mode is locked for admin panel"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            <Moon className="h-5 w-5" />
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             {!isCollapsed && (
               <span className="font-medium text-[15px]">
-                Dark Mode
+                {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
               </span>
             )}
-            <Lock className="h-4 w-4 text-blue-500 ml-auto" />
           </button>
-          
-          {/* Lock message popup */}
-          {showLockMessage && (
-            <div className="absolute bottom-full left-0 mb-2 w-64 p-3 rounded-lg bg-gray-800 text-white text-xs shadow-lg z-50">
-              <p className="font-semibold mb-1">⚠️ Feature Under Development</p>
-              <p className="text-gray-300">Light mode toggle is currently disabled for the admin panel. This feature will be available in a future update.</p>
-              <button
-                onClick={() => setShowLockMessage(false)}
-                className="mt-2 text-blue-400 hover:text-blue-300 font-medium"
-              >
-                Got it
-              </button>
-            </div>
-          )}
 
           {/* Developer Notes Button */}
           <button

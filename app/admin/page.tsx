@@ -642,18 +642,18 @@ function AdminPageContent() {
     <AdminLayout>
       <div id="dashboard-overview" className="space-y-6 scroll-mt-24">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Workspace overview</p><h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Admin Dashboard</h1><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">A quick view of how your store is performing today.</p></div>
+          <div><p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Workspace overview</p><h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Admin Dashboard</h1><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">A quick view of how your store is performing today.</p></div>
           <button onClick={handleLogout} disabled={loggingOut} className="inline-flex items-center gap-2 self-start rounded-md border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"><LogOut className="h-4 w-4" />{loggingOut ? 'Logging out…' : 'Logout'}</button>
         </div>
         {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">{error}</div>}
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><KPICard title="Total revenue" value={`₹${stats.totalRevenue}`} icon={<IndianRupee className="h-5 w-5" />} /><KPICard title="Registered users" value={stats.totalUsers} icon={<Users className="h-5 w-5" />} /><KPICard title="Live resources" value={stats.totalResources} icon={<Package className="h-5 w-5" />} /><KPICard title="Orders" value={stats.totalOrders ?? 0} icon={<UserCheck className="h-5 w-5" />} /></div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4"><KPICard title="Total revenue" value={`₹${stats.totalRevenue}`} icon={<IndianRupee className="h-5 w-5" />} /><KPICard title="Registered users" value={stats.totalUsers} icon={<Users className="h-5 w-5" />} /><KPICard title="Live resources" value={stats.totalResources} icon={<Package className="h-5 w-5" />} /><KPICard title="Orders" value={stats.totalOrders ?? 0} icon={<UserCheck className="h-5 w-5" />} /></div>
         <section className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900"><div><h2 className="font-semibold text-gray-900 dark:text-gray-100">Manage workspace</h2><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Open a focused section to manage your store.</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><button onClick={() => window.location.href = '/admin/resources'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Package className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Resources</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Add and edit products</p></button><button onClick={() => window.location.href = '/admin/users'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Users className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Users</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Profiles and activity</p></button><button onClick={() => window.location.href = '/admin/analytics'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><IndianRupee className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Analytics</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Revenue and traffic</p></button><button onClick={() => setShowCouponModal(true)} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Plus className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Create coupon</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Create a promotion</p></button></div></section>
       </div>
       <div className="hidden">
           {/* Header */}
           <div className="flex items-start justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">
                 Admin Dashboard
               </h1>
               <p className="text-base text-gray-600 dark:text-gray-400 font-normal">
@@ -1078,7 +1078,7 @@ function AdminPageContent() {
             <div className="p-6 space-y-6">
               {/* Payment Gateway Selection */}
               <div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <button
                     type="button"
                     onClick={() => setTempPaymentSettings({ ...tempPaymentSettings, gateway: 'razorpay' })}

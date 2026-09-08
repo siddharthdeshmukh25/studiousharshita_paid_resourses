@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Make the Tailwind `dark:` variant follow the `.dark` class on <html>
+   (managed by ThemeContext) instead of the OS prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* While ThemeContext flips the theme, disable all transitions for one frame so
+   the page background, sidebar, navbar, cards and icons change simultaneously
+   instead of animating at different speeds (staggered flash). */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: none !important;
+}
+
 :root {
   /* Theme system: accent vars are overridden at runtime by SiteThemeApplier
      (admin can switch between Blue (original) and Green (new) presets or a custom color). */

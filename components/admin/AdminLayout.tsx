@@ -17,7 +17,7 @@ export default function AdminLayout({ children, showNavbar = true }: AdminLayout
         <AdminSidebar />
         
         {/* Main content area */}
-        <main className="flex-1 min-h-screen lg:ml-0 flex flex-col">
+        <main className="flex-1 min-w-0 min-h-screen lg:ml-0 flex flex-col">
           {showNavbar && <AdminNavbar />}
           <div className="admin-content flex-1 w-full max-w-[1540px] mx-auto px-4 py-5 sm:px-5 sm:py-6 lg:px-10 lg:py-8">
             {children}

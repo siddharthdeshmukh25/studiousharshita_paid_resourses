@@ -13,6 +13,24 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+// Flip the `dark` class on <html> with transitions suppressed for one frame, so
+// the page background, sidebar, navbar and icons all switch at the same instant
+// instead of animating at different speeds (which shows a staggered flash where
+// one area changes before the others).
+function applyThemeClass(theme: Theme) {
+  const root = document.documentElement;
+  root.classList.add('theme-switching');
+  root.classList.toggle('dark', theme === 'dark');
+  // Force a reflow so the suppression applies before the class change paints,
+  // then release it on the next frame.
+  void root.offsetWidth;
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      root.classList.remove('theme-switching');
+    });
+  });
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
@@ -21,52 +39,34 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const isLoadingTheme = useRef(true);
 
   useEffect(() => {
-    // Force dark mode for admin pages
-    if (isAdmin) {
-      isLoadingTheme.current = true;
-      setThemeState('dark');
-      document.documentElement.classList.add('dark');
-      localStorage.setItem(storageKey, 'dark');
-      return;
-    }
-    
+    // Apply the saved theme for the current area (admin vs public site).
     const savedTheme = localStorage.getItem(storageKey) === 'dark' ? 'dark' : 'light';
     isLoadingTheme.current = true;
     setThemeState(savedTheme);
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-  }, [storageKey, isAdmin]);
+    applyThemeClass(savedTheme);
+  }, [storageKey]);
 
   useEffect(() => {
     if (isLoadingTheme.current) {
       isLoadingTheme.current = false;
       return;
     }
-    document.documentElement.classList.toggle('dark', theme === 'dark');
+    applyThemeClass(theme);
     localStorage.setItem(storageKey, theme);
   }, [storageKey, theme]);
 
   const toggleTheme = () => {
-    // Prevent theme toggle for admin pages
-    if (isAdmin) {
-      return;
-    }
-    
     setThemeState((currentTheme) => {
       const nextTheme: Theme = currentTheme === 'light' ? 'dark' : 'light';
-      document.documentElement.classList.toggle('dark', nextTheme === 'dark');
+      applyThemeClass(nextTheme);
       localStorage.setItem(storageKey, nextTheme);
       return nextTheme;
     });
   };
 
   const setTheme = (newTheme: Theme) => {
-    // Prevent theme change for admin pages
-    if (isAdmin) {
-      return;
-    }
-    
     setThemeState(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    applyThemeClass(newTheme);
     localStorage.setItem(storageKey, newTheme);
   };
 

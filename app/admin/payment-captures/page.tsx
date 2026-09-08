@@ -136,7 +136,7 @@ export default function PaymentCapturesPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Finance</p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Payment Captures</h1>
+            <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Payment Captures</h1>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               Authorized Razorpay payments awaiting capture. Retry failed or pending captures manually.
             </p>

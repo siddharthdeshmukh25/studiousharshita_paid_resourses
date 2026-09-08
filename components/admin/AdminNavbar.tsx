@@ -134,9 +134,9 @@ export default function AdminNavbar() {
 
   return (
     <header className="admin-navbar sticky top-0 z-30 backdrop-blur">
-      <div className="flex h-[76px] items-center justify-between gap-3 px-5 sm:px-7">
-        {/* Search */}
-        <div className="flex-1 max-w-[290px] sm:max-w-[330px]">
+      <div className="flex h-[76px] items-center justify-between gap-3 pl-16 pr-5 lg:px-7">
+        {/* Search (hidden on small screens — not useful in mobile view) */}
+        <div className="hidden sm:flex flex-1 max-w-[290px] sm:max-w-[330px]">
           <form className="relative" onSubmit={submitSearch}>
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
@@ -149,8 +149,8 @@ export default function AdminNavbar() {
           </form>
         </div>
 
-        {/* Right side actions */}
-        <div className="flex items-center gap-3">
+        {/* Right side actions (ml-auto keeps them right-aligned on mobile, where search is hidden) */}
+        <div className="ml-auto flex items-center gap-3">
           {/* Notifications */}
           <div className="relative" ref={dropdownRef}>
             <button
@@ -170,9 +170,9 @@ export default function AdminNavbar() {
             </button>
 
             {showNotifications && (
-              <div className="admin-popover absolute right-0 mt-2 w-80 sm:w-96 overflow-hidden rounded-lg z-50">
-                <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 px-4 py-3">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Notifications</p>
+              <div className="admin-popover absolute right-0 mt-2 w-72 max-w-[calc(100vw-2rem)] sm:w-96 overflow-hidden rounded-lg z-50">
+                <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 px-3 py-2 sm:px-4 sm:py-3">
+                  <p className="text-xs font-semibold text-gray-900 dark:text-gray-100 sm:text-sm">Notifications</p>
                   <div className="flex items-center gap-2">
                     {unreadCount > 0 && (
                       <button
@@ -187,12 +187,12 @@ export default function AdminNavbar() {
                   </div>
                 </div>
 
-                <div className="max-h-80 overflow-y-auto">
+                <div className="max-h-72 overflow-y-auto sm:max-h-80">
                   {loadingNotifications ? (
-                    <div className="p-8 text-center"><Loader2 className="h-5 w-5 animate-spin text-gray-400 mx-auto" /></div>
+                    <div className="p-6 text-center"><Loader2 className="h-5 w-5 animate-spin text-gray-400 mx-auto" /></div>
                   ) : notifications.length === 0 ? (
-                    <div className="p-8 text-center">
-                      <Bell className="h-8 w-8 text-gray-300 mx-auto mb-2" />
+                    <div className="p-6 text-center">
+                      <Bell className="h-7 w-7 text-gray-300 mx-auto mb-2" />
                       <p className="text-sm text-gray-500 dark:text-gray-400">No notifications yet</p>
                     </div>
                   ) : (
@@ -200,18 +200,18 @@ export default function AdminNavbar() {
                       <button
                         key={notification._id}
                         onClick={() => openNotification(notification)}
-                        className={`w-full flex items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${
+                        className={`w-full flex items-start gap-2 px-3 py-2 text-left transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 sm:gap-3 sm:px-4 sm:py-3 ${
                           !notification.read ? 'bg-blue-50/60 dark:bg-blue-900/10' : ''
                         }`}
                       >
-                        <span className={`mt-0.5 grid h-7 w-7 flex-shrink-0 place-items-center rounded-full text-[10px] font-bold uppercase ${TYPE_ICON_CLASS[notification.type] || TYPE_ICON_CLASS.system}`}>
+                        <span className={`mt-0.5 grid h-6 w-6 flex-shrink-0 place-items-center rounded-full text-[10px] font-bold uppercase sm:h-7 sm:w-7 ${TYPE_ICON_CLASS[notification.type] || TYPE_ICON_CLASS.system}`}>
                           {notification.type === 'new_order' ? '₹' : notification.type.includes('ticket') || notification.type.includes('contact') ? '!' : '•'}
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
+                          <span className="block text-xs font-semibold text-gray-900 dark:text-gray-100 truncate sm:text-sm">
                             {notification.title}
                           </span>
-                          <span className="block text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
+                          <span className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1 sm:line-clamp-2">
                             {notification.message}
                           </span>
                           <span className="mt-1 block text-[11px] text-gray-400 dark:text-gray-500">
@@ -224,13 +224,13 @@ export default function AdminNavbar() {
                   )}
                 </div>
 
-                <div className="border-t border-gray-100 dark:border-gray-800 p-2">
+                <div className="border-t border-gray-100 dark:border-gray-800 p-1.5 sm:p-2">
                   <button
                     onClick={() => {
                       setShowNotifications(false);
                       router.push('/admin/notifications');
                     }}
-                    className="w-full flex items-center justify-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors"
+                    className="w-full flex items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors sm:py-2 sm:text-sm"
                   >
                     View all notifications
                     <ArrowRight className="h-3.5 w-3.5" />

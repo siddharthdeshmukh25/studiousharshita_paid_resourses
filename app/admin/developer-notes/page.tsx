@@ -183,7 +183,7 @@ export default function DeveloperNotesPage() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">Developer Tools</p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Developer Notes</h1>
+            <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">Developer Notes</h1>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
               Keep track of features, ideas and tasks for your project.
             </p>
@@ -218,8 +218,7 @@ export default function DeveloperNotesPage() {
           ))}
         </div>
 
-        {/* Create Note Card */}
-        <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-[#111111]">
+        {/* Create Note Card */}          <div className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-[#111111] sm:p-5">
           <div className="flex items-center gap-2 mb-4">
             <div className="h-2 w-2 rounded-full bg-blue-500"></div>
             <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Create a new note</h2>
@@ -328,14 +327,14 @@ export default function DeveloperNotesPage() {
               return (
                 <div
                   key={note._id}
-                  className={`rounded-xl border p-5 transition-all ${
+                  className={`rounded-xl border p-3.5 transition-all sm:p-5 ${
                     note.status === 'done'
                       ? 'bg-blue-50/50 border-blue-200 dark:bg-blue-900/10 dark:border-blue-800/50'
                       : 'bg-white border-gray-200 dark:bg-[#111111] dark:border-gray-700'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3 flex-1">
+                    <div className="flex items-start gap-3 flex-1 min-w-0">
                       <button onClick={() => toggleStatus(note)} className="mt-0.5 flex-shrink-0" title="Cycle status">
                         {note.status === 'done' ? (
                           <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -370,7 +369,7 @@ export default function DeveloperNotesPage() {
                             </div>
                           </div>
                         ) : (
-                          <p className={`text-sm leading-relaxed ${
+                          <p className={`text-sm leading-relaxed break-words ${
                             note.status === 'done'
                               ? 'line-through text-gray-500 dark:text-gray-400'
                               : 'text-gray-900 dark:text-gray-100'
@@ -414,7 +413,7 @@ export default function DeveloperNotesPage() {
                         {!isEditing && (
                           <button
                             onClick={() => { setEditingId(note._id); setEditContent(note.content); }}
-                            className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1"
+                            className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1.5 sm:p-1"
                             title="Edit note"
                           >
                             <Pencil className="h-4 w-4" />
@@ -422,7 +421,7 @@ export default function DeveloperNotesPage() {
                         )}
                         <button
                           onClick={() => deleteNote(note._id)}
-                          className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1"
+                          className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1.5 sm:p-1"
                           title="Delete note"
                         >
                           <Trash2 className="h-4 w-4" />

@@ -346,23 +346,32 @@ function CheckoutPageContent() {
                   </div>
                 )}
 
-                <button
-                  onClick={handleCheckout}
-                  disabled={checkoutLoading}
-                  className="mt-6 w-full bg-blue-600 text-white py-4 rounded-xl text-lg font-semibold flex items-center justify-center gap-3 transition-colors hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {checkoutLoading ? (
-                    <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      <span>Processing…</span>
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="h-5 w-5" />
-                      <span>Pay ₹{finalAmount.toFixed(2)} securely</span>
-                    </>
-                  )}
-                </button>
+                <div className="flex items-center justify-between mt-6">
+                  <button
+                    onClick={() => router.push('/support')}
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1.5 transition-colors"
+                  >
+                    <LifeBuoy className="h-4 w-4" />
+                    Need help?
+                  </button>
+                  <button
+                    onClick={handleCheckout}
+                    disabled={checkoutLoading}
+                    className="bg-blue-600 text-white py-3 px-6 rounded-xl text-base font-semibold flex items-center justify-center gap-2 transition-colors hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {checkoutLoading ? (
+                      <>
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        <span>Processing…</span>
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="h-5 w-5" />
+                        <span>Pay ₹{finalAmount.toFixed(2)}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
 
                 <p className="mt-4 text-sm text-gray-500 text-center leading-relaxed">
                   By completing this purchase you agree to our{' '}

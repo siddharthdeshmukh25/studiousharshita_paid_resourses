@@ -134,7 +134,7 @@ export default function AdminNotificationsPage() {
             <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">
               Activity
             </p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">
+            <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">
               Notifications
             </h1>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -145,7 +145,7 @@ export default function AdminNotificationsPage() {
             <button
               onClick={markAllRead}
               disabled={markingAll}
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-xs sm:px-4 sm:py-2.5 sm:text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60 transition-colors"
             >
               {markingAll ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCheck className="h-4 w-4" />}
               Mark all as read ({unreadCount})
@@ -159,7 +159,7 @@ export default function AdminNotificationsPage() {
             <button
               key={type.value}
               onClick={() => setTypeFilter(type.value)}
-              className={`px-3.5 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+              className={`px-2.5 py-1 rounded-md text-xs sm:px-3.5 sm:py-1.5 sm:rounded-lg sm:text-sm font-medium border transition-colors ${
                 typeFilter === type.value
                   ? 'bg-blue-600 text-white border-blue-600'
                   : 'bg-white text-gray-700 border-gray-200 dark:bg-[#0d1413] dark:text-gray-300 dark:border-gray-700'
@@ -193,11 +193,11 @@ export default function AdminNotificationsPage() {
                   <button
                     key={notification._id}
                     onClick={() => markRead(notification)}
-                    className={`w-full flex items-start gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-[#0d1413] ${
+                    className={`w-full flex items-start gap-3 px-3.5 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-[#0d1413] sm:gap-4 sm:px-5 sm:py-4 ${
                       !notification.read ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
                     }`}
                   >
-                    <span className={`mt-0.5 grid h-9 w-9 flex-shrink-0 place-items-center rounded-full ${meta.className}`}>
+                    <span className={`mt-0.5 grid h-8 w-8 flex-shrink-0 place-items-center rounded-full sm:h-9 sm:w-9 ${meta.className}`}>
                       {meta.icon}
                     </span>
                     <span className="min-w-0 flex-1">

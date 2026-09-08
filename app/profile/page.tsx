@@ -209,7 +209,6 @@ export default function ProfilePage() {
             </button>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -554,8 +553,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

@@ -310,7 +310,7 @@ function ResourcesPageContent() {
         {/* Header */}
         <div className="flex items-start justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-2 tracking-tight">
               Resources
             </h1>
             <p className="text-base text-gray-600 dark:text-gray-400 font-normal">
@@ -319,9 +319,9 @@ function ResourcesPageContent() {
           </div>
           <button
             onClick={() => { setEditingResource(null); setNewResource(createEmptyNewResource()); setResourceAccess('paid'); setShowAddModal(true); }}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm transition-all"
+            className="flex items-center gap-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium text-xs px-3 py-2 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm transition-all"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             <span>Add Resource</span>
           </button>
         </div>

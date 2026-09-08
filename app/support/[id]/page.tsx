@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
@@ -51,6 +51,7 @@ export default function TicketDetailPage() {
   const [reply, setReply] = useState('');
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const conversationRef = useRef<HTMLDivElement>(null);
 
   const loadTicket = async () => {
     try {
@@ -71,6 +72,11 @@ export default function TicketDetailPage() {
       return () => clearTimeout(timer);
     }
   }, [params.id]);
+
+  // Keep the chat scrolled to the newest message.
+  useEffect(() => {
+    conversationRef.current?.scrollTo({ top: conversationRef.current.scrollHeight });
+  }, [ticket]);
 
   const handleReply = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,7 +105,6 @@ export default function TicketDetailPage() {
       <div className="min-h-screen flex flex-col bg-gray-50">
         <Navbar />
         <div className="flex-1 grid place-items-center"><Loader2 className="h-8 w-8 animate-spin text-gray-400" /></div>
-        <Footer />
       </div>
     );
   }
@@ -116,7 +121,6 @@ export default function TicketDetailPage() {
             </button>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -128,107 +132,107 @@ export default function TicketDetailPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="h-dvh flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
       <Navbar />
 
-      <main className="flex-1 py-8 md:py-12">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back */}
-          <button
-            onClick={() => router.push('/support')}
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 mb-6"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to support center
-          </button>
+      {/* Chat layout: conversation scrolls, composer stays pinned at the bottom */}
+      <main className="flex-1 flex flex-col min-h-0 w-full max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-3 md:py-8">
+        {/* Back */}
+        <button
+          onClick={() => router.push('/support')}
+          className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 mb-3 md:mb-4 transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to support center
+        </button>
 
-          {/* Ticket header */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500 mb-1">
-                  Ticket · {ticket.category.replace('_', ' ')}
+        {/* Ticket header */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/60 shadow-sm p-3 md:p-4 mb-3 md:mb-4 flex-shrink-0">
+          <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
+            <div className="min-w-0">
+              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1 md:mb-1.5">
+                Ticket · {ticket.category.replace('_', ' ')}
+              </p>
+              <h1 className="text-sm md:text-lg font-semibold text-gray-900">{ticket.subject}</h1>
+              {ticket.orderId && (
+                <p className="mt-1 text-xs text-gray-500">
+                  Order ID: <span className="font-mono text-[10px] bg-gray-100 px-2 py-0.5 rounded">{ticket.orderId}</span>
                 </p>
-                <h1 className="text-xl md:text-2xl font-bold text-gray-900">{ticket.subject}</h1>
-                {ticket.orderId && (
-                  <p className="mt-1 text-sm text-gray-500">
-                    Order ID: <span className="font-mono">{ticket.orderId}</span>
-                  </p>
-                )}
-              </div>
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold ${meta.className}`}>
-                {meta.icon}
-                {meta.label}
-              </span>
+              )}
             </div>
+            <span className={`inline-flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 rounded-full text-[10px] md:text-xs font-semibold ${meta.className}`}>
+              {meta.icon}
+              {meta.label}
+            </span>
           </div>
+        </div>
 
-          {/* Conversation */}
-          <div className="space-y-4 mb-8">
-            {allMessages.map((msg, index) => {
-              const isUser = msg.author === 'user';
-              return (
-                <div key={index} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] rounded-2xl p-4 ${isUser
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white border border-gray-200 shadow-sm text-gray-900'
-                  }`}>
-                    <div className={`flex items-center gap-2 mb-2 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
-                      {isUser ? <User className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
-                      <span className="text-xs font-semibold uppercase tracking-wide">
-                        {isUser ? (session?.user?.name || 'You') : 'Support team'}
-                      </span>
-                      <span className="text-xs opacity-80">
-                        {new Date(msg.createdAt).toLocaleString('en-IN', {
-                          day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit',
-                        })}
-                      </span>
-                    </div>
-                    <p className={`text-base leading-relaxed whitespace-pre-wrap ${isUser ? 'text-white' : 'text-gray-800'}`}>
-                      {msg.text}
-                    </p>
+        {/* Conversation (scrollable) */}
+        <div ref={conversationRef} className="flex-1 min-h-0 overflow-y-auto space-y-3 md:space-y-4 mb-3 md:mb-4 custom-scrollbar">
+          {allMessages.map((msg, index) => {
+            const isUser = msg.author === 'user';
+            return (
+              <div key={index} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[90%] md:max-w-[85%] rounded-xl md:rounded-2xl px-3 md:px-5 py-2 md:py-3 shadow-sm ${isUser
+                  ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white'
+                  : 'bg-white border border-gray-200/60 text-gray-900'
+                }`}>
+                  <div className={`flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
+                    {isUser ? <User className="h-3.5 w-3.5 md:h-4 md:w-4" /> : <ShieldCheck className="h-3.5 w-3.5 md:h-4 md:w-4" />}
+                    <span className="text-[10px] md:text-xs font-semibold">
+                      {isUser ? (session?.user?.name || 'You') : 'Support team'}
+                    </span>
+                    <span className="text-[10px] md:text-xs opacity-70">
+                      {new Date(msg.createdAt).toLocaleString('en-IN', {
+                        day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                  <p className={`text-xs md:text-sm leading-relaxed whitespace-pre-wrap ${isUser ? 'text-white' : 'text-gray-800'}`}>
+                    {msg.text}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Reply box — pinned at the bottom */}
+        <div className="flex-shrink-0 -mx-3 px-3 sm:mx-0 sm:px-0 pb-2 md:pb-0">
+          {ticket.status !== 'closed' ? (
+            <form onSubmit={handleReply} className="bg-white rounded-xl border border-gray-200 p-2 md:p-3">
+              {sendError && <div className="mb-2 md:mb-3 p-2 md:p-3 bg-red-50 border border-red-200 rounded-lg text-xs md:text-sm text-red-700">{sendError}</div>}
+              <div className="flex items-end gap-2">
+                <div className="flex-1 relative">
+                  <textarea
+                    id="reply-text"
+                    value={reply}
+                    onChange={(e) => setReply(e.target.value)}
+                    placeholder="Write your reply…"
+                    rows={2}
+                    maxLength={500}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 md:px-4 py-2 md:py-3 pr-10 md:pr-12 text-xs md:text-sm text-gray-900 outline-none focus:border-blue-500 resize-none"
+                  />
+                  <div className="absolute bottom-2 right-2 text-[10px] md:text-xs text-gray-400">
+                    {reply.length}/500
                   </div>
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Reply box */}
-          {ticket.status !== 'closed' ? (
-            <form onSubmit={handleReply} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-              <label htmlFor="reply-text" className="block text-sm font-semibold text-gray-900 mb-2">
-                Add a message
-              </label>
-              {sendError && <div className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700">{sendError}</div>}
-              <textarea
-                id="reply-text"
-                value={reply}
-                onChange={(e) => setReply(e.target.value)}
-                placeholder="Write your reply…"
-                rows={4}
-                maxLength={5000}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-y"
-              />
-              <div className="flex justify-end mt-3">
                 <button
                   type="submit"
                   disabled={sending || !reply.trim()}
-                  className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-lg text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="flex-shrink-0 h-10 md:h-11 w-10 md:w-11 rounded-lg bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {sending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
-                  Send message
+                  {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </button>
               </div>
             </form>
           ) : (
-            <div className="bg-gray-100 border border-gray-200 rounded-2xl p-6 text-center">
-              <p className="text-base text-gray-600">This ticket is closed. Open a new ticket if you need further help.</p>
+            <div className="bg-white border border-gray-200 rounded-xl p-3 md:p-4 text-center">
+              <p className="text-xs md:text-sm text-gray-600">This ticket is closed. Open a new ticket if you need further help.</p>
             </div>
           )}
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

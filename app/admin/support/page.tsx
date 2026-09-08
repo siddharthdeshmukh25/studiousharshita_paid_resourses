@@ -216,12 +216,12 @@ function AdminSupportPageContent() {
   };
 
   const statusChips = (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1.5 sm:gap-2">
       {['all', ...STATUS_OPTIONS].map((s) => (
         <button
           key={s}
           onClick={() => setStatusFilter(s)}
-          className={`px-3.5 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+          className={`px-2 py-1 rounded-md text-xs sm:px-3.5 sm:py-1.5 sm:rounded-lg sm:text-sm font-medium border transition-colors ${
             statusFilter === s
               ? 'bg-blue-600 text-white border-blue-600'
               : 'bg-white text-gray-700 border-gray-200 dark:bg-[#0d1413] dark:text-gray-300 dark:border-gray-700'
@@ -239,7 +239,7 @@ function AdminSupportPageContent() {
         <button
           key={s}
           onClick={() => setSourceFilter(s)}
-          className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+          className={`px-2.5 py-1 rounded-md text-xs sm:px-3 sm:py-1.5 sm:text-sm font-medium transition-colors ${
             sourceFilter === s
               ? 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900'
               : 'text-gray-600 dark:text-gray-400'
@@ -267,7 +267,7 @@ function AdminSupportPageContent() {
             <p className="text-xs font-semibold uppercase tracking-[.16em] text-blue-600 dark:text-blue-400">
               Customer Care
             </p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">
+            <h1 className="mt-1 text-2xl sm:text-3xl font-semibold tracking-[-.045em] text-gray-900 dark:text-gray-100">
               Support Tickets
             </h1>
             <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -282,15 +282,15 @@ function AdminSupportPageContent() {
         {/* Filters */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           {statusChips}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {sourceTabs}
-            <div className="relative">
+            <div className="relative flex-1 min-w-[150px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search tickets…"
-                className="w-56 rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0d1413] dark:text-gray-100"
+                className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-3 text-sm outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0d1413] dark:text-gray-100"
               />
             </div>
           </div>
@@ -304,7 +304,7 @@ function AdminSupportPageContent() {
 
         {/* Ticket list */}
         <section className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-[#080d0d]">
-          <div className="border-b border-gray-200 px-5 py-4 dark:border-gray-700">
+          <div className="border-b border-gray-200 px-4 py-3 dark:border-gray-700 sm:px-5 sm:py-4">
             <h2 className="font-semibold text-gray-900 dark:text-gray-100">
               {tickets.length} {tickets.length === 1 ? 'ticket' : 'tickets'}
             </h2>
@@ -323,7 +323,7 @@ function AdminSupportPageContent() {
                   <button
                     key={ticket._id}
                     onClick={() => openTicket(ticket._id)}
-                    className={`w-full flex items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-gray-50 dark:hover:bg-[#0d1413] ${
+                    className={`w-full flex items-center justify-between gap-3 px-3.5 py-3 text-left transition-colors hover:bg-gray-50 dark:hover:bg-[#0d1413] sm:gap-4 sm:px-5 sm:py-4 ${
                       selectedId === ticket._id ? 'bg-blue-50 dark:bg-blue-900/10' : ''
                     }`}
                   >

@@ -185,7 +185,7 @@ export default function Navbar() {
                 <Search className="h-4 w-4 sm:h-5 sm:w-5" />
               </button>
               {pathname !== '/' && (
-                <button onClick={() => router.back()} aria-label="Go back" className="p-1.5 text-[#64748B] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)] rounded-lg transition-colors">
+                <button onClick={() => router.back()} aria-label="Go back" className="hidden md:block p-1.5 text-[#64748B] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)] rounded-lg transition-colors">
                   <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                 </button>
               )}
