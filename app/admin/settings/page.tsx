@@ -13,24 +13,37 @@ type PaymentSettings = {
   cashfree?: { clientId?: string; clientSecret?: string; hasSecret?: boolean } 
 };
 
-type GoogleDriveSettings = {
-  enabled: boolean;
+type DriveStatus = {
+  connected: boolean;
+  email?: string;
+  scope?: string | null;
+  tokenExpiry?: string | null;
+  accessTokenExpired?: boolean | null;
+  hasRefreshToken?: boolean;
   clientId?: string;
-  clientSecret?: string;
   redirectUri?: string;
-  folderId?: string;
-  hasClientSecret?: boolean;
+};
+
+const DRIVE_ERROR_MESSAGES: Record<string, string> = {
+  login_required: 'Please log in before connecting Google Drive.',
+  missing_credentials: 'Google OAuth credentials are not configured on the server. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to your environment.',
+  no_user: 'No user found. Please log in again.',
+  user_mismatch: 'The Google account you signed in with does not match your session. Please try again.',
+  token_exchange_failed: 'Could not exchange the Google authorization code. Please try again.',
+  oauth_error: 'Google Drive connection was cancelled or failed.',
 };
 
 const blank: PaymentSettings = { gateway: 'cashfree', razorpay: {}, payu: {}, cashfree: {} };
-const blankGoogleDrive: GoogleDriveSettings = { enabled: false, hasClientSecret: false };
 
 type TabType = 'payment' | 'grant-access' | 'google-drive' | 'theme';
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('payment');
   const [settings, setSettings] = useState<PaymentSettings>(blank);
-  const [googleDriveSettings, setGoogleDriveSettings] = useState<GoogleDriveSettings>(blankGoogleDrive);
+  const [driveStatus, setDriveStatus] = useState<DriveStatus | null>(null);
+  const [driveLoading, setDriveLoading] = useState(false);
+  const [driveError, setDriveError] = useState('');
+  const [driveMessage, setDriveMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -56,6 +69,86 @@ export default function SettingsPage() {
       })
       .catch(() => setError('Could not load payment settings.'))
       .finally(() => setLoading(false)); 
+  }, []);
+
+  // ---- Google Drive ----
+
+  const fetchDriveStatus = async () => {
+    try {
+      setDriveLoading(true);
+      setDriveError('');
+      const response = await fetch('/api/google-drive/status');
+      const data = await response.json();
+      if (response.ok && data.connected !== undefined) {
+        setDriveStatus(data);
+      } else {
+        setDriveError(data.error || 'Could not load Google Drive status.');
+      }
+    } catch {
+      setDriveError('Could not load Google Drive status.');
+    } finally {
+      setDriveLoading(false);
+    }
+  };
+
+  const connectDrive = () => {
+    const returnTo = encodeURIComponent('/admin/settings?tab=google-drive');
+    window.location.href = `/api/google-drive/auth?returnTo=${returnTo}`;
+  };
+
+  const disconnectDrive = async () => {
+    try {
+      setDriveLoading(true);
+      setDriveError('');
+      const response = await fetch('/api/google-drive/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ connected: false }),
+      });
+      if (response.ok) {
+        setDriveStatus(prev => (prev ? { ...prev, connected: false, hasRefreshToken: false } : prev));
+        setDriveMessage('Google Drive disconnected successfully.');
+      } else {
+        const data = await response.json();
+        setDriveError(data.error || 'Failed to disconnect Google Drive.');
+      }
+    } catch {
+      setDriveError('Failed to disconnect Google Drive.');
+    } finally {
+      setDriveLoading(false);
+    }
+  };
+
+  // Fetch status whenever the Google Drive tab is opened
+  useEffect(() => {
+    if (activeTab === 'google-drive') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: refetch on tab open
+      void fetchDriveStatus();
+    }
+  }, [activeTab]);
+
+  // Handle the OAuth callback landing back on this page
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    const connected = urlParams.get('google_drive_connected') === 'true';
+    const err = urlParams.get('error');
+
+    if (tab === 'google-drive') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: restore tab after OAuth redirect
+      setActiveTab('google-drive');
+    }
+    if (connected) {
+      void fetchDriveStatus();
+      setDriveMessage('Google Drive connected successfully.');
+      setTimeout(() => setDriveMessage(''), 5000);
+    }
+    if (err) {
+      setDriveError(DRIVE_ERROR_MESSAGES[err] || 'Google Drive connection failed. Please try again.');
+    }
+    if (tab || connected || err) {
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }, []);
 
   const save = async () => { 
@@ -354,91 +447,131 @@ export default function SettingsPage() {
                 <h2 className="font-semibold text-lg">Google Drive Integration</h2>
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                Connect your Google Drive to store and manage resources. Configure OAuth credentials and folder settings.
+                Connect your Google Drive to store and manage resources. Sign in with Google — the server manages OAuth credentials automatically.
               </p>
               
-              <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-slate-50 dark:bg-white/5 rounded-lg gap-3">
-                  <div>
-                    <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100">Connection Status</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      {googleDriveSettings.enabled ? 'Connected' : 'Not connected'}
-                    </p>
-                  </div>
-                  <div className={`px-3 py-1 rounded-full text-xs font-medium self-start sm:self-auto ${
-                    googleDriveSettings.enabled 
-                      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' 
-                      : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+              {driveError && <p className="rounded-md bg-red-50 p-3 text-sm text-red-700 mb-4">{driveError}</p>}
+              {driveMessage && <p className="rounded-md bg-blue-50 p-3 text-sm text-blue-700 flex items-center gap-2 mb-4"><Check className="h-4 w-4" />{driveMessage}</p>}
+
+              {driveLoading ? (
+                <div className="flex justify-center py-10">
+                  <Loader2 className="animate-spin text-blue-600 dark:text-blue-400" />
+                </div>
+              ) : (
+                <>
+                  {/* Connection Status */}
+                  <div className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-lg border ${
+                    driveStatus?.connected
+                      ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-500/30'
+                      : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-gray-700'
                   }`}>
-                    {googleDriveSettings.enabled ? 'Active' : 'Inactive'}
+                    <div className="flex items-center gap-3">
+                      <span className={`w-3 h-3 rounded-full shrink-0 ${driveStatus?.connected ? 'bg-blue-500' : 'bg-gray-400'}`}></span>
+                      <div>
+                        <p className="font-medium text-sm text-gray-900 dark:text-gray-100">
+                          {driveStatus?.connected ? 'Google Drive Connected' : 'Google Drive Not Connected'}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                          {driveStatus?.connected
+                            ? `Connected as ${driveStatus.email || 'your Google account'}`
+                            : 'Connect your Google Drive to enable secure file sharing'}
+                        </p>
+                      </div>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium self-start sm:self-auto ${
+                      driveStatus?.connected
+                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                    }`}>
+                      {driveStatus?.connected ? 'Active' : 'Inactive'}
+                    </span>
                   </div>
-                </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Client ID</label>
-                    <input
-                      value={googleDriveSettings.clientId || ''}
-                      onChange={e => setGoogleDriveSettings({ ...googleDriveSettings, clientId: e.target.value })}
-                      placeholder="Google OAuth Client ID"
-                      className={inputClass}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Client Secret {googleDriveSettings.hasClientSecret && <span className="text-xs font-normal text-slate-500">(saved)</span>}
-                    </label>
-                    <input
-                      type="password"
-                      value={googleDriveSettings.clientSecret || ''}
-                      onChange={e => setGoogleDriveSettings({ ...googleDriveSettings, clientSecret: e.target.value })}
-                      placeholder="Enter new secret to replace"
-                      className={inputClass}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Redirect URI</label>
-                    <input
-                      value={googleDriveSettings.redirectUri || ''}
-                      onChange={e => setGoogleDriveSettings({ ...googleDriveSettings, redirectUri: e.target.value })}
-                      placeholder="https://yourdomain.com/api/auth/callback/google"
-                      className={inputClass}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Default Folder ID</label>
-                    <input
-                      value={googleDriveSettings.folderId || ''}
-                      onChange={e => setGoogleDriveSettings({ ...googleDriveSettings, folderId: e.target.value })}
-                      placeholder="Google Drive Folder ID (optional)"
-                      className={inputClass}
-                    />
-                  </div>
-                </div>
+                  {driveStatus?.connected && (
+                    <>
+                      <div className="grid gap-3 sm:grid-cols-2 mt-4">
+                        <div className="bg-slate-50 dark:bg-white/5 rounded-lg p-4">
+                          <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Connected account</p>
+                          <p className="mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100 break-all">{driveStatus.email}</p>
+                        </div>
+                        <div className="bg-slate-50 dark:bg-white/5 rounded-lg p-4">
+                          <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Access token</p>
+                          <p className={`mt-1 text-sm font-semibold ${driveStatus.hasRefreshToken ? 'text-gray-900 dark:text-gray-100' : 'text-amber-600'}`}>
+                            {driveStatus.hasRefreshToken ? 'Auto-refresh enabled' : 'Refresh token missing — reconnect needed'}
+                          </p>
+                        </div>
+                      </div>
 
-                <div className="flex items-center gap-3 pt-2">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={googleDriveSettings.enabled}
-                      onChange={e => setGoogleDriveSettings({ ...googleDriveSettings, enabled: e.target.checked })}
-                      className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:text-blue-400 dark:focus:ring-blue-500"
-                    />
-                    <span className="text-sm font-medium">Enable Google Drive Integration</span>
-                  </label>
-                </div>
+                      {driveStatus.scope && (
+                        <div className="bg-slate-50 dark:bg-white/5 rounded-lg p-4 mt-3">
+                          <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">Granted permissions</p>
+                          <p className="mt-1 text-xs font-mono text-slate-600 dark:text-slate-300 break-all">{driveStatus.scope}</p>
+                        </div>
+                      )}
+                    </>
+                  )}
 
-                <button
-                  onClick={() => {
-                    setMessage('Google Drive settings saved successfully.');
-                    setTimeout(() => setMessage(''), 3000);
-                  }}
-                  className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 transition-colors w-full sm:w-auto"
-                >
-                  <HardDrive className="h-4 w-4" />
-                  Save Google Drive Settings
-                </button>
-              </div>
+                  {/* Actions */}
+                  <div className="flex flex-col sm:flex-row gap-3 mt-5">
+                    {!driveStatus?.connected ? (
+                      <button
+                        onClick={connectDrive}
+                        className="inline-flex items-center justify-center gap-2.5 rounded-md border-2 border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-800 hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                      >
+                        <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z" />
+                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                          <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18A10.97 10.97 0 001 12c0 1.77.42 3.45 1.18 4.94l3.66-2.84z" />
+                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                        </svg>
+                        Connect with Google
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          onClick={connectDrive}
+                          className="inline-flex items-center justify-center gap-2 rounded-md bg-blue-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 transition-colors"
+                        >
+                          <HardDrive className="h-4 w-4" />
+                          Reconnect
+                        </button>
+                        <button
+                          onClick={disconnectDrive}
+                          disabled={driveLoading}
+                          className="inline-flex items-center justify-center gap-2 rounded-md border border-red-200 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50 transition-colors"
+                        >
+                          Disconnect
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Server configuration */}
+                  <div className="rounded-lg border border-slate-200 dark:border-gray-700 p-4 mt-6 space-y-3">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Server configuration</h3>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div>
+                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Active Client ID (managed by server)</p>
+                        <p className="mt-1 text-sm font-mono text-slate-700 dark:text-slate-300 break-all">
+                          {driveStatus?.clientId || 'Not configured — add GOOGLE_CLIENT_ID to your environment'}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Authorized redirect URI</p>
+                        <p className="mt-1 text-sm font-mono text-slate-700 dark:text-slate-300 break-all">
+                          {driveStatus?.redirectUri || 'Loading…'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-500/30 dark:bg-amber-900/20">
+                      <p className="text-xs leading-relaxed text-amber-800 dark:text-amber-300">
+                        <span className="font-semibold">Keep your connection alive:</span> add the redirect URI above to your Google Cloud Console OAuth client, enable the Google Drive API, and set the OAuth consent screen publishing status to{' '}
+                        <span className="font-semibold">In production</span>. Testing-mode apps get refresh tokens that expire after 7 days.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
             </section>
           )}
         </div>

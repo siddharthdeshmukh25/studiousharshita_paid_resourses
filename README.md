@@ -20,6 +20,38 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Google Drive Integration
+
+The admin connects a Google Drive account with a one-click **Sign in with Google** flow (Admin Settings → Google Drive). The server manages all OAuth credentials via environment variables — no manual Client ID / secret entry in the UI.
+
+### Required environment variables
+
+```
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+```
+
+These are the same OAuth credentials used for Google sign-in (NextAuth). The Google Drive flow requests offline access (`access_type=offline&prompt=consent`) so a refresh token is stored in the `GoogleDriveCredentials` collection and access tokens auto-refresh. The app requests **full Drive access** (`https://www.googleapis.com/auth/drive`) so buyers can be granted read access to any private file, including files uploaded manually — existing connections must reconnect once to pick up the new scope.
+
+### One-time Google Cloud Console setup
+
+1. **Enable the Google Drive API** for your project (APIs & Services → Library → Google Drive API).
+2. **Add the authorized redirect URI** to your OAuth 2.0 Client ID (APIs & Services → Credentials → your Web client):
+   ```
+   {YOUR_ORIGIN}/api/google-drive/auth
+   ```
+   e.g. `http://localhost:3000/api/google-drive/auth` locally.
+3. **Set the OAuth consent screen publishing status to "In production"** (APIs & Services → OAuth consent screen).
+   - Apps left in *Testing* mode get refresh tokens that **expire after 7 days**, so the connection silently drops every week.
+   - In production, tokens stay valid long-term (Google may still revoke them after ~6 months of no usage, or if the user changes their password).
+
+### How it works
+
+- **Connect**: Admin clicks "Connect with Google" → Google consent → callback at `/api/google-drive/auth` stores the tokens and redirects back.
+- **Auto-refresh**: `lib/drive/tokenManager.ts` refreshes the access token whenever it is close to expiry.
+- **On purchase**: `app/api/checkout/route.ts` grants the buyer read permission on the Drive file automatically.
+- **Disconnect**: Removes stored credentials.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
