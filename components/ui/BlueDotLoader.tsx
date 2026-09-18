@@ -8,7 +8,7 @@ export default function BlueDotLoader({ className = '' }: { className?: string }
   return (
     <svg viewBox="0 0 100 100" className={`animate-spin ${className}`} aria-hidden="true">
       {dots.map(([cx, cy, r, opacity], index) => (
-        <circle key={index} cx={cx} cy={cy} r={r} fill="#2563EB" fillOpacity={opacity} />
+        <circle key={index} cx={cx} cy={cy} r={r} fill="var(--accent)" fillOpacity={opacity} />
       ))}
     </svg>
   );

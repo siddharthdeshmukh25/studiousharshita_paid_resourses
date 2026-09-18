@@ -4,6 +4,7 @@ import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Mail, Calendar, MapPin, Globe, Clock, ShoppingBag, Eye, MousePointer2, Smartphone, Monitor, Tablet } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { formatPrice } from '@/lib/format';
 
 type UserDetail = {
   user: {
@@ -202,7 +203,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Total spent</p>
-                <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">₹{data.summary.totalSpent}</p>
+                <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">{formatPrice(data.summary.totalSpent)}</p>
               </div>
               <div className="rounded-lg bg-gray-100 p-2 dark:bg-[#080D0D]">
                 <span className="text-sm font-bold text-lime-600 dark:text-lime-400">₹</span>
@@ -234,7 +235,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
                       <td className="px-4 py-2.5 font-medium text-gray-900 dark:text-gray-100 max-w-[200px] truncate">
                         {order.resourceId?.title || 'Unknown'}
                       </td>
-                      <td className="px-4 py-2.5 text-gray-500 dark:text-gray-400">₹{order.amount}</td>
+                      <td className="px-4 py-2.5 text-gray-500 dark:text-gray-400">{formatPrice(order.amount)}</td>
                       <td className="px-4 py-2.5 text-gray-500 dark:text-gray-400">
                         <span className="font-mono text-[11px]">
                           {order.razorpayOrderId || order.cashfreeOrderId || order.cashfreePaymentId || 'N/A'}

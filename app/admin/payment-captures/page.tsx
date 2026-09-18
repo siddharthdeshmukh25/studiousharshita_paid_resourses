@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { formatPrice } from '@/lib/format';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -211,7 +212,7 @@ export default function PaymentCapturesPage() {
         <div className="grid gap-4 sm:grid-cols-3">
           <KPICard title="Failed captures" value={failed.length} icon={<AlertTriangle className="h-5 w-5" />} />
           <KPICard title="Pending captures" value={pending.length} icon={<Clock className="h-5 w-5" />} />
-          <KPICard title="Amount awaiting capture" value={`₹${amountAtRisk.toLocaleString('en-IN')}`} icon={<IndianRupee className="h-5 w-5" />} />
+          <KPICard title="Amount awaiting capture" value={formatPrice(amountAtRisk)} icon={<IndianRupee className="h-5 w-5" />} />
         </div>
 
         <section className="overflow-hidden rounded-xl border border-slate-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
@@ -291,7 +292,7 @@ export default function PaymentCapturesPage() {
                           <p className="font-mono text-[10px] text-slate-400" title={order.razorpayOrderId}>{shortId(order.razorpayOrderId)}</p>
                         )}
                       </td>
-                      <td className="px-5 py-3 text-right font-medium text-gray-900 dark:text-gray-100">₹{order.amount}</td>
+                      <td className="px-5 py-3 text-right font-medium text-gray-900 dark:text-gray-100">{formatPrice(order.amount)}</td>
                       <td className="px-5 py-3 text-slate-600 dark:text-slate-400">{order.captureAttempts?.length || 0}</td>
                       <td className="px-5 py-3 text-slate-600 dark:text-slate-400">
                         {order.lastCaptureAttempt ? formatDate(order.lastCaptureAttempt) : formatDate(order.createdAt)}

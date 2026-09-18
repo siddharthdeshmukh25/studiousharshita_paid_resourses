@@ -14,49 +14,65 @@ html.theme-switching *::after {
 }
 
 :root {
-  /* Theme system: accent vars are overridden at runtime by SiteThemeApplier
-     (admin can switch between Blue (original) and Green (new) presets or a custom color). */
-  --accent: #2563EB;
-  --accent-deep: #1D4ED8;
-  --accent-soft: #EFF6FF;
-  --accent-soft-2: #DBEAFE;
-  --accent-ring: rgba(37, 99, 235, 0.35);
-  --accent-text: #1D4ED8;
-  --background: #F8FAFC;
-  --foreground: #0F172A;
+  /* Editorial theme tokens — runtime accent override (SiteThemeApplier) stays available for admin. */
+  --accent: #2F5D50;
+  --accent-deep: #234A3F;
+  --accent-soft: #EAF1EE;
+  --accent-soft-2: #DCE9E4;
+  --accent-ring: rgba(47, 93, 80, 0.28);
+  --accent-text: #2F5D50;
+
+  /* Warm ivory paper canvas */
+  --background: #FAF6EF;
+  --foreground: #1A1A1A;
+
+  /* Legacy aliases kept working so unchanged pages keep a coherent look. */
   --ink: var(--accent);
-  --ink-deep: #0F172A;
+  --ink-deep: #1A1A1A;
   --teal: var(--accent);
   --teal-light: var(--accent-soft);
-  --paper-blue: #EFF6FF;
-  --line: #E2E8F0;
+  --paper-blue: #F1EBE0;
+  --line: #E4DCCE;
+
+  /* Pastel editorial palette */
+  --sage: #A8C3B9;
+  --sage-soft: #E4EEE9;
+  --blush: #F2C7C2;
+  --blush-soft: #F9E4E1;
+  --sky: #B8CCE8;
+  --sky-soft: #E7EEF9;
+  --butter: #F2D897;
+  --butter-soft: #FBF3DD;
+  --clay: #E5B48B;
+  --clay-soft: #F7E8DC;
+
   --neon-lime: #84CC16;
-  --neon-lime-light: #FEF9C3;
+  --neon-lime-light: #FBF3DD;
   --neon-lime-dark: #65A30D;
-  --card-bg: #FFFFFF;
-  --card-border: #E2E8F0;
-  --text-primary: #0F172A;
-  --text-secondary: #64748B;
-  --text-muted: #94A3B8;
+  --card-bg: #FFFDF8;
+  --card-border: #E4DCCE;
+  --text-primary: #1A1A1A;
+  --text-secondary: #6B6257;
+  --text-muted: #A29785;
 }
 
 .dark {
-  --background: #0F172A;
-  --foreground: #F8FAFC;
+  --background: #171715;
+  --foreground: #F5F1E8;
   --ink: var(--accent);
-  --ink-deep: #F8FAFC;
+  --ink-deep: #F5F1E8;
   --teal: var(--accent);
-  --teal-light: #0E7490;
-  --paper-blue: #1E293B;
-  --line: #334155;
+  --teal-light: #2F5D50;
+  --paper-blue: #222220;
+  --line: #2E2D29;
   --neon-lime: #84CC16;
-  --neon-lime-light: #1E293B;
+  --neon-lime-light: #222220;
   --neon-lime-dark: #65A30D;
-  --card-bg: #1E293B;
-  --card-border: #334155;
-  --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --text-muted: #64748B;
+  --card-bg: #201F1C;
+  --card-border: #2E2D29;
+  --text-primary: #F5F1E8;
+  --text-secondary: #B5AC9D;
+  --text-muted: #8A8172;
 }
 
 * {
@@ -125,9 +141,92 @@ body {
 
 .academic-surface {
   background:
-    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 30rem),
-    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 25rem),
-    #F8FAFC;
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 30rem),
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--blush) 12%, transparent), transparent 25rem),
+    var(--background);
+}
+
+/* =============================
+   Editorial paper, grid, tape & sticker utilities
+   ============================= */
+
+.font-hand {
+  font-family: var(--font-caveat), 'Segoe Script', cursive;
+  letter-spacing: 0.01em;
+}
+
+.font-serif-display {
+  font-family: var(--font-instrument-serif), Georgia, 'Times New Roman', serif;
+}
+
+/* Notebook / graph-paper background with fine lines. */
+.paper-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Soft grainy paper texture. */
+.paper-texture {
+  background-image: radial-gradient(rgba(26, 26, 26, 0.03) 1px, transparent 1.4px);
+  background-size: 6px 6px;
+}
+
+/* Washi tape strip — rotate via an arbitrary rotate class or inline style. */
+.tape {
+  width: 92px;
+  height: 26px;
+  background: linear-gradient(180deg, rgba(242, 216, 151, 0.85), rgba(242, 216, 151, 0.65));
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.12);
+  opacity: 0.92;
+  clip-path: polygon(2% 8%, 98% 0%, 100% 92%, 0% 100%);
+}
+
+/* Round sticker dot — stars, hearts, badges. */
+.sticker-dot {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  background: var(--butter);
+  box-shadow: 0 1px 3px rgba(26, 26, 26, 0.15);
+  transform: rotate(-8deg);
+  transition: transform 0.25s ease;
+}
+
+.group:hover .sticker-dot { transform: rotate(8deg) scale(1.06); }
+
+/* Gentle fade/slide-in on scroll (JS adds .reveal-visible). */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* Marquee ticker for the hero strip. */
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  animation: ticker-scroll 30s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ticker { animation: none; }
 }
 
 button, a, input {

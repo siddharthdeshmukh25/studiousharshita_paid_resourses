@@ -36,8 +36,8 @@ interface Ticket {
 const STATUS_META: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
   open: { label: 'Open', className: 'bg-[var(--accent-soft-2)] text-[var(--accent-text)]', icon: <Circle className="h-3.5 w-3.5" /> },
   in_progress: { label: 'In progress', className: 'bg-amber-100 text-amber-800', icon: <Clock className="h-3.5 w-3.5" /> },
-  resolved: { label: 'Resolved', className: 'bg-blue-100 text-blue-800', icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
-  closed: { label: 'Closed', className: 'bg-gray-100 text-gray-700', icon: <Circle className="h-3.5 w-3.5" /> },
+  resolved: { label: 'Resolved', className: 'bg-[var(--accent-soft)] text-[var(--accent-deep)]', icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
+  closed: { label: 'Closed', className: 'bg-[var(--accent-soft)] text-[#4A443B]', icon: <Circle className="h-3.5 w-3.5" /> },
 };
 
 export default function TicketDetailPage() {
@@ -102,20 +102,20 @@ export default function TicketDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-[var(--background)]">
         <Navbar />
-        <div className="flex-1 grid place-items-center"><Loader2 className="h-8 w-8 animate-spin text-gray-400" /></div>
+        <div className="flex-1 grid place-items-center"><Loader2 className="h-8 w-8 animate-spin text-[#A29785]" /></div>
       </div>
     );
   }
 
   if (error || !ticket) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-[var(--background)]">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center px-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Ticket not found</h2>
+            <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Ticket not found</h2>
             <button onClick={() => router.push('/support')} className="text-[var(--accent)] hover:underline font-medium">
               Back to support center
             </button>
@@ -132,7 +132,7 @@ export default function TicketDetailPage() {
   ];
 
   return (
-    <div className="h-dvh flex flex-col bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="h-dvh flex flex-col bg-gradient-to-br from-[var(--background)] to-[var(--accent-soft)]">
       <Navbar />
 
       {/* Chat layout: conversation scrolls, composer stays pinned at the bottom */}
@@ -140,23 +140,23 @@ export default function TicketDetailPage() {
         {/* Back */}
         <button
           onClick={() => router.push('/support')}
-          className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 mb-3 md:mb-4 transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-medium text-[#6B6257] hover:text-[#1A1A1A] mb-3 md:mb-4 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to support center
         </button>
 
         {/* Ticket header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl border border-gray-200/60 shadow-sm p-3 md:p-4 mb-3 md:mb-4 flex-shrink-0">
+        <div className="bg-[#FFFDF8]/80 backdrop-blur-sm rounded-xl border border-[var(--line)]/60 shadow-sm p-3 md:p-4 mb-3 md:mb-4 flex-shrink-0">
           <div className="flex flex-wrap items-start justify-between gap-2 md:gap-3">
             <div className="min-w-0">
-              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1 md:mb-1.5">
+              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-[#6B6257] mb-1 md:mb-1.5">
                 Ticket · {ticket.category.replace('_', ' ')}
               </p>
-              <h1 className="text-sm md:text-lg font-semibold text-gray-900">{ticket.subject}</h1>
+              <h1 className="text-sm md:text-lg font-semibold text-[#1A1A1A]">{ticket.subject}</h1>
               {ticket.orderId && (
-                <p className="mt-1 text-xs text-gray-500">
-                  Order ID: <span className="font-mono text-[10px] bg-gray-100 px-2 py-0.5 rounded">{ticket.orderId}</span>
+                <p className="mt-1 text-xs text-[#6B6257]">
+                  Order ID: <span className="font-mono text-[10px] bg-[var(--accent-soft)] px-2 py-0.5 rounded">{ticket.orderId}</span>
                 </p>
               )}
             </div>
@@ -174,10 +174,10 @@ export default function TicketDetailPage() {
             return (
               <div key={index} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[90%] md:max-w-[85%] rounded-xl md:rounded-2xl px-3 md:px-5 py-2 md:py-3 shadow-sm ${isUser
-                  ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white'
-                  : 'bg-white border border-gray-200/60 text-gray-900'
+                  ? 'bg-gradient-to-br from-[var(--accent)] to-[var(--accent-deep)] text-white'
+                  : 'bg-[#FFFDF8] border border-[var(--line)]/60 text-[#1A1A1A]'
                 }`}>
-                  <div className={`flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2 ${isUser ? 'text-blue-100' : 'text-gray-500'}`}>
+                  <div className={`flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2 ${isUser ? 'text-[#FDFBF6]' : 'text-[#6B6257]'}`}>
                     {isUser ? <User className="h-3.5 w-3.5 md:h-4 md:w-4" /> : <ShieldCheck className="h-3.5 w-3.5 md:h-4 md:w-4" />}
                     <span className="text-[10px] md:text-xs font-semibold">
                       {isUser ? (session?.user?.name || 'You') : 'Support team'}
@@ -188,7 +188,7 @@ export default function TicketDetailPage() {
                       })}
                     </span>
                   </div>
-                  <p className={`text-xs md:text-sm leading-relaxed whitespace-pre-wrap ${isUser ? 'text-white' : 'text-gray-800'}`}>
+                  <p className={`text-xs md:text-sm leading-relaxed whitespace-pre-wrap ${isUser ? 'text-white' : 'text-[#1A1A1A]'}`}>
                     {msg.text}
                   </p>
                 </div>
@@ -200,7 +200,7 @@ export default function TicketDetailPage() {
         {/* Reply box — pinned at the bottom */}
         <div className="flex-shrink-0 -mx-3 px-3 sm:mx-0 sm:px-0 pb-2 md:pb-0">
           {ticket.status !== 'closed' ? (
-            <form onSubmit={handleReply} className="bg-white rounded-xl border border-gray-200 p-2 md:p-3">
+            <form onSubmit={handleReply} className="bg-[#FFFDF8] rounded-xl border border-[var(--line)] p-2 md:p-3">
               {sendError && <div className="mb-2 md:mb-3 p-2 md:p-3 bg-red-50 border border-red-200 rounded-lg text-xs md:text-sm text-red-700">{sendError}</div>}
               <div className="flex items-end gap-2">
                 <div className="flex-1 relative">
@@ -211,24 +211,24 @@ export default function TicketDetailPage() {
                     placeholder="Write your reply…"
                     rows={2}
                     maxLength={500}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 md:px-4 py-2 md:py-3 pr-10 md:pr-12 text-xs md:text-sm text-gray-900 outline-none focus:border-blue-500 resize-none"
+                    className="w-full rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-3 md:px-4 py-2 md:py-3 pr-10 md:pr-12 text-xs md:text-sm text-[#1A1A1A] outline-none focus:border-[var(--accent)] resize-none"
                   />
-                  <div className="absolute bottom-2 right-2 text-[10px] md:text-xs text-gray-400">
+                  <div className="absolute bottom-2 right-2 text-[10px] md:text-xs text-[#A29785]">
                     {reply.length}/500
                   </div>
                 </div>
                 <button
                   type="submit"
                   disabled={sending || !reply.trim()}
-                  className="flex-shrink-0 h-10 md:h-11 w-10 md:w-11 rounded-lg bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-shrink-0 h-10 md:h-11 w-10 md:w-11 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center hover:bg-[var(--accent-deep)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </button>
               </div>
             </form>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-xl p-3 md:p-4 text-center">
-              <p className="text-xs md:text-sm text-gray-600">This ticket is closed. Open a new ticket if you need further help.</p>
+            <div className="bg-[#FFFDF8] border border-[var(--line)] rounded-xl p-3 md:p-4 text-center">
+              <p className="text-xs md:text-sm text-[#6B6257]">This ticket is closed. Open a new ticket if you need further help.</p>
             </div>
           )}
         </div>

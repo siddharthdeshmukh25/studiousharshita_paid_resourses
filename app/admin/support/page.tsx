@@ -17,6 +17,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { formatPrice } from '@/lib/format';
 
 interface TicketUser {
   _id: string;
@@ -433,7 +434,7 @@ function AdminSupportPageContent() {
                       {detail.orderContext.resource && (
                         <div><dt className="text-gray-500 dark:text-gray-400">Resource</dt><dd className="text-gray-900 dark:text-gray-100 mt-0.5">{detail.orderContext.resource.title}</dd></div>
                       )}
-                      <div><dt className="text-gray-500 dark:text-gray-400">Amount</dt><dd className="text-gray-900 dark:text-gray-100 mt-0.5">₹{detail.orderContext.amount.toFixed(2)}</dd></div>
+                      <div><dt className="text-gray-500 dark:text-gray-400">Amount</dt><dd className="text-gray-900 dark:text-gray-100 mt-0.5">{formatPrice(detail.orderContext.amount)}</dd></div>
                       <div><dt className="text-gray-500 dark:text-gray-400">Gateway / status</dt><dd className="text-gray-900 dark:text-gray-100 mt-0.5">{detail.orderContext.gateway || '—'} · {detail.orderContext.status}</dd></div>
                       {detail.orderContext.captureFailureReason && (
                         <div className="col-span-2"><dt className="text-gray-500 dark:text-gray-400">Capture issue</dt><dd className="text-red-600 dark:text-red-400 mt-0.5">{detail.orderContext.captureFailureReason}</dd></div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { IndianRupee, ReceiptText, TrendingUp } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import KPICard from '@/components/admin/KPICard';
+import { formatPrice } from '@/lib/format';
 
 type Data = { 
   summary: { revenue: number; orders: number; average: number }; 
@@ -35,9 +36,9 @@ export default function RevenuePage() {
         <p className="rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">{error}</p> : 
         <>
           <div className="grid gap-4 sm:grid-cols-3">
-            <KPICard title="Total revenue" value={`₹${data?.summary.revenue ?? 0}`} icon={<IndianRupee className="h-5 w-5"/>}/>
+            <KPICard title="Total revenue" value={formatPrice(data?.summary.revenue ?? 0)} icon={<IndianRupee className="h-5 w-5"/>}/>
             <KPICard title="Completed orders" value={data?.summary.orders ?? 0} icon={<ReceiptText className="h-5 w-5"/>}/>
-            <KPICard title="Average order value" value={`₹${Math.round(data?.summary.average ?? 0)}`} icon={<TrendingUp className="h-5 w-5"/>}/>
+            <KPICard title="Average order value" value={formatPrice(data?.summary.average ?? 0)} icon={<TrendingUp className="h-5 w-5"/>}/>
           </div>
           
           <section className="overflow-hidden rounded-xl border border-slate-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
@@ -65,7 +66,7 @@ export default function RevenuePage() {
                       <td className="px-5 py-3 text-gray-700 dark:text-gray-300">{order.resourceId?.title || 'Unknown'}</td>
                       <td className="px-5 py-3 text-slate-600 dark:text-slate-400">{new Date(order.createdAt).toLocaleDateString()}</td>
                       <td className="px-5 py-3 text-slate-600 dark:text-slate-400 capitalize">{order.gateway || 'Unknown'}</td>
-                      <td className="px-5 py-3 text-right font-medium text-gray-900 dark:text-gray-100">₹{order.amount}</td>
+                      <td className="px-5 py-3 text-right font-medium text-gray-900 dark:text-gray-100">{formatPrice(order.amount)}</td>
                     </tr>
                   ))}
                   {!data?.orders.length && (

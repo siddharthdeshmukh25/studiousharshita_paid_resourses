@@ -3,13 +3,43 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+// Check if WebGL is available before attempting to create renderer
+const isWebGLAvailable = () => {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+  } catch (e) {
+    return false;
+  }
+};
+
 export default function ThreeBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Scene setup
+    // Check WebGL availability first
+    if (!isWebGLAvailable()) {
+      console.warn('ThreeBackground: WebGL unavailable, skipping 3D background.');
+      return;
+    }
+
+    // Scene setup — WebGL may be unavailable (sandboxed browsers, GPU
+    // disabled, driver blocks). In that case skip the effect silently:
+    // the hero's CSS gradient still looks good without the particles.
+    let renderer: THREE.WebGLRenderer | null = null;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    } catch (error) {
+      console.warn('ThreeBackground: WebGL unavailable, skipping 3D background.');
+      return;
+    }
+
+    if (!renderer) {
+      return;
+    }
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -17,7 +47,6 @@ export default function ThreeBackground() {
       0.1,
       1000
     );
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -144,10 +173,10 @@ export default function ThreeBackground() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
-      if (containerRef.current) {
+      if (renderer && containerRef.current) {
         containerRef.current.removeChild(renderer.domElement);
+        renderer.dispose();
       }
-      renderer.dispose();
       particlesGeometry.dispose();
       particlesMaterial.dispose();
       icoGeometry.dispose();

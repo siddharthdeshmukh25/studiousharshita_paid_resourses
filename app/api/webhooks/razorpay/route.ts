@@ -7,6 +7,7 @@ import Resource from '@/models/Resource';
 import PaymentSettings from '@/models/PaymentSettings';
 import { capturePayment } from '@/lib/paymentCapture';
 import { createAdminNotification } from '@/lib/notifications';
+import { formatPrice } from '@/lib/format';
 
 function verifyRazorpayWebhookSignature(payload: string, signature: string, secret: string): boolean {
   const expectedSignature = crypto
@@ -167,7 +168,7 @@ export async function POST(request: NextRequest) {
         await createAdminNotification({
           type: 'new_order',
           title: 'New order completed',
-          message: `${notes?.resourceTitle || 'Resource'} purchased — ₹${(payment.amount / 100).toFixed(2)}`,
+          message: `${notes?.resourceTitle || 'Resource'} purchased — ${formatPrice(payment.amount / 100)}`,
           link: '/admin/revenue',
         });
       } catch (error) {
@@ -216,7 +217,7 @@ export async function POST(request: NextRequest) {
         await createAdminNotification({
           type: 'payment_failed',
           title: 'Payment failed',
-          message: `${notes?.resourceTitle || 'Resource'} — ₹${(payment.amount / 100).toFixed(2)} (${payment.error_description || 'Payment failed'})`,
+          message: `${notes?.resourceTitle || 'Resource'} — ${formatPrice(payment.amount / 100)} (${payment.error_description || 'Payment failed'})`,
           link: '/admin/payment-captures',
         });
       } catch (error) {

@@ -1,25 +1,39 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
+export const metadata: Metadata = {
+  title: 'Privacy Policy — How We Protect Student Data',
+  description:
+    'How Studious Harshita collects, uses, stores and protects your personal data when you browse or purchase digital study resources, including your rights and contact details.',
+  alternates: { canonical: '/privacy-policy' },
+  openGraph: {
+    type: 'website',
+    url: '/privacy-policy',
+    title: 'Privacy Policy | Studious Harshita',
+    description: 'How Studious Harshita collects, uses and protects your personal data.',
+  },
+};
+
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-[var(--background)]">
       <Navbar />
       
       <main className="flex-1 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
+          <h1 className="text-3xl font-bold text-[#1A1A1A] mb-8">Privacy Policy</h1>
             
-            <div className="space-y-6 text-gray-700">
+            <div className="space-y-6 text-[#4A443B]">
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">1. Introduction</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">1. Introduction</h2>
                 <p className="leading-relaxed text-justify">
-                  studiousharshita, operated by HARSHITA SONI, is committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy outlines how we collect, use, process, and protect your information when you visit our website and purchase our digital resources.
+                  Studious Harshita, operated by Harshita Pravinbhai Soni, is committed to protecting your privacy and ensuring the security of your personal data. This Privacy Policy outlines how we collect, use, process, and protect your information when you visit our website and purchase our digital resources.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">2. Information We Collect</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">2. Information We Collect</h2>
                 <p className="leading-relaxed text-justify">
                   We collect information you provide directly to us to ensure a seamless experience:
                 </p>
@@ -31,7 +45,7 @@ export default function PrivacyPolicy() {
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">3. How We Use Your Information</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">3. How We Use Your Information</h2>
                 <p className="leading-relaxed text-justify">
                   Your information is strictly used for the following purposes:
                 </p>
@@ -44,7 +58,7 @@ export default function PrivacyPolicy() {
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">4. Third-Party Services & Payment Gateways</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">4. Third-Party Services & Payment Gateways</h2>
                 <p className="leading-relaxed text-justify">
                   We do not sell your personal data. However, we use trusted third-party services to operate our platform securely:
                 </p>
@@ -55,42 +69,41 @@ export default function PrivacyPolicy() {
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">5. Data Security</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">5. Data Security</h2>
                 <p className="leading-relaxed text-justify">
                   We implement industry-standard security measures, including SSL encryption and secure server hosting, to protect your personal information from unauthorized access, alteration, or disclosure.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">6. Cookies</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">6. Cookies</h2>
                 <p className="leading-relaxed text-justify">
                   We use cookies to maintain your session, remember your preferences, and analyze website traffic. You can manage or disable cookies through your browser settings, though this may affect certain functionalities of the platform.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">7. Your Rights and Data Retention</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">7. Your Rights and Data Retention</h2>
                 <p className="leading-relaxed text-justify">
                   You have the right to access, correct, or request the deletion of your personal data. We retain your data only for as long as necessary to provide our services and fulfill the purposes outlined in this policy, or as required by Indian law.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">8. Contact Information</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">8. Contact Information</h2>
                 <p className="leading-relaxed text-justify">
                   If you have any questions or concerns regarding this Privacy Policy or how your data is handled, please contact our Grievance Officer at:
                 </p>
-                <div className="mt-4 space-y-2 text-gray-700">
+                <div className="mt-4 space-y-2 text-[#4A443B]">
                   <p><strong>Legal Entity Name:</strong> Harshita Pravinbhai Soni</p>
                   <p><strong>Email:</strong> support@studiousharshita.com</p>
-                  <p><strong>Phone:</strong> +91 95122 15337</p>
                   <p><strong>Registered Address:</strong> Vyasvadi, Vadaj, Ahmedabad, Gujarat, India - 380013</p>
                 </div>
               </section>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <p className="text-sm text-gray-500">
+            <div className="mt-8 pt-6 border-t border-[var(--line)]">
+              <p className="text-sm text-[#6B6257]">
                 Last updated: August 2, 2026
               </p>
             </div>

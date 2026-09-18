@@ -7,6 +7,7 @@ import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import dynamic from 'next/dynamic';
 import AdminLayout from '@/components/admin/AdminLayout';
 import KPICard from '@/components/admin/KPICard';
+import { formatPrice, formatDiscountedPrice } from '@/lib/format';
 
 const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor'), { ssr: false });
 
@@ -408,7 +409,7 @@ function ResourcesPageContent() {
                         ) : resource.discount && resource.discount > 0 ? (
                           <div>
                             <span className="line-through text-gray-400 dark:text-gray-500 mr-1 text-xs">₹{resource.price}</span>
-                            <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">₹{(resource.price * (1 - resource.discount / 100)).toFixed(2)}</span>
+                            <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">{formatDiscountedPrice(resource.price, resource.discount)}</span>
                             <span className="text-xs text-red-500 ml-1">({Math.round(resource.discount)}% off)</span>
                           </div>
                         ) : (

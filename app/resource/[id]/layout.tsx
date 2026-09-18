@@ -3,6 +3,7 @@ import { cache } from 'react';
 import connectDB from '@/lib/db/mongodb';
 import Resource from '@/models/Resource';
 import Review from '@/models/Review';
+import { SITE_NAME, SITE_URL } from '@/lib/site';
 
 type ResourceSeoData = {
   id: string;
@@ -76,13 +77,16 @@ export async function generateMetadata({ params }: ResourceLayoutProps): Promise
   return {
     title: resource.title,
     description: resource.description,
+    keywords: [resource.title, resource.category, 'study notes', 'digital study resources'],
     alternates: { canonical: canonicalPath },
+    robots: { index: true, follow: true },
+    other: { 'article:section': resource.category },
     openGraph: {
       type: 'website',
       url: canonicalPath,
       title: resource.title,
       description: resource.description,
-      siteName: 'studiousharshita',
+      siteName: SITE_NAME,
       images: [{ url: resource.thumbnailUrl, alt: resource.title }],
     },
     twitter: {
@@ -97,7 +101,7 @@ export async function generateMetadata({ params }: ResourceLayoutProps): Promise
 export default async function ResourceLayout({ children, params }: ResourceLayoutProps) {
   const { id } = await params;
   const resource = await getResourceSeoData(id);
-  const siteUrl = (process.env.NEXTAUTH_URL || 'https://resources.studiousharshita.com').replace(/\/$/, '');
+  const baseUrl = SITE_URL;
 
   const productSchema = resource
     ? {
@@ -112,7 +116,7 @@ export default async function ResourceLayout({ children, params }: ResourceLayou
           priceCurrency: 'INR',
           price: resource.price,
           availability: 'https://schema.org/InStock',
-          url: `${siteUrl}/resource/${resource.id}`,
+          url: `${baseUrl}/resource/${resource.id}`,
         },
         ...(resource.reviewCount > 0
           ? {

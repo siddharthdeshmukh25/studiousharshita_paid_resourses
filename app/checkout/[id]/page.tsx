@@ -6,6 +6,8 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CheckoutSkeleton from '@/components/ui/CheckoutSkeleton';
+import { formatPrice } from '@/lib/format';
+import { SITE_NAME } from '@/lib/site';
 import {
   Lock,
   Shield,
@@ -167,7 +169,7 @@ function CheckoutPageContent() {
           key: data.keyId,
           amount: data.amount * 100,
           currency: 'INR',
-          name: 'studiousharshita',
+          name: SITE_NAME,
           description: resource?.title,
           order_id: data.paymentSessionId,
           handler: function (paymentResponse: { razorpay_payment_id?: string }) {
@@ -190,7 +192,7 @@ function CheckoutPageContent() {
             email: session.user?.email,
           },
           theme: {
-            color: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#2563EB',
+            color: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || 'var(--accent)',
           },
         };
         const rzp = new window.Razorpay(options);
@@ -217,11 +219,11 @@ function CheckoutPageContent() {
 
   if (error || !resource) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-[var(--background)]">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center px-4">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Resource not found</h2>
+            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-2">Resource not found</h2>
             <button
               onClick={() => router.push('/')}
               className="mt-4 text-[var(--accent)] hover:text-[var(--accent-text)] font-medium"
@@ -236,16 +238,16 @@ function CheckoutPageContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-[var(--background)]">
       <Navbar />
 
       <main className="flex-1 py-8 md:py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Secure Checkout</p>
-            <h1 className="mt-1 text-2xl md:text-3xl font-bold text-gray-900">Review your order</h1>
-            <p className="mt-1 text-base text-gray-600">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">Secure Checkout</p>
+            <h1 className="mt-1 text-2xl md:text-3xl font-bold text-[#1A1A1A]">Review your order</h1>
+            <p className="mt-1 text-base text-[#6B6257]">
               Please confirm the details below before completing your purchase.
             </p>
           </div>
@@ -254,15 +256,15 @@ function CheckoutPageContent() {
             {/* Left: order details */}
             <div className="lg:col-span-3 space-y-6">
               {/* Resource summary */}
-              <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                <div className="px-6 py-5 border-b border-gray-200">
-                  <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <Store className="h-5 w-5 text-blue-600" />
+              <section className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm overflow-hidden">
+                <div className="px-6 py-5 border-b border-[var(--line)]">
+                  <h2 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2">
+                    <Store className="h-5 w-5 text-[var(--accent)]" />
                     Item details
                   </h2>
                 </div>
                 <div className="p-6 flex gap-5">
-                  <div className="h-24 w-24 md:h-28 md:w-28 rounded-xl overflow-hidden border border-gray-200 bg-gray-100 flex-shrink-0">
+                  <div className="h-24 w-24 md:h-28 md:w-28 rounded-xl overflow-hidden border border-[var(--line)] bg-[var(--accent-soft)] flex-shrink-0">
                     <img
                       src={resource.thumbnailUrl || '/placeholder.png'}
                       alt={resource.title}
@@ -270,13 +272,13 @@ function CheckoutPageContent() {
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <span className="inline-block px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                    <span className="inline-block px-2.5 py-1 bg-[var(--accent-soft)] text-[var(--accent-deep)] rounded-full text-sm font-medium">
                       {resource.category}
                     </span>
-                    <h3 className="mt-2 text-lg md:text-xl font-semibold text-gray-900 leading-snug">
+                    <h3 className="mt-2 text-lg md:text-xl font-semibold text-[#1A1A1A] leading-snug">
                       {resource.title}
                     </h3>
-                    <p className="mt-1 text-base text-gray-600">
+                    <p className="mt-1 text-base text-[#6B6257]">
                       Digital resource · Instant access after payment
                     </p>
                   </div>
@@ -284,9 +286,9 @@ function CheckoutPageContent() {
               </section>
 
               {/* Coupon */}
-              <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-                <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
-                  <Tag className="h-5 w-5 text-blue-600" />
+              <section className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-6">
+                <h2 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2 mb-4">
+                  <Tag className="h-5 w-5 text-[var(--accent)]" />
                   Have a coupon?
                 </h2>
                 <div className="flex gap-3">
@@ -298,42 +300,42 @@ function CheckoutPageContent() {
                       setCouponMessage(null);
                     }}
                     placeholder="Enter coupon code"
-                    className="min-w-0 flex-1 rounded-lg border border-gray-300 bg-white px-4 py-3 text-base font-semibold uppercase text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                    className="min-w-0 flex-1 rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-4 py-3 text-base font-semibold uppercase text-[#1A1A1A] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
                   />
                   <button
                     type="button"
                     onClick={() => validateCoupon()}
                     disabled={couponLoading || !couponCode.trim()}
-                    className="rounded-lg bg-gray-900 px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded-lg bg-[#1A1A1A] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#33302B] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {couponLoading ? 'Checking…' : 'Apply'}
                   </button>
                 </div>
                 {couponMessage && (
-                  <p className={`mt-3 text-base ${couponDiscount ? 'text-blue-700' : 'text-red-600'}`}>
+                  <p className={`mt-3 text-base ${couponDiscount ? 'text-[var(--accent-deep)]' : 'text-red-600'}`}>
                     {couponMessage}
                   </p>
                 )}
                 {couponDiscount && (
-                  <p className="mt-2 text-base font-semibold text-blue-700">
-                    You pay ₹{finalAmount.toFixed(2)} after {couponDiscount}% off.
+                  <p className="mt-2 text-base font-semibold text-[var(--accent-deep)]">
+                    You pay {formatPrice(finalAmount)} after {couponDiscount}% off.
                   </p>
                 )}
               </section>
 
               {/* Payment method note */}
-              <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-                <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2 mb-4">
-                  <Lock className="h-5 w-5 text-blue-600" />
+              <section className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-6">
+                <h2 className="text-lg font-semibold text-[#1A1A1A] flex items-center gap-2 mb-4">
+                  <Lock className="h-5 w-5 text-[var(--accent)]" />
                   Payment method
                 </h2>
-                <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50 px-5 py-4">
-                  <div className="grid h-12 w-12 place-items-center rounded-full bg-blue-600 text-white flex-shrink-0">
+                <div className="flex items-center gap-4 rounded-xl border border-[var(--line)] bg-[var(--background)] px-5 py-4">
+                  <div className="grid h-12 w-12 place-items-center rounded-full bg-[var(--accent)] text-white flex-shrink-0">
                     <Shield className="h-6 w-6" />
                   </div>
                   <div>
-                    <p className="text-base font-semibold text-gray-900">Secure online payment</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-base font-semibold text-[#1A1A1A]">Secure online payment</p>
+                    <p className="text-sm text-[#6B6257]">
                       UPI, cards, net banking & wallets — processed by our payment partner.
                     </p>
                   </div>
@@ -349,7 +351,7 @@ function CheckoutPageContent() {
                 <div className="flex items-center justify-between mt-6">
                   <button
                     onClick={() => router.push('/support')}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1.5 transition-colors"
+                    className="text-sm text-[var(--accent)] hover:text-[var(--accent-deep)] font-medium flex items-center gap-1.5 transition-colors"
                   >
                     <LifeBuoy className="h-4 w-4" />
                     Need help?
@@ -357,7 +359,7 @@ function CheckoutPageContent() {
                   <button
                     onClick={handleCheckout}
                     disabled={checkoutLoading}
-                    className="bg-blue-600 text-white py-3 px-6 rounded-xl text-base font-semibold flex items-center justify-center gap-2 transition-colors hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="bg-[var(--accent)] text-white py-3 px-6 rounded-xl text-base font-semibold flex items-center justify-center gap-2 transition-colors hover:bg-[var(--accent-deep)] disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {checkoutLoading ? (
                       <>
@@ -367,13 +369,13 @@ function CheckoutPageContent() {
                     ) : (
                       <>
                         <Lock className="h-5 w-5" />
-                        <span>Pay ₹{finalAmount.toFixed(2)}</span>
+                        <span>Pay {formatPrice(finalAmount)}</span>
                       </>
                     )}
                   </button>
                 </div>
 
-                <p className="mt-4 text-sm text-gray-500 text-center leading-relaxed">
+                <p className="mt-4 text-sm text-[#6B6257] text-center leading-relaxed">
                   By completing this purchase you agree to our{' '}
                   <a href="/terms-of-service" className="text-[var(--accent)] hover:underline">Terms of Service</a> and{' '}
                   <a href="/refund-policy" className="text-[var(--accent)] hover:underline">Refund Policy</a>.
@@ -383,87 +385,87 @@ function CheckoutPageContent() {
 
             {/* Right: price summary + trust */}
             <div className="lg:col-span-2 space-y-6">
-              <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                <div className="px-6 py-5 border-b border-gray-200">
-                  <h2 className="text-lg font-semibold text-gray-900">Price summary</h2>
+              <section className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm overflow-hidden">
+                <div className="px-6 py-5 border-b border-[var(--line)]">
+                  <h2 className="text-lg font-semibold text-[#1A1A1A]">Price summary</h2>
                 </div>
                 <div className="p-6 space-y-3">
                   <div className="flex items-center justify-between text-base">
-                    <span className="text-gray-600">Original price</span>
-                    <span className="font-medium text-gray-900">₹{originalAmount.toFixed(2)}</span>
+                    <span className="text-[#6B6257]">Original price</span>
+                    <span className="font-medium text-[#1A1A1A]">{formatPrice(originalAmount)}</span>
                   </div>
                   {resource.discount && resource.discount > 0 && (
                     <div className="flex items-center justify-between text-base">
-                      <span className="text-gray-600">Item discount</span>
+                      <span className="text-[#6B6257]">Item discount</span>
                       <span className="font-semibold text-red-600">−{Math.round(resource.discount)}%</span>
                     </div>
                   )}
                   {couponDiscount && (
                     <div className="flex items-center justify-between text-base">
-                      <span className="text-gray-600">Coupon ({couponCode})</span>
+                      <span className="text-[#6B6257]">Coupon ({couponCode})</span>
                       <span className="font-semibold text-red-600">−{couponDiscount}%</span>
                     </div>
                   )}
-                  <div className="border-t border-gray-200 pt-3 flex items-center justify-between">
-                    <span className="text-base font-semibold text-gray-900">Total payable</span>
-                    <span className="text-2xl font-bold text-gray-900">₹{finalAmount.toFixed(2)}</span>
+                  <div className="border-t border-[var(--line)] pt-3 flex items-center justify-between">
+                    <span className="text-base font-semibold text-[#1A1A1A]">Total payable</span>
+                    <span className="text-2xl font-bold text-[#1A1A1A]">{formatPrice(finalAmount)}</span>
                   </div>
                 </div>
               </section>
 
               {/* Trust badges */}
-              <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                  <BadgeCheck className="h-5 w-5 text-blue-600" />
+              <section className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-6">
+                <h2 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
+                  <BadgeCheck className="h-5 w-5 text-[var(--accent)]" />
                   Why buy with us
                 </h2>
                 <ul className="space-y-4">
                   <li className="flex items-start gap-3">
-                    <Shield className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <Shield className="h-5 w-5 text-[var(--accent)] mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-base font-medium text-gray-900">Secure payments</p>
-                      <p className="text-sm text-gray-600">256-bit encrypted transactions via trusted gateways.</p>
+                      <p className="text-base font-medium text-[#1A1A1A]">Secure payments</p>
+                      <p className="text-sm text-[#6B6257]">256-bit encrypted transactions via trusted gateways.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Zap className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <Zap className="h-5 w-5 text-[var(--accent)] mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-base font-medium text-gray-900">Instant access</p>
-                      <p className="text-sm text-gray-600">Your resource unlocks in your dashboard right after payment.</p>
+                      <p className="text-base font-medium text-[#1A1A1A]">Instant access</p>
+                      <p className="text-sm text-[#6B6257]">Your resource unlocks in your dashboard right after payment.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <RefreshCw className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <RefreshCw className="h-5 w-5 text-[var(--accent)] mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-base font-medium text-gray-900">Refund policy</p>
-                      <p className="text-sm text-gray-600">Clear, fair refund terms for digital products.</p>
+                      <p className="text-base font-medium text-[#1A1A1A]">Refund policy</p>
+                      <p className="text-sm text-[#6B6257]">Clear, fair refund terms for digital products.</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
-                    <LifeBuoy className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <LifeBuoy className="h-5 w-5 text-[var(--accent)] mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-base font-medium text-gray-900">24×7 support</p>
-                      <p className="text-sm text-gray-600">Raise a support ticket any time — we reply within 24-48 hours.</p>
+                      <p className="text-base font-medium text-[#1A1A1A]">24×7 support</p>
+                      <p className="text-sm text-[#6B6257]">Raise a support ticket any time — we reply within 24-48 hours.</p>
                     </div>
                   </li>
                 </ul>
               </section>
 
               {/* Business info */}
-              <section className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Business information</h2>
+              <section className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-6">
+                <h2 className="text-lg font-semibold text-[#1A1A1A] mb-4">Business information</h2>
                 <dl className="space-y-3 text-base">
                   <div className="flex justify-between gap-4">
-                    <dt className="text-gray-600">Legal entity</dt>
-                    <dd className="font-medium text-gray-900 text-right">Harshita Pravinbhai Soni</dd>
+                    <dt className="text-[#6B6257]">Legal entity</dt>
+                    <dd className="font-medium text-[#1A1A1A] text-right">Harshita Pravinbhai Soni</dd>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <dt className="text-gray-600">Business type</dt>
-                    <dd className="font-medium text-gray-900 text-right">Educational digital resources</dd>
+                    <dt className="text-[#6B6257]">Business type</dt>
+                    <dd className="font-medium text-[#1A1A1A] text-right">Educational digital resources</dd>
                   </div>
                   <div className="flex justify-between gap-4">
-                    <dt className="text-gray-600">Support</dt>
-                    <dd className="font-medium text-gray-900 text-right">
+                    <dt className="text-[#6B6257]">Support</dt>
+                    <dd className="font-medium text-[#1A1A1A] text-right">
                       <a href="mailto:support@studiousharshita.com" className="text-[var(--accent)] hover:underline">
                         support@studiousharshita.com
                       </a>
@@ -472,7 +474,7 @@ function CheckoutPageContent() {
                 </dl>
               </section>
 
-              <p className="text-sm text-gray-500 flex items-center gap-2 justify-center">
+              <p className="text-sm text-[#6B6257] flex items-center gap-2 justify-center">
                 <IndianRupee className="h-4 w-4" />
                 Prices shown in INR (₹). Taxes included where applicable.
               </p>

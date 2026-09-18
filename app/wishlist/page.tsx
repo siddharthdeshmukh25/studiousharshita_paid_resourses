@@ -35,16 +35,16 @@ export default function WishlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--background)]">
       <Navbar />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 flex items-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2 flex items-center">
             <Heart className="h-6 w-6 md:h-8 md:w-8 text-red-500 mr-3 fill-red-500" />
             My Wishlist
           </h1>
-          <p className="text-gray-600">
+          <p className="text-[#6B6257]">
             {wishlist.length} {wishlist.length === 1 ? 'item' : 'items'} saved
           </p>
         </div>
@@ -57,9 +57,9 @@ export default function WishlistPage() {
 
         {wishlist.length === 0 ? (
           <div className="text-center py-16">
-            <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Your wishlist is empty</h2>
-            <p className="text-gray-600 mb-4">Start adding resources you love!</p>
+            <Heart className="h-16 w-16 text-[#D8CFC0] mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-[#1A1A1A] mb-2">Your wishlist is empty</h2>
+            <p className="text-[#6B6257] mb-4">Start adding resources you love!</p>
             <button
               onClick={() => router.push('/')}
               className="bg-[var(--accent)] text-white px-6 py-3 rounded-lg hover:bg-[var(--accent-deep)] transition-colors"

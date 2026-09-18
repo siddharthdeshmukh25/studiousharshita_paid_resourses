@@ -6,6 +6,7 @@ import { Loader2, Users, IndianRupee, Plus, Trash2, Edit, X, LogOut, MoreVertica
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import AdminLayout from '@/components/admin/AdminLayout';
 import KPICard from '@/components/admin/KPICard';
+import { formatPrice } from '@/lib/format';
 
 interface Category {
   _id: string;
@@ -646,7 +647,7 @@ function AdminPageContent() {
           <button onClick={handleLogout} disabled={loggingOut} className="inline-flex items-center gap-2 self-start rounded-md border border-gray-200 bg-white px-3.5 py-2 text-sm font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-100 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"><LogOut className="h-4 w-4" />{loggingOut ? 'Logging out…' : 'Logout'}</button>
         </div>
         {error && <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">{error}</div>}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4"><KPICard title="Total revenue" value={`₹${stats.totalRevenue}`} icon={<IndianRupee className="h-5 w-5" />} /><KPICard title="Registered users" value={stats.totalUsers} icon={<Users className="h-5 w-5" />} /><KPICard title="Live resources" value={stats.totalResources} icon={<Package className="h-5 w-5" />} /><KPICard title="Orders" value={stats.totalOrders ?? 0} icon={<UserCheck className="h-5 w-5" />} /></div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4"><KPICard title="Total revenue" value={formatPrice(stats.totalRevenue)} icon={<IndianRupee className="h-5 w-5" />} /><KPICard title="Registered users" value={stats.totalUsers} icon={<Users className="h-5 w-5" />} /><KPICard title="Live resources" value={stats.totalResources} icon={<Package className="h-5 w-5" />} /><KPICard title="Orders" value={stats.totalOrders ?? 0} icon={<UserCheck className="h-5 w-5" />} /></div>
         <section className="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900"><div><h2 className="font-semibold text-gray-900 dark:text-gray-100">Manage workspace</h2><p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Open a focused section to manage your store.</p></div><div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><button onClick={() => window.location.href = '/admin/resources'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Package className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Resources</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Add and edit products</p></button><button onClick={() => window.location.href = '/admin/users'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Users className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Users</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Profiles and activity</p></button><button onClick={() => window.location.href = '/admin/analytics'} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><IndianRupee className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Analytics</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Revenue and traffic</p></button><button onClick={() => setShowCouponModal(true)} className="rounded-lg border border-gray-200 bg-white p-4 text-left hover:border-blue-500/70 dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm transition-all"><Plus className="h-5 w-5 text-blue-600 dark:text-blue-400" /><p className="mt-3 text-sm font-semibold text-gray-900 dark:text-gray-100">Create coupon</p><p className="mt-1 text-xs text-gray-600 dark:text-gray-400">Create a promotion</p></button></div></section>
       </div>
       <div className="hidden">
@@ -687,7 +688,7 @@ function AdminPageContent() {
             />
             <KPICard
               title="Revenue"
-              value={`₹${stats.totalRevenue}`}
+              value={formatPrice(stats.totalRevenue)}
               icon={<IndianRupee className="h-5 w-5 lg:h-6 lg:w-6" />}
             />
           </div>
@@ -797,7 +798,7 @@ function AdminPageContent() {
             <div className="max-h-[320px] overflow-x-auto overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               <table className="min-w-[650px] w-full text-left text-sm">
                 <thead className="sticky top-0 z-10 bg-gray-50 dark:bg-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"><tr><th className="px-6 py-3">Code</th><th className="px-6 py-3">Title</th><th className="px-6 py-3">Discount</th><th className="px-6 py-3">Min Purchase</th><th className="px-6 py-3">Expires</th><th className="px-6 py-3 text-right">Action</th></tr></thead>
-                <tbody>{coupons.map((coupon) => <tr key={coupon._id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"><td className="px-6 py-4 font-bold tracking-wide text-blue-600 dark:text-blue-400">{coupon.code}</td><td className="px-6 py-4 text-gray-700 dark:text-gray-300">{coupon.title}</td><td className="px-6 py-4 font-semibold text-blue-700 dark:text-blue-400">{coupon.discountPercentage}%</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{coupon.minimumPurchaseAmount ? `₹${coupon.minimumPurchaseAmount}` : 'No limit'}</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{new Date(coupon.expiresAt).toLocaleDateString()}</td><td className="px-6 py-4 text-right"><button onClick={() => handleEditCoupon(coupon)} className="mr-2 rounded p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"><Edit className="h-4 w-4" /></button><button onClick={() => handleDeleteCoupon(coupon._id)} disabled={deleteCouponLoading === coupon._id} className="rounded p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50">{deleteCouponLoading === coupon._id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}</button></td></tr>)}</tbody>
+                <tbody>{coupons.map((coupon) => <tr key={coupon._id} className="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"><td className="px-6 py-4 font-bold tracking-wide text-blue-600 dark:text-blue-400">{coupon.code}</td><td className="px-6 py-4 text-gray-700 dark:text-gray-300">{coupon.title}</td><td className="px-6 py-4 font-semibold text-blue-700 dark:text-blue-400">{coupon.discountPercentage}%</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{coupon.minimumPurchaseAmount ? formatPrice(coupon.minimumPurchaseAmount) : 'No limit'}</td><td className="px-6 py-4 text-gray-600 dark:text-gray-400">{new Date(coupon.expiresAt).toLocaleDateString()}</td><td className="px-6 py-4 text-right"><button onClick={() => handleEditCoupon(coupon)} className="mr-2 rounded p-1 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"><Edit className="h-4 w-4" /></button><button onClick={() => handleDeleteCoupon(coupon._id)} disabled={deleteCouponLoading === coupon._id} className="rounded p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50">{deleteCouponLoading === coupon._id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}</button></td></tr>)}</tbody>
               </table>
             </div>
           )}
@@ -1343,7 +1344,7 @@ function AdminPageContent() {
                                   <p className="text-sm text-gray-600">Razorpay Order: {order.razorpayOrderId}</p>
                                 )}
                                 <p className="text-sm text-gray-600">User: {order.userId?.email || 'Unknown'}</p>
-                                <p className="text-sm text-gray-600">Amount: ₹{order.amount}</p>
+                                <p className="text-sm text-gray-600">Amount: {formatPrice(order.amount)}</p>
                                 <p className="text-sm text-red-600 mt-1">Error: {order.captureFailureReason || 'Unknown error'}</p>
                                 <p className="text-xs text-gray-500 mt-1">Attempts: {order.captureAttempts?.length || 0}</p>
                               </div>
@@ -1387,7 +1388,7 @@ function AdminPageContent() {
                                   <p className="text-sm text-gray-600">Razorpay Order: {order.razorpayOrderId}</p>
                                 )}
                                 <p className="text-sm text-gray-600">User: {order.userId?.email || 'Unknown'}</p>
-                                <p className="text-sm text-gray-600">Amount: ₹{order.amount}</p>
+                                <p className="text-sm text-gray-600">Amount: {formatPrice(order.amount)}</p>
                                 <p className="text-xs text-gray-500 mt-1">Created: {new Date(order.createdAt).toLocaleString()}</p>
                               </div>
                               <button
@@ -1714,7 +1715,7 @@ function AdminPageContent() {
                                       <p className="text-sm text-gray-600">Razorpay Order: {order.razorpayOrderId}</p>
                                     )}
                                     <p className="text-sm text-gray-600">User: {order.userId?.email || 'Unknown'}</p>
-                                    <p className="text-sm text-gray-600">Amount: ₹{order.amount}</p>
+                                    <p className="text-sm text-gray-600">Amount: {formatPrice(order.amount)}</p>
                                     <p className="text-sm text-red-600 mt-1">Error: {order.captureFailureReason || 'Unknown error'}</p>
                                     <p className="text-xs text-gray-500 mt-1">Attempts: {order.captureAttempts?.length || 0}</p>
                                   </div>
@@ -1757,7 +1758,7 @@ function AdminPageContent() {
                                       <p className="text-sm text-gray-600">Razorpay Order: {order.razorpayOrderId}</p>
                                     )}
                                     <p className="text-sm text-gray-600">User: {order.userId?.email || 'Unknown'}</p>
-                                    <p className="text-sm text-gray-600">Amount: ₹{order.amount}</p>
+                                    <p className="text-sm text-gray-600">Amount: {formatPrice(order.amount)}</p>
                                     <p className="text-xs text-gray-500 mt-1">Created: {new Date(order.createdAt).toLocaleString()}</p>
                                   </div>
                                   <button

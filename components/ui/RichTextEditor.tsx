@@ -81,13 +81,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   if (!mounted || !editor) {
     return (
-      <div className={`w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 min-h-[200px] ${className}`}>
+      <div className={`w-full px-4 py-3 border border-[var(--line)] rounded-xl bg-[var(--background)] min-h-[200px] ${className}`}>
         <div className="animate-pulse flex space-x-4">
           <div className="flex-1 space-y-4 py-1">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-[var(--accent-soft-2)] rounded w-3/4"></div>
             <div className="space-y-2">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+              <div className="h-4 bg-[var(--accent-soft-2)] rounded"></div>
+              <div className="h-4 bg-[var(--accent-soft-2)] rounded w-5/6"></div>
             </div>
           </div>
         </div>
@@ -112,8 +112,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       title={title}
       className={`p-2 rounded transition-colors ${
         active 
-          ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' 
-          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700'
+          ? 'bg-[var(--accent-soft)] dark:bg-[var(--accent-deep)]/30 text-[var(--accent)] dark:text-[var(--accent)]' 
+          : 'text-[#6B6257] dark:text-[#A29785] hover:bg-[var(--accent-soft)] dark:hover:bg-slate-700'
       }`}
     >
       {children}
@@ -121,11 +121,11 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   );
 
   return (
-    <div className={`rich-text-editor border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden ${className}`}>
+    <div className={`rich-text-editor border border-[var(--line)] dark:border-[#2E2D29] rounded-xl overflow-hidden ${className}`}>
       {/* Toolbar */}
-      <div className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-800 p-2 flex flex-wrap gap-1">
+      <div className="border-b border-[var(--line)] dark:border-[#2E2D29] bg-[var(--background)] dark:bg-[#1A1A1A] p-2 flex flex-wrap gap-1">
         {/* Headings */}
-        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
+        <div className="flex gap-1 border-r border-[var(--line)] dark:border-[#2E2D29] pr-2">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             active={editor.isActive('heading', { level: 1 })}
@@ -150,7 +150,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Text Formatting */}
-        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
+        <div className="flex gap-1 border-r border-[var(--line)] dark:border-[#2E2D29] pr-2">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBold().run()}
             active={editor.isActive('bold')}
@@ -175,7 +175,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Lists */}
-        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
+        <div className="flex gap-1 border-r border-[var(--line)] dark:border-[#2E2D29] pr-2">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             active={editor.isActive('bulletList')}
@@ -193,7 +193,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Code & Quote */}
-        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
+        <div className="flex gap-1 border-r border-[var(--line)] dark:border-[#2E2D29] pr-2">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
             active={editor.isActive('codeBlock')}
@@ -211,7 +211,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Link */}
-        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
+        <div className="flex gap-1 border-r border-[var(--line)] dark:border-[#2E2D29] pr-2">
           <ToolbarButton
             onClick={() => {
               const url = window.prompt('Enter URL:');
@@ -227,7 +227,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         </div>
 
         {/* Undo/Redo */}
-        <div className="flex gap-1 border-r border-gray-200 dark:border-gray-700 pr-2">
+        <div className="flex gap-1 border-r border-[var(--line)] dark:border-[#2E2D29] pr-2">
           <ToolbarButton
             onClick={() => editor.chain().focus().undo().run()}
             title="Undo"
@@ -254,13 +254,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       </div>
 
       {/* Editor */}
-      <div className="bg-white dark:bg-slate-900">
+      <div className="bg-[#FFFDF8] dark:bg-[#1A1A1A]">
         <EditorContent editor={editor} />
       </div>
 
       {/* Character Count */}
-      <div className="bg-white dark:bg-slate-900 px-4 py-2 border-t border-gray-200 dark:border-gray-700">
-        <div className="text-xs text-gray-500 dark:text-gray-400 text-right">
+      <div className="bg-[#FFFDF8] dark:bg-[#1A1A1A] px-4 py-2 border-t border-[var(--line)] dark:border-[#2E2D29]">
+        <div className="text-xs text-[#6B6257] dark:text-[#A29785] text-right">
           <span className={charCount > maxLength ? 'text-amber-600 font-medium' : ''}>{charCount}/{maxLength} characters</span>
         </div>
       </div>
@@ -339,7 +339,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           color: #d1d5db;
         }
         .rich-text-editor .ProseMirror a {
-          color: #2563EB;
+          color: var(--accent);
           text-decoration: underline;
         }
         .dark .rich-text-editor .ProseMirror a {

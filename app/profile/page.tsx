@@ -5,6 +5,7 @@ import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { formatPrice } from '@/lib/format';
 import {
   User,
   Package,
@@ -94,7 +95,7 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
 ];
 
 const STATUS_META: Record<string, { label: string; className: string }> = {
-  completed: { label: 'Completed', className: 'bg-blue-100 text-blue-800' },
+  completed: { label: 'Completed', className: 'bg-[var(--accent-soft)] text-[var(--accent-deep)]' },
   pending: { label: 'Pending', className: 'bg-amber-100 text-amber-800' },
   failed: { label: 'Failed', className: 'bg-red-100 text-red-800' },
 };
@@ -102,8 +103,8 @@ const STATUS_META: Record<string, { label: string; className: string }> = {
 const TICKET_STATUS: Record<string, { label: string; className: string }> = {
   open: { label: 'Open', className: 'bg-[var(--accent-soft-2)] text-[var(--accent-text)]' },
   in_progress: { label: 'In progress', className: 'bg-amber-100 text-amber-800' },
-  resolved: { label: 'Resolved', className: 'bg-blue-100 text-blue-800' },
-  closed: { label: 'Closed', className: 'bg-gray-100 text-gray-700' },
+  resolved: { label: 'Resolved', className: 'bg-[var(--accent-soft)] text-[var(--accent-deep)]' },
+  closed: { label: 'Closed', className: 'bg-[var(--accent-soft)] text-[#4A443B]' },
 };
 
 export default function ProfilePage() {
@@ -182,9 +183,9 @@ export default function ProfilePage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-[var(--background)]">
         <Navbar />
-        <div className="flex-1 grid place-items-center"><Loader2 className="h-8 w-8 animate-spin text-gray-400" /></div>
+        <div className="flex-1 grid place-items-center"><Loader2 className="h-8 w-8 animate-spin text-[#A29785]" /></div>
         <Footer />
       </div>
     );
@@ -192,18 +193,18 @@ export default function ProfilePage() {
 
   if (!session) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-[var(--background)]">
         <Navbar />
         <main className="flex-1 flex items-center justify-center px-4">
           <div className="text-center max-w-md">
-            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-blue-100">
-              <User className="h-8 w-8 text-blue-600" />
+            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-[var(--accent-soft)]">
+              <User className="h-8 w-8 text-[var(--accent)]" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">My Profile</h1>
-            <p className="text-base text-gray-600 mb-6">Login to view your resources, orders and support tickets.</p>
+            <h1 className="text-2xl font-bold text-[#1A1A1A] mb-2">My Profile</h1>
+            <p className="text-base text-[#6B6257] mb-6">Login to view your resources, orders and support tickets.</p>
             <button
               onClick={() => signIn('google', { callbackUrl: '/profile' })}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-blue-700 transition-colors"
+              className="bg-[var(--accent)] text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-[var(--accent-deep)] transition-colors"
             >
               Login to continue
             </button>
@@ -214,16 +215,16 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-[var(--background)]">
       <Navbar />
 
       <main className="flex-1 py-8 md:py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">Account</p>
-            <h1 className="mt-1 text-2xl md:text-3xl font-bold text-gray-900">My Profile</h1>
-            <p className="mt-1 text-base text-gray-600">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">Account</p>
+            <h1 className="mt-1 text-2xl md:text-3xl font-bold text-[#1A1A1A]">My Profile</h1>
+            <p className="mt-1 text-base text-[#6B6257]">
               Manage your resources, watchlist, orders and support tickets.
             </p>
           </div>
@@ -236,7 +237,7 @@ export default function ProfilePage() {
             {/* Sidebar / tab nav */}
             <aside className="lg:col-span-1">
               {/* Profile card */}
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+              <div className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-6 mb-6">
                 <div className="flex lg:flex-col items-center lg:items-start gap-4">
                   {session.user?.image ? (
                     <img
@@ -246,24 +247,24 @@ export default function ProfilePage() {
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <div className="grid h-16 w-16 lg:h-20 lg:w-20 place-items-center rounded-full bg-blue-600 text-2xl font-bold text-white">
+                    <div className="grid h-16 w-16 lg:h-20 lg:w-20 place-items-center rounded-full bg-[var(--accent)] text-2xl font-bold text-white">
                       {session.user?.name?.charAt(0) || 'U'}
                     </div>
                   )}
                   <div className="min-w-0">
-                    <h2 className="text-lg font-bold text-gray-900 truncate">{profile?.name || session.user?.name}</h2>
-                    <p className="text-sm text-gray-600 flex items-center gap-1.5 mt-1">
+                    <h2 className="text-lg font-bold text-[#1A1A1A] truncate">{profile?.name || session.user?.name}</h2>
+                    <p className="text-sm text-[#6B6257] flex items-center gap-1.5 mt-1">
                       <Mail className="h-3.5 w-3.5" />
                       <span className="truncate">{profile?.email || session.user?.email}</span>
                     </p>
                     {profile?.country && (
-                      <p className="text-sm text-gray-600 flex items-center gap-1.5 mt-1">
+                      <p className="text-sm text-[#6B6257] flex items-center gap-1.5 mt-1">
                         <MapPin className="h-3.5 w-3.5" />
                         {profile.country}
                       </p>
                     )}
                     {profile?.createdAt && (
-                      <p className="text-sm text-gray-600 flex items-center gap-1.5 mt-1">
+                      <p className="text-sm text-[#6B6257] flex items-center gap-1.5 mt-1">
                         <Calendar className="h-3.5 w-3.5" />
                         Joined {new Date(profile.createdAt).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
                       </p>
@@ -280,8 +281,8 @@ export default function ProfilePage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors ${
                       activeTab === tab.id
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white text-gray-700 border border-gray-200 hover:border-blue-400'
+                        ? 'bg-[var(--accent)] text-white'
+                        : 'bg-[#FFFDF8] text-[#4A443B] border border-[var(--line)] hover:border-[var(--accent)]'
                     }`}
                   >
                     {tab.icon}
@@ -294,8 +295,8 @@ export default function ProfilePage() {
             {/* Content */}
             <div className="lg:col-span-3">
               {loading ? (
-                <div className="bg-white rounded-2xl border border-gray-200 p-16 text-center">
-                  <Loader2 className="h-7 w-7 animate-spin text-gray-400 mx-auto" />
+                <div className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] p-16 text-center">
+                  <Loader2 className="h-7 w-7 animate-spin text-[#A29785] mx-auto" />
                 </div>
               ) : (
                 <>
@@ -309,37 +310,37 @@ export default function ProfilePage() {
                           { label: 'Wishlist', value: profile?.stats.wishlistCount ?? 0, icon: <Heart className="h-5 w-5" /> },
                           { label: 'Tickets', value: profile?.stats.ticketCount ?? 0, icon: <LifeBuoy className="h-5 w-5" /> },
                         ].map((stat) => (
-                          <div key={stat.label} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+                          <div key={stat.label} className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-5">
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-sm text-gray-600">{stat.label}</span>
-                              <span className="text-blue-600">{stat.icon}</span>
+                              <span className="text-sm text-[#6B6257]">{stat.label}</span>
+                              <span className="text-[var(--accent)]">{stat.icon}</span>
                             </div>
-                            <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                            <p className="text-3xl font-bold text-[#1A1A1A]">{stat.value}</p>
                           </div>
                         ))}
                       </div>
 
-                      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                          <ShieldCheck className="h-5 w-5 text-blue-600" />
+                      <div className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-6">
+                        <h3 className="text-lg font-semibold text-[#1A1A1A] mb-4 flex items-center gap-2">
+                          <ShieldCheck className="h-5 w-5 text-[var(--accent)]" />
                           Account details
                         </h3>
                         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-base">
                           <div>
-                            <dt className="text-sm text-gray-500">Full name</dt>
-                            <dd className="font-medium text-gray-900 mt-0.5">{profile?.name || session.user?.name}</dd>
+                            <dt className="text-sm text-[#6B6257]">Full name</dt>
+                            <dd className="font-medium text-[#1A1A1A] mt-0.5">{profile?.name || session.user?.name}</dd>
                           </div>
                           <div>
-                            <dt className="text-sm text-gray-500">Email</dt>
-                            <dd className="font-medium text-gray-900 mt-0.5">{profile?.email || session.user?.email}</dd>
+                            <dt className="text-sm text-[#6B6257]">Email</dt>
+                            <dd className="font-medium text-[#1A1A1A] mt-0.5">{profile?.email || session.user?.email}</dd>
                           </div>
                           <div>
-                            <dt className="text-sm text-gray-500">Account type</dt>
-                            <dd className="font-medium text-gray-900 mt-0.5 capitalize">{profile?.role === 'admin' ? 'Administrator' : 'Customer'}</dd>
+                            <dt className="text-sm text-[#6B6257]">Account type</dt>
+                            <dd className="font-medium text-[#1A1A1A] mt-0.5 capitalize">{profile?.role === 'admin' ? 'Administrator' : 'Customer'}</dd>
                           </div>
                           <div>
-                            <dt className="text-sm text-gray-500">Country</dt>
-                            <dd className="font-medium text-gray-900 mt-0.5">{profile?.country || '—'}</dd>
+                            <dt className="text-sm text-[#6B6257]">Country</dt>
+                            <dd className="font-medium text-[#1A1A1A] mt-0.5">{profile?.country || '—'}</dd>
                           </div>
                         </dl>
                       </div>
@@ -350,13 +351,13 @@ export default function ProfilePage() {
                   {activeTab === 'resources' && (
                     <div>
                       {resources.length === 0 ? (
-                        <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
-                          <Package className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                          <h3 className="text-lg font-semibold text-gray-900 mb-1">No purchased resources yet</h3>
-                          <p className="text-sm text-gray-600 mb-5">Browse our collection and unlock your first resource.</p>
+                        <div className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] p-12 text-center">
+                          <Package className="h-12 w-12 text-[#D8CFC0] mx-auto mb-3" />
+                          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-1">No purchased resources yet</h3>
+                          <p className="text-sm text-[#6B6257] mb-5">Browse our collection and unlock your first resource.</p>
                           <button
                             onClick={() => router.push('/')}
-                            className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                            className="bg-[var(--accent)] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-[var(--accent-deep)] transition-colors"
                           >
                             Browse resources
                           </button>
@@ -364,22 +365,22 @@ export default function ProfilePage() {
                       ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {resources.map((resource) => (
-                            <div key={resource._id} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                            <div key={resource._id} className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm overflow-hidden">
                               <div className="h-40 overflow-hidden">
                                 <img src={resource.thumbnailUrl} alt={resource.title} className="w-full h-full object-cover" />
                               </div>
                               <div className="p-5">
-                                <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                <span className="inline-block px-2 py-0.5 bg-[var(--accent-soft)] text-[var(--accent-deep)] rounded-full text-xs font-medium">
                                   {resource.category}
                                 </span>
-                                <h4 className="mt-2 text-base font-semibold text-gray-900 line-clamp-1">{resource.title}</h4>
-                                <p className="mt-1 text-xs text-gray-500 flex items-center gap-1">
+                                <h4 className="mt-2 text-base font-semibold text-[#1A1A1A] line-clamp-1">{resource.title}</h4>
+                                <p className="mt-1 text-xs text-[#6B6257] flex items-center gap-1">
                                   <Calendar className="h-3.5 w-3.5" />
                                   Purchased on {new Date(resource.purchasedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                                 </p>
                                 <button
                                   onClick={() => openResource(resource._id)}
-                                  className="mt-4 w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+                                  className="mt-4 w-full bg-[var(--accent)] text-white py-2.5 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[var(--accent-deep)] transition-colors"
                                 >
                                   <ExternalLink className="h-4 w-4" />
                                   Open Resource
@@ -396,13 +397,13 @@ export default function ProfilePage() {
                   {activeTab === 'watchlist' && (
                     <div>
                       {wishlist.length === 0 ? (
-                        <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
-                          <Heart className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                          <h3 className="text-lg font-semibold text-gray-900 mb-1">Your watchlist is empty</h3>
-                          <p className="text-sm text-gray-600 mb-5">Save resources you like and find them here later.</p>
+                        <div className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] p-12 text-center">
+                          <Heart className="h-12 w-12 text-[#D8CFC0] mx-auto mb-3" />
+                          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-1">Your watchlist is empty</h3>
+                          <p className="text-sm text-[#6B6257] mb-5">Save resources you like and find them here later.</p>
                           <button
                             onClick={() => router.push('/')}
-                            className="bg-blue-600 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                            className="bg-[var(--accent)] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-[var(--accent-deep)] transition-colors"
                           >
                             Browse resources
                           </button>
@@ -415,7 +416,7 @@ export default function ProfilePage() {
                             const thumb = typeof item.resourceId === 'string' ? undefined : item.resourceId.thumbnailUrl;
                             const category = typeof item.resourceId === 'string' ? '' : item.resourceId.category;
                             return (
-                              <div key={item._id} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                              <div key={item._id} className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm overflow-hidden">
                                 <div className="h-40 overflow-hidden">
                                   <img src={thumb || '/placeholder.png'} alt={title} className="w-full h-full object-cover" />
                                 </div>
@@ -423,17 +424,17 @@ export default function ProfilePage() {
                                   <span className="inline-block px-2 py-0.5 bg-[var(--accent-soft-2)] text-[var(--accent-text)] rounded-full text-xs font-medium">
                                     {category || 'Resource'}
                                   </span>
-                                  <h4 className="mt-2 text-base font-semibold text-gray-900 line-clamp-1">{title}</h4>
+                                  <h4 className="mt-2 text-base font-semibold text-[#1A1A1A] line-clamp-1">{title}</h4>
                                   <div className="mt-4 flex gap-2">
                                     <button
                                       onClick={() => router.push(`/resource/${id}`)}
-                                      className="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                                      className="flex-1 bg-[var(--accent)] text-white py-2.5 rounded-lg font-semibold hover:bg-[var(--accent-deep)] transition-colors"
                                     >
                                       View
                                     </button>
                                     <button
                                       onClick={() => removeFromWishlist(id)}
-                                      className="p-2.5 rounded-lg border border-gray-200 text-gray-500 hover:text-red-600 hover:border-red-300 transition-colors"
+                                      className="p-2.5 rounded-lg border border-[var(--line)] text-[#6B6257] hover:text-red-600 hover:border-red-300 transition-colors"
                                       title="Remove from wishlist"
                                     >
                                       <X className="h-4 w-4" />
@@ -452,17 +453,17 @@ export default function ProfilePage() {
                   {activeTab === 'orders' && (
                     <div>
                       {orders.length === 0 ? (
-                        <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
-                          <Receipt className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                          <h3 className="text-lg font-semibold text-gray-900 mb-1">No orders yet</h3>
-                          <p className="text-sm text-gray-600">Your purchase history will appear here.</p>
+                        <div className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] p-12 text-center">
+                          <Receipt className="h-12 w-12 text-[#D8CFC0] mx-auto mb-3" />
+                          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-1">No orders yet</h3>
+                          <p className="text-sm text-[#6B6257]">Your purchase history will appear here.</p>
                         </div>
                       ) : (
                         <div className="space-y-3">
                           {orders.map((order) => {
                             const meta = STATUS_META[order.status] || STATUS_META.pending;
                             return (
-                              <div key={order._id} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+                              <div key={order._id} className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-5">
                                 <div className="flex flex-wrap items-start justify-between gap-3">
                                   <div className="min-w-0">
                                     <div className="flex flex-wrap items-center gap-2">
@@ -470,15 +471,15 @@ export default function ProfilePage() {
                                         {order.status === 'completed' ? <CheckCircle2 className="h-3.5 w-3.5" /> : order.status === 'failed' ? <Circle className="h-3.5 w-3.5" /> : <Clock className="h-3.5 w-3.5" />}
                                         {meta.label}
                                       </span>
-                                      <span className="text-xs font-mono text-gray-500">{order.orderId}</span>
+                                      <span className="text-xs font-mono text-[#6B6257]">{order.orderId}</span>
                                     </div>
-                                    <h4 className="mt-2 text-base font-semibold text-gray-900">{order.resource?.title || 'Resource'}</h4>
-                                    <p className="mt-1 text-sm text-gray-600">
+                                    <h4 className="mt-2 text-base font-semibold text-[#1A1A1A]">{order.resource?.title || 'Resource'}</h4>
+                                    <p className="mt-1 text-sm text-[#6B6257]">
                                       {new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} · {order.gateway || 'manual'} · {order.paymentCaptured ? 'Payment captured' : order.captureStatus || '—'}
                                     </p>
                                   </div>
                                   <div className="text-right">
-                                    <p className="text-lg font-bold text-gray-900">₹{order.amount.toFixed(2)}</p>
+                                    <p className="text-lg font-bold text-[#1A1A1A]">{formatPrice(order.amount)}</p>
                                     {order.resource && (
                                       <button
                                         onClick={() => router.push(`/resource/${order.resource!._id}`)}
@@ -501,19 +502,19 @@ export default function ProfilePage() {
                   {activeTab === 'tickets' && (
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-gray-900">Your tickets</h3>
+                        <h3 className="text-lg font-semibold text-[#1A1A1A]">Your tickets</h3>
                         <button
                           onClick={() => router.push('/support')}
-                          className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                          className="text-sm font-semibold text-[var(--accent)] hover:text-[var(--accent-deep)]"
                         >
                           + Open a ticket
                         </button>
                       </div>
                       {tickets.length === 0 ? (
-                        <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
-                          <LifeBuoy className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                          <h3 className="text-lg font-semibold text-gray-900 mb-1">No support tickets</h3>
-                          <p className="text-sm text-gray-600">Need help with a payment or access issue? Create a ticket.</p>
+                        <div className="bg-[#FFFDF8] rounded-2xl border border-[var(--line)] p-12 text-center">
+                          <LifeBuoy className="h-12 w-12 text-[#D8CFC0] mx-auto mb-3" />
+                          <h3 className="text-lg font-semibold text-[#1A1A1A] mb-1">No support tickets</h3>
+                          <p className="text-sm text-[#6B6257]">Need help with a payment or access issue? Create a ticket.</p>
                         </div>
                       ) : (
                         <div className="space-y-3">
@@ -523,7 +524,7 @@ export default function ProfilePage() {
                               <button
                                 key={ticket._id}
                                 onClick={() => router.push(`/support/${ticket._id}`)}
-                                className="w-full text-left bg-white rounded-2xl border border-gray-200 shadow-sm p-5 transition-colors hover:border-blue-400"
+                                className="w-full text-left bg-[#FFFDF8] rounded-2xl border border-[var(--line)] shadow-sm p-5 transition-colors hover:border-[var(--accent)]"
                               >
                                 <div className="flex items-start justify-between gap-4">
                                   <div className="min-w-0">
@@ -531,12 +532,12 @@ export default function ProfilePage() {
                                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${meta.className}`}>
                                         {meta.label}
                                       </span>
-                                      <span className="text-xs capitalize text-gray-500">{ticket.category}</span>
-                                      {ticket.orderId && <span className="text-xs font-mono text-gray-500">#{ticket.orderId}</span>}
+                                      <span className="text-xs capitalize text-[#6B6257]">{ticket.category}</span>
+                                      {ticket.orderId && <span className="text-xs font-mono text-[#6B6257]">#{ticket.orderId}</span>}
                                     </div>
-                                    <h4 className="text-base font-semibold text-gray-900">{ticket.subject}</h4>
+                                    <h4 className="text-base font-semibold text-[#1A1A1A]">{ticket.subject}</h4>
                                   </div>
-                                  <span className="text-xs text-gray-500 flex-shrink-0">
+                                  <span className="text-xs text-[#6B6257] flex-shrink-0">
                                     {new Date(ticket.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                                   </span>
                                 </div>

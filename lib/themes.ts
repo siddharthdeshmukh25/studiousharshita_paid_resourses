@@ -19,17 +19,18 @@ export interface ThemePreset {
 
 export const THEME_PRESETS: ThemePreset[] = [
   {
+    // Legacy id kept so DB records saved as 'blue' map to the editorial default.
     id: 'blue',
-    name: 'Blue (Original)',
-    description: 'The original site theme with royal blue accents.',
-    swatch: '#2563EB',
+    name: 'Sage (Editorial)',
+    description: 'The editorial sage-green accent — the default Studious Harshita look.',
+    swatch: '#2F5D50',
     vars: {
-      '--accent': '#2563EB',
-      '--accent-deep': '#1D4ED8',
-      '--accent-soft': '#EFF6FF',
-      '--accent-soft-2': '#DBEAFE',
-      '--accent-ring': 'rgba(37, 99, 235, 0.35)',
-      '--accent-text': '#1D4ED8',
+      '--accent': '#2F5D50',
+      '--accent-deep': '#234A3F',
+      '--accent-soft': '#EAF1EE',
+      '--accent-soft-2': '#DCE9E4',
+      '--accent-ring': 'rgba(47, 93, 80, 0.28)',
+      '--accent-text': '#234A3F',
     },
   },
   {

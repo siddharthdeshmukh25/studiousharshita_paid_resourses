@@ -138,7 +138,7 @@ export default function SearchResults({ searchQuery, onResultClick, searchHistor
     return (
       <div className="p-4">
         <div className="flex justify-center py-12">
-          <div className="h-8 w-8 rounded-full border-2 border-transparent border-t-[#06B6D4] border-r-[#2563EB] border-b-[#F59E0B] border-l-[#10B981] animate-spin" />
+          <div className="h-8 w-8 rounded-full border-2 border-transparent border-t-[var(--sage)] border-r-[var(--accent)] border-b-[#F59E0B] border-l-[#10B981] animate-spin" />
         </div>
       </div>
     );
@@ -155,9 +155,9 @@ export default function SearchResults({ searchQuery, onResultClick, searchHistor
             <div
               key={resource._id}
               onClick={() => handleResourceClick(resource._id)}
-              className="flex items-center gap-3 border-b border-gray-100 bg-white p-2 text-left transition-colors last:border-b-0 hover:bg-[#F8FAFC]"
+              className="flex items-center gap-3 border-b border-[var(--line)] bg-[#FFFDF8] p-2 text-left transition-colors last:border-b-0 hover:bg-[#F8FAFC]"
             >
-              <div className="h-11 w-11 shrink-0 overflow-hidden rounded-md bg-gray-100">
+              <div className="h-11 w-11 shrink-0 overflow-hidden rounded-md bg-[var(--accent-soft)]">
                 <img
                   src={resource.thumbnailUrl}
                   alt={resource.title}

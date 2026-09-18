@@ -80,7 +80,7 @@ function PaymentReturnContent() {
     <main className="flex-1 flex items-center justify-center px-4 py-16">
       <section className="w-full max-w-lg">
         {/* Main Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-[#FFFDF8] rounded-2xl shadow-xl overflow-hidden">
           {/* Header Section */}
           <div className={`bg-gradient-to-r px-8 py-6 ${state === 'success' ? 'from-[var(--accent)] to-[var(--accent-deep)]' :
               state === 'error' ? 'from-red-500 to-rose-600' :
@@ -88,17 +88,17 @@ function PaymentReturnContent() {
             }`}>
             <div className="flex items-center justify-center">
               {state === 'verifying' && (
-                <div className="bg-white/20 rounded-full p-4">
+                <div className="bg-[#FFFDF8]/20 rounded-full p-4">
                   <Loader2 className="h-12 w-12 text-white animate-spin" />
                 </div>
               )}
               {state === 'success' && (
-                <div className="bg-white/20 rounded-full p-4">
+                <div className="bg-[#FFFDF8]/20 rounded-full p-4">
                   <CheckCircle2 className="h-12 w-12 text-white" />
                 </div>
               )}
               {state === 'error' && (
-                <div className="bg-white/20 rounded-full p-4">
+                <div className="bg-[#FFFDF8]/20 rounded-full p-4">
                   <CircleAlert className="h-12 w-12 text-white" />
                 </div>
               )}
@@ -112,14 +112,14 @@ function PaymentReturnContent() {
 
           {/* Content Section */}
           <div className="px-8 py-6">
-            <p className="text-center text-gray-600 text-sm leading-relaxed mb-6">
+            <p className="text-center text-[#6B6257] text-sm leading-relaxed mb-6">
               {message}
             </p>
 
             {/* Order Details Card */}
             {state !== 'verifying' && orderDetails && (
-              <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+              <div className="bg-[var(--background)] rounded-xl p-4 mb-6 border border-[var(--line)]">
+                <h3 className="text-sm font-semibold text-[#4A443B] mb-3 flex items-center gap-2">
                   <Receipt className="h-4 w-4" />
                   Order Details
                 </h3>
@@ -127,14 +127,14 @@ function PaymentReturnContent() {
                 <div className="space-y-3">
                   {/* Custom Order ID */}
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500">Order ID:</span>
+                    <span className="text-xs text-[#6B6257]">Order ID:</span>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono text-gray-800 bg-white px-2 py-1 rounded border">
+                      <span className="text-xs font-mono text-[#1A1A1A] bg-[#FFFDF8] px-2 py-1 rounded border">
                         {orderDetails.orderId}
                       </span>
                       <button
                         onClick={() => copyToClipboard(orderDetails.orderId)}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        className="text-[#A29785] hover:text-[#6B6257] transition-colors"
                         title="Copy Order ID"
                       >
                         {copied ? <Check className="h-3 w-3 text-[var(--accent)]" /> : <Copy className="h-3 w-3" />}
@@ -145,14 +145,14 @@ function PaymentReturnContent() {
                   {/* Razorpay Order ID */}
                   {orderDetails.razorpayOrderId && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">Razorpay Order ID:</span>
+                      <span className="text-xs text-[#6B6257]">Razorpay Order ID:</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-gray-800 bg-white px-2 py-1 rounded border">
+                        <span className="text-xs font-mono text-[#1A1A1A] bg-[#FFFDF8] px-2 py-1 rounded border">
                           {orderDetails.razorpayOrderId}
                         </span>
                         <button
                           onClick={() => copyToClipboard(orderDetails.razorpayOrderId!)}
-                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                          className="text-[#A29785] hover:text-[#6B6257] transition-colors"
                           title="Copy Razorpay Order ID"
                         >
                           {copied ? <Check className="h-3 w-3 text-[var(--accent)]" /> : <Copy className="h-3 w-3" />}
@@ -164,14 +164,14 @@ function PaymentReturnContent() {
                   {/* Payment ID */}
                   {orderDetails.paymentId && (
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">Payment ID:</span>
+                      <span className="text-xs text-[#6B6257]">Payment ID:</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-gray-800 bg-white px-2 py-1 rounded border">
+                        <span className="text-xs font-mono text-[#1A1A1A] bg-[#FFFDF8] px-2 py-1 rounded border">
                           {orderDetails.paymentId}
                         </span>
                         <button
                           onClick={() => copyToClipboard(orderDetails.paymentId!)}
-                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                          className="text-[#A29785] hover:text-[#6B6257] transition-colors"
                           title="Copy Payment ID"
                         >
                           {copied ? <Check className="h-3 w-3 text-[var(--accent)]" /> : <Copy className="h-3 w-3" />}
@@ -187,12 +187,12 @@ function PaymentReturnContent() {
             {state === 'success' && (
               <div className="flex gap-2 mb-6">
                 <div className="flex-1 bg-[var(--accent-soft)] rounded-lg p-3 flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-blue-600" />
+                  <Shield className="h-4 w-4 text-[var(--accent)]" />
                   <span className="text-xs text-[var(--accent-text)]">Secure Payment</span>
                 </div>
-                <div className="flex-1 bg-indigo-50 rounded-lg p-3 flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-indigo-600" />
-                  <span className="text-xs text-indigo-700">Instant Access</span>
+                <div className="flex-1 bg-[var(--accent-soft)] rounded-lg p-3 flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-[var(--accent)]" />
+                  <span className="text-xs text-[var(--accent-deep)]">Instant Access</span>
                 </div>
               </div>
             )}
@@ -203,7 +203,7 @@ function PaymentReturnContent() {
                 onClick={() => router.push(state === 'success' ? '/dashboard' : '/')}
                 className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all transform hover:scale-[1.02] active:scale-[0.98] ${state === 'success'
                     ? 'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] hover:from-[var(--accent-deep)] hover:to-[var(--accent-deep)]'
-                    : 'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] hover:from-blue-600 hover:to-indigo-700'
+                    : 'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] hover:from-[var(--accent)] hover:to-[var(--accent)]'
                   }`}
               >
                 {state === 'success' ? 'Go to Dashboard' : 'Return Home'}
@@ -212,21 +212,21 @@ function PaymentReturnContent() {
 
             {/* Secondary Info */}
             {state === 'success' && (
-              <p className="text-center text-xs text-gray-400 mt-4">
+              <p className="text-center text-xs text-[#A29785] mt-4">
                 A confirmation email has been sent to your registered email address.
               </p>
             )}
 
             {/* Social Media Follow Section */}
             {state === 'success' && (
-              <div className="mt-6 pt-6 border-t border-gray-100">
-                <p className="text-center text-sm font-semibold text-gray-700 mb-4">Follow us for more resources</p>
+              <div className="mt-6 pt-6 border-t border-[var(--line)]">
+                <p className="text-center text-sm font-semibold text-[#4A443B] mb-4">Follow us for more resources</p>
                 <div className="flex justify-center gap-4">
                   <a
                     href="https://beacons.ai/studiousharshita/mediakit"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+                    className="w-10 h-10 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md bg-[var(--accent-soft)] dark:bg-[#201F1C] text-[#1A1A1A] dark:text-white"
                     title="Visit Beacons"
                   >
                     <svg className="w-6 h-6" viewBox="0 0 80.4 77" fill="currentColor">
@@ -241,7 +241,7 @@ function PaymentReturnContent() {
                     href="https://www.instagram.com/studious_harshita"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white hover:scale-110 transition-transform shadow-md"
+                    className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--blush)] to-[var(--clay)] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-md"
                     title="Follow on Instagram"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -270,11 +270,11 @@ function PaymentReturnContent() {
           <div className="mt-4 space-y-3 text-center">
             <button
               onClick={() => router.push(`/support?orderId=${encodeURIComponent(orderDetails?.orderId || '')}`)}
-              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-blue-600 hover:bg-[var(--accent-deep)] transition-colors"
+              className="w-full py-3 px-4 rounded-xl font-semibold text-white bg-[var(--accent)] hover:bg-[var(--accent-deep)] transition-colors"
             >
               Raise a Support Ticket
             </button>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#6B6257]">
               Need help? Contact us at{' '}
               <a href="mailto:support@studiousharshita.com" className="text-[var(--accent)] hover:underline">
                 support@studiousharshita.com

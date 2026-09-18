@@ -7,6 +7,7 @@ import Resource from '@/models/Resource';
 import PaymentSettings from '@/models/PaymentSettings';
 import { capturePayment } from '@/lib/paymentCapture';
 import { createAdminNotification } from '@/lib/notifications';
+import { formatPrice } from '@/lib/format';
 
 function verifyCashfreeWebhookSignature(payload: string, signature: string, timestamp: string, secret: string): boolean {
   // Cashfree signs `<timestamp><rawBody>` with the API client secret and sends
@@ -109,7 +110,7 @@ export async function POST(request: NextRequest) {
         await createAdminNotification({
           type: 'new_order',
           title: 'New order completed',
-          message: `${orderTags.resourceTitle || 'Resource'} purchased — ₹${Number(data.order_amount || 0).toFixed(2)}`,
+          message: `${orderTags.resourceTitle || 'Resource'} purchased — ${formatPrice(Number(data.order_amount || 0))}`,
           link: '/admin/revenue',
         });
       } catch (error) {
@@ -160,7 +161,7 @@ export async function POST(request: NextRequest) {
         await createAdminNotification({
           type: 'payment_failed',
           title: 'Payment failed',
-          message: `${orderTags.resourceTitle || 'Resource'} — ₹${Number(data.order_amount || 0).toFixed(2)} (${data.payment?.error_message || 'Payment failed'})`,
+          message: `${orderTags.resourceTitle || 'Resource'} — ${formatPrice(Number(data.order_amount || 0))} (${data.payment?.error_message || 'Payment failed'})`,
           link: '/admin/payment-captures',
         });
       } catch (error) {

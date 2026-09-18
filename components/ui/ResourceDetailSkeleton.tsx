@@ -1,90 +1,64 @@
-const Line = ({ className = '' }: { className?: string }) => (
-  <div className={`relative overflow-hidden rounded-md bg-slate-200 ${className}`} />
-);
-
-function ResourceHeaderSkeleton() {
-  return (
-    <header className="border-b border-[#E2E8F0] bg-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-lg bg-slate-200" />
-            <Line className="hidden h-5 w-32 min-[390px]:block" />
-          </div>
-          <Line className="hidden h-10 max-w-xl flex-1 md:block" />
-          <Line className="h-9 w-20 rounded-lg" />
-        </div>
-        <div className="pb-3 md:hidden"><Line className="h-10 w-full rounded-lg" /></div>
-      </div>
-    </header>
-  );
-}
-
+/**
+ * Editorial loading skeleton for the resource detail page. Mirrors the real
+ * page's structure (gallery + details + reviews) in the paper theme so the
+ * layout doesn't jump when content arrives.
+ */
 export default function ResourceDetailSkeleton() {
   return (
-    <div className="academic-surface min-h-screen animate-pulse">
-      <ResourceHeaderSkeleton />
+    <div className="min-h-screen bg-[var(--background)]">
+      {/* Navbar placeholder */}
+      <div className="h-14 sm:h-16 border-b border-[var(--line)] bg-[#FAF6EF]/90" />
 
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
-          <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="relative aspect-square w-full overflow-hidden bg-slate-200" />
-          </section>
-
-          <section className="space-y-3">
-            <div className="space-y-3">
-              <Line className="h-7 w-24 rounded-full" />
-              <Line className="h-8 w-4/5 sm:h-10" />
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <div key={index} className="h-5 w-5 rounded bg-slate-200" />
-                  ))}
-                </div>
-                <Line className="h-4 w-28" />
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6">
-              <div className="mb-5 flex items-start justify-between">
-                <div className="space-y-2">
-                  <Line className="h-8 w-24 sm:h-10" />
-                  <Line className="h-4 w-16" />
-                </div>
-                <div className="h-9 w-9 rounded-lg bg-slate-200" />
-              </div>
-              <Line className="h-12 w-full rounded-lg" />
-              <Line className="mx-auto mt-4 h-4 w-52 max-w-full" />
-            </div>
-
-            <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6">
-              <Line className="mb-4 h-6 w-36" />
-              <div className="space-y-2.5">
-                <Line className="h-4 w-full" />
-                <Line className="h-4 w-11/12" />
-                <Line className="h-4 w-3/4" />
-              </div>
-            </div>
-          </section>
-
-          <section className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-6 lg:col-start-1">
-            <div className="mb-4 flex items-center justify-between">
-              <Line className="h-6 w-32" />
-              <Line className="h-9 w-32 rounded-lg" />
-            </div>
-            <div className="space-y-3">
-              {Array.from({ length: 2 }).map((_, index) => (
-                <div key={index} className="rounded-xl border border-slate-200 bg-white p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-2"><Line className="h-4 w-28" /><Line className="h-3 w-20" /></div>
-                    <Line className="h-3 w-16" />
-                  </div>
-                  <Line className="mt-4 h-3 w-full" />
-                  <Line className="mt-2 h-3 w-4/5" />
-                </div>
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-pulse">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+          {/* Gallery column */}
+          <div>
+            <div className="aspect-square w-full rounded-2xl border border-[var(--line)] bg-gradient-to-br from-[var(--sage-soft)] to-[var(--butter-soft)]" />
+            <div className="mt-3 flex gap-2">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-16 w-16 rounded-lg border border-[var(--line)] bg-[var(--accent-soft)]" />
               ))}
             </div>
-          </section>
+          </div>
+
+          {/* Details column */}
+          <div>
+            <div className="h-4 w-24 rounded-full bg-[var(--accent-soft-2)]" />
+            <div className="mt-4 h-9 w-4/5 rounded bg-[var(--line)]" />
+            <div className="mt-2 h-9 w-3/5 rounded bg-[var(--line)]" />
+            <div className="mt-5 flex items-center gap-2">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-5 w-5 rounded-full bg-[var(--butter-soft)]" />
+              ))}
+              <div className="h-4 w-20 rounded bg-[var(--line)]" />
+            </div>
+
+            {/* Price / CTA card */}
+            <div className="mt-6 rounded-2xl border border-[var(--line)] bg-[#FFFDF8] p-5">
+              <div className="h-8 w-28 rounded bg-[var(--line)]" />
+              <div className="mt-3 h-4 w-40 rounded bg-[var(--accent-soft)]" />
+              <div className="mt-5 h-12 w-full rounded-full bg-[var(--accent)] opacity-70" />
+              <div className="mt-2.5 h-12 w-full rounded-full border border-[var(--line)] bg-[#FFFDF8]" />
+            </div>
+
+            {/* Description lines */}
+            <div className="mt-6 space-y-2.5">
+              <div className="h-4 w-full rounded bg-[var(--line)]" />
+              <div className="h-4 w-11/12 rounded bg-[var(--line)]" />
+              <div className="h-4 w-4/6 rounded bg-[var(--line)]" />
+            </div>
+          </div>
+        </div>
+
+        {/* Reviews strip */}
+        <div className="mt-10 space-y-3">
+          <div className="h-5 w-32 rounded bg-[var(--line)]" />
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="rounded-xl border border-[var(--line)] bg-[#FFFDF8] p-4">
+              <div className="h-4 w-36 rounded bg-[var(--accent-soft-2)]" />
+              <div className="mt-2.5 h-3.5 w-3/4 rounded bg-[var(--line)]" />
+            </div>
+          ))}
         </div>
       </main>
     </div>

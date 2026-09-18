@@ -1,59 +1,119 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ContactForm from '@/components/contact/ContactForm';
+import JsonLd from '@/components/seo/JsonLd';
+import {
+  BUSINESS_ADDRESS,
+  BUSINESS_ADDRESS_TEXT,
+  CONTACT_EMAIL,
+  LEGAL_ENTITY,
+  SITE_NAME,
+  siteUrl,
+} from '@/lib/site';
+
+export const metadata: Metadata = {
+  title: `Contact ${SITE_NAME} — Support for Digital Study Resources`,
+  description:
+    'Contact Studious Harshita for order, access, payment or refund help on our digital study notes. Email support@studiousharshita.com or use the form; we reply within 24–48 business hours.',
+  keywords: [
+    'contact Studious Harshita',
+    'study notes support India',
+    'digital study resource help',
+    'refund request study notes',
+  ],
+  alternates: { canonical: '/contact' },
+  openGraph: {
+    type: 'website',
+    url: '/contact',
+    title: `Contact ${SITE_NAME}`,
+    description:
+      'Reach the Studious Harshita support team for help with study resources, orders, payments and refunds.',
+    siteName: SITE_NAME,
+  },
+};
+
+const contactSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: `Contact ${SITE_NAME}`,
+  url: siteUrl('/contact'),
+  mainEntity: {
+    '@type': 'Organization',
+    name: SITE_NAME,
+    legalName: LEGAL_ENTITY,
+    email: CONTACT_EMAIL,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: BUSINESS_ADDRESS.street,
+      addressLocality: BUSINESS_ADDRESS.city,
+      addressRegion: BUSINESS_ADDRESS.region,
+      postalCode: BUSINESS_ADDRESS.postalCode,
+      addressCountry: BUSINESS_ADDRESS.country,
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: CONTACT_EMAIL,
+      areaServed: 'IN',
+      availableLanguage: ['en', 'hi', 'gu'],
+    },
+  },
+};
 
 export default function Contact() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-[var(--background)]">
       <Navbar />
-      
+
+      <JsonLd data={contactSchema} />
+
       <main className="flex-1 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Contact Us</h1>
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--accent)]">Support</p>
+          <h1 className="mt-2 text-3xl font-bold text-[#1A1A1A] mb-8 sm:text-4xl">
+            Contact Studious Harshita — Study Resource Support in Ahmedabad
+          </h1>
             
-            <div className="space-y-6 text-gray-700">
+            <div className="space-y-6 text-[#4A443B]">
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">Get in Touch</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Get in Touch</h2>
                 <p className="leading-relaxed text-justify">
                   We are here to help you with any questions, concerns, or support requests regarding our educational resources and services. Please reach out to us through any of the following channels.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">Contact Information</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Contact Information</h2>
                 <div className="mt-4 space-y-4">
-                  <div className="bg-white p-6 rounded-lg border border-gray-200">
-                    <h3 className="font-semibold text-gray-900 mb-2">Official Email</h3>
-                    <p className="text-lg text-[var(--accent)]">support@studiousharshita.com</p>
-                    <p className="text-sm text-gray-500 mt-1">For general inquiries, support, and technical assistance</p>
-                  </div>
-                  
-                  <div className="bg-white p-6 rounded-lg border border-gray-200">
-                    <h3 className="font-semibold text-gray-900 mb-2">Phone Number</h3>
-                    <p className="text-lg text-[var(--accent)]">+91 95122 15337</p>
-                    <p className="text-sm text-gray-500 mt-1">Available for urgent matters during business hours (9 AM - 6 PM IST)</p>
+                  <div className="bg-[#FFFDF8] p-6 rounded-lg border border-[var(--line)]">
+                    <h3 className="font-semibold text-[#1A1A1A] mb-2">Official Email</h3>
+                    <p className="text-lg text-[var(--accent)]">
+                      <a href={`mailto:${CONTACT_EMAIL}`} className="hover:underline">{CONTACT_EMAIL}</a>
+                    </p>
+                    <p className="text-sm text-[#6B6257] mt-1">For general inquiries, support, and technical assistance</p>
                   </div>
                 </div>
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">Business Information</h2>
-                <div className="mt-4 space-y-2 text-gray-700">
-                  <p><strong>Legal Entity Name:</strong> Harshita Pravinbhai Soni</p>
-                  <p><strong>Registered Address:</strong> Vyasvadi, Vadaj, Ahmedabad, Gujarat, India - 380013</p>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Business Information</h2>
+                <div className="mt-4 space-y-2 text-[#4A443B]">
+                  <p><strong>Legal Entity Name:</strong> {LEGAL_ENTITY}</p>
+                  <p><strong>Registered Address:</strong> {BUSINESS_ADDRESS_TEXT}</p>
                   <p><strong>Business Type:</strong> Educational Digital Resources</p>
                 </div>
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">Response Time</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Response Time</h2>
                 <p className="leading-relaxed text-justify">
                   We strive to respond to all inquiries within 24-48 business hours. For urgent technical issues related to accessing purchased resources, please include your order number and registered email address in your communication to help us assist you faster.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">Support Topics</h2>
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Support Topics</h2>
                 <p className="leading-relaxed text-justify">
                   We can assist you with:
                 </p>
@@ -69,16 +129,16 @@ export default function Contact() {
             </div>
 
               <section>
-                <h2 className="text-xl font-semibold text-gray-900 mb-3">Write to us</h2>
-                <p className="leading-relaxed text-justify text-gray-700 mb-6">
+                <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Write to us</h2>
+                <p className="leading-relaxed text-justify text-[#4A443B] mb-6">
                   Have a query about a resource, your payment, or a student project you are working on?
                   Send it through the form below and we will respond within 24-48 business hours.
                 </p>
                 <ContactForm />
               </section>
 
-            <div className="mt-8 pt-6 border-t border-gray-200">
-              <p className="text-sm text-gray-500">
+            <div className="mt-8 pt-6 border-t border-[var(--line)]">
+              <p className="text-sm text-[#6B6257]">
                 Last updated: September 2, 2026
               </p>
             </div>

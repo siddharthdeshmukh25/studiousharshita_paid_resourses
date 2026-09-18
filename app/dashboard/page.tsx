@@ -78,17 +78,17 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-[var(--background)]">
       <Navbar />
 
       <main className="flex-1 py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-6 md:mb-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2">
               My Dashboard
             </h1>
-            <p className="text-gray-600">
+            <p className="text-[#6B6257]">
               Welcome back, {session?.user?.name || session?.user?.email}! Here are your purchased resources.
             </p>
           </div>
@@ -113,12 +113,12 @@ export default function DashboardPage() {
 
           {/* Resources Grid */}
           {resources.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-              <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <div className="text-center py-16 bg-[#FFFDF8] rounded-xl border border-[var(--line)]">
+              <Package className="h-16 w-16 text-[#A29785] mx-auto mb-4" />
+              <h2 className="text-xl font-semibold text-[#1A1A1A] mb-2">
                 No purchased resources yet
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-[#6B6257] mb-6">
                 Start exploring our collection of premium resources
               </p>
               <button
@@ -133,7 +133,7 @@ export default function DashboardPage() {
               {resources.map((resource) => (
                 <div
                   key={resource._id}
-                  className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-200"
+                  className="bg-[#FFFDF8] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-[var(--line)]"
                 >
                   {/* Thumbnail */}
                   <div className="h-44 md:h-48 overflow-hidden">
@@ -149,15 +149,15 @@ export default function DashboardPage() {
                     <span className="inline-block px-2 py-1 bg-[var(--accent-soft-2)] text-[var(--accent-text)] rounded-full text-[10px] md:text-xs font-medium mb-2">
                       {resource.category}
                     </span>
-                    <h3 className="text-sm md:text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                    <h3 className="text-sm md:text-lg font-semibold text-[#1A1A1A] mb-2 line-clamp-2">
                       {resource.title}
                     </h3>
-                    <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4 line-clamp-2">
+                    <p className="text-xs md:text-sm text-[#6B6257] mb-3 md:mb-4 line-clamp-2">
                       {resource.description}
                     </p>
 
                     {/* Purchase Date */}
-                    <div className="flex items-center text-[10px] md:text-xs text-gray-500 mb-3 md:mb-4">
+                    <div className="flex items-center text-[10px] md:text-xs text-[#6B6257] mb-3 md:mb-4">
                       <Calendar className="h-3 w-3 md:h-4 md:w-4 mr-1" />
                       Purchased on {new Date(resource.purchasedAt).toLocaleDateString()}
                     </div>

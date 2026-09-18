@@ -60,18 +60,18 @@ export default function ContactForm() {
   };
 
   return (
-    <section className="bg-white p-6 md:p-8 rounded-2xl border border-gray-200 shadow-sm">
-      <h2 className="text-xl font-bold text-gray-900 mb-1">Send us a message</h2>
-      <p className="text-base text-gray-600 mb-6">
+    <section className="bg-[#FFFDF8] p-6 md:p-8 rounded-2xl border border-[var(--line)] shadow-sm">
+      <h2 className="text-xl font-bold text-[#1A1A1A] mb-1">Send us a message</h2>
+      <p className="text-base text-[#6B6257] mb-6">
         Fill in the form below and our team will get back to you within 24-48 business hours.
       </p>
 
       {success && (
-        <div className="mb-5 p-4 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3">
-          <CheckCircle2 className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+        <div className="mb-5 p-4 bg-[var(--accent-soft)] border border-[var(--accent-soft-2)] rounded-xl flex items-start gap-3">
+          <CheckCircle2 className="h-5 w-5 text-[var(--accent)] mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-semibold text-blue-800">Message sent!</p>
-            <p className="text-sm text-blue-700">Thank you for reaching out. We will reply to your email shortly.</p>
+            <p className="font-semibold text-[var(--accent-deep)]">Message sent!</p>
+            <p className="text-sm text-[var(--accent-deep)]">Thank you for reaching out. We will reply to your email shortly.</p>
           </div>
         </div>
       )}
@@ -83,36 +83,36 @@ export default function ContactForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label htmlFor="contact-name" className="block text-sm font-semibold text-gray-900 mb-2">Your name</label>
+            <label htmlFor="contact-name" className="block text-sm font-semibold text-[#1A1A1A] mb-2">Your name</label>
             <input
               id="contact-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Full name"
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-4 py-3 text-base text-[#1A1A1A] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
             />
           </div>
           <div>
-            <label htmlFor="contact-email" className="block text-sm font-semibold text-gray-900 mb-2">Email address</label>
+            <label htmlFor="contact-email" className="block text-sm font-semibold text-[#1A1A1A] mb-2">Email address</label>
             <input
               id="contact-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-4 py-3 text-base text-[#1A1A1A] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
             />
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label htmlFor="contact-topic" className="block text-sm font-semibold text-gray-900 mb-2">Topic</label>
+            <label htmlFor="contact-topic" className="block text-sm font-semibold text-[#1A1A1A] mb-2">Topic</label>
             <select
               id="contact-topic"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-4 py-3 text-base text-[#1A1A1A] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
             >
               {TOPICS.map((t) => (
                 <option key={t.value} value={t.value}>{t.label}</option>
@@ -120,20 +120,20 @@ export default function ContactForm() {
             </select>
           </div>
           <div>
-            <label htmlFor="contact-subject" className="block text-sm font-semibold text-gray-900 mb-2">Subject</label>
+            <label htmlFor="contact-subject" className="block text-sm font-semibold text-[#1A1A1A] mb-2">Subject</label>
             <input
               id="contact-subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Brief summary"
               maxLength={200}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-4 py-3 text-base text-[#1A1A1A] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="contact-message" className="block text-sm font-semibold text-gray-900 mb-2">Your message</label>
+          <label htmlFor="contact-message" className="block text-sm font-semibold text-[#1A1A1A] mb-2">Your message</label>
           <textarea
             id="contact-message"
             value={message}
@@ -141,7 +141,7 @@ export default function ContactForm() {
             placeholder="Write your query or project details here…"
             rows={6}
             maxLength={5000}
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 resize-y"
+            className="w-full rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-4 py-3 text-base text-[#1A1A1A] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 resize-y"
           />
         </div>
 
@@ -149,7 +149,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-blue-700 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 bg-[var(--accent)] text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-[var(--accent-deep)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {submitting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
             Send message

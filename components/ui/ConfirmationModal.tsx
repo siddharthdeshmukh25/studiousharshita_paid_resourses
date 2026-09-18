@@ -59,10 +59,10 @@ export default function ConfirmationModal({
     },
     info: {
       icon: Info,
-      iconBg: 'bg-blue-100',
-      iconColor: 'text-blue-600',
+      iconBg: 'bg-[var(--accent-soft)]',
+      iconColor: 'text-[var(--accent)]',
       confirm: 'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] hover:from-[var(--accent-deep)] hover:to-[var(--accent-deep)]',
-      confirmShadow: 'shadow-lg shadow-blue-500/30'
+      confirmShadow: 'shadow-lg shadow-[var(--accent)]/30'
     }
   };
 
@@ -71,7 +71,7 @@ export default function ConfirmationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px] p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 border border-gray-200 transform transition-all duration-200 scale-in">
+      <div className="bg-[#FFFDF8] rounded-2xl shadow-2xl max-w-sm w-full mx-4 border border-[var(--line)] transform transition-all duration-200 scale-in">
         <div className="p-6">
           {/* Icon */}
           <div className={`mx-auto w-14 h-14 rounded-full ${currentStyle.iconBg} flex items-center justify-center mb-4`}>
@@ -79,16 +79,16 @@ export default function ConfirmationModal({
           </div>
 
           {/* Title */}
-          <h2 className="text-lg font-bold text-gray-900 text-center mb-2">{title}</h2>
+          <h2 className="text-lg font-bold text-[#1A1A1A] text-center mb-2">{title}</h2>
 
           {/* Message */}
-          <p className="text-gray-600 text-sm text-center leading-relaxed mb-6">{message}</p>
+          <p className="text-[#6B6257] text-sm text-center leading-relaxed mb-6">{message}</p>
 
           {/* Buttons */}
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 font-medium text-sm hover:bg-gray-50 transition-all duration-150"
+              className="flex-1 px-4 py-2.5 border border-[var(--line)] rounded-xl text-[#4A443B] font-medium text-sm hover:bg-[var(--background)] transition-all duration-150"
             >
               {cancelText}
             </button>

@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState, useRef } from 'react';
 import { Plus, Ticket, Trash2, IndianRupee, Percent, ToggleLeft, ToggleRight, Power, Loader2, X, Search, Edit2, Upload, Eye } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { formatPrice } from '@/lib/format';
 
 type Coupon = { 
   _id: string; 
@@ -809,11 +810,11 @@ export default function CouponsPage() {
                       <td className="px-3 py-3">
                         {coupon.discountType === 'percentage' 
                           ? `${coupon.discountPercentage}%` 
-                          : `₹${coupon.discountAmount}`}
+                          : formatPrice(coupon.discountAmount)}
                       </td>
                       <td className="px-3 py-3">
                         {coupon.minimumPurchaseAmount && coupon.minimumPurchaseAmount > 0 
-                          ? `₹${coupon.minimumPurchaseAmount}` 
+                          ? formatPrice(coupon.minimumPurchaseAmount) 
                           : 'No minimum'}
                       </td>
                       <td className="px-3 py-3">
