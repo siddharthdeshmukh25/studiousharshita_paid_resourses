@@ -1,9 +1,20 @@
-import Link from 'next/link';
-import { Mail, MapPin } from 'lucide-react';
-import { BUSINESS_ADDRESS_TEXT, CONTACT_EMAIL, SITE_NAME, SITE_WORDMARK } from '@/lib/site';
+'use client';
 
-// Update the Pinterest URL once the official profile is live.
-const PINTEREST_URL = 'https://www.pinterest.com/';
+import Link from 'next/link';
+import { Mail } from 'lucide-react';
+import { SITE_NAME } from '@/lib/site';
+import { useBrandProfile } from '@/lib/brand-profile';
+
+const SOCIAL_LABELS = [
+  { key: 'instagram', label: 'Instagram' },
+  { key: 'tiktok', label: 'TikTok' },
+  { key: 'facebook', label: 'Facebook' },
+  { key: 'threads', label: 'Threads' },
+  { key: 'youtube', label: 'YouTube' },
+  { key: 'pinterest', label: 'Pinterest' },
+  { key: 'linkedin', label: 'LinkedIn' },
+  { key: 'snapchat', label: 'Snapchat' },
+] as const;
 
 const FOOTER_NAV = [
   { href: '/about', label: 'About' },
@@ -12,13 +23,6 @@ const FOOTER_NAV = [
   { href: '/guides', label: 'Blog' },
   { href: '/support', label: 'Work With Me' },
   { href: '/contact', label: 'Contact' },
-];
-
-const SOCIAL_LINKS = [
-  { href: 'https://www.instagram.com/studious_harshita', label: 'Instagram' },
-  { href: 'https://youtube.com/@studious_harshita', label: 'YouTube' },
-  { href: PINTEREST_URL, label: 'Pinterest' },
-  { href: 'https://www.linkedin.com/in/siddharth-deshmukh2028', label: 'LinkedIn' },
 ];
 
 const LEGAL_LINKS = [
@@ -30,12 +34,24 @@ const LEGAL_LINKS = [
 ];
 
 export default function Footer() {
+  const profile = useBrandProfile();
+
+  // Admin-editable links/emails (lib/site.ts defaults) — empty entries are hidden.
+  const SOCIAL_LINKS = SOCIAL_LABELS.map(({ key, label }) => ({ href: profile.socials[key], label })).filter(
+    (link) => link.href
+  );
+  const CONTACT_EMAILS = [
+    { email: profile.emails.support, purpose: 'Support' },
+    { email: profile.emails.contact, purpose: 'General queries' },
+    { email: profile.emails.brand, purpose: 'Brand deals' },
+  ].filter((entry) => entry.email);
+
   return (
     <footer className="border-t border-[#1A1A1A] bg-[#1A1A1A] text-[#FAF6EF]">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           {/* Brand */}
-          <div>
+          <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <p className="font-serif-display text-2xl tracking-tight">
               studious<span className="italic text-[var(--butter)]">harshita</span><span className="text-[var(--butter)]">.</span>
             </p>
@@ -47,7 +63,7 @@ export default function Footer() {
           </div>
 
           {/* Navigation */}
-          <nav aria-label="Footer navigation">
+          <nav aria-label="Footer navigation" className="min-w-0">
             <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#FAF6EF]/50">Explore</h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               {FOOTER_NAV.map((link) => (
@@ -60,7 +76,7 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* Social */}
+          {/* Social — editable from /admin/profile */}
           <div>
             <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#FAF6EF]/50">Elsewhere</h2>
             <ul className="mt-4 space-y-2.5 text-sm">
@@ -79,20 +95,23 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact — editable from /admin/profile */}
           <div>
             <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#FAF6EF]/50">Say hello</h2>
             <ul className="mt-4 space-y-3 text-sm text-[#FAF6EF]/80">
-              <li className="flex items-start gap-2.5">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--butter)]" />
-                <a href={`mailto:${CONTACT_EMAIL}`} className="break-all transition-colors hover:text-[var(--butter)]">
-                  {CONTACT_EMAIL}
-                </a>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--butter)]" />
-                <span>{BUSINESS_ADDRESS_TEXT}</span>
-              </li>
+              {CONTACT_EMAILS.map(({ email, purpose }) => (
+                <li key={email} className="flex items-start gap-2.5">
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--butter)]" />
+                  <span>
+                    <a href={`mailto:${email}`} className="break-all transition-colors hover:text-[var(--butter)]">
+                      {email}
+                    </a>
+                    <span className="mt-0.5 block text-[11px] uppercase tracking-[0.12em] text-[#FAF6EF]/45">
+                      {purpose}
+                    </span>
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

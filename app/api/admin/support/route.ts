@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     if (status && ['open', 'in_progress', 'resolved', 'closed'].includes(status)) {
       query.status = status;
     }
-    if (source === 'contact' || source === 'support') {
+    if (source === 'contact' || source === 'support' || source === 'collaboration') {
       query.source = source;
     }
     if (search && search.trim()) {

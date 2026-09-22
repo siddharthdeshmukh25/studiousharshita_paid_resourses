@@ -37,9 +37,9 @@ interface Ticket {
   category: string;
   status: string;
   priority: string;
-  source: 'support' | 'contact';
+  source: 'support' | 'contact' | 'collaboration';
   orderId?: string;
-  userId: TicketUser;
+  userId?: TicketUser;
   createdAt: string;
   updatedAt: string;
   messages?: Message[];
@@ -236,7 +236,7 @@ function AdminSupportPageContent() {
 
   const sourceTabs = (
     <div className="flex gap-1 rounded-lg border border-gray-200 p-1 dark:border-gray-700">
-      {(['all', 'support', 'contact'] as const).map((s) => (
+      {(['all', 'support', 'contact', 'collaboration'] as const).map((s) => (
         <button
           key={s}
           onClick={() => setSourceFilter(s)}
@@ -246,7 +246,7 @@ function AdminSupportPageContent() {
               : 'text-gray-600 dark:text-gray-400'
           }`}
         >
-          {s === 'all' ? 'All' : s === 'support' ? 'Support' : 'Contact'}
+          {s === 'all' ? 'All' : s === 'support' ? 'Support' : s === 'contact' ? 'Contact' : 'Collaboration'}
         </button>
       ))}
     </div>
@@ -336,6 +336,11 @@ function AdminSupportPageContent() {
                         {ticket.source === 'contact' && (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
                             Contact
+                          </span>
+                        )}
+                        {ticket.source === 'collaboration' && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300">
+                            Collaboration
                           </span>
                         )}
                         {ticket.priority === 'high' && (

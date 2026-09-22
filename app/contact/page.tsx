@@ -4,11 +4,13 @@ import Footer from '@/components/layout/Footer';
 import ContactForm from '@/components/contact/ContactForm';
 import JsonLd from '@/components/seo/JsonLd';
 import {
+  BRAND_EMAIL,
   BUSINESS_ADDRESS,
   BUSINESS_ADDRESS_TEXT,
   CONTACT_EMAIL,
   LEGAL_ENTITY,
   SITE_NAME,
+  SUPPORT_EMAIL,
   siteUrl,
 } from '@/lib/site';
 
@@ -42,7 +44,7 @@ const contactSchema = {
     '@type': 'Organization',
     name: SITE_NAME,
     legalName: LEGAL_ENTITY,
-    email: CONTACT_EMAIL,
+    email: SUPPORT_EMAIL,
     address: {
       '@type': 'PostalAddress',
       streetAddress: BUSINESS_ADDRESS.street,
@@ -54,7 +56,7 @@ const contactSchema = {
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer support',
-      email: CONTACT_EMAIL,
+      email: SUPPORT_EMAIL,
       areaServed: 'IN',
       availableLanguage: ['en', 'hi', 'gu'],
     },
@@ -85,13 +87,27 @@ export default function Contact() {
 
               <section>
                 <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">Contact Information</h2>
-                <div className="mt-4 space-y-4">
+                <div className="mt-4 grid gap-4 sm:grid-cols-3">
                   <div className="bg-[#FFFDF8] p-6 rounded-lg border border-[var(--line)]">
-                    <h3 className="font-semibold text-[#1A1A1A] mb-2">Official Email</h3>
-                    <p className="text-lg text-[var(--accent)]">
+                    <h3 className="font-semibold text-[#1A1A1A] mb-2">Support</h3>
+                    <p className="text-[var(--accent)] break-all">
+                      <a href={`mailto:${SUPPORT_EMAIL}`} className="hover:underline">{SUPPORT_EMAIL}</a>
+                    </p>
+                    <p className="text-sm text-[#6B6257] mt-1">Orders, payments, refunds & technical help</p>
+                  </div>
+                  <div className="bg-[#FFFDF8] p-6 rounded-lg border border-[var(--line)]">
+                    <h3 className="font-semibold text-[#1A1A1A] mb-2">General queries</h3>
+                    <p className="text-[var(--accent)] break-all">
                       <a href={`mailto:${CONTACT_EMAIL}`} className="hover:underline">{CONTACT_EMAIL}</a>
                     </p>
-                    <p className="text-sm text-[#6B6257] mt-1">For general inquiries, support, and technical assistance</p>
+                    <p className="text-sm text-[#6B6257] mt-1">Questions, feedback & suggestions</p>
+                  </div>
+                  <div className="bg-[#FFFDF8] p-6 rounded-lg border border-[var(--line)]">
+                    <h3 className="font-semibold text-[#1A1A1A] mb-2">Brand deals</h3>
+                    <p className="text-[var(--accent)] break-all">
+                      <a href={`mailto:${BRAND_EMAIL}`} className="hover:underline">{BRAND_EMAIL}</a>
+                    </p>
+                    <p className="text-sm text-[#6B6257] mt-1">Collaborations & partnerships</p>
                   </div>
                 </div>
               </section>

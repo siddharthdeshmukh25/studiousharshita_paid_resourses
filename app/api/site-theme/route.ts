@@ -3,6 +3,10 @@ import connectDB from '@/lib/db/mongodb';
 import { SiteSettings } from '@/models/SiteSettings';
 import { resolveThemeVars, THEME_PRESETS } from '@/lib/themes';
 
+// Theme is editable at runtime from admin — never cache it (Next 16 would
+// otherwise serve a stale response after the admin changes it).
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     await connectDB();
@@ -14,10 +18,16 @@ export async function GET() {
     const theme = doc?.theme ?? { preset: 'blue', customColor: null };
     const preset = (theme.preset ?? 'blue') as 'blue' | 'green' | 'custom';
     const vars = resolveThemeVars(preset, theme.customColor ?? null);
-    return NextResponse.json({ preset, customColor: theme.customColor ?? null, vars, presets: THEME_PRESETS });
+    return NextResponse.json(
+      { preset, customColor: theme.customColor ?? null, vars, presets: THEME_PRESETS },
+      { headers: { 'Cache-Control': 'no-store' } }
+    );
   } catch {
     // Fail-safe: default blue theme if DB is unreachable.
     const vars = resolveThemeVars('blue');
-    return NextResponse.json({ preset: 'blue', customColor: null, vars, presets: THEME_PRESETS });
+    return NextResponse.json(
+      { preset: 'blue', customColor: null, vars, presets: THEME_PRESETS },
+      { headers: { 'Cache-Control': 'no-store' } }
+    );
   }
 }

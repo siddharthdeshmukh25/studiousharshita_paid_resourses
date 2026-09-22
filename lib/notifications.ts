@@ -7,6 +7,7 @@ export type NotificationType =
   | 'new_ticket'
   | 'ticket_reply'
   | 'new_contact'
+  | 'new_collab'
   | 'capture_failed'
   | 'system';
 

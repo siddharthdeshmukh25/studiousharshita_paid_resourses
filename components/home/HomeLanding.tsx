@@ -184,30 +184,31 @@ export default function HomeLanding() {
                 tools, study systems, AI resources and ideas to help students make progress.
               </p>
 
-              <div className="mt-7 flex flex-wrap items-center gap-3">
+              <div className="mt-7 flex items-center gap-2 sm:gap-3">
                 <Link
                   href="/resources?type=free"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-[#FDFBF6] shadow-[0_10px_24px_rgba(47,93,80,0.22)] transition-all hover:-translate-y-0.5 hover:bg-[var(--accent-deep)] hover:shadow-[0_14px_28px_rgba(47,93,80,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-ring)] focus-visible:ring-offset-2"
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[var(--accent)] px-4 py-2.5 text-xs font-semibold text-[#FDFBF6] shadow-[0_10px_24px_rgba(47,93,80,0.22)] transition-all hover:-translate-y-0.5 hover:bg-[var(--accent-deep)] hover:shadow-[0_14px_28px_rgba(47,93,80,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-ring)] focus-visible:ring-offset-2 sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
                 >
-                  <BookOpen className="h-4 w-4" />
+                  <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   Explore Free Resources
                 </Link>
                 <Link
                   href={primaryCtaHref}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#1A1A1A]/20 bg-[#FFFDF8]/80 px-6 py-3 text-sm font-semibold text-[#1A1A1A] transition-all hover:-translate-y-0.5 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:shadow-md"
+                  className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-[#1A1A1A]/20 bg-[#FFFDF8]/80 px-4 py-2.5 text-xs font-semibold text-[#1A1A1A] transition-all hover:-translate-y-0.5 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:shadow-md sm:gap-2 sm:px-6 sm:py-3 sm:text-sm"
                 >
                   Visit the Shop
-                  <ArrowUpRight className="h-4 w-4" />
+                  <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </Link>
               </div>
 
-              {/* Handwritten annotation + doodle arrow */}
-              <p className="font-hand mt-4 flex items-center gap-2 text-lg leading-none text-[var(--accent)]">
-                <svg viewBox="0 0 100 60" aria-hidden="true" className="h-8 w-14 -scale-x-100 text-[var(--accent)]">
+              {/* Handwritten annotation + doodle arrow — arrowhead tucks up
+                  toward the CTA row so the line reads "this way to free stuff" */}
+              <p className="font-hand mt-3 flex items-center gap-1.5 pl-1 text-base leading-none text-[var(--accent)] sm:mt-4 sm:gap-2 sm:pl-0 sm:text-lg">
+                <svg viewBox="0 0 100 60" aria-hidden="true" className="h-6 w-10 shrink-0 -translate-y-1.5 -scale-x-100 text-[var(--accent)] sm:h-8 sm:w-14 sm:-translate-y-2">
                   <path d="M6 50 C 30 44, 58 30, 88 12" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
                   <path d="M78 10 l 11 1 -5 10" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                start here — it&apos;s all free ♡
+                <span>start here — it&apos;s all free ♡</span>
               </p>
 
               {/* Magazine-annotation stats */}
@@ -223,8 +224,8 @@ export default function HomeLanding() {
             </Reveal>
           </div>
 
-          {/* ---- Scrapbook composition column ---- */}
-          <div className="lg:col-span-5">
+          {/* ---- Scrapbook composition column (desktop only — hidden on mobile) ---- */}
+          <div className="hidden lg:col-span-5 lg:block">
             <Reveal delay={120}>
               <div aria-hidden="true" className="pointer-events-none relative mx-auto h-[340px] w-[300px] select-none sm:h-[400px] sm:w-[360px] lg:h-[430px] lg:w-[390px]">
                 {/* Graph-paper board */}
@@ -303,9 +304,9 @@ export default function HomeLanding() {
 
           <div className="mt-8 space-y-10">
             {loading ? (
-              <div className="grid grid-cols-2 min-[600px]:grid-cols-4 gap-0">
+              <div className="-mx-4 flex gap-3 overflow-x-auto px-4 no-scrollbar sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-4 sm:overflow-visible sm:px-0">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="aspect-square animate-pulse bg-[var(--sage-soft)]" />
+                  <div key={i} className="aspect-square w-[44%] shrink-0 animate-pulse bg-[var(--sage-soft)] sm:w-auto" />
                 ))}
               </div>
             ) : !hasFeatured ? (
@@ -315,8 +316,8 @@ export default function HomeLanding() {
               </div>
             ) : (
               [
-                { id: 'free', kicker: 'free notes', title: 'start with something free', items: featuredFree },
                 { id: 'paid', kicker: 'paid notes', title: 'notes students swear by', items: featuredPaid },
+                { id: 'free', kicker: 'free notes', title: 'start with something free', items: featuredFree },
               ]
                 .filter((row) => row.items.length > 0)
                 .map((row) => (
@@ -330,23 +331,26 @@ export default function HomeLanding() {
                         View all →
                       </Link>
                     </div>
-                    {/* Scroll-snap row on mobile, flush 4-up grid on larger screens */}
-                    <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-0 sm:overflow-visible sm:px-0 sm:pb-0">
+                    {/* Mobile: swipeable rail — cards keep phone size and the
+                        row scrolls instead of wrapping. Desktop: 4-up grid. */}
+                    <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 no-scrollbar sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:gap-5">
                       {row.items.map((resource) => {
-                        const hasDiscount = typeof resource.discount === 'number' && resource.discount > 0;
                         // Numeric price after discount — formatted exactly once at render.
-                        const finalPrice = hasDiscount
-                          ? discountedPrice(resource.price, resource.discount as number)
-                          : resource.price;
+                        // Coerce so a string discount ("20") still shows the discounted price.
+                        const discountValue = Number(resource.discount);
+                        const hasDiscount = Number.isFinite(discountValue) && discountValue > 0 && discountValue < 100;
+                        const finalPrice = hasDiscount ? discountedPrice(resource.price, discountValue) : resource.price;
+                        // Cover image: newer uploads only fill images[], older ones only thumbnailUrl.
+                        const displayImage = resource.images && resource.images.length > 0 ? resource.images[0] : resource.thumbnailUrl;
                         const isBestseller = (resource.avgRating || 0) >= 4.5 || resource.price >= 2000;
                         return (
                           <button
                             key={resource._id}
                             type="button"
                             onClick={() => router.push(`/resource/${resource._id}`)}
-                            className="group w-44 shrink-0 snap-start text-left sm:w-auto"
+                            className="group h-full w-[44%] shrink-0 snap-start text-left sm:w-auto"
                           >
-                            <div className="relative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_14px_28px_rgba(26,26,26,0.12)]">
+                            <div className="relative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
                               <span
                                 className={`absolute left-0 top-3 z-10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide shadow-md ${
                                   isBestseller ? 'bg-[var(--butter)] text-[#1A1A1A]' : 'bg-[var(--accent)] text-[#FDFBF6]'
@@ -355,9 +359,9 @@ export default function HomeLanding() {
                                 {isBestseller ? '★ Bestseller' : 'Trending'}
                               </span>
                               <div className="aspect-square w-full overflow-hidden rounded-t-lg bg-[var(--sage-soft)]">
-                                {resource.thumbnailUrl ? (
+                                {displayImage ? (
                                   // eslint-disable-next-line @next/next/no-img-element
-                                  <img src={resource.thumbnailUrl} alt={resource.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+                                  <img src={displayImage} alt={resource.title} loading="lazy" className="h-full w-full object-cover" />
                                 ) : (
                                   <div className="grid h-full place-items-center text-[var(--accent)]"><BookOpen className="h-10 w-10" /></div>
                                 )}
@@ -399,11 +403,11 @@ export default function HomeLanding() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#6B6257]">the map</p>
-            <h2 className="font-serif-display mt-1 text-3xl italic text-[#1A1A1A] sm:text-4xl">what can you find here?</h2>
+            <h2 className="font-serif-display mt-1 text-4xl font-bold text-[#1A1A1A] sm:text-5xl">what can you find here?</h2>
           </Reveal>
 
           {/* Mobile: swipeable editorial cards; desktop: asymmetric 6-col grid */}
-          <div className="-mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-6 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0">
+          <div className="-mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 no-scrollbar sm:mx-0 sm:grid sm:grid-cols-6 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0">
             {CATEGORY_CARDS.map((card, index) => (
               <Reveal
                 key={card.id}
@@ -412,14 +416,14 @@ export default function HomeLanding() {
               >
                 <Link
                   href={card.href}
-                  className={`group flex h-full flex-col rounded-2xl border border-[var(--line)] ${card.bg} p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_32px_rgba(26,26,26,0.10)]`}
+                  className={`group flex h-full flex-col rounded-2xl border border-[var(--line)] ${card.bg} p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(26,26,26,0.10)]`}
                 >
                   <div className="flex items-start justify-between">
                     <span className="font-serif-display text-4xl italic text-[#1A1A1A]/20">{card.id}</span>
                     <span aria-hidden="true" className="font-hand text-lg text-[#1A1A1A]/40 transition-transform duration-300 group-hover:rotate-6">{['✷', '♡', '✦', '✿', '✸'][index]}</span>
                   </div>
                   <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.16em] text-[#1A1A1A]/60">{card.label}</p>
-                  <h3 className="font-serif-display mt-1 text-2xl italic leading-tight text-[#1A1A1A]">{card.text}</h3>
+                  <h3 className="font-serif-display mt-1 text-2xl font-bold leading-tight text-[#1A1A1A] sm:text-3xl">{card.text}</h3>
                   <p className="mt-2 text-sm leading-6 text-[#4A443B]">{card.desc}</p>
                   <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-[13px] font-bold text-[#1A1A1A] underline decoration-[var(--accent)] decoration-2 underline-offset-4 transition-colors group-hover:text-[var(--accent)]">
                     {card.cta}

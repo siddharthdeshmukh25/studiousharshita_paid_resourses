@@ -6,7 +6,7 @@ import JsonLd from '@/components/seo/JsonLd';
 import CustomCursor from '@/components/ui/CustomCursor';
 import {
   BUSINESS_ADDRESS,
-  CONTACT_EMAIL,
+  SUPPORT_EMAIL,
   DEFAULT_DESCRIPTION,
   DEFAULT_KEYWORDS,
   DEFAULT_OG_IMAGE,
@@ -118,7 +118,7 @@ const organizationSchema = {
   logo: siteUrl('/favicon.svg'),
   image: siteUrl(DEFAULT_OG_IMAGE),
   description: DEFAULT_DESCRIPTION,
-  email: CONTACT_EMAIL,
+  email: SUPPORT_EMAIL,
   founder: { '@type': 'Person', name: LEGAL_ENTITY },
   address: {
     '@type': 'PostalAddress',
@@ -134,7 +134,7 @@ const organizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
-    email: CONTACT_EMAIL,
+    email: SUPPORT_EMAIL,
     areaServed: 'IN',
     availableLanguage: ['en', 'hi', 'gu'],
   },

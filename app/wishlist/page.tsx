@@ -73,7 +73,7 @@ export default function WishlistPage() {
               <div
                 key={item._id}
                 onClick={() => router.push(`/resource/${(typeof item.resourceId === 'string' ? item.resourceId : item.resourceId._id)}`)}
-                className="cursor-pointer w-full"
+                className="h-full cursor-pointer w-full"
               >
                 <ResourceCard
                   id={typeof item.resourceId === 'string' ? item.resourceId : item.resourceId._id}

@@ -7,10 +7,11 @@ export interface ISupportMessage {
 }
 
 interface ISupportTicket {
-  userId: mongoose.Types.ObjectId;
+  // Optional: guest enquiries (contact/collaboration) have no account to link.
+  userId?: mongoose.Types.ObjectId;
   orderId?: string;
-  source: 'support' | 'contact';
-  category: 'payment' | 'access' | 'refund' | 'general' | 'project';
+  source: 'support' | 'contact' | 'collaboration';
+  category: 'payment' | 'access' | 'refund' | 'general' | 'project' | 'collaboration';
   subject: string;
   message: string;
   status: 'open' | 'in_progress' | 'resolved' | 'closed';
@@ -30,12 +31,12 @@ const SupportMessageSchema = new Schema<ISupportMessage>(
 
 const SupportTicketSchema = new Schema<ISupportTicket>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     orderId: { type: String },
-    source: { type: String, enum: ['support', 'contact'], default: 'support' },
+    source: { type: String, enum: ['support', 'contact', 'collaboration'], default: 'support' },
     category: {
       type: String,
-      enum: ['payment', 'access', 'refund', 'general', 'project'],
+      enum: ['payment', 'access', 'refund', 'general', 'project', 'collaboration'],
       default: 'general',
     },
     subject: { type: String, required: true, maxlength: 200 },

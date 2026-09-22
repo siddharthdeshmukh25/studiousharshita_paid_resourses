@@ -8,13 +8,12 @@ import { useState, useEffect } from 'react';
 import LoginModal from '../auth/LoginModal';
 import { useRouter, usePathname } from 'next/navigation';
 
-// Main horizontal navigation — editorial magazine style menu (rendered uppercase).
+// Main horizontal navigation — clean client-approved menu (rendered uppercase).
 const NAV_LINKS = [
-  { href: '/about', label: 'About' },
+  { href: '/', label: 'Home' },
   { href: '/resources', label: 'Resources' },
-  { href: '/resources?type=paid', label: 'Shop' },
   { href: '/guides', label: 'Blog' },
-  { href: '/support', label: 'Work With Me' },
+  { href: '/collaboration', label: 'Collaboration' },
   { href: '/contact', label: 'Contact' },
 ];
 
@@ -23,7 +22,6 @@ export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
-  const [showSearchResults, setShowSearchResults] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
@@ -75,33 +73,6 @@ export default function Navbar() {
     setShowDropdown(false);
   };
 
-  // Show/hide search results dropdown based on search query
-  useEffect(() => {
-    if (searchQuery.trim().length >= 2) {
-      setShowSearchResults(true);
-    } else {
-      setShowSearchResults(false);
-    }
-  }, [searchQuery]);
-
-  // Close search results when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest('.search-container')) {
-        setShowSearchResults(false);
-      }
-    };
-
-    if (showSearchResults) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showSearchResults]);
-
   // Prevent body scroll when mobile search modal is open
   useEffect(() => {
     if (showSearchModal) {
@@ -118,25 +89,22 @@ export default function Navbar() {
     };
   }, [showSearchModal]);
 
-  // Handle Escape key to close search modal
+  // Handle Escape key to close search modal / profile dropdown
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && showSearchModal) {
-        setShowSearchModal(false);
-      }
-      if (e.key === 'Escape' && showSearchResults) {
-        setShowSearchResults(false);
+      if (e.key === 'Escape') {
+        setShowDropdown(false);
+        if (showSearchModal) {
+          setShowSearchModal(false);
+        }
       }
     };
 
-    if (showSearchModal || showSearchResults) {
-      document.addEventListener('keydown', handleEscape);
-    }
-
+    document.addEventListener('keydown', handleEscape);
     return () => {
       document.removeEventListener('keydown', handleEscape);
     };
-  }, [showSearchModal, showSearchResults]);
+  }, [showSearchModal]);
 
   // Handle swipe down to close modal
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -153,36 +121,36 @@ export default function Navbar() {
     }
   };
 
+  // Profile menu content — PC me compact dropdown, mobile me full-width panel.
+  const profileMenuBody = session ? (
+    <>
+      {/* Profile header: icon + naam + email ek saath */}
+      <div className="flex items-center gap-3 border-b border-[var(--line)] px-4 py-3">
+        {session.user?.image ? (
+          <img src={session.user.image} alt={session.user.name || 'User'} className="h-10 w-10 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
+        ) : (
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--sage)] text-sm font-bold text-white">{session.user?.name?.charAt(0) || session.user?.email?.charAt(0) || 'U'}</span>
+        )}
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-[#0F172A]">{session.user?.name || session.user?.email}</p>
+          <p className="truncate text-xs text-[#64748B]">{session.user?.email}</p>
+        </div>
+      </div>
+      <button onClick={() => { router.push('/profile'); setShowDropdown(false); }} className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-[#334155] hover:bg-[#F8FAFC] transition-colors"><User className="h-4 w-4" />Profile</button>
+      <button onClick={handleLogout} className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-[#334155] hover:bg-[#F8FAFC] transition-colors"><LogOut className="h-4 w-4" />Logout</button>
+    </>
+  ) : null;
+
   return (
     <>
       <nav className="sticky top-0 z-50 border-b border-[var(--line)] bg-[#FAF6EF]/90 backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 sm:h-16 items-center justify-between gap-3">
-            <button onClick={() => router.push('/')} className="flex shrink-0 items-center gap-1.5 text-left" aria-label="Studious Harshita — home">
-              <span aria-hidden="true" className="font-hand text-xl leading-none text-[var(--accent)]">✷</span>
+            <button onClick={() => router.push('/')} className="flex shrink-0 items-center text-left" aria-label="Studious Harshita — home">
               <span className="font-serif-display text-lg tracking-tight text-[#1A1A1A] sm:text-xl">
-                studious<span className="italic text-[var(--accent)]">harshita</span><span className="text-[var(--accent)]">.</span>
+                studious<span className="italic text-[var(--accent)]">harshita</span>
               </span>
             </button>
-
-            {/* Search bar lives in the header on desktop — always visible */}
-            <div className="hidden md:block flex-1 max-w-md mx-6 relative search-container">
-              <SearchBar
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-              />
-              {showSearchResults && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-[var(--background)] rounded-lg shadow border border-[var(--line)] z-[100] max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-[#C9BFA9] scrollbar-track-transparent">
-                  <SearchResults
-                    searchQuery={searchQuery}
-                    onResultClick={() => setShowSearchResults(false)}
-                    searchHistory={searchHistory}
-                    setSearchHistory={setSearchHistory}
-                    showHistory={false}
-                  />
-                </div>
-              )}
-            </div>
 
             {/* Horizontal nav menu (desktop) — small uppercase editorial labels */}
             <div className="hidden lg:flex items-center gap-0.5">
@@ -190,7 +158,7 @@ export default function Navbar() {
                 const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href.split('?')[0]);
                 return (
                   <button
-                    key={link.href}
+                    key={link.label}
                     onClick={() => router.push(link.href)}
                     className={`whitespace-nowrap rounded-full px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors ${
                       isActive
@@ -213,14 +181,6 @@ export default function Navbar() {
                   Sign in
                 </button>
               )}
-              {/* Editorial primary CTA — magazine-style charcoal pill */}
-              <button
-                onClick={() => router.push('/resources')}
-                className="hidden lg:inline-flex items-center gap-1.5 rounded-full bg-[#1A1A1A] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[#FAF6EF] transition-all hover:-translate-y-px hover:bg-[var(--accent-deep)] hover:shadow-md"
-              >
-                Explore Resources
-              </button>
-
               {/* === MOBILE/TABLET (<lg): search icon + hamburger toggle === */}
               <button onClick={() => setShowSearchModal(true)} aria-label="Search" className="lg:hidden p-2 text-[#64748B] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)] rounded-lg transition-colors">
                 <Search className="h-5 w-5" />
@@ -235,25 +195,22 @@ export default function Navbar() {
               </button>
 
               {status === 'loading' ? (
-                <div className="h-8 w-16 sm:h-9 sm:w-20 rounded-lg bg-[var(--accent-soft)] animate-pulse" />
+                <div className="hidden lg:block h-9 w-20 rounded-lg bg-[var(--accent-soft)] animate-pulse" />
               ) : session ? (
-                <div className="relative z-[60]">
-                  <button onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-2 rounded-lg py-1 pl-1 pr-1.5 sm:py-1.5 sm:pl-1.5 sm:pr-2 hover:bg-[var(--accent-soft)] transition-colors">
+                // Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+                // profile hamburger menu ke andar dikhta hai.
+                <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+                  <button onClick={() => setShowDropdown(!showDropdown)} className="flex items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-2 hover:bg-[var(--accent-soft)] transition-colors">
                     {session.user?.image ? (
-                      <img src={session.user.image} alt={session.user.name || 'User'} className="h-6 w-6 sm:h-7 sm:w-7 rounded-full border-none object-cover" referrerPolicy="no-referrer" />
+                      <img src={session.user.image} alt={session.user.name || 'User'} className="h-7 w-7 rounded-full border-none object-cover" referrerPolicy="no-referrer" />
                     ) : (
-                      <span className="grid h-6 w-6 sm:h-7 sm:w-7 place-items-center rounded-full bg-[var(--sage)] text-xs font-bold text-white">{session.user?.name?.charAt(0) || session.user?.email?.charAt(0) || 'U'}</span>
+                      <span className="grid h-7 w-7 place-items-center rounded-full bg-[var(--sage)] text-xs font-bold text-white">{session.user?.name?.charAt(0) || session.user?.email?.charAt(0) || 'U'}</span>
                     )}
-                    <span className="hidden lg:block max-w-28 truncate text-sm font-medium text-[#1E293B]">{session.user?.name?.split(' ')[0] || session.user?.email?.split('@')[0]}</span>
+                    <span className="max-w-28 truncate text-sm font-medium text-[#1E293B]">{session.user?.name?.split(' ')[0] || session.user?.email?.split('@')[0]}</span>
                   </button>
                   {showDropdown && (
-                    <div className="absolute right-0 z-[60] mt-2 w-52 overflow-hidden rounded-lg border-none bg-[#FFFDF8] py-1 shadow-lg">
-                      <div className="border-b border-[var(--line)] px-3 py-2.5">
-                        <p className="truncate text-sm font-semibold text-[#0F172A]">{session.user?.name || session.user?.email}</p>
-                        <p className="truncate text-xs text-[#64748B]">{session.user?.email}</p>
-                      </div>
-                      <button onClick={() => { router.push('/profile'); setShowDropdown(false); }} className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-[#334155] hover:bg-[#F8FAFC] transition-colors"><User className="h-4 w-4" />Profile</button>
-                      <button onClick={handleLogout} className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-[#334155] hover:bg-[#F8FAFC] transition-colors"><LogOut className="h-4 w-4" />Logout</button>
+                    <div className="absolute right-0 z-[60] mt-2 w-56 overflow-hidden rounded-lg border-none bg-[#FFFDF8] py-1 shadow-lg">
+                      {profileMenuBody}
                     </div>
                   )}
                 </div>
@@ -272,7 +229,7 @@ export default function Navbar() {
                 const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
                 return (
                   <button
-                    key={link.href}
+                    key={link.label}
                     onClick={() => { router.push(link.href); setIsMenuOpen(false); }}
                     className={`rounded-lg px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-[0.14em] transition-colors ${
                       isActive ? 'bg-[var(--accent-soft-2)] text-[var(--accent-deep)]' : 'text-[#4A443B] hover:bg-[var(--sage-soft)]'
@@ -283,7 +240,24 @@ export default function Navbar() {
                 );
               })}
             </nav>
-            {!session && status !== 'loading' && (
+            {session ? (
+              /* Logged-in: profile section hamburger menu ke andar */
+              <div className="mt-3 border-t border-[var(--line)] pt-3">
+                <div className="flex items-center gap-3 px-3 py-2">
+                  {session.user?.image ? (
+                    <img src={session.user.image} alt={session.user.name || 'User'} className="h-10 w-10 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
+                  ) : (
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--sage)] text-sm font-bold text-white">{session.user?.name?.charAt(0) || session.user?.email?.charAt(0) || 'U'}</span>
+                  )}
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-[#1A1A1A]">{session.user?.name || session.user?.email}</p>
+                    <p className="truncate text-xs text-[#6B6257]">{session.user?.email}</p>
+                  </div>
+                </div>
+                <button onClick={() => { router.push('/profile'); setIsMenuOpen(false); }} className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-[#1A1A1A] hover:bg-[var(--sage-soft)] transition-colors"><User className="h-4 w-4" />Profile</button>
+                <button onClick={() => { setIsMenuOpen(false); void handleLogout(); }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-[#B4544A] hover:bg-[var(--blush-soft)] transition-colors"><LogOut className="h-4 w-4" />Logout</button>
+              </div>
+            ) : !session && status !== 'loading' ? (
               <div className="mt-3 grid grid-cols-2 gap-2 border-t border-[var(--line)] pt-3">
                 <button
                   onClick={() => { setIsMenuOpen(false); setShowLoginModal(true); }}
@@ -299,7 +273,7 @@ export default function Navbar() {
                   Sign Up
                 </button>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </nav>

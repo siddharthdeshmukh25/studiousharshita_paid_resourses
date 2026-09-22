@@ -19,7 +19,8 @@ import {
   Sun,
   Moon,
   FileText,
-  Palette
+  Palette,
+  UserCircle
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -56,6 +57,7 @@ const navItems: NavItem[] = [
   { id: 'analytics', label: 'Analytics', icon: <BarChart3 className="h-5 w-5" />, path: '/admin/analytics' },
   { id: 'notifications', label: 'Notifications', icon: <Bell className="h-5 w-5" />, path: '/admin/notifications' },
   { id: 'theme-builder', label: 'Theme Builder', icon: <Palette className="h-5 w-5" />, path: '/admin/theme-builder' },
+  { id: 'profile', label: 'Profile', icon: <UserCircle className="h-5 w-5" />, path: '/admin/profile' },
   { id: 'settings', label: 'Settings', icon: <Settings className="h-5 w-5" />, path: '/admin/settings' },
 ];
 
@@ -103,6 +105,7 @@ export default function AdminSidebar() {
     if (pathname === '/admin/coupons') return 'coupons';
     if (pathname === '/admin/categories') return 'categories';
     if (pathname === '/admin/theme-builder') return 'theme-builder';
+    if (pathname === '/admin/profile') return 'profile';
     if (pathname === '/admin/settings') return 'settings';
     if (pathname === '/admin/resources') return 'resources';
     return 'dashboard';

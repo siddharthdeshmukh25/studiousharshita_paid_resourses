@@ -7,6 +7,7 @@ interface INotification {
     | 'new_ticket'
     | 'ticket_reply'
     | 'new_contact'
+    | 'new_collab'
     | 'capture_failed'
     | 'system';
   title: string;
@@ -26,6 +27,7 @@ const NotificationSchema = new Schema<INotification>(
         'new_ticket',
         'ticket_reply',
         'new_contact',
+        'new_collab',
         'capture_failed',
         'system',
       ],

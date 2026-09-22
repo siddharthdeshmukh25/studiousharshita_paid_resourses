@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import JsonLd from '@/components/seo/JsonLd';
-import { BUSINESS_ADDRESS, CONTACT_EMAIL, LEGAL_ENTITY, SITE_NAME, SITE_URL, SOCIAL_PROFILES, siteUrl } from '@/lib/site';
+import { BUSINESS_ADDRESS, LEGAL_ENTITY, SITE_NAME, SITE_URL, SOCIAL_PROFILES, SUPPORT_EMAIL, siteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: `About ${SITE_NAME} — Study Notes & Resources in Ahmedabad`,
@@ -47,7 +47,7 @@ const aboutSchema = {
       addressCountry: BUSINESS_ADDRESS.country,
     },
     sameAs: SOCIAL_PROFILES,
-    email: CONTACT_EMAIL,
+    email: SUPPORT_EMAIL,
   },
 };
 
@@ -119,7 +119,7 @@ export default function About() {
                   <p><strong>YouTube:</strong> <a href="https://youtube.com/@studious_harshita" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] hover:underline">@studious_harshita</a></p>
                 </div>
                 <p className="leading-relaxed mt-4 text-justify">
-                  For support, reach out to us at <a href={`mailto:${CONTACT_EMAIL}`} className="text-[var(--accent)] hover:underline">{CONTACT_EMAIL}</a>.
+                  For support, reach out to us at <a href={`mailto:${SUPPORT_EMAIL}`} className="text-[var(--accent)] hover:underline">{SUPPORT_EMAIL}</a>.
                 </p>
                 <p className="leading-relaxed mt-4 text-justify">
                   Join our growing community of learners and take the next step toward academic excellence today! Explore our

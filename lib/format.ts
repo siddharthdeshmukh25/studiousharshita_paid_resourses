@@ -24,10 +24,12 @@ export function formatPrice(value: number | string | null | undefined): string {
   return inrFormatter.format(amount);
 }
 
-/** Price after a percentage discount, rounded to paise. */
+/** Price after a percentage discount, rounded to a whole rupee so cards
+ *  never show odd amounts like "₹2,299.08" (display-only helper — checkout
+ *  computes the charge server-side). */
 export function discountedPrice(price: number, discount?: number | null): number {
   if (!discount || discount <= 0) return price;
-  return Number((price * (1 - discount / 100)).toFixed(2));
+  return Math.round(price * (1 - discount / 100));
 }
 
 /** Formats the price after an optional percentage discount. */

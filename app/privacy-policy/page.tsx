@@ -97,7 +97,6 @@ export default function PrivacyPolicy() {
                 <div className="mt-4 space-y-2 text-[#4A443B]">
                   <p><strong>Legal Entity Name:</strong> Harshita Pravinbhai Soni</p>
                   <p><strong>Email:</strong> support@studiousharshita.com</p>
-                  <p><strong>Registered Address:</strong> Vyasvadi, Vadaj, Ahmedabad, Gujarat, India - 380013</p>
                 </div>
               </section>
             </div>

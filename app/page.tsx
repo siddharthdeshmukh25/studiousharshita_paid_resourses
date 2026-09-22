@@ -1,7 +1,15 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import HomeLanding from '@/components/home/HomeLanding';
-import HomeSections from '@/components/home/HomeSections';
+import {
+  WelcomeSection,
+  AboutSection,
+  ShopSection,
+  CommunityQuotesSection,
+  FaqSection,
+  NewsletterSection,
+  FinalCtaSection,
+} from '@/components/home/HomeSections';
 import GuidesTeaser from '@/components/home/GuidesTeaser';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -37,6 +45,7 @@ export default function Home() {
     <div className="academic-surface min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 flex flex-col">
+        {/* 1. Hero + featured resources (paid first, then free) */}
         <Suspense
           fallback={
             <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Loading">
@@ -46,8 +55,30 @@ export default function Home() {
         >
           <HomeLanding />
         </Suspense>
-        <HomeSections />
+
+        {/* 2. Blog — "from my desk" */}
         <GuidesTeaser />
+
+        {/* 3. Welcome to my little corner (yellow-box intro) */}
+        <WelcomeSection />
+
+        {/* 4. About — the girl behind the notes */}
+        <AboutSection />
+
+        {/* 5. Shop — paid resources */}
+        <ShopSection />
+
+        {/* 6. Community quotes */}
+        <CommunityQuotesSection />
+
+        {/* 7. FAQ */}
+        <FaqSection />
+
+        {/* 8. Newsletter */}
+        <NewsletterSection />
+
+        {/* 9. Closing CTA */}
+        <FinalCtaSection />
       </main>
       <Footer />
     </div>

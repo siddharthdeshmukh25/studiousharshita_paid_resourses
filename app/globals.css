@@ -246,6 +246,16 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   border-radius: 999px;
 }
 
+/* Swipeable mobile rails (e.g. "what can you find here?") — hide the chunky
+   native scrollbar; the cards peeking off-screen already signal scrollability. */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes mobile-category-sheet-in {
   from { opacity: 0; transform: translateY(32px); }
   to { opacity: 1; transform: translateY(0); }

@@ -1,290 +1,2301 @@
 
 > paid_resourse_seller@0.1.0 dev
-> next dev
+> next dev -p 3000
 
 ▲ Next.js 16.2.11 (Turbopack)
-- Local:         http://localhost:63593
-- Network:       http://192.168.31.42:63593
+- Local:         http://localhost:3000
+- Network:       http://192.168.31.42:3000
 - Environments: .env
-✓ Ready in 477ms
+✓ Ready in 935ms
 
- GET /resources 200 in 659ms (next.js: 307ms, application-code: 352ms)
- GET / 200 in 345ms (next.js: 44ms, application-code: 301ms)
- GET / 200 in 171ms (next.js: 13ms, application-code: 158ms)
+ GET / 200 in 1073ms (next.js: 320ms, application-code: 753ms)
+API Request - Category: null Search: null
 API Request - Category: null Search: null
 Found resources: 3 for query: { price: { '$gt': 0 } }
- GET /api/site-theme 200 in 1795ms (next.js: 712ms, application-code: 1082ms)
- GET /api/auth/session 200 in 1284ms (next.js: 1259ms, application-code: 25ms)
- GET /api/resources?access=paid 200 in 1431ms (next.js: 118ms, application-code: 1313ms)
- GET /resources 200 in 113ms (next.js: 4ms, application-code: 110ms)
- GET /api/site-theme 200 in 64ms (next.js: 6ms, application-code: 57ms)
- GET /api/auth/session 200 in 42ms (next.js: 14ms, application-code: 28ms)
-API Request - Category: null Search: null
-Found resources: 23 for query: { price: 0 }
- GET /api/resources?access=free 200 in 676ms (next.js: 5ms, application-code: 671ms)
- GET / 200 in 212ms (next.js: 9ms, application-code: 203ms)
-API Request - Category: null Search: null
- GET /api/site-theme 200 in 96ms (next.js: 7ms, application-code: 89ms)
- GET /api/auth/session 200 in 40ms (next.js: 14ms, application-code: 26ms)
-Found resources: 3 for query: { price: { '$gt': 0 } }
- GET /api/resources?access=paid 200 in 119ms (next.js: 5ms, application-code: 114ms)
- GET /resources 200 in 108ms (next.js: 4ms, application-code: 103ms)
- GET /api/auth/session 200 in 31ms (next.js: 14ms, application-code: 17ms)
-API Request - Category: null Search: null
- GET /api/site-theme 200 in 74ms (next.js: 5ms, application-code: 69ms)
-Found resources: 23 for query: { price: 0 }
- GET /api/resources?access=free 200 in 694ms (next.js: 7ms, application-code: 687ms)
-✓ Compiled in 2.4s
- GET /resources 200 in 791ms (next.js: 500ms, application-code: 291ms)
- GET /resources 200 in 269ms (next.js: 12ms, application-code: 257ms)
- GET /resources 200 in 231ms (next.js: 11ms, application-code: 220ms)
- GET /resources 200 in 230ms (next.js: 83ms, application-code: 147ms)
- GET /resources 200 in 231ms (next.js: 57ms, application-code: 174ms)
- GET /resources 200 in 230ms (next.js: 103ms, application-code: 128ms)
- GET /resources 200 in 237ms (next.js: 15ms, application-code: 222ms)
- GET /resources 200 in 227ms (next.js: 10ms, application-code: 217ms)
- GET /resources 200 in 192ms (next.js: 8ms, application-code: 185ms)
- GET /resources 200 in 193ms (next.js: 43ms, application-code: 150ms)
- GET /resources 200 in 194ms (next.js: 63ms, application-code: 131ms)
- GET /resources 200 in 195ms (next.js: 92ms, application-code: 103ms)
- GET /resources 200 in 211ms (next.js: 16ms, application-code: 195ms)
- GET /resources 200 in 216ms (next.js: 14ms, application-code: 202ms)
- GET /resources 200 in 179ms (next.js: 47ms, application-code: 132ms)
- GET /resources 200 in 180ms (next.js: 12ms, application-code: 168ms)
- GET /resources 200 in 179ms (next.js: 72ms, application-code: 108ms)
- GET /resources 200 in 179ms (next.js: 92ms, application-code: 87ms)
- GET /resources 200 in 263ms (next.js: 18ms, application-code: 245ms)
- GET /resources 200 in 232ms (next.js: 5ms, application-code: 226ms)
- GET /resources 200 in 239ms (next.js: 12ms, application-code: 227ms)
- GET /resources 200 in 242ms (next.js: 40ms, application-code: 202ms)
- GET /resources 200 in 244ms (next.js: 76ms, application-code: 168ms)
- GET /resources 200 in 245ms (next.js: 95ms, application-code: 151ms)
- GET /resources 200 in 222ms (next.js: 17ms, application-code: 205ms)
- GET /resources 200 in 167ms (next.js: 19ms, application-code: 148ms)
- GET /resources 200 in 187ms (next.js: 33ms, application-code: 154ms)
- GET /resources 200 in 187ms (next.js: 11ms, application-code: 176ms)
- GET /resources 200 in 191ms (next.js: 54ms, application-code: 136ms)
- GET /resources 200 in 219ms (next.js: 73ms, application-code: 146ms)
- GET /resources 200 in 375ms (next.js: 27ms, application-code: 349ms)
- GET /resources 200 in 296ms (next.js: 11ms, application-code: 285ms)
- GET /resources 200 in 307ms (next.js: 22ms, application-code: 286ms)
- GET /resources 200 in 308ms (next.js: 63ms, application-code: 245ms)
- GET /resources 200 in 216ms (next.js: 22ms, application-code: 194ms)
- GET /resources 200 in 299ms (next.js: 93ms, application-code: 206ms)
- GET /resources 200 in 301ms (next.js: 11ms, application-code: 289ms)
- GET /resources 200 in 254ms (next.js: 11ms, application-code: 242ms)
- GET /resources 200 in 296ms (next.js: 52ms, application-code: 244ms)
- GET /resources 200 in 206ms (next.js: 8ms, application-code: 198ms)
- GET /resources 200 in 172ms (next.js: 13ms, application-code: 159ms)
- GET /resources 200 in 210ms (next.js: 48ms, application-code: 162ms)
- GET /resources 200 in 303ms (next.js: 11ms, application-code: 292ms)
- GET /resources 200 in 255ms (next.js: 11ms, application-code: 243ms)
- GET /resources 200 in 262ms (next.js: 12ms, application-code: 251ms)
- GET /resources 200 in 263ms (next.js: 57ms, application-code: 206ms)
- GET /resources 200 in 172ms (next.js: 10ms, application-code: 162ms)
- GET /resources 200 in 219ms (next.js: 48ms, application-code: 171ms)
- GET /resources 200 in 296ms (next.js: 16ms, application-code: 280ms)
- GET /resources 200 in 251ms (next.js: 12ms, application-code: 239ms)
- GET /resources 200 in 210ms (next.js: 13ms, application-code: 197ms)
- GET /resources 200 in 211ms (next.js: 49ms, application-code: 162ms)
- GET /resources 200 in 203ms (next.js: 9ms, application-code: 194ms)
- GET /resources 200 in 162ms (next.js: 8ms, application-code: 154ms)
- GET /resources 200 in 275ms (next.js: 14ms, application-code: 261ms)
- GET /resources 200 in 226ms (next.js: 17ms, application-code: 208ms)
- GET /resources 200 in 244ms (next.js: 6ms, application-code: 239ms)
- GET /resources 200 in 247ms (next.js: 38ms, application-code: 209ms)
- GET /resources 200 in 179ms (next.js: 16ms, application-code: 163ms)
- GET /resources 200 in 151ms (next.js: 14ms, application-code: 137ms)
- GET /resources 200 in 229ms (next.js: 12ms, application-code: 217ms)
- GET /resources 200 in 178ms (next.js: 28ms, application-code: 150ms)
- GET /resources 200 in 165ms (next.js: 4ms, application-code: 161ms)
- GET /resources 200 in 165ms (next.js: 23ms, application-code: 142ms)
- GET /resources 200 in 164ms (next.js: 12ms, application-code: 152ms)
- GET /resources 200 in 151ms (next.js: 5ms, application-code: 147ms)
- GET /resources 200 in 320ms (next.js: 11ms, application-code: 310ms)
- GET /resources 200 in 295ms (next.js: 5ms, application-code: 290ms)
- GET /resources 200 in 298ms (next.js: 32ms, application-code: 265ms)
- GET /resources 200 in 292ms (next.js: 111ms, application-code: 181ms)
- GET /resources 200 in 124ms (next.js: 21ms, application-code: 103ms)
- GET /resources 200 in 112ms (next.js: 26ms, application-code: 86ms)
- GET /resources 200 in 339ms (next.js: 9ms, application-code: 330ms)
- GET /resources 200 in 295ms (next.js: 11ms, application-code: 284ms)
- GET /resources 200 in 293ms (next.js: 54ms, application-code: 240ms)
- GET /resources 200 in 294ms (next.js: 75ms, application-code: 220ms)
- GET /resources 200 in 282ms (next.js: 61ms, application-code: 221ms)
- GET /resources 200 in 234ms (next.js: 59ms, application-code: 175ms)
- GET /resources 200 in 288ms (next.js: 18ms, application-code: 270ms)
- GET /resources 200 in 252ms (next.js: 6ms, application-code: 247ms)
- GET /resources 200 in 254ms (next.js: 35ms, application-code: 220ms)
- GET /resources 200 in 269ms (next.js: 91ms, application-code: 178ms)
- GET /resources 200 in 196ms (next.js: 77ms, application-code: 118ms)
- GET /resources 200 in 173ms (next.js: 34ms, application-code: 139ms)
- GET /resources 200 in 230ms (next.js: 21ms, application-code: 209ms)
- GET /resources 200 in 196ms (next.js: 13ms, application-code: 182ms)
- GET /resources 200 in 193ms (next.js: 45ms, application-code: 149ms)
- GET /resources 200 in 159ms (next.js: 26ms, application-code: 133ms)
- GET /resources 200 in 163ms (next.js: 38ms, application-code: 125ms)
- GET /resources 200 in 157ms (next.js: 6ms, application-code: 150ms)
- GET /resources 200 in 230ms (next.js: 17ms, application-code: 214ms)
- GET /resources 200 in 200ms (next.js: 5ms, application-code: 195ms)
- GET /resources 200 in 155ms (next.js: 22ms, application-code: 133ms)
- GET /resources 200 in 158ms (next.js: 56ms, application-code: 103ms)
- GET /resources 200 in 161ms (next.js: 40ms, application-code: 121ms)
- GET /resources 200 in 135ms (next.js: 12ms, application-code: 123ms)
- GET /resources 200 in 235ms (next.js: 17ms, application-code: 217ms)
- GET /resources 200 in 182ms (next.js: 10ms, application-code: 172ms)
- GET /resources 200 in 180ms (next.js: 27ms, application-code: 152ms)
- GET /resources 200 in 180ms (next.js: 71ms, application-code: 109ms)
- GET /resources 200 in 191ms (next.js: 70ms, application-code: 121ms)
- GET /resources 200 in 191ms (next.js: 12ms, application-code: 179ms)
- GET /resources 200 in 192ms (next.js: 15ms, application-code: 177ms)
- GET /resources 200 in 162ms (next.js: 6ms, application-code: 157ms)
- GET /resources 200 in 163ms (next.js: 60ms, application-code: 103ms)
- GET /resources 200 in 166ms (next.js: 41ms, application-code: 125ms)
- GET /resources 200 in 136ms (next.js: 11ms, application-code: 125ms)
- GET /resources 200 in 225ms (next.js: 8ms, application-code: 217ms)
- GET /resources 200 in 297ms (next.js: 17ms, application-code: 280ms)
- GET /resources 200 in 241ms (next.js: 13ms, application-code: 227ms)
- GET /resources 200 in 200ms (next.js: 22ms, application-code: 178ms)
- GET /resources 200 in 199ms (next.js: 40ms, application-code: 159ms)
- GET /resources 200 in 217ms (next.js: 60ms, application-code: 156ms)
- GET /resources 200 in 183ms (next.js: 14ms, application-code: 168ms)
- GET /resources 200 in 216ms (next.js: 17ms, application-code: 198ms)
- GET /resources 200 in 183ms (next.js: 10ms, application-code: 173ms)
- GET /resources 200 in 165ms (next.js: 4ms, application-code: 161ms)
- GET /resources 200 in 166ms (next.js: 22ms, application-code: 144ms)
- GET /resources 200 in 240ms (next.js: 46ms, application-code: 194ms)
- GET /resources 200 in 255ms (next.js: 9ms, application-code: 246ms)
- GET /resources 200 in 240ms (next.js: 16ms, application-code: 224ms)
- GET /resources 200 in 239ms (next.js: 33ms, application-code: 206ms)
- GET /resources 200 in 146ms (next.js: 49ms, application-code: 97ms)
- GET /resources 200 in 149ms (next.js: 10ms, application-code: 139ms)
- GET /resources 200 in 141ms (next.js: 8ms, application-code: 133ms)
- GET /resources 200 in 189ms (next.js: 14ms, application-code: 175ms)
- GET /resources 200 in 216ms (next.js: 20ms, application-code: 196ms)
- GET /resources 200 in 217ms (next.js: 41ms, application-code: 176ms)
- GET /resources 200 in 163ms (next.js: 9ms, application-code: 154ms)
- GET /resources 200 in 240ms (next.js: 42ms, application-code: 198ms)
- GET /resources 200 in 174ms (next.js: 11ms, application-code: 162ms)
- GET /resources 200 in 194ms (next.js: 6ms, application-code: 188ms)
- GET /resources 200 in 233ms (next.js: 23ms, application-code: 210ms)
- GET /resources 200 in 230ms (next.js: 61ms, application-code: 169ms)
- GET /resources 200 in 151ms (next.js: 18ms, application-code: 133ms)
- GET /resources 200 in 201ms (next.js: 36ms, application-code: 165ms)
- GET /resources 200 in 176ms (next.js: 25ms, application-code: 151ms)
- GET /resources 200 in 175ms (next.js: 12ms, application-code: 164ms)
- GET /resources 200 in 187ms (next.js: 37ms, application-code: 150ms)
- GET /resources 200 in 187ms (next.js: 14ms, application-code: 174ms)
- GET /resources 200 in 130ms (next.js: 9ms, application-code: 121ms)
- GET /resources 200 in 157ms (next.js: 5ms, application-code: 152ms)
- GET /resources 200 in 157ms (next.js: 29ms, application-code: 128ms)
- GET /resources 200 in 211ms (next.js: 16ms, application-code: 194ms)
- GET /resources 200 in 217ms (next.js: 14ms, application-code: 203ms)
- GET /resources 200 in 218ms (next.js: 34ms, application-code: 183ms)
- GET /resources 200 in 299ms (next.js: 8ms, application-code: 291ms)
- GET /resources 200 in 282ms (next.js: 27ms, application-code: 255ms)
- GET /resources 200 in 284ms (next.js: 5ms, application-code: 280ms)
- GET /resources 200 in 342ms (next.js: 11ms, application-code: 331ms)
- GET /resources 200 in 341ms (next.js: 9ms, application-code: 332ms)
- GET /resources 200 in 341ms (next.js: 79ms, application-code: 262ms)
- GET /resources 200 in 263ms (next.js: 63ms, application-code: 201ms)
- GET /resources 200 in 269ms (next.js: 11ms, application-code: 258ms)
- GET /resources 200 in 269ms (next.js: 104ms, application-code: 165ms)
- GET /resources 200 in 240ms (next.js: 16ms, application-code: 224ms)
- GET /resources 200 in 229ms (next.js: 14ms, application-code: 215ms)
- GET /resources 200 in 194ms (next.js: 5ms, application-code: 190ms)
- GET /resources 200 in 210ms (next.js: 10ms, application-code: 200ms)
- GET /resources 200 in 212ms (next.js: 75ms, application-code: 136ms)
- GET /resources 200 in 211ms (next.js: 51ms, application-code: 160ms)
- GET /resources 200 in 201ms (next.js: 22ms, application-code: 179ms)
- GET /resources 200 in 224ms (next.js: 5ms, application-code: 220ms)
- GET /resources 200 in 226ms (next.js: 29ms, application-code: 197ms)
- GET /resources 200 in 252ms (next.js: 15ms, application-code: 237ms)
- GET /resources 200 in 251ms (next.js: 32ms, application-code: 219ms)
- GET /resources 200 in 255ms (next.js: 53ms, application-code: 201ms)
- GET /resources 200 in 261ms (next.js: 16ms, application-code: 245ms)
- GET /resources 200 in 231ms (next.js: 11ms, application-code: 220ms)
- GET /resources 200 in 230ms (next.js: 46ms, application-code: 184ms)
- GET /resources 200 in 212ms (next.js: 14ms, application-code: 198ms)
- GET /resources 200 in 212ms (next.js: 33ms, application-code: 179ms)
- GET /resources 200 in 211ms (next.js: 51ms, application-code: 159ms)
- GET /resources 200 in 274ms (next.js: 16ms, application-code: 258ms)
- GET /resources 200 in 271ms (next.js: 4ms, application-code: 267ms)
- GET /resources 200 in 272ms (next.js: 59ms, application-code: 213ms)
- GET /resources 200 in 234ms (next.js: 54ms, application-code: 180ms)
- GET /resources 200 in 235ms (next.js: 10ms, application-code: 225ms)
- GET /resources 200 in 240ms (next.js: 102ms, application-code: 138ms)
- GET /resources 200 in 187ms (next.js: 9ms, application-code: 178ms)
- GET /resources 200 in 163ms (next.js: 16ms, application-code: 146ms)
- GET /resources 200 in 131ms (next.js: 5ms, application-code: 126ms)
- GET /resources 200 in 92ms (next.js: 8ms, application-code: 84ms)
- GET /resources 200 in 93ms (next.js: 28ms, application-code: 65ms)
- GET /resources 200 in 109ms (next.js: 73ms, application-code: 36ms)
-✓ Compiled in 424ms
- GET /resources 200 in 3.0s (next.js: 8ms, application-code: 3.0s)
- GET /resources 200 in 418ms (next.js: 91ms, application-code: 328ms)
- GET /resources 200 in 271ms (next.js: 135ms, application-code: 136ms)
- GET /resources 200 in 277ms (next.js: 17ms, application-code: 260ms)
- GET /resources 200 in 277ms (next.js: 99ms, application-code: 178ms)
- GET /resources 200 in 281ms (next.js: 178ms, application-code: 103ms)
- GET /resources 200 in 78ms (next.js: 11ms, application-code: 67ms)
- GET /api/stats 200 in 1142ms (next.js: 1035ms, application-code: 107ms)
- GET / 200 in 786ms (next.js: 143ms, application-code: 643ms)
-API Request - Category: null Search: null
- GET /api/site-theme 200 in 622ms (next.js: 182ms, application-code: 440ms)
-Found resources: 3 for query: { price: { '$gt': 0 } }
- GET /api/auth/session 200 in 106ms (next.js: 77ms, application-code: 29ms)
- GET /api/stats 200 in 531ms (next.js: 6ms, application-code: 526ms)
- GET /api/resources?access=paid 200 in 591ms (next.js: 393ms, application-code: 198ms)
- GET /api/stats 200 in 194ms (next.js: 5ms, application-code: 190ms)
- GET / 200 in 104ms (next.js: 6ms, application-code: 99ms)
- GET / 200 in 102ms (next.js: 5ms, application-code: 97ms)
-✓ Compiled in 817ms
-API Request - Category: null Search: null
- GET / 200 in 932ms (next.js: 493ms, application-code: 439ms)
- GET / 200 in 232ms (next.js: 59ms, application-code: 173ms)
-Found resources: 3 for query: { price: { '$gt': 0 } }
- GET / 200 in 67ms (next.js: 6ms, application-code: 61ms)
- GET / 200 in 34ms (next.js: 4ms, application-code: 30ms)
- GET /api/resources?access=paid 200 in 216ms (next.js: 96ms, application-code: 120ms)
- GET /api/stats 200 in 241ms (next.js: 123ms, application-code: 118ms)
+ GET /api/site-theme 200 in 2.5s (next.js: 984ms, application-code: 1564ms)
+ GET /api/brand-profile 200 in 2.6s (next.js: 1043ms, application-code: 1520ms)
+ GET /api/stats 200 in 2.6s (next.js: 1085ms, application-code: 1498ms)
+ GET /api/resources?access=paid 200 in 2.6s (next.js: 1284ms, application-code: 1346ms)
 API Request - Category: null Search: null
 Found resources: 3 for query: { price: { '$gt': 0 } }
- GET /api/resources?access=paid 200 in 109ms (next.js: 3ms, application-code: 106ms)
- GET /api/stats 200 in 110ms (next.js: 9ms, application-code: 101ms)
+ GET /api/stats 200 in 235ms (next.js: 8ms, application-code: 227ms)
+ GET /api/resources?access=paid 200 in 233ms (next.js: 7ms, application-code: 226ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/auth/session 200 in 1743ms (next.js: 1696ms, application-code: 47ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 379ms (next.js: 78ms, application-code: 301ms)
+ GET /api/resources?access=free 200 in 2.3s (next.js: 11ms, application-code: 2.2s)
+ GET /api/wishlist 200 in 902ms (next.js: 135ms, application-code: 767ms)
+ GET / 200 in 160ms (next.js: 5ms, application-code: 155ms)
+ GET /api/brand-profile 200 in 73ms (next.js: 4ms, application-code: 69ms)
+ GET /api/site-theme 200 in 74ms (next.js: 6ms, application-code: 68ms)
+ GET / 200 in 466ms (next.js: 18ms, application-code: 449ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 209ms (next.js: 21ms, application-code: 188ms)
+ GET /api/brand-profile 200 in 192ms (next.js: 82ms, application-code: 110ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+API Request - Category: null Search: null
+ GET /api/stats 200 in 289ms (next.js: 25ms, application-code: 265ms)
+ GET /api/resources?access=paid 200 in 366ms (next.js: 112ms, application-code: 254ms)
+ GET /api/auth/session 200 in 104ms (next.js: 52ms, application-code: 53ms)
+Found resources: 24 for query: { price: 0 }
+API Request - Category: null Search: null
+ GET /api/stats 200 in 475ms (next.js: 27ms, application-code: 448ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 435ms (next.js: 47ms, application-code: 388ms)
+ GET /api/resources?access=free 200 in 933ms (next.js: 42ms, application-code: 890ms)
+ GET /guides 200 in 171ms (next.js: 93ms, application-code: 77ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 152ms (next.js: 7ms, application-code: 145ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 167ms (next.js: 19ms, application-code: 147ms)
+ GET /resources 200 in 98ms (next.js: 46ms, application-code: 52ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 153ms (next.js: 6ms, application-code: 147ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 170ms (next.js: 21ms, application-code: 149ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 641ms (next.js: 34ms, application-code: 606ms)
+API Request - Category: null Search: null
+ GET / 200 in 67ms (next.js: 9ms, application-code: 58ms)
+Found resources: 24 for query: { price: 0 }
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 251ms (next.js: 27ms, application-code: 224ms)
+ GET /api/resources?access=paid 200 in 263ms (next.js: 79ms, application-code: 184ms)
+API Request - Category: null Search: null
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 217ms (next.js: 40ms, application-code: 177ms)
+ GET /api/stats 200 in 308ms (next.js: 99ms, application-code: 210ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 152ms (next.js: 5ms, application-code: 147ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 156ms (next.js: 4ms, application-code: 151ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 135ms (next.js: 5ms, application-code: 129ms)
+ GET /api/resources?access=free 200 in 766ms (next.js: 6ms, application-code: 760ms)
+API Request - Category: null Search: null
 API Request - Category: null Search: null
 Found resources: 3 for query: { price: { '$gt': 0 } }
- GET /api/resources?access=paid 200 in 108ms (next.js: 3ms, application-code: 105ms)
- GET /api/stats 200 in 113ms (next.js: 8ms, application-code: 105ms)
-✓ Compiled in 100ms
- GET / 200 in 210ms (next.js: 31ms, application-code: 179ms)
- GET / 200 in 321ms (next.js: 71ms, application-code: 250ms)
- GET / 200 in 256ms (next.js: 5ms, application-code: 251ms)
+ GET /api/resources?access=paid 200 in 153ms (next.js: 8ms, application-code: 145ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 701ms (next.js: 5ms, application-code: 697ms)
 API Request - Category: null Search: null
- GET /api/resources?access=paid 200 in 120ms (next.js: 88ms, application-code: 32ms)
- GET /api/stats 200 in 120ms (next.js: 112ms, application-code: 8ms)
+ GET / 200 in 186ms (next.js: 8ms, application-code: 178ms)
+Found resources: 24 for query: { price: 0 }
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 98ms (next.js: 6ms, application-code: 91ms)
+ GET /api/brand-profile 200 in 103ms (next.js: 8ms, application-code: 95ms)
+ GET /api/auth/session 200 in 39ms (next.js: 19ms, application-code: 20ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 177ms (next.js: 20ms, application-code: 157ms)
+ GET /api/resources?access=paid 200 in 182ms (next.js: 38ms, application-code: 144ms)
+Found resources: 24 for query: { price: 0 }
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 690ms (next.js: 12ms, application-code: 679ms)
+ GET /api/stats 200 in 164ms (next.js: 5ms, application-code: 159ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 198ms (next.js: 10ms, application-code: 188ms)
+ GET /api/resources?access=free 200 in 580ms (next.js: 6ms, application-code: 574ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 1133ms (next.js: 935ms, application-code: 199ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 150ms (next.js: 53ms, application-code: 97ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 77ms (next.js: 6ms, application-code: 70ms)
+ POST /api/tracking 200 in 764ms (next.js: 74ms, application-code: 690ms)
+ POST /api/tracking 200 in 766ms (next.js: 94ms, application-code: 672ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 1266ms (next.js: 1192ms, application-code: 74ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 94ms (next.js: 14ms, application-code: 80ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/purchased-resources 200 in 301ms (next.js: 68ms, application-code: 233ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 165ms (next.js: 8ms, application-code: 158ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 151ms (next.js: 4ms, application-code: 148ms)
+ GET /api/user/purchased-resources 200 in 242ms (next.js: 5ms, application-code: 237ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 166ms (next.js: 22ms, application-code: 144ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 173ms (next.js: 37ms, application-code: 136ms)
+ GET /api/stats 200 in 217ms (next.js: 71ms, application-code: 146ms)
+ GET /api/resources?access=paid 200 in 221ms (next.js: 51ms, application-code: 170ms)
+Found resources: 24 for query: { price: 0 }
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 182ms (next.js: 18ms, application-code: 163ms)
+ GET /api/stats 200 in 184ms (next.js: 5ms, application-code: 179ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ POST /api/tracking 200 in 574ms (next.js: 9ms, application-code: 565ms)
+ GET /api/resources?access=paid 200 in 168ms (next.js: 13ms, application-code: 155ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 675ms (next.js: 61ms, application-code: 615ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 159ms (next.js: 5ms, application-code: 154ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 577ms (next.js: 5ms, application-code: 572ms)
+ GET / 200 in 176ms (next.js: 7ms, application-code: 169ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 129ms (next.js: 7ms, application-code: 122ms)
+ GET /api/auth/session 200 in 50ms (next.js: 19ms, application-code: 32ms)
+ GET /api/brand-profile 200 in 164ms (next.js: 39ms, application-code: 125ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
 Found resources: 3 for query: { price: { '$gt': 0 } }
 API Request - Category: null Search: null
- GET /api/site-theme 200 in 122ms (next.js: 24ms, application-code: 98ms)
-Found resources: 3 for query: { price: { '$gt': 0 } }
- GET /api/auth/session 200 in 72ms (next.js: 52ms, application-code: 20ms)
- GET /api/resources?access=paid 200 in 138ms (next.js: 11ms, application-code: 127ms)
- GET /api/stats 200 in 143ms (next.js: 4ms, application-code: 140ms)
- GET /api/stats 200 in 117ms (next.js: 2ms, application-code: 114ms)
-✓ Compiled in 170ms
- GET / 200 in 143ms (next.js: 65ms, application-code: 78ms)
- GET /api/stats 200 in 169ms (next.js: 33ms, application-code: 136ms)
- GET / 200 in 156ms (next.js: 4ms, application-code: 151ms)
- GET / 200 in 76ms (next.js: 5ms, application-code: 71ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/stats 200 in 217ms (next.js: 23ms, application-code: 194ms)
+ GET /api/resources?access=paid 200 in 244ms (next.js: 52ms, application-code: 192ms)
+ GET /api/resources?access=paid 200 in 178ms (next.js: 7ms, application-code: 171ms)
+ GET /api/stats 200 in 166ms (next.js: 12ms, application-code: 154ms)
+Found resources: 24 for query: { price: 0 }
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 158ms (next.js: 6ms, application-code: 151ms)
+ GET /api/wishlist 200 in 330ms (next.js: 7ms, application-code: 323ms)
+ GET /api/resources?access=free 200 in 628ms (next.js: 6ms, application-code: 622ms)
+ GET /resources?type=free 200 in 133ms (next.js: 5ms, application-code: 127ms)
+ GET /api/auth/session 200 in 30ms (next.js: 14ms, application-code: 16ms)
 API Request - Category: null Search: null
- GET /api/site-theme 200 in 135ms (next.js: 24ms, application-code: 112ms)
-Found resources: 3 for query: { price: { '$gt': 0 } }
- GET /api/stats 200 in 175ms (next.js: 4ms, application-code: 171ms)
- GET /api/auth/session 200 in 76ms (next.js: 56ms, application-code: 20ms)
- GET /api/resources?access=paid 200 in 221ms (next.js: 90ms, application-code: 131ms)
- GET /api/stats 200 in 88ms (next.js: 3ms, application-code: 84ms)
- GET / 200 in 60ms (next.js: 4ms, application-code: 55ms)
+ GET /api/site-theme 200 in 84ms (next.js: 4ms, application-code: 80ms)
+ GET /api/brand-profile 200 in 86ms (next.js: 16ms, application-code: 70ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 227ms (next.js: 6ms, application-code: 221ms)
+ GET /resources?type=paid 200 in 23ms (next.js: 4ms, application-code: 19ms)
 API Request - Category: null Search: null
 Found resources: 3 for query: { price: { '$gt': 0 } }
- GET /api/resources?access=paid 200 in 93ms (next.js: 2ms, application-code: 91ms)
-[?25h
+ GET /api/resources?access=paid 200 in 149ms (next.js: 5ms, application-code: 144ms)
+ GET /resources?type=free 200 in 23ms (next.js: 4ms, application-code: 19ms)
+ GET / 200 in 30ms (next.js: 5ms, application-code: 26ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 143ms (next.js: 4ms, application-code: 139ms)
+Found resources: 24 for query: { price: 0 }
+API Request - Category: null Search: null
+ GET /api/stats 200 in 169ms (next.js: 19ms, application-code: 150ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 234ms (next.js: 13ms, application-code: 221ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=paid 200 in 139ms (next.js: 3ms, application-code: 135ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 188ms (next.js: 3ms, application-code: 185ms)
+ GET /api/resources?access=paid 200 in 175ms (next.js: 3ms, application-code: 173ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 138ms (next.js: 3ms, application-code: 135ms)
+ GET /api/stats 200 in 544ms (next.js: 3ms, application-code: 541ms)
+ GET /api/stats 200 in 138ms (next.js: 3ms, application-code: 135ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 216ms (next.js: 5ms, application-code: 211ms)
+✓ Compiled in 665ms
+ GET / 200 in 213ms (next.js: 181ms, application-code: 32ms)
+ GET / 200 in 213ms (next.js: 115ms, application-code: 99ms)
+ GET / 200 in 179ms (next.js: 4ms, application-code: 175ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 232ms (next.js: 59ms, application-code: 173ms)
+ GET /api/brand-profile 200 in 128ms (next.js: 27ms, application-code: 101ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 327ms (next.js: 99ms, application-code: 228ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 84ms (next.js: 61ms, application-code: 23ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 286ms (next.js: 110ms, application-code: 176ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 329ms (next.js: 3ms, application-code: 325ms)
+ GET /api/resources?access=paid 200 in 282ms (next.js: 2ms, application-code: 280ms)
+ GET /api/resources?access=free 200 in 790ms (next.js: 14ms, application-code: 776ms)
+ GET /api/auth/session 200 in 47ms (next.js: 13ms, application-code: 34ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 220ms (next.js: 44ms, application-code: 177ms)
+ GET /api/wishlist 200 in 343ms (next.js: 37ms, application-code: 307ms)
+ GET /api/auth/providers 200 in 41ms (next.js: 10ms, application-code: 30ms)
+ GET /api/auth/csrf 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ POST /api/auth/signin/google 200 in 233ms (next.js: 3ms, application-code: 230ms)
+ GET /api/auth/session 200 in 46ms (next.js: 9ms, application-code: 37ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 160ms (next.js: 3ms, application-code: 157ms)
+ GET /api/wishlist 200 in 317ms (next.js: 5ms, application-code: 311ms)
+ GET / 200 in 93ms (next.js: 5ms, application-code: 89ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 103ms (next.js: 5ms, application-code: 98ms)
+ GET /api/brand-profile 200 in 97ms (next.js: 14ms, application-code: 83ms)
+ GET /api/auth/session 200 in 47ms (next.js: 14ms, application-code: 34ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 161ms (next.js: 4ms, application-code: 157ms)
+ GET /api/resources?access=paid 200 in 170ms (next.js: 23ms, application-code: 147ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 251ms (next.js: 6ms, application-code: 246ms)
+ GET /api/stats 200 in 145ms (next.js: 5ms, application-code: 141ms)
+ GET /api/resources?access=paid 200 in 162ms (next.js: 21ms, application-code: 141ms)
+✓ Compiled in 321ms
+ GET / 200 in 602ms (next.js: 159ms, application-code: 443ms)
+ GET / 200 in 605ms (next.js: 98ms, application-code: 506ms)
+ GET / 200 in 493ms (next.js: 8ms, application-code: 485ms)
+ GET / 200 in 495ms (next.js: 68ms, application-code: 427ms)
+ GET / 200 in 400ms (next.js: 8ms, application-code: 392ms)
+ GET / 200 in 400ms (next.js: 115ms, application-code: 285ms)
+ GET / 200 in 401ms (next.js: 80ms, application-code: 321ms)
+ GET / 200 in 403ms (next.js: 43ms, application-code: 360ms)
+ GET / 200 in 403ms (next.js: 152ms, application-code: 251ms)
+ GET / 200 in 446ms (next.js: 186ms, application-code: 261ms)
+ GET / 200 in 337ms (next.js: 76ms, application-code: 261ms)
+ GET / 200 in 337ms (next.js: 109ms, application-code: 228ms)
+ GET / 200 in 333ms (next.js: 48ms, application-code: 285ms)
+ GET / 200 in 334ms (next.js: 7ms, application-code: 327ms)
+ GET / 200 in 244ms (next.js: 12ms, application-code: 231ms)
+ GET / 200 in 242ms (next.js: 54ms, application-code: 188ms)
+ GET / 200 in 159ms (next.js: 46ms, application-code: 113ms)
+ GET / 200 in 160ms (next.js: 12ms, application-code: 148ms)
+ GET / 200 in 160ms (next.js: 81ms, application-code: 79ms)
+ GET / 200 in 86ms (next.js: 44ms, application-code: 43ms)
+ GET / 200 in 285ms (next.js: 73ms, application-code: 212ms)
+ GET / 200 in 285ms (next.js: 120ms, application-code: 164ms)
+ GET / 200 in 133ms (next.js: 6ms, application-code: 127ms)
+ GET / 200 in 93ms (next.js: 14ms, application-code: 79ms)
+✓ Compiled in 225ms
+ GET / 200 in 571ms (next.js: 157ms, application-code: 414ms)
+ GET / 200 in 575ms (next.js: 95ms, application-code: 480ms)
+ GET / 200 in 388ms (next.js: 7ms, application-code: 381ms)
+ GET / 200 in 428ms (next.js: 20ms, application-code: 408ms)
+ GET / 200 in 415ms (next.js: 10ms, application-code: 405ms)
+ GET / 200 in 413ms (next.js: 99ms, application-code: 315ms)
+ GET / 200 in 415ms (next.js: 69ms, application-code: 346ms)
+ GET / 200 in 416ms (next.js: 41ms, application-code: 376ms)
+ GET / 200 in 417ms (next.js: 129ms, application-code: 288ms)
+ GET / 200 in 418ms (next.js: 164ms, application-code: 254ms)
+ GET / 200 in 450ms (next.js: 194ms, application-code: 256ms)
+ GET / 200 in 328ms (next.js: 104ms, application-code: 224ms)
+ GET / 200 in 310ms (next.js: 7ms, application-code: 302ms)
+ GET / 200 in 310ms (next.js: 48ms, application-code: 261ms)
+ GET / 200 in 221ms (next.js: 8ms, application-code: 213ms)
+ GET / 200 in 183ms (next.js: 10ms, application-code: 173ms)
+ GET / 200 in 142ms (next.js: 40ms, application-code: 102ms)
+ GET / 200 in 146ms (next.js: 9ms, application-code: 137ms)
+ GET / 200 in 81ms (next.js: 6ms, application-code: 75ms)
+ GET / 200 in 81ms (next.js: 37ms, application-code: 44ms)
+✓ Compiled in 207ms
+ GET / 200 in 631ms (next.js: 103ms, application-code: 528ms)
+ GET / 200 in 633ms (next.js: 169ms, application-code: 464ms)
+ GET / 200 in 573ms (next.js: 8ms, application-code: 565ms)
+ GET / 200 in 531ms (next.js: 10ms, application-code: 521ms)
+ GET / 200 in 491ms (next.js: 48ms, application-code: 443ms)
+ GET / 200 in 498ms (next.js: 85ms, application-code: 412ms)
+ GET / 200 in 501ms (next.js: 12ms, application-code: 489ms)
+ GET / 200 in 499ms (next.js: 117ms, application-code: 382ms)
+ GET / 200 in 449ms (next.js: 17ms, application-code: 432ms)
+ GET / 200 in 449ms (next.js: 139ms, application-code: 310ms)
+ GET / 200 in 450ms (next.js: 57ms, application-code: 393ms)
+ GET / 200 in 454ms (next.js: 99ms, application-code: 355ms)
+ GET / 200 in 455ms (next.js: 10ms, application-code: 445ms)
+ GET / 200 in 456ms (next.js: 101ms, application-code: 356ms)
+ GET / 200 in 314ms (next.js: 19ms, application-code: 295ms)
+ GET / 200 in 311ms (next.js: 60ms, application-code: 251ms)
+ GET / 200 in 204ms (next.js: 15ms, application-code: 189ms)
+ GET / 200 in 202ms (next.js: 59ms, application-code: 143ms)
+ GET / 200 in 110ms (next.js: 59ms, application-code: 51ms)
+ GET / 200 in 112ms (next.js: 17ms, application-code: 95ms)
+✓ Compiled in 685ms
+✓ Compiled in 72ms
+ GET / 200 in 223ms (next.js: 180ms, application-code: 43ms)
+ GET / 200 in 225ms (next.js: 111ms, application-code: 114ms)
+✓ Compiled in 220ms
+ GET / 200 in 723ms (next.js: 140ms, application-code: 583ms)
+ GET / 200 in 726ms (next.js: 219ms, application-code: 507ms)
+ GET / 200 in 516ms (next.js: 9ms, application-code: 507ms)
+ GET / 200 in 562ms (next.js: 60ms, application-code: 502ms)
+ GET / 200 in 471ms (next.js: 8ms, application-code: 462ms)
+ GET / 200 in 473ms (next.js: 47ms, application-code: 425ms)
+ GET / 200 in 473ms (next.js: 128ms, application-code: 345ms)
+ GET / 200 in 475ms (next.js: 93ms, application-code: 382ms)
+ GET / 200 in 359ms (next.js: 15ms, application-code: 344ms)
+ GET / 200 in 359ms (next.js: 60ms, application-code: 299ms)
+ GET / 200 in 359ms (next.js: 97ms, application-code: 262ms)
+ GET / 200 in 359ms (next.js: 141ms, application-code: 218ms)
+ GET / 200 in 414ms (next.js: 14ms, application-code: 400ms)
+ GET / 200 in 413ms (next.js: 57ms, application-code: 356ms)
+ GET / 200 in 310ms (next.js: 14ms, application-code: 296ms)
+ GET / 200 in 259ms (next.js: 15ms, application-code: 244ms)
+ GET / 200 in 201ms (next.js: 54ms, application-code: 147ms)
+ GET / 200 in 202ms (next.js: 12ms, application-code: 190ms)
+ GET / 200 in 201ms (next.js: 99ms, application-code: 102ms)
+ GET / 200 in 112ms (next.js: 52ms, application-code: 59ms)
+ GET / 200 in 206ms (next.js: 4ms, application-code: 202ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 337ms (next.js: 67ms, application-code: 269ms)
+API Request - Category: null Search: null
+ GET /api/brand-profile 200 in 277ms (next.js: 114ms, application-code: 163ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 376ms (next.js: 44ms, application-code: 331ms)
+ GET /api/auth/session 200 in 96ms (next.js: 72ms, application-code: 24ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 451ms (next.js: 237ms, application-code: 213ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 151ms (next.js: 5ms, application-code: 147ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 204ms (next.js: 3ms, application-code: 201ms)
+ GET /api/resources?access=free 200 in 806ms (next.js: 134ms, application-code: 672ms)
+ GET /resources?type=paid 200 in 139ms (next.js: 94ms, application-code: 45ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 146ms (next.js: 5ms, application-code: 141ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 152ms (next.js: 3ms, application-code: 149ms)
+ GET /resources?type=free 200 in 25ms (next.js: 5ms, application-code: 21ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 221ms (next.js: 4ms, application-code: 217ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 298ms (next.js: 92ms, application-code: 206ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 172ms (next.js: 6ms, application-code: 166ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 115ms (next.js: 38ms, application-code: 77ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 110ms (next.js: 40ms, application-code: 70ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 77ms (next.js: 3ms, application-code: 74ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 79ms (next.js: 3ms, application-code: 75ms)
+ POST /api/tracking 200 in 570ms (next.js: 10ms, application-code: 561ms)
+ POST /api/tracking 200 in 566ms (next.js: 11ms, application-code: 555ms)
+ POST /api/tracking 200 in 621ms (next.js: 33ms, application-code: 588ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 354ms (next.js: 13ms, application-code: 341ms)
+ GET /api/site-theme 200 in 88ms (next.js: 5ms, application-code: 83ms)
+ GET /api/auth/session 200 in 53ms (next.js: 34ms, application-code: 19ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 91ms (next.js: 6ms, application-code: 85ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 94ms (next.js: 14ms, application-code: 80ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 73ms (next.js: 6ms, application-code: 67ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 76ms (next.js: 7ms, application-code: 70ms)
+ GET /api/brand-profile 200 in 87ms (next.js: 6ms, application-code: 81ms)
+ GET / 200 in 33ms (next.js: 5ms, application-code: 28ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 174ms (next.js: 6ms, application-code: 168ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 212ms (next.js: 25ms, application-code: 187ms)
+ GET /api/resources?access=free 200 in 247ms (next.js: 18ms, application-code: 229ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+API Request - Category: null Search: null
+ GET /api/resources?access=paid 200 in 149ms (next.js: 4ms, application-code: 146ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 143ms (next.js: 3ms, application-code: 140ms)
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 145ms (next.js: 4ms, application-code: 141ms)
+ GET /api/resources?access=free 200 in 223ms (next.js: 3ms, application-code: 221ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 140ms (next.js: 3ms, application-code: 137ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 140ms (next.js: 5ms, application-code: 135ms)
+✓ Compiled in 273ms
+ GET / 200 in 1014ms (next.js: 166ms, application-code: 848ms)
+ GET / 200 in 1017ms (next.js: 264ms, application-code: 752ms)
+ GET / 200 in 702ms (next.js: 12ms, application-code: 690ms)
+ GET / 200 in 788ms (next.js: 12ms, application-code: 777ms)
+ GET / 200 in 788ms (next.js: 111ms, application-code: 677ms)
+ GET / 200 in 790ms (next.js: 218ms, application-code: 572ms)
+ GET / 200 in 791ms (next.js: 166ms, application-code: 625ms)
+ GET / 200 in 793ms (next.js: 22ms, application-code: 771ms)
+ GET / 200 in 794ms (next.js: 286ms, application-code: 508ms)
+ GET / 200 in 795ms (next.js: 345ms, application-code: 450ms)
+ GET / 200 in 866ms (next.js: 402ms, application-code: 464ms)
+ GET / 200 in 866ms (next.js: 472ms, application-code: 394ms)
+ GET / 200 in 830ms (next.js: 12ms, application-code: 818ms)
+ GET / 200 in 830ms (next.js: 79ms, application-code: 751ms)
+ GET / 200 in 683ms (next.js: 15ms, application-code: 667ms)
+ GET / 200 in 611ms (next.js: 17ms, application-code: 594ms)
+ GET / 200 in 527ms (next.js: 131ms, application-code: 396ms)
+ GET / 200 in 530ms (next.js: 19ms, application-code: 511ms)
+ GET / 200 in 528ms (next.js: 196ms, application-code: 332ms)
+ GET / 200 in 531ms (next.js: 78ms, application-code: 453ms)
+ GET / 200 in 526ms (next.js: 254ms, application-code: 272ms)
+ GET / 200 in 526ms (next.js: 310ms, application-code: 217ms)
+ GET / 200 in 286ms (next.js: 136ms, application-code: 150ms)
+ GET / 200 in 286ms (next.js: 197ms, application-code: 88ms)
+ GET /resources 200 in 193ms (next.js: 136ms, application-code: 57ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 426ms (next.js: 179ms, application-code: 247ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 189ms (next.js: 5ms, application-code: 184ms)
+ GET /resources?type=paid 200 in 28ms (next.js: 5ms, application-code: 23ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 156ms (next.js: 4ms, application-code: 152ms)
+ GET /resources?type=free 200 in 31ms (next.js: 6ms, application-code: 25ms)
+ GET /guides 200 in 198ms (next.js: 122ms, application-code: 76ms)
+ GET / 200 in 320ms (next.js: 8ms, application-code: 312ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 165ms (next.js: 39ms, application-code: 126ms)
+ GET /api/brand-profile 200 in 117ms (next.js: 36ms, application-code: 81ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 142ms (next.js: 110ms, application-code: 32ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/stats 200 in 314ms (next.js: 80ms, application-code: 234ms)
+ GET /api/resources?access=paid 200 in 332ms (next.js: 103ms, application-code: 229ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 243ms (next.js: 6ms, application-code: 237ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 173ms (next.js: 5ms, application-code: 168ms)
+ GET /api/resources?access=paid 200 in 156ms (next.js: 4ms, application-code: 152ms)
+✓ Compiled in 93ms
+ GET / 200 in 274ms (next.js: 167ms, application-code: 107ms)
+ GET / 200 in 49ms (next.js: 7ms, application-code: 42ms)
+✓ Compiled in 328ms
+ GET / 200 in 480ms (next.js: 114ms, application-code: 366ms)
+ GET / 200 in 480ms (next.js: 183ms, application-code: 297ms)
+ GET / 200 in 303ms (next.js: 11ms, application-code: 292ms)
+ GET / 200 in 242ms (next.js: 110ms, application-code: 132ms)
+ GET / 200 in 244ms (next.js: 10ms, application-code: 235ms)
+ GET / 200 in 244ms (next.js: 54ms, application-code: 190ms)
+ GET / 200 in 299ms (next.js: 146ms, application-code: 154ms)
+ GET / 200 in 156ms (next.js: 7ms, application-code: 150ms)
+ GET / 200 in 111ms (next.js: 10ms, application-code: 101ms)
+ GET / 200 in 51ms (next.js: 8ms, application-code: 43ms)
+ GET / 200 in 45ms (next.js: 6ms, application-code: 39ms)
+ GET / 200 in 46ms (next.js: 6ms, application-code: 40ms)
+ GET / 200 in 32ms (next.js: 5ms, application-code: 27ms)
+ GET / 200 in 53ms (next.js: 8ms, application-code: 45ms)
+ GET / 200 in 43ms (next.js: 6ms, application-code: 36ms)
+ GET / 200 in 255ms (next.js: 8ms, application-code: 246ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 408ms (next.js: 61ms, application-code: 346ms)
+API Request - Category: null Search: null
+ GET /api/brand-profile 200 in 347ms (next.js: 100ms, application-code: 248ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 422ms (next.js: 43ms, application-code: 379ms)
+ GET /api/resources?access=paid 200 in 423ms (next.js: 254ms, application-code: 168ms)
+ GET /api/auth/session 200 in 81ms (next.js: 48ms, application-code: 33ms)
+API Request - Category: null Search: null
+ GET / 200 in 468ms (next.js: 270ms, application-code: 198ms)
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 445ms (next.js: 217ms, application-code: 229ms)
+ GET /api/stats 200 in 141ms (next.js: 6ms, application-code: 135ms)
+ GET /api/resources?access=paid 200 in 164ms (next.js: 18ms, application-code: 146ms)
+ GET / 200 in 51ms (next.js: 7ms, application-code: 44ms)
+ GET / 200 in 34ms (next.js: 5ms, application-code: 29ms)
+✓ Compiled in 95ms
+ GET / 200 in 343ms (next.js: 172ms, application-code: 172ms)
+ GET / 200 in 79ms (next.js: 17ms, application-code: 62ms)
+ GET / 200 in 285ms (next.js: 9ms, application-code: 276ms)
+ GET /api/site-theme 200 in 165ms (next.js: 66ms, application-code: 99ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+ GET /api/brand-profile 200 in 220ms (next.js: 54ms, application-code: 166ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 358ms (next.js: 44ms, application-code: 314ms)
+ GET /api/auth/session 200 in 84ms (next.js: 52ms, application-code: 33ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 378ms (next.js: 188ms, application-code: 191ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 412ms (next.js: 203ms, application-code: 209ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 165ms (next.js: 10ms, application-code: 154ms)
+ GET /api/resources?access=paid 200 in 142ms (next.js: 4ms, application-code: 138ms)
+ GET /admin/profile 200 in 653ms (next.js: 242ms, proxy.ts: 7ms, application-code: 404ms)
+ GET /admin/profile 200 in 143ms (next.js: 10ms, proxy.ts: 9ms, application-code: 123ms)
+ GET /api/site-theme 200 in 247ms (next.js: 12ms, application-code: 235ms)
+ GET /api/admin/brand-profile 200 in 307ms (next.js: 103ms, application-code: 204ms)
+ GET /api/admin/notifications?limit=1 200 in 317ms (next.js: 217ms, application-code: 100ms)
+ GET /api/auth/session 200 in 63ms (next.js: 20ms, application-code: 43ms)
+ GET /api/admin/notifications?limit=8 200 in 91ms (next.js: 8ms, application-code: 83ms)
+ GET /api/auth/session 200 in 41ms (next.js: 11ms, application-code: 29ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 266ms (next.js: 76ms, application-code: 190ms)
+ GET /api/wishlist 200 in 483ms (next.js: 75ms, application-code: 408ms)
+ GET /api/wishlist 200 in 276ms (next.js: 8ms, application-code: 269ms)
+ POST /api/admin/upload 200 in 3.2s (next.js: 208ms, application-code: 2.9s)
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ PUT /api/admin/brand-profile 200 in 91ms (next.js: 7ms, application-code: 84ms)
+ GET /api/auth/session 200 in 44ms (next.js: 17ms, application-code: 27ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/auth/session 200 in 39ms (next.js: 10ms, application-code: 29ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 153ms (next.js: 6ms, application-code: 147ms)
+ GET /api/wishlist 200 in 376ms (next.js: 22ms, application-code: 354ms)
+ GET /api/wishlist 200 in 300ms (next.js: 6ms, application-code: 294ms)
+ GET / 200 in 211ms (next.js: 10ms, application-code: 201ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 104ms (next.js: 12ms, application-code: 92ms)
+API Request - Category: null Search: null
+ GET /api/brand-profile 200 in 101ms (next.js: 15ms, application-code: 85ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 59ms (next.js: 23ms, application-code: 36ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/resources?access=paid 200 in 240ms (next.js: 51ms, application-code: 189ms)
+ GET /api/stats 200 in 245ms (next.js: 31ms, application-code: 214ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/auth/session 200 in 159ms (next.js: 10ms, application-code: 149ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 338ms (next.js: 14ms, application-code: 324ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 245ms (next.js: 8ms, application-code: 237ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 194ms (next.js: 28ms, application-code: 166ms)
+ GET /api/resources?access=paid 200 in 206ms (next.js: 11ms, application-code: 195ms)
+ GET /api/wishlist 200 in 492ms (next.js: 26ms, application-code: 466ms)
+ GET /api/wishlist 200 in 324ms (next.js: 13ms, application-code: 311ms)
+ GET /api/auth/session 200 in 46ms (next.js: 17ms, application-code: 29ms)
+ GET /api/auth/session 200 in 22ms (next.js: 5ms, application-code: 16ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 163ms (next.js: 7ms, application-code: 156ms)
+ GET /api/wishlist 200 in 305ms (next.js: 6ms, application-code: 299ms)
+ GET /api/wishlist 200 in 321ms (next.js: 6ms, application-code: 315ms)
+ GET /api/admin/notifications?limit=8 200 in 92ms (next.js: 12ms, application-code: 80ms)
+ GET /api/admin/notifications?limit=1 200 in 94ms (next.js: 4ms, application-code: 90ms)
+✓ Compiled in 121ms
+ GET / 200 in 470ms (next.js: 168ms, application-code: 302ms)
+ GET / 200 in 470ms (next.js: 290ms, application-code: 180ms)
+ GET /admin/profile 200 in 475ms (next.js: 25ms, proxy.ts: 391ms, application-code: 59ms)
+ GET /api/admin/notifications?limit=1 200 in 122ms (next.js: 33ms, application-code: 89ms)
+ GET /api/admin/notifications?limit=8 200 in 124ms (next.js: 45ms, application-code: 79ms)
+ GET /api/auth/session 200 in 169ms (next.js: 138ms, application-code: 31ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/auth/session 200 in 34ms (next.js: 8ms, application-code: 26ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 225ms (next.js: 45ms, application-code: 181ms)
+ GET /api/wishlist 200 in 460ms (next.js: 63ms, application-code: 397ms)
+ GET /api/wishlist 200 in 308ms (next.js: 6ms, application-code: 302ms)
+ GET /api/admin/notifications?limit=8 200 in 84ms (next.js: 12ms, application-code: 72ms)
+ GET /api/admin/notifications?limit=1 200 in 87ms (next.js: 5ms, application-code: 82ms)
+ GET /about 200 in 120ms (next.js: 66ms, application-code: 53ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 165ms (next.js: 12ms, application-code: 153ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 187ms (next.js: 28ms, application-code: 159ms)
+ GET / 200 in 50ms (next.js: 6ms, application-code: 44ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 264ms (next.js: 27ms, application-code: 238ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 272ms (next.js: 10ms, application-code: 262ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/stats 200 in 299ms (next.js: 139ms, application-code: 160ms)
+ GET /api/resources?access=paid 200 in 340ms (next.js: 108ms, application-code: 233ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 411ms (next.js: 121ms, application-code: 291ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 154ms (next.js: 7ms, application-code: 147ms)
+ GET /api/resources?access=paid 200 in 177ms (next.js: 25ms, application-code: 152ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 234ms (next.js: 5ms, application-code: 229ms)
+ GET /api/stats 200 in 156ms (next.js: 5ms, application-code: 151ms)
+ GET /api/resources?access=paid 200 in 156ms (next.js: 4ms, application-code: 152ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 157ms (next.js: 6ms, application-code: 151ms)
+ GET /resources 200 in 289ms (next.js: 202ms, application-code: 87ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 193ms (next.js: 9ms, application-code: 184ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 197ms (next.js: 23ms, application-code: 174ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 299ms (next.js: 35ms, application-code: 264ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 261ms (next.js: 6ms, application-code: 255ms)
+ GET /resources?type=paid 200 in 47ms (next.js: 8ms, application-code: 40ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 161ms (next.js: 6ms, application-code: 155ms)
+ GET /resources?type=free 200 in 48ms (next.js: 7ms, application-code: 41ms)
+ GET /profile 200 in 176ms (next.js: 119ms, application-code: 57ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 418ms (next.js: 14ms, application-code: 404ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 449ms (next.js: 14ms, application-code: 435ms)
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/profile 200 in 598ms (next.js: 129ms, application-code: 469ms)
+ GET /api/user/orders 200 in 572ms (next.js: 300ms, application-code: 273ms)
+ GET /api/support 200 in 225ms (next.js: 86ms, application-code: 139ms)
+ GET /api/wishlist 200 in 621ms (next.js: 210ms, application-code: 411ms)
+ GET /api/user/purchased-resources 200 in 628ms (next.js: 192ms, application-code: 436ms)
+ GET / 200 in 68ms (next.js: 9ms, application-code: 58ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 168ms (next.js: 9ms, application-code: 159ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 179ms (next.js: 25ms, application-code: 153ms)
+ GET /api/resources?access=paid 200 in 203ms (next.js: 45ms, application-code: 158ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/stats 200 in 181ms (next.js: 14ms, application-code: 167ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 314ms (next.js: 58ms, application-code: 257ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+API Request - Category: null Search: null
+ GET /api/resources?access=paid 200 in 161ms (next.js: 6ms, application-code: 155ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 168ms (next.js: 6ms, application-code: 162ms)
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 291ms (next.js: 12ms, application-code: 280ms)
+ GET /api/resources?access=paid 200 in 224ms (next.js: 7ms, application-code: 217ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 179ms (next.js: 9ms, application-code: 170ms)
+ GET /api/admin/notifications?limit=8 200 in 102ms (next.js: 21ms, application-code: 81ms)
+ GET /api/admin/notifications?limit=1 200 in 107ms (next.js: 7ms, application-code: 99ms)
+ GET /api/admin/notifications?limit=1 200 in 93ms (next.js: 3ms, application-code: 90ms)
+ GET /api/admin/notifications?limit=8 200 in 101ms (next.js: 8ms, application-code: 94ms)
+ GET /resources 200 in 40ms (next.js: 8ms, application-code: 33ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 157ms (next.js: 9ms, application-code: 148ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 140ms (next.js: 8ms, application-code: 133ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 240ms (next.js: 5ms, application-code: 235ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 251ms (next.js: 5ms, application-code: 246ms)
+ GET /guides 200 in 251ms (next.js: 140ms, application-code: 111ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 165ms (next.js: 9ms, application-code: 156ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 166ms (next.js: 22ms, application-code: 144ms)
+ GET /collaboration 200 in 221ms (next.js: 104ms, application-code: 118ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 161ms (next.js: 7ms, application-code: 154ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 169ms (next.js: 16ms, application-code: 154ms)
+✓ Compiled in 398ms
+ GET / 200 in 763ms (next.js: 251ms, application-code: 512ms)
+ GET / 200 in 771ms (next.js: 369ms, application-code: 401ms)
+ GET / 200 in 769ms (next.js: 448ms, application-code: 321ms)
+ GET /admin/profile 200 in 778ms (next.js: 32ms, proxy.ts: 652ms, application-code: 94ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 460ms (next.js: 109ms, application-code: 352ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 465ms (next.js: 84ms, application-code: 381ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 528ms (next.js: 360ms, application-code: 167ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 601ms (next.js: 292ms, application-code: 310ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 686ms (next.js: 310ms, application-code: 375ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 194ms (next.js: 8ms, application-code: 187ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 205ms (next.js: 14ms, application-code: 191ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 272ms (next.js: 9ms, application-code: 263ms)
+ GET /api/resources?access=paid 200 in 170ms (next.js: 8ms, application-code: 162ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 148ms (next.js: 4ms, application-code: 143ms)
+ GET / 200 in 377ms (next.js: 7ms, application-code: 371ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 245ms (next.js: 66ms, application-code: 179ms)
+ GET /api/brand-profile 200 in 166ms (next.js: 69ms, application-code: 97ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Found resources: 24 for query: { price: 0 }
+ GET /api/auth/session 200 in 158ms (next.js: 95ms, application-code: 63ms)
+ GET /api/stats 200 in 358ms (next.js: 95ms, application-code: 263ms)
+ GET /api/resources?access=paid 200 in 361ms (next.js: 118ms, application-code: 243ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 421ms (next.js: 135ms, application-code: 286ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 154ms (next.js: 7ms, application-code: 147ms)
+ GET /api/resources?access=paid 200 in 183ms (next.js: 24ms, application-code: 159ms)
+ GET /api/admin/notifications?limit=1 200 in 102ms (next.js: 27ms, application-code: 75ms)
+ GET /api/admin/notifications?limit=8 200 in 86ms (next.js: 5ms, application-code: 81ms)
+ GET /api/admin/notifications?limit=8 200 in 87ms (next.js: 11ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=1 200 in 89ms (next.js: 4ms, application-code: 85ms)
+✓ Compiled in 519ms
+ GET / 200 in 799ms (next.js: 125ms, application-code: 674ms)
+ GET / 200 in 842ms (next.js: 192ms, application-code: 649ms)
+ GET /admin/profile 200 in 848ms (next.js: 161ms, proxy.ts: 306ms, application-code: 381ms)
+ GET / 200 in 540ms (next.js: 8ms, application-code: 532ms)
+ GET / 200 in 539ms (next.js: 219ms, application-code: 320ms)
+ GET / 200 in 271ms (next.js: 12ms, application-code: 259ms)
+ GET /admin/profile 200 in 271ms (next.js: 12ms, proxy.ts: 155ms, application-code: 104ms)
+ GET / 200 in 214ms (next.js: 12ms, application-code: 202ms)
+ GET /admin/profile 200 in 73ms (next.js: 13ms, proxy.ts: 12ms, application-code: 49ms)
+ GET /admin/login 200 in 239ms (next.js: 39ms, proxy.ts: 4ms, application-code: 196ms)
+ GET /api/site-theme 200 in 202ms (next.js: 51ms, application-code: 151ms)
+ GET /api/auth/session 200 in 141ms (next.js: 112ms, application-code: 30ms)
+ GET /api/admin/notifications?limit=1 200 in 95ms (next.js: 23ms, application-code: 72ms)
+ GET /api/admin/notifications?limit=8 200 in 76ms (next.js: 3ms, application-code: 73ms)
+ GET /api/admin/notifications?limit=1 200 in 88ms (next.js: 4ms, application-code: 85ms)
+ GET /api/admin/notifications?limit=8 200 in 89ms (next.js: 11ms, application-code: 78ms)
+✓ Compiled in 294ms
+ GET / 200 in 456ms (next.js: 221ms, application-code: 235ms)
+ GET /admin/login 200 in 466ms (next.js: 266ms, proxy.ts: 89ms, application-code: 110ms)
+ GET /admin/profile 200 in 466ms (next.js: 77ms, proxy.ts: 336ms, application-code: 52ms)
+✓ Compiled in 59ms
+ GET /admin/login 200 in 254ms (next.js: 140ms, proxy.ts: 47ms, application-code: 66ms)
+ GET / 200 in 202ms (next.js: 81ms, application-code: 120ms)
+ GET /admin/profile 200 in 202ms (next.js: 11ms, proxy.ts: 163ms, application-code: 28ms)
+ GET /api/admin/notifications?limit=1 200 in 115ms (next.js: 33ms, application-code: 82ms)
+ GET /api/admin/notifications?limit=8 200 in 116ms (next.js: 43ms, application-code: 73ms)
+ GET / 200 in 183ms (next.js: 5ms, application-code: 178ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 222ms (next.js: 26ms, application-code: 196ms)
+ GET /api/brand-profile 200 in 191ms (next.js: 69ms, application-code: 122ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 264ms (next.js: 37ms, application-code: 228ms)
+ GET /api/auth/session 200 in 63ms (next.js: 40ms, application-code: 23ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 366ms (next.js: 175ms, application-code: 191ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 173ms (next.js: 5ms, application-code: 168ms)
+ GET /api/resources?access=free 200 in 260ms (next.js: 10ms, application-code: 250ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 147ms (next.js: 3ms, application-code: 144ms)
+ GET /api/admin/notifications?limit=8 200 in 81ms (next.js: 7ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=1 200 in 90ms (next.js: 3ms, application-code: 87ms)
+ GET /api/admin/notifications?limit=8 200 in 60ms (next.js: 1805µs, application-code: 58ms)
+ GET /api/admin/notifications?limit=1 200 in 70ms (next.js: 3ms, application-code: 67ms)
+ GET /api/admin/notifications?limit=1 200 in 77ms (next.js: 4ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=8 200 in 67ms (next.js: 2ms, application-code: 65ms)
+ GET /api/admin/notifications?limit=1 200 in 86ms (next.js: 3ms, application-code: 83ms)
+ GET /api/admin/notifications?limit=8 200 in 76ms (next.js: 2ms, application-code: 73ms)
+ GET /api/admin/notifications?limit=8 200 in 72ms (next.js: 4ms, application-code: 68ms)
+ GET /api/admin/notifications?limit=1 200 in 80ms (next.js: 3ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=1 200 in 80ms (next.js: 3ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=8 200 in 71ms (next.js: 3ms, application-code: 68ms)
+ GET /api/admin/notifications?limit=8 200 in 81ms (next.js: 10ms, application-code: 71ms)
+ GET /api/admin/notifications?limit=1 200 in 87ms (next.js: 2ms, application-code: 85ms)
+ GET /api/admin/notifications?limit=8 200 in 81ms (next.js: 8ms, application-code: 73ms)
+ GET /api/admin/notifications?limit=1 200 in 83ms (next.js: 4ms, application-code: 79ms)
+ GET /api/admin/notifications?limit=1 200 in 75ms (next.js: 3ms, application-code: 71ms)
+ GET /api/admin/notifications?limit=8 200 in 73ms (next.js: 3ms, application-code: 70ms)
+ GET /api/admin/notifications?limit=1 200 in 83ms (next.js: 3ms, application-code: 80ms)
+ GET /api/admin/notifications?limit=8 200 in 83ms (next.js: 8ms, application-code: 75ms)
+ GET /api/admin/notifications?limit=8 200 in 85ms (next.js: 8ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=1 200 in 87ms (next.js: 3ms, application-code: 84ms)
+ GET /api/admin/notifications?limit=8 200 in 82ms (next.js: 8ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=1 200 in 83ms (next.js: 3ms, application-code: 80ms)
+ GET /api/admin/notifications?limit=8 200 in 70ms (next.js: 3ms, application-code: 67ms)
+ GET /api/admin/notifications?limit=1 200 in 80ms (next.js: 4ms, application-code: 76ms)
+ GET /api/admin/notifications?limit=8 200 in 77ms (next.js: 7ms, application-code: 70ms)
+ GET /api/admin/notifications?limit=1 200 in 80ms (next.js: 3ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=8 200 in 71ms (next.js: 2ms, application-code: 69ms)
+ GET /api/admin/notifications?limit=1 200 in 81ms (next.js: 2ms, application-code: 79ms)
+ GET /api/admin/notifications?limit=8 200 in 82ms (next.js: 9ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=1 200 in 84ms (next.js: 3ms, application-code: 81ms)
+ GET /api/admin/notifications?limit=8 200 in 76ms (next.js: 7ms, application-code: 70ms)
+ GET /api/admin/notifications?limit=1 200 in 84ms (next.js: 4ms, application-code: 80ms)
+ GET /api/admin/notifications?limit=8 200 in 84ms (next.js: 7ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=1 200 in 86ms (next.js: 3ms, application-code: 84ms)
+ GET /resources 200 in 51ms (next.js: 24ms, application-code: 27ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 342ms (next.js: 8ms, application-code: 334ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 219ms (next.js: 4ms, application-code: 215ms)
+ GET /api/admin/notifications?limit=8 200 in 94ms (next.js: 10ms, application-code: 85ms)
+ GET /api/admin/notifications?limit=1 200 in 97ms (next.js: 3ms, application-code: 94ms)
+✓ Compiled in 335ms
+ GET /resources 200 in 631ms (next.js: 169ms, application-code: 462ms)
+ GET / 200 in 633ms (next.js: 298ms, application-code: 336ms)
+ GET /admin/profile 200 in 633ms (next.js: 29ms, proxy.ts: 551ms, application-code: 54ms)
+ GET /resources?type=free 200 in 179ms (next.js: 6ms, application-code: 172ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 254ms (next.js: 64ms, application-code: 190ms)
+ GET /api/brand-profile 200 in 175ms (next.js: 40ms, application-code: 136ms)
+ GET /api/auth/session 200 in 66ms (next.js: 46ms, application-code: 21ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 333ms (next.js: 109ms, application-code: 223ms)
+ GET /api/admin/notifications?limit=1 200 in 103ms (next.js: 21ms, application-code: 82ms)
+ GET /api/admin/notifications?limit=8 200 in 73ms (next.js: 2ms, application-code: 71ms)
+ GET /api/admin/notifications?limit=8 200 in 73ms (next.js: 7ms, application-code: 66ms)
+ GET /api/admin/notifications?limit=1 200 in 77ms (next.js: 2ms, application-code: 75ms)
+ GET /api/admin/notifications?limit=8 200 in 71ms (next.js: 2ms, application-code: 69ms)
+ GET /api/admin/notifications?limit=1 200 in 82ms (next.js: 3ms, application-code: 79ms)
+ GET /api/admin/notifications?limit=8 200 in 76ms (next.js: 8ms, application-code: 68ms)
+ GET /api/admin/notifications?limit=1 200 in 77ms (next.js: 4ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=1 200 in 77ms (next.js: 3ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=8 200 in 81ms (next.js: 8ms, application-code: 73ms)
+✓ Compiled in 92ms
+ GET /resources?type=free 200 in 411ms (next.js: 135ms, application-code: 276ms)
+ GET / 200 in 210ms (next.js: 21ms, application-code: 189ms)
+ GET /admin/profile 200 in 214ms (next.js: 19ms, proxy.ts: 139ms, application-code: 57ms)
+ GET /resources?type=free 200 in 339ms (next.js: 10ms, application-code: 329ms)
+ GET /api/site-theme 200 in 174ms (next.js: 78ms, application-code: 96ms)
+API Request - Category: null Search: null
+ GET /api/brand-profile 200 in 229ms (next.js: 55ms, application-code: 174ms)
+ GET /api/auth/session 200 in 75ms (next.js: 54ms, application-code: 21ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 360ms (next.js: 137ms, application-code: 223ms)
+ GET /api/admin/notifications?limit=8 200 in 121ms (next.js: 37ms, application-code: 84ms)
+ GET /api/admin/notifications?limit=1 200 in 123ms (next.js: 28ms, application-code: 95ms)
+ GET /api/admin/notifications?limit=1 200 in 81ms (next.js: 4ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=8 200 in 73ms (next.js: 4ms, application-code: 69ms)
+✓ Compiled in 615ms
+ GET /resources?type=free 200 in 1275ms (next.js: 436ms, application-code: 839ms)
+ GET / 200 in 1286ms (next.js: 210ms, application-code: 1076ms)
+ GET /resources?type=free 200 in 691ms (next.js: 48ms, application-code: 643ms)
+ GET /admin/profile 200 in 1344ms (next.js: 233ms, proxy.ts: 597ms, application-code: 514ms)
+ GET / 200 in 867ms (next.js: 8ms, application-code: 858ms)
+ GET /resources?type=free 200 in 469ms (next.js: 115ms, application-code: 354ms)
+ GET /resources?type=free 200 in 472ms (next.js: 19ms, application-code: 453ms)
+ GET /resources?type=free 200 in 473ms (next.js: 64ms, application-code: 408ms)
+ GET / 200 in 671ms (next.js: 18ms, application-code: 654ms)
+ GET / 200 in 672ms (next.js: 80ms, application-code: 592ms)
+ GET /resources?type=free 200 in 423ms (next.js: 10ms, application-code: 412ms)
+ GET /resources?type=free 200 in 621ms (next.js: 11ms, application-code: 610ms)
+ GET /resources?type=free 200 in 561ms (next.js: 124ms, application-code: 437ms)
+ GET / 200 in 567ms (next.js: 10ms, application-code: 557ms)
+ GET / 200 in 567ms (next.js: 71ms, application-code: 496ms)
+ GET /resources?type=free 200 in 330ms (next.js: 63ms, application-code: 267ms)
+ GET /resources?type=free 200 in 331ms (next.js: 104ms, application-code: 226ms)
+ GET / 200 in 403ms (next.js: 13ms, application-code: 390ms)
+ GET / 200 in 339ms (next.js: 15ms, application-code: 325ms)
+ GET / 200 in 188ms (next.js: 10ms, application-code: 178ms)
+ GET / 200 in 192ms (next.js: 70ms, application-code: 122ms)
+ GET /admin/profile 200 in 399ms (next.js: 12ms, proxy.ts: 10ms, application-code: 378ms)
+ GET /admin/profile 200 in 382ms (next.js: 13ms, proxy.ts: 8ms, application-code: 360ms)
+ GET /admin/profile 200 in 312ms (next.js: 73ms, proxy.ts: 21ms, application-code: 217ms)
+ GET /admin/profile 200 in 312ms (next.js: 121ms, proxy.ts: 20ms, application-code: 170ms)
+ GET /admin/profile 200 in 311ms (next.js: 166ms, proxy.ts: 20ms, application-code: 125ms)
+ GET /admin/profile 200 in 316ms (next.js: 17ms, proxy.ts: 22ms, application-code: 277ms)
+ GET /admin/profile 200 in 178ms (next.js: 10ms, proxy.ts: 6ms, application-code: 162ms)
+ GET /admin/profile 200 in 120ms (next.js: 14ms, proxy.ts: 8ms, application-code: 98ms)
+ GET /admin/profile 200 in 108ms (next.js: 7ms, proxy.ts: 53ms, application-code: 48ms)
+ GET /resources?type=paid 200 in 36ms (next.js: 7ms, application-code: 29ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/admin/notifications?limit=8 200 in 130ms (next.js: 50ms, application-code: 80ms)
+ GET /api/admin/notifications?limit=1 200 in 134ms (next.js: 35ms, application-code: 98ms)
+ GET /api/resources?access=paid 200 in 306ms (next.js: 147ms, application-code: 159ms)
+ GET /resources?type=free 200 in 41ms (next.js: 8ms, application-code: 34ms)
+ GET /resource/6a8f4a332d7a272b4147d44a 200 in 476ms (next.js: 185ms, application-code: 291ms)
+ GET /resource/6a8f4a332d7a272b4147d44a 200 in 222ms (next.js: 21ms, application-code: 201ms)
+ GET /api/reviews?resourceId=6a8f4a332d7a272b4147d44a 200 in 189ms (next.js: 73ms, application-code: 116ms)
+ GET /api/resources/6a8f4a332d7a272b4147d44a 200 in 149ms (next.js: 67ms, application-code: 83ms)
+ GET /api/reviews?resourceId=6a8f4a332d7a272b4147d44a 200 in 90ms (next.js: 9ms, application-code: 81ms)
+ GET /api/resources/6a8f4a332d7a272b4147d44a 200 in 87ms (next.js: 5ms, application-code: 81ms)
+ GET / 200 in 55ms (next.js: 6ms, application-code: 49ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 178ms (next.js: 8ms, application-code: 171ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 250ms (next.js: 26ms, application-code: 224ms)
+ GET /api/stats 200 in 215ms (next.js: 53ms, application-code: 162ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 150ms (next.js: 4ms, application-code: 146ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/stats 200 in 156ms (next.js: 20ms, application-code: 137ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 232ms (next.js: 5ms, application-code: 227ms)
+ GET /api/resources?access=paid 200 in 155ms (next.js: 4ms, application-code: 151ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 161ms (next.js: 4ms, application-code: 158ms)
+ GET /api/resources?access=paid 200 in 145ms (next.js: 6ms, application-code: 139ms)
+ GET /api/auth/session 200 in 186ms (next.js: 133ms, application-code: 53ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/auth/session 200 in 143ms (next.js: 105ms, application-code: 38ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 313ms (next.js: 76ms, application-code: 237ms)
+ GET /api/wishlist 200 in 430ms (next.js: 85ms, application-code: 344ms)
+ GET /api/wishlist 200 in 403ms (next.js: 5ms, application-code: 398ms)
+ GET /resources 200 in 72ms (next.js: 13ms, application-code: 59ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 157ms (next.js: 8ms, application-code: 149ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 183ms (next.js: 31ms, application-code: 152ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 300ms (next.js: 47ms, application-code: 253ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 289ms (next.js: 8ms, application-code: 281ms)
+ GET / 200 in 54ms (next.js: 8ms, application-code: 46ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 175ms (next.js: 9ms, application-code: 165ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 178ms (next.js: 26ms, application-code: 152ms)
+ GET /api/resources?access=paid 200 in 191ms (next.js: 41ms, application-code: 150ms)
+API Request - Category: null Search: null
+ GET /api/stats 200 in 168ms (next.js: 26ms, application-code: 142ms)
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 298ms (next.js: 24ms, application-code: 273ms)
+ GET /api/resources?access=paid 200 in 169ms (next.js: 6ms, application-code: 163ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+ GET /api/stats 200 in 152ms (next.js: 6ms, application-code: 145ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 159ms (next.js: 6ms, application-code: 153ms)
+ GET /api/stats 200 in 147ms (next.js: 6ms, application-code: 141ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 254ms (next.js: 6ms, application-code: 248ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 151ms (next.js: 7ms, application-code: 143ms)
+ GET / 200 in 301ms (next.js: 6ms, application-code: 296ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 235ms (next.js: 51ms, application-code: 184ms)
+ GET /api/brand-profile 200 in 207ms (next.js: 107ms, application-code: 100ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 48ms (next.js: 18ms, application-code: 31ms)
+ GET /api/stats 200 in 238ms (next.js: 7ms, application-code: 230ms)
+ GET /api/resources?access=paid 200 in 284ms (next.js: 129ms, application-code: 155ms)
+Found resources: 24 for query: { price: 0 }
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 337ms (next.js: 109ms, application-code: 227ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 159ms (next.js: 6ms, application-code: 152ms)
+ GET /api/resources?access=paid 200 in 158ms (next.js: 7ms, application-code: 150ms)
+ GET /api/admin/notifications?limit=8 200 in 89ms (next.js: 16ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=1 200 in 92ms (next.js: 4ms, application-code: 87ms)
+ GET /api/admin/notifications?limit=1 200 in 86ms (next.js: 3ms, application-code: 83ms)
+ GET /api/admin/notifications?limit=8 200 in 87ms (next.js: 10ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=1 200 in 89ms (next.js: 6ms, application-code: 84ms)
+ GET /api/admin/notifications?limit=8 200 in 83ms (next.js: 3ms, application-code: 80ms)
+✓ Compiled in 665ms
+ GET / 200 in 1639ms (next.js: 153ms, application-code: 1487ms)
+ GET / 200 in 1640ms (next.js: 297ms, application-code: 1344ms)
+ GET /admin/profile 200 in 1646ms (next.js: 388ms, proxy.ts: 508ms, application-code: 749ms)
+ GET / 200 in 1151ms (next.js: 90ms, application-code: 1061ms)
+ GET / 200 in 1154ms (next.js: 13ms, application-code: 1141ms)
+ GET / 200 in 766ms (next.js: 20ms, application-code: 746ms)
+ GET / 200 in 764ms (next.js: 266ms, application-code: 498ms)
+ GET / 200 in 766ms (next.js: 110ms, application-code: 657ms)
+ GET /admin/profile 200 in 991ms (next.js: 91ms, proxy.ts: 355ms, application-code: 544ms)
+ GET / 200 in 711ms (next.js: 18ms, application-code: 693ms)
+ GET /admin/profile 200 in 643ms (next.js: 14ms, proxy.ts: 17ms, application-code: 613ms)
+ GET / 200 in 676ms (next.js: 19ms, application-code: 657ms)
+ GET /admin/profile 200 in 684ms (next.js: 105ms, proxy.ts: 121ms, application-code: 457ms)
+ GET /admin/profile 200 in 680ms (next.js: 175ms, proxy.ts: 120ms, application-code: 386ms)
+ GET / 200 in 568ms (next.js: 17ms, application-code: 551ms)
+ GET / 200 in 412ms (next.js: 87ms, application-code: 324ms)
+ GET / 200 in 350ms (next.js: 86ms, application-code: 264ms)
+ GET /admin/profile 200 in 278ms (next.js: 19ms, proxy.ts: 13ms, application-code: 245ms)
+ GET /admin/profile 200 in 269ms (next.js: 12ms, proxy.ts: 14ms, application-code: 243ms)
+ GET /admin/profile 200 in 334ms (next.js: 17ms, proxy.ts: 18ms, application-code: 299ms)
+ GET /admin/profile 200 in 329ms (next.js: 85ms, proxy.ts: 16ms, application-code: 228ms)
+ GET /admin/profile 200 in 175ms (next.js: 12ms, proxy.ts: 10ms, application-code: 153ms)
+ GET / 200 in 104ms (next.js: 12ms, application-code: 92ms)
+ GET /api/admin/notifications?limit=1 200 in 199ms (next.js: 92ms, application-code: 107ms)
+ GET /api/admin/notifications?limit=8 200 in 200ms (next.js: 109ms, application-code: 91ms)
+ GET / 200 in 83ms (next.js: 11ms, application-code: 73ms)
+ GET / 200 in 98ms (next.js: 21ms, application-code: 78ms)
+ GET / 200 in 76ms (next.js: 12ms, application-code: 64ms)
+ GET / 200 in 76ms (next.js: 10ms, application-code: 67ms)
+ GET / 200 in 86ms (next.js: 9ms, application-code: 77ms)
+ GET / 200 in 80ms (next.js: 16ms, application-code: 65ms)
+ GET / 200 in 85ms (next.js: 18ms, application-code: 67ms)
+✓ Compiled in 283ms
+ GET / 200 in 1027ms (next.js: 133ms, application-code: 895ms)
+ GET / 200 in 1027ms (next.js: 215ms, application-code: 812ms)
+ GET /admin/profile 200 in 1034ms (next.js: 165ms, proxy.ts: 336ms, application-code: 533ms)
+ GET / 200 in 708ms (next.js: 7ms, application-code: 701ms)
+ GET / 200 in 639ms (next.js: 8ms, application-code: 631ms)
+ GET / 200 in 638ms (next.js: 92ms, application-code: 547ms)
+ GET / 200 in 639ms (next.js: 136ms, application-code: 503ms)
+ GET / 200 in 640ms (next.js: 48ms, application-code: 592ms)
+ GET /admin/profile 200 in 709ms (next.js: 75ms, proxy.ts: 193ms, application-code: 441ms)
+ GET / 200 in 617ms (next.js: 13ms, application-code: 604ms)
+ GET /admin/profile 200 in 516ms (next.js: 16ms, proxy.ts: 46ms, application-code: 455ms)
+ GET /admin/profile 200 in 529ms (next.js: 59ms, proxy.ts: 16ms, application-code: 454ms)
+ GET /admin/profile 200 in 538ms (next.js: 18ms, proxy.ts: 64ms, application-code: 455ms)
+ GET / 200 in 534ms (next.js: 12ms, application-code: 522ms)
+ GET /admin/profile 200 in 539ms (next.js: 113ms, proxy.ts: 69ms, application-code: 357ms)
+ GET / 200 in 472ms (next.js: 52ms, application-code: 420ms)
+ GET / 200 in 314ms (next.js: 8ms, application-code: 306ms)
+ GET / 200 in 362ms (next.js: 59ms, application-code: 303ms)
+ GET /admin/profile 200 in 314ms (next.js: 13ms, proxy.ts: 65ms, application-code: 235ms)
+ GET /admin/profile 200 in 200ms (next.js: 14ms, proxy.ts: 12ms, application-code: 174ms)
+ GET /admin/profile 200 in 197ms (next.js: 61ms, proxy.ts: 13ms, application-code: 122ms)
+ GET /admin/profile 200 in 72ms (next.js: 10ms, proxy.ts: 10ms, application-code: 52ms)
+ GET / 200 in 47ms (next.js: 6ms, application-code: 40ms)
+ GET / 200 in 43ms (next.js: 6ms, application-code: 38ms)
+ GET / 200 in 43ms (next.js: 7ms, application-code: 36ms)
+ GET / 200 in 43ms (next.js: 5ms, application-code: 38ms)
+ GET / 200 in 79ms (next.js: 11ms, application-code: 68ms)
+ GET / 200 in 51ms (next.js: 6ms, application-code: 44ms)
+ GET / 200 in 51ms (next.js: 6ms, application-code: 45ms)
+ GET / 200 in 74ms (next.js: 9ms, application-code: 65ms)
+ GET /api/admin/notifications?limit=1 200 in 122ms (next.js: 34ms, application-code: 88ms)
+ GET /api/admin/notifications?limit=8 200 in 123ms (next.js: 44ms, application-code: 78ms)
+ GET /api/admin/notifications?limit=1 200 in 108ms (next.js: 6ms, application-code: 102ms)
+ GET /api/admin/notifications?limit=8 200 in 96ms (next.js: 5ms, application-code: 91ms)
+✓ Compiled in 1323ms
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+ GET / 500 in 843ms (next.js: 467ms, application-code: 376ms)
+ GET / 500 in 845ms (next.js: 486ms, application-code: 358ms)
+ GET /admin/profile 500 in 847ms (next.js: 649ms, proxy.ts: 176ms, application-code: 22ms)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+ GET / 500 in 143ms (next.js: 78ms, application-code: 64ms)
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+
+ GET / 500 in 217ms (next.js: 147ms, application-code: 70ms)
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+
+ GET / 500 in 239ms (next.js: 162ms, application-code: 76ms)
+ GET /admin/profile 500 in 366ms (next.js: 256ms, proxy.ts: 66ms, application-code: 44ms)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+ GET / 500 in 191ms (next.js: 155ms, application-code: 36ms)
+ GET /admin/profile 500 in 413ms (next.js: 202ms, proxy.ts: 180ms, application-code: 30ms)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] Uncaught Error: ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+    at <unknown> (Error: ./components/layout/Navbar.tsx:202:22)
+    at <unknown> (Error: (./components/layout/Navbar.tsx:202:22)
+[browser] Uncaught Error: ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+    at <unknown> (Error: ./components/layout/Navbar.tsx:202:22)
+    at <unknown> (Error: (./components/layout/Navbar.tsx:202:22)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/guides/page.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/resources/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Server Component:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  Client Component Browser:
+    ./components/layout/Navbar.tsx [Client Component Browser]
+    ./app/resource/[id]/page.tsx [Client Component Browser]
+    ./app/resource/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/layout/Navbar.tsx [Client Component SSR]
+    ./app/resource/[id]/page.tsx [Client Component SSR]
+    ./app/resource/[id]/page.tsx [Server Component] 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/about/page.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Server Component:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  Client Component Browser:
+    ./components/layout/Navbar.tsx [Client Component Browser]
+    ./app/profile/page.tsx [Client Component Browser]
+    ./app/profile/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/layout/Navbar.tsx [Client Component SSR]
+    ./app/profile/page.tsx [Client Component SSR]
+    ./app/profile/page.tsx [Server Component] 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/collaboration/page.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+⨯ ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  [90m200 |[0m                 {[90m/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —[0m
+  [90m201 |[0m [90m                    profile hamburger menu ke andar dikhta hai. */[0m}
+[31m[1m>[0m [90m202 |[0m                 <div className=[32m"relative z-[60] hidden lg:block"[0m key=[32m"desktop-profile"[0m>
+  [90m    |[0m                      [31m[1m^^^^^^^^^[0m
+  [90m203 |[0m                   <button onClick={() => setShowDropdown(!showDropdown)} className=[32m"flex ...[0m
+  [90m204 |[0m                     {session.user?.image ? (
+  [90m205 |[0m                       <img src={session.user.image} alt={session.user.name || [32m'User'[0m} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+ GET / 500 in 24ms (next.js: 13ms, application-code: 11ms)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+ GET / 200 in 7.2s (next.js: 898ms, application-code: 6.3s)
+[browser] Uncaught Error: ./components/layout/Navbar.tsx:202:22
+Expected '</', got 'ident'
+  200 |                 {/* Desktop (lg+): avatar + naam + dropdown. Mobile me ye hidden —
+  201 |                     profile hamburger menu ke andar dikhta hai. */}
+> 202 |                 <div className="relative z-[60] hidden lg:block" key="desktop-profile">
+      |                      ^^^^^^^^^
+  203 |                   <button onClick={() => setShowDropdown(!showDropdown)} className="flex ...
+  204 |                     {session.user?.image ? (
+  205 |                       <img src={session.user.image} alt={session.user.name || 'User'} cla...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  #1 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/not-found.tsx
+
+  #2 [Server Component]:
+    ./components/layout/Navbar.tsx
+    ./app/page.tsx
+
+
+    at <unknown> (Error: ./components/layout/Navbar.tsx:202:22)
+    at <unknown> (Error: (./components/layout/Navbar.tsx:202:22)
+ GET / 200 in 1206ms (next.js: 450ms, application-code: 756ms)
+ GET /admin/profile 200 in 1207ms (next.js: 145ms, proxy.ts: 754ms, application-code: 308ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 537ms (next.js: 126ms, application-code: 410ms)
+ GET /api/brand-profile 200 in 384ms (next.js: 154ms, application-code: 229ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Found resources: 24 for query: { price: 0 }
+ GET /api/stats 200 in 567ms (next.js: 84ms, application-code: 483ms)
+ GET /api/auth/session 200 in 191ms (next.js: 106ms, application-code: 85ms)
+ GET /api/resources?access=paid 200 in 628ms (next.js: 320ms, application-code: 308ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 699ms (next.js: 337ms, application-code: 362ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 201ms (next.js: 12ms, application-code: 189ms)
+ GET /api/resources?access=paid 200 in 305ms (next.js: 12ms, application-code: 293ms)
+ GET /api/site-theme 200 in 139ms (next.js: 5ms, application-code: 134ms)
+ GET /api/auth/session 200 in 35ms (next.js: 5ms, application-code: 31ms)
+ GET /api/admin/brand-profile 200 in 192ms (next.js: 107ms, application-code: 85ms)
+ GET /api/admin/notifications?limit=1 200 in 197ms (next.js: 44ms, application-code: 152ms)
+ GET /api/admin/notifications?limit=8 200 in 139ms (next.js: 6ms, application-code: 133ms)
+ GET /api/wishlist 200 in 338ms (next.js: 55ms, application-code: 283ms)
+✓ Compiled in 376ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 200 in 1746ms (next.js: 232ms, application-code: 1514ms)
+ GET /admin/profile 200 in 1755ms (next.js: 390ms, proxy.ts: 819ms, application-code: 546ms)
+ GET / 200 in 1019ms (next.js: 14ms, application-code: 1005ms)
+ GET / 200 in 1846ms (next.js: 372ms, application-code: 1474ms)
+ GET / 200 in 529ms (next.js: 20ms, application-code: 509ms)
+ GET / 200 in 528ms (next.js: 96ms, application-code: 432ms)
+ GET / 200 in 528ms (next.js: 165ms, application-code: 363ms)
+ GET / 200 in 531ms (next.js: 249ms, application-code: 282ms)
+ GET /admin/profile 200 in 607ms (next.js: 18ms, proxy.ts: 14ms, application-code: 575ms)
+ GET / 200 in 739ms (next.js: 12ms, application-code: 727ms)
+ GET /admin/profile 200 in 667ms (next.js: 106ms, proxy.ts: 24ms, application-code: 537ms)
+ GET / 200 in 654ms (next.js: 16ms, application-code: 638ms)
+ GET / 200 in 566ms (next.js: 90ms, application-code: 476ms)
+ GET / 200 in 566ms (next.js: 183ms, application-code: 383ms)
+ GET /admin/profile 200 in 571ms (next.js: 21ms, proxy.ts: 297ms, application-code: 253ms)
+ GET /admin/profile 200 in 344ms (next.js: 23ms, proxy.ts: 144ms, application-code: 177ms)
+ GET /admin/profile 200 in 229ms (next.js: 16ms, proxy.ts: 15ms, application-code: 198ms)
+ GET /admin/profile 200 in 221ms (next.js: 15ms, proxy.ts: 70ms, application-code: 136ms)
+ GET /admin/profile 200 in 212ms (next.js: 10ms, proxy.ts: 64ms, application-code: 138ms)
+ GET /admin/profile 200 in 155ms (next.js: 15ms, proxy.ts: 9ms, application-code: 132ms)
+ GET /admin/profile 200 in 146ms (next.js: 22ms, proxy.ts: 61ms, application-code: 63ms)
+ GET /api/admin/notifications?limit=1 200 in 162ms (next.js: 57ms, application-code: 106ms)
+ GET /api/admin/notifications?limit=8 200 in 74ms (next.js: 5ms, application-code: 69ms)
+ GET /api/site-theme 200 in 279ms (next.js: 78ms, application-code: 201ms)
+API Request - Category: null Search: null
+ GET /api/brand-profile 200 in 477ms (next.js: 251ms, application-code: 226ms)
+ GET /api/stats 200 in 485ms (next.js: 162ms, application-code: 323ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 171ms (next.js: 116ms, application-code: 54ms)
+ GET /api/resources?access=paid 200 in 435ms (next.js: 182ms, application-code: 254ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 384ms (next.js: 14ms, application-code: 371ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 60ms (next.js: 25ms, application-code: 34ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/stats 200 in 264ms (next.js: 9ms, application-code: 254ms)
+ GET /api/resources?access=paid 200 in 215ms (next.js: 8ms, application-code: 206ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 273ms (next.js: 79ms, application-code: 194ms)
+ GET /api/wishlist 200 in 387ms (next.js: 59ms, application-code: 328ms)
+ GET /api/wishlist 200 in 351ms (next.js: 16ms, application-code: 335ms)
+ GET /profile 200 in 289ms (next.js: 195ms, application-code: 94ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 218ms (next.js: 11ms, application-code: 208ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 232ms (next.js: 9ms, application-code: 223ms)
+ GET /api/user/profile 200 in 279ms (next.js: 82ms, application-code: 197ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/support 200 in 321ms (next.js: 195ms, application-code: 125ms)
+ GET /api/user/purchased-resources 200 in 480ms (next.js: 87ms, application-code: 393ms)
+ GET /api/user/orders 200 in 371ms (next.js: 106ms, application-code: 265ms)
+ GET /api/wishlist 200 in 537ms (next.js: 11ms, application-code: 526ms)
+ GET / 200 in 65ms (next.js: 9ms, application-code: 56ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Found resources: 24 for query: { price: 0 }
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 234ms (next.js: 15ms, application-code: 219ms)
+ GET /api/stats 200 in 213ms (next.js: 56ms, application-code: 158ms)
+ GET /api/resources?access=paid 200 in 228ms (next.js: 33ms, application-code: 194ms)
+ GET /api/resources?access=free 200 in 307ms (next.js: 32ms, application-code: 275ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 212ms (next.js: 18ms, application-code: 194ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 233ms (next.js: 8ms, application-code: 225ms)
+ GET /api/resources?access=paid 200 in 220ms (next.js: 5ms, application-code: 215ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 349ms (next.js: 7ms, application-code: 342ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 157ms (next.js: 7ms, application-code: 150ms)
+ GET /api/auth/csrf 200 in 44ms (next.js: 18ms, application-code: 25ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=paid 200 in 334ms (next.js: 7ms, application-code: 326ms)
+ POST /api/auth/signout 200 in 40ms (next.js: 16ms, application-code: 24ms)
+ GET /api/auth/session 200 in 37ms (next.js: 23ms, application-code: 15ms)
+ GET / 200 in 281ms (next.js: 13ms, application-code: 268ms)
+ GET / 200 in 228ms (next.js: 8ms, application-code: 220ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 99ms (next.js: 8ms, application-code: 92ms)
+ GET /api/brand-profile 200 in 113ms (next.js: 30ms, application-code: 83ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 48ms (next.js: 22ms, application-code: 26ms)
+ GET /api/stats 200 in 167ms (next.js: 9ms, application-code: 158ms)
+ GET /api/resources?access=paid 200 in 228ms (next.js: 52ms, application-code: 176ms)
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Found resources: 24 for query: { price: 0 }
+ GET /api/stats 200 in 156ms (next.js: 18ms, application-code: 139ms)
+ GET /api/resources?access=paid 200 in 152ms (next.js: 7ms, application-code: 145ms)
+ GET /api/resources?access=free 200 in 267ms (next.js: 16ms, application-code: 252ms)
+ GET /api/admin/notifications?limit=8 200 in 94ms (next.js: 16ms, application-code: 79ms)
+ GET /api/admin/notifications?limit=1 200 in 99ms (next.js: 6ms, application-code: 93ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 94ms (next.js: 12ms, application-code: 82ms)
+API Request - Category: null Search: null
+ GET /api/brand-profile 200 in 113ms (next.js: 33ms, application-code: 80ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 51ms (next.js: 21ms, application-code: 29ms)
+ GET /api/stats 200 in 189ms (next.js: 30ms, application-code: 158ms)
+ GET /api/resources?access=paid 200 in 226ms (next.js: 47ms, application-code: 179ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 380ms (next.js: 13ms, application-code: 367ms)
+API Request - Category: null Search: null
+ GET /api/auth/session 200 in 43ms (next.js: 20ms, application-code: 23ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/stats 200 in 167ms (next.js: 10ms, application-code: 157ms)
+ GET /api/resources?access=paid 200 in 146ms (next.js: 6ms, application-code: 140ms)
+ GET /api/auth/providers 200 in 50ms (next.js: 18ms, application-code: 32ms)
+ GET /api/auth/csrf 200 in 38ms (next.js: 17ms, application-code: 21ms)
+ POST /api/auth/signin/google 200 in 276ms (next.js: 24ms, application-code: 252ms)
+Google sign-in attempt for email: dsiddharth550@gmail.com
+Existing user found: dsiddharth550@gmail.com
+ GET /api/auth/callback/google?state=3CyAmnWBEWgF4oZeXa0Q1jhnU_L-P7P9MyynnhrqpKQ&iss=https%3A%2F%2Faccounts.google.com&code=4%2F0ATsMZqARnRhSHw0sgW9b0BGIt4carhj468WvG3Ljb48IbRn5ArmNwNraC8F_CyswYAL2Zw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none 302 in 747ms (next.js: 15ms, application-code: 732ms)
+ GET / 200 in 229ms (next.js: 10ms, application-code: 219ms)
+ GET /api/site-theme 200 in 419ms (next.js: 72ms, application-code: 347ms)
+API Request - Category: null Search: null
+ GET /api/brand-profile 200 in 470ms (next.js: 366ms, application-code: 104ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 73ms (next.js: 19ms, application-code: 54ms)
+ GET /api/stats 200 in 536ms (next.js: 352ms, application-code: 184ms)
+ GET /api/resources?access=paid 200 in 530ms (next.js: 373ms, application-code: 156ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 285ms (next.js: 37ms, application-code: 248ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/auth/session 200 in 71ms (next.js: 20ms, application-code: 51ms)
+ GET /api/stats 200 in 170ms (next.js: 7ms, application-code: 163ms)
+ GET /api/resources?access=paid 200 in 158ms (next.js: 7ms, application-code: 151ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 161ms (next.js: 15ms, application-code: 146ms)
+ GET /api/wishlist 200 in 315ms (next.js: 7ms, application-code: 308ms)
+ GET /api/wishlist 200 in 417ms (next.js: 6ms, application-code: 411ms)
+ GET /api/admin/notifications?limit=1 200 in 96ms (next.js: 9ms, application-code: 86ms)
+ GET /api/admin/notifications?limit=8 200 in 95ms (next.js: 19ms, application-code: 75ms)
+ GET /api/auth/session 200 in 51ms (next.js: 20ms, application-code: 30ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/auth/session 200 in 40ms (next.js: 13ms, application-code: 27ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 177ms (next.js: 8ms, application-code: 170ms)
+ GET /api/wishlist 200 in 355ms (next.js: 25ms, application-code: 330ms)
+ GET /api/wishlist 200 in 268ms (next.js: 9ms, application-code: 260ms)

@@ -51,7 +51,7 @@ export default function GuidesTeaser() {
           {featured.map((guide, index) => (
             <article
               key={guide.slug}
-              className={`group relative flex flex-col rounded-2xl border border-[var(--line)] p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_32px_rgba(26,26,26,0.10)] ${
+              className={`group relative flex flex-col rounded-2xl border border-[var(--line)] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(26,26,26,0.10)] ${
                 ['bg-[var(--sky-soft)]', 'bg-[var(--blush-soft)]', 'bg-[var(--butter-soft)]'][index % 3]
               }`}
             >

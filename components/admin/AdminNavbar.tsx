@@ -20,6 +20,7 @@ const TYPE_ICON_CLASS: Record<string, string> = {
   new_ticket: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
   ticket_reply: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
   new_contact: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+  new_collab: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
   capture_failed: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
   system: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
 };

@@ -1,47 +1,55 @@
+/**
+ * Loading placeholder that mirrors ResourceCard's polaroid anatomy exactly:
+ * rounded-xl card, padded white frame, aspect-square cover — so the grid does
+ * not visibly reflow or "flash" when real cards replace these skeletons.
+ * Colors follow the theme variables like the real card.
+ */
 export default function ResourceCardSkeleton() {
   return (
-    <div className="w-full flex flex-col bg-[#FFFFFF] rounded-lg shadow-sm border border-[#E2E8F0] h-full overflow-hidden">
-      {/* Thumbnail Section Skeleton */}
-      <div className="w-full h-32 sm:h-44 md:h-52 relative bg-[#F1F5F9] animate-pulse">
-        {/* Category Badge Skeleton */}
-        <div className="absolute top-2 left-2 bg-[#CBD5E1] h-5 w-16 rounded-md animate-pulse" />
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card-bg)] shadow-sm">
+      {/* Square cover — polaroid frame (matches ResourceCard) */}
+      <div className="w-full bg-[var(--card-bg)] p-2 sm:p-2.5">
+        <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[var(--accent-soft)] animate-pulse">
+          {/* Free / discount badge skeleton */}
+          <div className="absolute left-2 top-2 h-6 w-14 animate-pulse rounded-md bg-[var(--accent-soft-2)]" />
 
-        {/* Wishlist Heart Skeleton */}
-        <div className="absolute top-2 right-2 bg-[#CBD5E1] h-7 w-7 rounded-md animate-pulse" />
+          {/* Wishlist heart skeleton */}
+          <div className="absolute right-2.5 top-2.5 h-9 w-9 animate-pulse rounded-full bg-[var(--accent-soft-2)]" />
+        </div>
       </div>
 
-      {/* Content Section Skeleton */}
-      <div className="p-2.5 sm:p-4 flex flex-col flex-grow">
-        {/* Title Skeleton */}
-        <div className="h-4 sm:h-6 bg-[var(--accent-soft-2)] rounded mb-2 sm:mb-3 animate-pulse" />
-        <div className="h-3 sm:h-4 bg-[var(--accent-soft-2)] rounded w-3/4 mb-2 sm:mb-3 animate-pulse" />
+      {/* Info (matches ResourceCard's p-3 sm:p-4 info column) */}
+      <div className="flex flex-grow flex-col gap-1 p-3 sm:p-4">
+        {/* Category skeleton */}
+        <div className="h-2.5 w-14 animate-pulse rounded bg-[var(--accent-soft-2)]" />
 
-        {/* Author Section Skeleton */}
-        <div className="flex items-center space-x-2 mb-2 sm:mb-3">
-          <div className="h-4 w-4 sm:h-6 sm:w-6 rounded-full bg-[var(--accent-soft-2)] animate-pulse" />
-          <div className="h-3 sm:h-4 bg-[var(--accent-soft-2)] rounded w-20 animate-pulse" />
+        {/* Title skeleton */}
+        <div className="h-3.5 w-full animate-pulse rounded bg-[var(--accent-soft-2)] sm:h-4" />
+        <div className="h-3.5 w-3/4 animate-pulse rounded bg-[var(--accent-soft-2)] sm:h-4" />
+
+        {/* Author skeleton */}
+        <div className="flex items-center gap-1.5">
+          <div className="h-4 w-4 animate-pulse rounded-full bg-[var(--accent-soft-2)]" />
+          <div className="h-3 w-20 animate-pulse rounded bg-[var(--accent-soft-2)]" />
         </div>
 
-        {/* Rating & Stats Skeleton */}
-        <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
-          <div className="flex items-center space-x-1">
-            <div className="flex space-x-0.5">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-2.5 w-2.5 sm:h-3 sm:w-3 bg-[var(--accent-soft-2)] rounded animate-pulse" />
-              ))}
-            </div>
-            <div className="h-3 sm:h-4 bg-[var(--accent-soft-2)] rounded w-16 animate-pulse" />
+        {/* Rating skeleton */}
+        <div className="flex items-center gap-1">
+          <div className="flex gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="h-3 w-3 animate-pulse rounded bg-[var(--accent-soft-2)]" />
+            ))}
           </div>
-          <div className="h-3 sm:h-4 bg-[var(--accent-soft-2)] rounded w-12 animate-pulse" />
+          <div className="h-3 w-16 animate-pulse rounded bg-[var(--accent-soft-2)]" />
         </div>
 
-        {/* Price & Button Footer Skeleton */}
-        <div className="mt-auto pt-2 sm:pt-3 flex items-center justify-between gap-1.5 border-t border-[var(--line)]">
-          <div className="flex flex-col min-w-0">
-            <div className="h-3 sm:h-4 bg-[var(--accent-soft-2)] rounded w-12 mb-1 animate-pulse" />
-            <div className="h-5 sm:h-6 bg-[var(--accent-soft-2)] rounded w-16 animate-pulse" />
+        {/* Price line skeleton */}
+        <div className="mt-auto flex items-center justify-between gap-1.5 pt-1.5">
+          <div className="flex flex-col gap-1">
+            <div className="h-3 w-12 animate-pulse rounded bg-[var(--accent-soft-2)]" />
+            <div className="h-5 w-16 animate-pulse rounded bg-[var(--accent-soft-2)] sm:h-6" />
           </div>
-          <div className="h-7 sm:h-9 w-12 sm:w-16 bg-[var(--accent-soft-2)] rounded-md sm:rounded-lg animate-pulse" />
+          <div className="h-7 w-14 animate-pulse rounded-md bg-[var(--accent-soft-2)] sm:h-8 sm:w-16" />
         </div>
       </div>
     </div>

@@ -11,6 +11,7 @@ import {
   LifeBuoy,
   MessageSquare,
   Mail,
+  Handshake,
   RefreshCw,
   Settings,
   ArrowRight,
@@ -33,6 +34,7 @@ const TYPES = [
   { value: 'payment_failed', label: 'Payment failures' },
   { value: 'new_ticket', label: 'Support' },
   { value: 'new_contact', label: 'Contact' },
+  { value: 'new_collab', label: 'Collabs' },
   { value: 'capture_failed', label: 'Captures' },
   { value: 'system', label: 'System' },
 ];
@@ -43,6 +45,7 @@ const TYPE_META: Record<string, { label: string; className: string; icon: React.
   new_ticket: { label: 'Support ticket', className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', icon: <LifeBuoy className="h-4 w-4" /> },
   ticket_reply: { label: 'Ticket reply', className: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300', icon: <MessageSquare className="h-4 w-4" /> },
   new_contact: { label: 'Contact message', className: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300', icon: <Mail className="h-4 w-4" /> },
+  new_collab: { label: 'Collab enquiry', className: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300', icon: <Handshake className="h-4 w-4" /> },
   capture_failed: { label: 'Capture failed', className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300', icon: <RefreshCw className="h-4 w-4" /> },
   system: { label: 'System', className: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300', icon: <Settings className="h-4 w-4" /> },
 };
