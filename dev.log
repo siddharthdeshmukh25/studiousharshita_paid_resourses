@@ -2299,3 +2299,1725 @@ Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected,
  POST /api/user/location 200 in 177ms (next.js: 8ms, application-code: 170ms)
  GET /api/wishlist 200 in 355ms (next.js: 25ms, application-code: 330ms)
  GET /api/wishlist 200 in 268ms (next.js: 9ms, application-code: 260ms)
+ GET /api/admin/notifications?limit=1 200 in 88ms (next.js: 4ms, application-code: 84ms)
+ GET /api/admin/notifications?limit=8 200 in 84ms (next.js: 8ms, application-code: 76ms)
+ GET /api/auth/session 200 in 41ms (next.js: 21ms, application-code: 20ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/auth/session 200 in 28ms (next.js: 10ms, application-code: 18ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 157ms (next.js: 7ms, application-code: 150ms)
+ GET /api/wishlist 200 in 438ms (next.js: 28ms, application-code: 410ms)
+ GET /api/wishlist 200 in 306ms (next.js: 6ms, application-code: 300ms)
+ GET /profile 200 in 38ms (next.js: 10ms, application-code: 27ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 173ms (next.js: 26ms, application-code: 147ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 178ms (next.js: 11ms, application-code: 167ms)
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/profile 200 in 246ms (next.js: 58ms, application-code: 189ms)
+ GET /api/user/orders 200 in 192ms (next.js: 26ms, application-code: 165ms)
+ GET /api/support 200 in 105ms (next.js: 13ms, application-code: 93ms)
+ GET /api/user/purchased-resources 200 in 306ms (next.js: 44ms, application-code: 263ms)
+ GET /api/wishlist 200 in 364ms (next.js: 43ms, application-code: 321ms)
+ GET / 200 in 63ms (next.js: 9ms, application-code: 54ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+API Request - Category: null Search: null
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 173ms (next.js: 11ms, application-code: 162ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 177ms (next.js: 27ms, application-code: 150ms)
+ GET /api/stats 200 in 213ms (next.js: 76ms, application-code: 137ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=paid 200 in 260ms (next.js: 41ms, application-code: 219ms)
+API Request - Category: null Search: null
+ GET /api/resources?access=free 200 in 339ms (next.js: 61ms, application-code: 278ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+API Request - Category: null Search: null
+ GET /api/stats 200 in 152ms (next.js: 6ms, application-code: 146ms)
+ GET /api/resources?access=paid 200 in 170ms (next.js: 6ms, application-code: 164ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 511ms (next.js: 7ms, application-code: 504ms)
+ GET /api/resources?access=paid 200 in 425ms (next.js: 5ms, application-code: 421ms)
+API Request - Category: null Search: null
+ GET /resources 200 in 357ms (next.js: 211ms, application-code: 146ms)
+Found resources: 3 for query: { price: { '$gt': 0 } }
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/resources?access=paid 200 in 202ms (next.js: 7ms, application-code: 195ms)
+API Request - Category: null Search: null
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 157ms (next.js: 11ms, application-code: 147ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 167ms (next.js: 30ms, application-code: 138ms)
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 291ms (next.js: 46ms, application-code: 245ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+ GET /api/resources?access=free 200 in 257ms (next.js: 6ms, application-code: 251ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 387ms (next.js: 161ms, application-code: 227ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 202ms (next.js: 18ms, application-code: 183ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 303ms (next.js: 121ms, application-code: 182ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 139ms (next.js: 11ms, application-code: 128ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 326ms (next.js: 159ms, application-code: 167ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 103ms (next.js: 17ms, application-code: 86ms)
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/purchased-resources 200 in 246ms (next.js: 7ms, application-code: 239ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ POST /api/tracking 200 in 1173ms (next.js: 89ms, application-code: 1084ms)
+ POST /api/tracking 200 in 1181ms (next.js: 69ms, application-code: 1112ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 157ms (next.js: 8ms, application-code: 149ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 175ms (next.js: 28ms, application-code: 147ms)
+ GET /api/user/purchased-resources 200 in 257ms (next.js: 7ms, application-code: 251ms)
+ GET /api/auth/session 200 in 44ms (next.js: 18ms, application-code: 26ms)
+ GET /api/auth/session 200 in 49ms (next.js: 8ms, application-code: 41ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 74ms (next.js: 5ms, application-code: 69ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 102ms (next.js: 24ms, application-code: 78ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 164ms (next.js: 12ms, application-code: 152ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+ GET /api/wishlist 200 in 281ms (next.js: 6ms, application-code: 276ms)
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/purchased-resources 200 in 228ms (next.js: 4ms, application-code: 223ms)
+ GET /api/wishlist 200 in 305ms (next.js: 6ms, application-code: 298ms)
+ GET /api/admin/notifications?limit=8 200 in 80ms (next.js: 9ms, application-code: 71ms)
+ GET /api/admin/notifications?limit=1 200 in 81ms (next.js: 4ms, application-code: 78ms)
+✓ Compiled in 101ms
+ GET /api/admin/notifications?limit=1 200 in 360ms (next.js: 66ms, application-code: 293ms)
+ GET /api/admin/brand-profile 200 in 362ms (next.js: 115ms, application-code: 248ms)
+ GET /api/admin/notifications?limit=8 200 in 451ms (next.js: 126ms, application-code: 325ms)
+ GET / 200 in 770ms (next.js: 130ms, application-code: 640ms)
+ GET /admin/profile 200 in 775ms (next.js: 283ms, proxy.ts: 311ms, application-code: 182ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 242ms (next.js: 41ms, application-code: 201ms)
+✓ Compiled in 87ms
+ GET / 200 in 692ms (next.js: 138ms, application-code: 553ms)
+ GET /admin/profile 200 in 433ms (next.js: 151ms, proxy.ts: 179ms, application-code: 104ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 539ms (next.js: 123ms, application-code: 416ms)
+ GET /api/admin/notifications?limit=8 200 in 142ms (next.js: 63ms, application-code: 79ms)
+ GET /api/admin/notifications?limit=1 200 in 144ms (next.js: 50ms, application-code: 94ms)
+ GET /api/admin/notifications?limit=8 200 in 80ms (next.js: 11ms, application-code: 70ms)
+ GET /api/admin/notifications?limit=1 200 in 86ms (next.js: 3ms, application-code: 82ms)
+ GET /resource/6a96cf73b0ab72b64e034c21 200 in 192ms (next.js: 16ms, application-code: 176ms)
+ GET /api/reviews?resourceId=6a96cf73b0ab72b64e034c21 200 in 189ms (next.js: 106ms, application-code: 83ms)
+ GET /api/resources/6a96cf73b0ab72b64e034c21 200 in 141ms (next.js: 55ms, application-code: 86ms)
+ GET /api/reviews?resourceId=6a96cf73b0ab72b64e034c21 200 in 77ms (next.js: 4ms, application-code: 73ms)
+ GET /api/resources/6a96cf73b0ab72b64e034c21 200 in 84ms (next.js: 7ms, application-code: 77ms)
+✓ Compiled in 311ms
+ GET /admin/profile 200 in 505ms (next.js: 153ms, proxy.ts: 110ms, application-code: 242ms)
+ GET /resource/6a96cf73b0ab72b64e034c21 200 in 493ms (next.js: 261ms, application-code: 232ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 539ms (next.js: 327ms, application-code: 212ms)
+ POST /api/tracking 200 in 535ms (next.js: 5ms, application-code: 530ms)
+ POST /api/tracking 200 in 539ms (next.js: 13ms, application-code: 526ms)
+ POST /api/tracking 200 in 657ms (next.js: 93ms, application-code: 564ms)
+ GET /resource/6a96cf73b0ab72b64e034c21 200 in 409ms (next.js: 17ms, application-code: 392ms)
+ GET /api/site-theme 200 in 165ms (next.js: 58ms, application-code: 107ms)
+ GET /api/reviews?resourceId=6a96cf73b0ab72b64e034c21 200 in 292ms (next.js: 60ms, application-code: 232ms)
+ GET /api/resources/6a96cf73b0ab72b64e034c21 200 in 213ms (next.js: 96ms, application-code: 117ms)
+ GET /api/auth/session 200 in 217ms (next.js: 184ms, application-code: 33ms)
+ GET /api/brand-profile 200 in 148ms (next.js: 52ms, application-code: 96ms)
+ GET /api/reviews?resourceId=6a96cf73b0ab72b64e034c21 200 in 90ms (next.js: 8ms, application-code: 81ms)
+ GET /api/resources/6a96cf73b0ab72b64e034c21 200 in 90ms (next.js: 10ms, application-code: 80ms)
+ GET /api/admin/notifications?limit=1 200 in 134ms (next.js: 47ms, application-code: 88ms)
+ GET /api/admin/notifications?limit=8 200 in 88ms (next.js: 10ms, application-code: 78ms)
+ GET /api/auth/session 200 in 62ms (next.js: 22ms, application-code: 40ms)
+ GET /api/auth/session 200 in 48ms (next.js: 12ms, application-code: 36ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/wishlist 200 in 529ms (next.js: 73ms, application-code: 456ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 103ms (next.js: 11ms, application-code: 92ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 324ms (next.js: 95ms, application-code: 229ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 149ms (next.js: 41ms, application-code: 109ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+ GET /api/wishlist 200 in 426ms (next.js: 8ms, application-code: 418ms)
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/purchased-resources 200 in 326ms (next.js: 71ms, application-code: 255ms)
+ GET /api/admin/notifications?limit=8 200 in 83ms (next.js: 12ms, application-code: 72ms)
+ GET /api/admin/notifications?limit=1 200 in 85ms (next.js: 5ms, application-code: 80ms)
+✓ Compiled in 244ms
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+ GET /resource/6a96cf73b0ab72b64e034c21 500 in 148ms (next.js: 62ms, application-code: 85ms)
+ GET /resource/6ab12a4e3a854c05408fc938 500 in 147ms (next.js: 93ms, application-code: 54ms)
+ GET /admin/profile 500 in 325ms (next.js: 128ms, proxy.ts: 170ms, application-code: 27ms)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] Cannot update a component (`ResourceDetailPage`) while rendering a different component (`Router`). To locate the bad setState() call inside `Router`, follow the stack trace as described in https://react.dev/link/setstate-in-render 
+    at scheduleUpdateOnFiber (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9036:201)
+    at dispatchSetStateInternal (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:5643:41)
+    at dispatchSetState (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:5615:9)
+    at trackEvent (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/_1hogiwn._.js:2922:17)
+    at ResourceDetailPage.useEffect.handleBeforeUnload (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/_1hogiwn._.js:2965:25)
+    at Router (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14495:26)
+    at Object.react_stack_bottom_frame (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15037:24)
+    at renderWithHooksAgain (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:4675:24)
+    at replayFunctionComponent (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6094:21)
+    at replayBeginWork (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9570:27)
+    at runWithFiberInDEV (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at replaySuspendedUnitOfWork (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9560:20)
+    at renderRootConcurrent (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9493:141)
+    at performWorkOnRoot (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9036:201)
+ GET /resource/6a96cf73b0ab72b64e034c21 500 in 284ms (next.js: 167ms, application-code: 116ms)
+ POST /api/tracking 500 in 283ms (next.js: 206ms, application-code: 77ms)
+ GET /resource/6ab12a4e3a854c05408fc938 500 in 292ms (next.js: 248ms, application-code: 45ms)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+ GET /admin/profile 500 in 390ms (next.js: 298ms, proxy.ts: 42ms, application-code: 51ms)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:14014:21)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13458:52) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_0r5nbpw._.js:13951:21)
+ GET /resource/6a96cf73b0ab72b64e034c21 500 in 137ms (next.js: 85ms, application-code: 51ms)
+ GET /admin/profile 500 in 417ms (next.js: 157ms, proxy.ts: 237ms, application-code: 24ms)
+ POST /api/tracking 500 in 129ms (next.js: 56ms, application-code: 73ms)
+ GET /resource/6ab12a4e3a854c05408fc938 500 in 141ms (next.js: 102ms, application-code: 39ms)
+[browser] Uncaught Error: ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx
+
+
+    at <unknown> (Error: ./components/home/HomeLanding.tsx:352:90)
+    at <unknown> (Error: (./components/home/HomeLanding.tsx:352:90)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] Uncaught Error: ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx
+
+
+    at <unknown> (Error: ./components/home/HomeLanding.tsx:352:90)
+    at <unknown> (Error: (./components/home/HomeLanding.tsx:352:90)
+[browser] Uncaught Error: ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx
+
+
+    at <unknown> (Error: ./components/home/HomeLanding.tsx:352:90)
+    at <unknown> (Error: (./components/home/HomeLanding.tsx:352:90)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+[browser] ./components/home/HomeLanding.tsx:352:90
+Expected '</', got '}'
+  350 | ...ter.push(`/resource/${resource._id}`)}
+  351 | ...: flex stretch equalizes heights — h-full
+> 352 | ...o-height rail collapses to content size. */}
+      |                                               ^
+  353 | ...-[44%] shrink-0 snap-start text-left sm:w-auto"
+  354 | ...
+  355 | ...lative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./components/home/HomeLanding.tsx
+    ./app/page.tsx 
+    at handleErrors (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+    at processMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2835:28)
+    at <unknown> (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2680:13)
+    at WebSocket.handleMessage (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2325:17) (file://D:/official project/resourses_seller_platform/.next/dev/static/chunks/node_modules_next_dist_client_16lnmlo._.js:2774:21)
+✓ Compiled in 79ms
+ GET /admin/profile 200 in 1204ms (next.js: 632ms, proxy.ts: 138ms, application-code: 434ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 1088ms (next.js: 227ms, application-code: 861ms)
+ GET /resource/6a96cf73b0ab72b64e034c21 200 in 678ms (next.js: 207ms, application-code: 472ms)
+ GET /api/site-theme 200 in 599ms (next.js: 128ms, application-code: 471ms)
+ GET /api/reviews?resourceId=6a96cf73b0ab72b64e034c21 200 in 438ms (next.js: 195ms, application-code: 243ms)
+ GET /api/site-theme 200 in 439ms (next.js: 218ms, application-code: 221ms)
+ GET /api/admin/notifications?limit=1 200 in 649ms (next.js: 305ms, application-code: 344ms)
+ GET /api/admin/notifications?limit=8 200 in 648ms (next.js: 387ms, application-code: 260ms)
+ GET /api/admin/brand-profile 200 in 656ms (next.js: 375ms, application-code: 282ms)
+ GET /api/resources/6a96cf73b0ab72b64e034c21 200 in 222ms (next.js: 85ms, application-code: 137ms)
+ GET /api/auth/session 200 in 230ms (next.js: 160ms, application-code: 70ms)
+ GET /api/auth/session 200 in 245ms (next.js: 183ms, application-code: 63ms)
+ GET /api/brand-profile 200 in 168ms (next.js: 81ms, application-code: 87ms)
+ GET /api/reviews?resourceId=6a96cf73b0ab72b64e034c21 200 in 181ms (next.js: 104ms, application-code: 77ms)
+ GET /api/resources/6a96cf73b0ab72b64e034c21 200 in 86ms (next.js: 9ms, application-code: 77ms)
+ GET /api/wishlist 200 in 491ms (next.js: 86ms, application-code: 405ms)
+ GET /api/site-theme 200 in 87ms (next.js: 7ms, application-code: 80ms)
+ GET /api/auth/session 200 in 51ms (next.js: 24ms, application-code: 27ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 82ms (next.js: 8ms, application-code: 75ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 104ms (next.js: 9ms, application-code: 95ms)
+ GET /api/auth/session 200 in 56ms (next.js: 6ms, application-code: 50ms)
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 77ms (next.js: 7ms, application-code: 71ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 102ms (next.js: 7ms, application-code: 95ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/brand-profile 200 in 73ms (next.js: 4ms, application-code: 69ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 200ms (next.js: 35ms, application-code: 165ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 161ms (next.js: 16ms, application-code: 145ms)
+ GET /api/wishlist 200 in 333ms (next.js: 24ms, application-code: 309ms)
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/purchased-resources 200 in 224ms (next.js: 33ms, application-code: 191ms)
+ GET /api/wishlist 200 in 287ms (next.js: 8ms, application-code: 279ms)
+ POST /api/tracking 200 in 28ms (next.js: 8ms, application-code: 19ms)
+ POST /api/tracking 200 in 27ms (next.js: 17ms, application-code: 11ms)
+ POST /api/tracking 200 in 511ms (next.js: 52ms, application-code: 459ms)
+ GET / 200 in 528ms (next.js: 205ms, application-code: 323ms)
+API Request - Category: null Search: null
+ GET /api/site-theme 200 in 158ms (next.js: 8ms, application-code: 150ms)
+ GET /api/brand-profile 200 in 151ms (next.js: 67ms, application-code: 84ms)
+API Request - Category: null Search: null
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/auth/session 200 in 34ms (next.js: 13ms, application-code: 21ms)
+ GET /api/stats 200 in 214ms (next.js: 48ms, application-code: 166ms)
+ GET /api/resources?access=paid 200 in 262ms (next.js: 125ms, application-code: 137ms)
+API Request - Category: null Search: null
+Found resources: 24 for query: { price: 0 }
+Found resources: 3 for query: { price: { '$gt': 0 } }
+ GET /api/resources?access=free 200 in 225ms (next.js: 5ms, application-code: 220ms)
+ GET /api/stats 200 in 163ms (next.js: 5ms, application-code: 158ms)
+ GET /api/resources?access=paid 200 in 192ms (next.js: 4ms, application-code: 188ms)
+ GET /api/admin/notifications?limit=1 200 in 84ms (next.js: 3ms, application-code: 81ms)
+ GET /api/admin/notifications?limit=8 200 in 86ms (next.js: 9ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=1 200 in 95ms (next.js: 19ms, application-code: 76ms)
+ GET /api/admin/notifications?limit=8 200 in 100ms (next.js: 4ms, application-code: 96ms)
+ GET /admin/theme-builder 200 in 147ms (next.js: 88ms, proxy.ts: 10ms, application-code: 50ms)
+ GET /api/admin/notifications?limit=8 200 in 105ms (next.js: 33ms, application-code: 72ms)
+ GET /api/admin/brand-profile 200 in 116ms (next.js: 21ms, application-code: 95ms)
+ GET /api/admin/notifications?limit=1 200 in 120ms (next.js: 7ms, application-code: 113ms)
+ GET /api/admin/brand-profile 200 in 97ms (next.js: 24ms, application-code: 73ms)
+ GET /api/admin/notifications?limit=1 200 in 99ms (next.js: 5ms, application-code: 95ms)
+ GET /admin/analytics 200 in 144ms (next.js: 82ms, proxy.ts: 5ms, application-code: 57ms)
+ GET /api/admin/notifications?limit=1 200 in 250ms (next.js: 9ms, application-code: 241ms)
+ GET /api/admin/notifications?limit=8 200 in 293ms (next.js: 66ms, application-code: 227ms)
+ GET /api/admin/resources/analytics 200 in 309ms (next.js: 202ms, application-code: 107ms)
+ GET /api/admin/notifications?limit=1 200 in 95ms (next.js: 6ms, application-code: 88ms)
+ GET /api/admin/resources/analytics 200 in 104ms (next.js: 7ms, application-code: 97ms)
+ GET /api/admin/analytics 200 in 508ms (next.js: 63ms, application-code: 445ms)
+Stats: {
+  totalRevenue: 14,
+  totalUsers: 126,
+  totalResources: 27,
+  totalOrders: 23,
+  completedOrdersCount: 14,
+  capturedOrdersCount: 14
+}
+ GET /api/admin/stats 200 in 645ms (next.js: 131ms, application-code: 513ms)
+ GET /api/admin/analytics 200 in 371ms (next.js: 6ms, application-code: 365ms)
+Stats: {
+  totalRevenue: 14,
+  totalUsers: 126,
+  totalResources: 27,
+  totalOrders: 23,
+  completedOrdersCount: 14,
+  capturedOrdersCount: 14
+}
+ GET /api/admin/stats 200 in 385ms (next.js: 8ms, application-code: 377ms)
+ GET /admin/payment-captures 200 in 74ms (next.js: 49ms, proxy.ts: 4ms, application-code: 21ms)
+🔍 Fetching failed captures with Razorpay order IDs
+🔍 Fetching pending captures with Razorpay order IDs
+ GET /api/admin/notifications?limit=1 200 in 201ms (next.js: 6ms, application-code: 195ms)
+✅ Found 0 pending captures
+ GET /api/admin/payment-captures?type=pending&limit=100 200 in 203ms (next.js: 112ms, application-code: 91ms)
+✅ Found 0 failed captures
+ GET /api/admin/payment-captures?type=failed&limit=100 200 in 207ms (next.js: 96ms, application-code: 111ms)
+ GET /api/admin/notifications?limit=8 200 in 247ms (next.js: 118ms, application-code: 128ms)
+🔍 Fetching pending captures with Razorpay order IDs
+🔍 Fetching failed captures with Razorpay order IDs
+ GET /api/admin/notifications?limit=1 200 in 123ms (next.js: 8ms, application-code: 115ms)
+✅ Found 0 pending captures
+ GET /api/admin/payment-captures?type=pending&limit=100 200 in 127ms (next.js: 22ms, application-code: 106ms)
+✅ Found 0 failed captures
+ GET /api/admin/payment-captures?type=failed&limit=100 200 in 134ms (next.js: 34ms, application-code: 100ms)
+ GET /admin/revenue 200 in 126ms (next.js: 70ms, proxy.ts: 6ms, application-code: 50ms)
+ GET /api/admin/notifications?limit=1 200 in 127ms (next.js: 9ms, application-code: 118ms)
+ GET /api/admin/notifications?limit=8 200 in 88ms (next.js: 13ms, application-code: 75ms)
+ GET /api/admin/notifications?limit=1 200 in 89ms (next.js: 5ms, application-code: 83ms)
+ GET /api/admin/revenue 200 in 276ms (next.js: 101ms, application-code: 175ms)
+ GET /api/admin/revenue 200 in 144ms (next.js: 6ms, application-code: 139ms)
+ GET /admin/users 200 in 88ms (next.js: 41ms, proxy.ts: 5ms, application-code: 41ms)
+ GET /api/admin/notifications?limit=8 200 in 122ms (next.js: 20ms, application-code: 102ms)
+ GET /api/admin/notifications?limit=1 200 in 129ms (next.js: 8ms, application-code: 121ms)
+ GET /api/admin/notifications?limit=1 200 in 81ms (next.js: 5ms, application-code: 76ms)
+ GET /api/admin/users?q= 200 in 296ms (next.js: 79ms, application-code: 217ms)
+ GET /admin/users/6ab2dfeecf2253a3487e2171 200 in 740ms (next.js: 673ms, proxy.ts: 6ms, application-code: 61ms)
+ GET /api/admin/notifications?limit=1 200 in 109ms (next.js: 8ms, application-code: 101ms)
+ GET /api/admin/notifications?limit=8 200 in 117ms (next.js: 29ms, application-code: 88ms)
+ GET /api/admin/notifications?limit=1 200 in 91ms (next.js: 6ms, application-code: 85ms)
+ GET /api/admin/users?id=6ab2dfeecf2253a3487e2171 200 in 334ms (next.js: 27ms, application-code: 308ms)
+ GET /api/admin/users?id=6ab2dfeecf2253a3487e2171 200 in 284ms (next.js: 5ms, application-code: 279ms)
+ GET /admin/users 200 in 50ms (next.js: 11ms, proxy.ts: 5ms, application-code: 33ms)
+ GET /api/admin/notifications?limit=1 200 in 106ms (next.js: 8ms, application-code: 97ms)
+ GET /api/admin/notifications?limit=8 200 in 107ms (next.js: 25ms, application-code: 83ms)
+ GET /api/admin/notifications?limit=1 200 in 83ms (next.js: 4ms, application-code: 79ms)
+ GET /api/admin/users?q= 200 in 231ms (next.js: 36ms, application-code: 196ms)
+ GET /api/admin/notifications?limit=1 200 in 98ms (next.js: 3ms, application-code: 96ms)
+ GET /api/admin/notifications?limit=8 200 in 99ms (next.js: 20ms, application-code: 79ms)
+ GET /admin/users/6aa5642b2813d773e10e3099 200 in 51ms (next.js: 15ms, proxy.ts: 7ms, application-code: 30ms)
+ GET /api/admin/notifications?limit=1 200 in 100ms (next.js: 8ms, application-code: 91ms)
+ GET /api/admin/notifications?limit=8 200 in 99ms (next.js: 19ms, application-code: 80ms)
+ GET /api/admin/notifications?limit=1 200 in 78ms (next.js: 5ms, application-code: 74ms)
+ GET /api/admin/users?id=6aa5642b2813d773e10e3099 200 in 308ms (next.js: 21ms, application-code: 286ms)
+ GET /api/admin/users?id=6aa5642b2813d773e10e3099 200 in 284ms (next.js: 9ms, application-code: 275ms)
+ GET /admin/users 200 in 57ms (next.js: 10ms, proxy.ts: 7ms, application-code: 40ms)
+ GET /api/admin/notifications?limit=8 200 in 111ms (next.js: 21ms, application-code: 90ms)
+ GET /api/admin/notifications?limit=1 200 in 115ms (next.js: 8ms, application-code: 108ms)
+ GET /api/admin/notifications?limit=1 200 in 94ms (next.js: 7ms, application-code: 87ms)
+ GET /api/admin/users?q= 200 in 233ms (next.js: 34ms, application-code: 199ms)
+ GET /admin/users/6ab2dfeecf2253a3487e2171 200 in 65ms (next.js: 19ms, proxy.ts: 5ms, application-code: 41ms)
+ GET /api/admin/notifications?limit=1 200 in 124ms (next.js: 9ms, application-code: 114ms)
+ GET /api/admin/notifications?limit=8 200 in 124ms (next.js: 30ms, application-code: 94ms)
+ GET /api/admin/notifications?limit=1 200 in 80ms (next.js: 8ms, application-code: 72ms)
+ GET /api/admin/users?id=6ab2dfeecf2253a3487e2171 200 in 326ms (next.js: 19ms, application-code: 307ms)
+ GET /api/admin/users?id=6ab2dfeecf2253a3487e2171 200 in 278ms (next.js: 7ms, application-code: 272ms)
+ GET /admin/users 200 in 57ms (next.js: 12ms, proxy.ts: 9ms, application-code: 37ms)
+ GET /api/admin/notifications?limit=8 200 in 117ms (next.js: 21ms, application-code: 96ms)
+ GET /api/admin/notifications?limit=1 200 in 120ms (next.js: 9ms, application-code: 111ms)
+ GET /api/admin/notifications?limit=1 200 in 82ms (next.js: 5ms, application-code: 77ms)
+ GET /api/admin/users?q= 200 in 263ms (next.js: 34ms, application-code: 228ms)
+ GET /admin/users/6ab274fa76dc538c4e69d529 200 in 63ms (next.js: 19ms, proxy.ts: 5ms, application-code: 39ms)
+ GET /api/admin/notifications?limit=1 200 in 105ms (next.js: 7ms, application-code: 99ms)
+ GET /api/admin/notifications?limit=8 200 in 109ms (next.js: 24ms, application-code: 85ms)
+ GET /api/admin/notifications?limit=1 200 in 100ms (next.js: 6ms, application-code: 94ms)
+ GET /api/admin/users?id=6ab274fa76dc538c4e69d529 200 in 295ms (next.js: 16ms, application-code: 280ms)
+ GET /api/admin/users?id=6ab274fa76dc538c4e69d529 200 in 293ms (next.js: 6ms, application-code: 286ms)
+✓ Compiled in 143ms
+ GET /admin/users/6ab274fa76dc538c4e69d529 200 in 716ms (next.js: 375ms, proxy.ts: 139ms, application-code: 202ms)
+ GET / 200 in 575ms (next.js: 200ms, application-code: 375ms)
+ GET /resource/6ab12a4e3a854c05408fc938 200 in 402ms (next.js: 153ms, application-code: 249ms)
+ GET /api/auth/session 200 in 178ms (next.js: 137ms, application-code: 42ms)
+ GET /api/auth/session 200 in 37ms (next.js: 8ms, application-code: 29ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 439ms (next.js: 87ms, application-code: 353ms)
+ GET /api/wishlist 200 in 731ms (next.js: 91ms, application-code: 641ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 562ms (next.js: 60ms, application-code: 502ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 363ms (next.js: 151ms, application-code: 212ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/purchased-resources 200 in 296ms (next.js: 79ms, application-code: 217ms)
+ GET /api/wishlist 200 in 379ms (next.js: 10ms, application-code: 369ms)
+ GET /admin/users 200 in 37ms (next.js: 13ms, proxy.ts: 5ms, application-code: 18ms)
+ GET /api/admin/notifications?limit=8 200 in 204ms (next.js: 99ms, application-code: 105ms)
+ GET /api/admin/notifications?limit=1 200 in 208ms (next.js: 67ms, application-code: 141ms)
+ GET /api/admin/notifications?limit=1 200 in 73ms (next.js: 4ms, application-code: 68ms)
+ GET /api/admin/users?q= 200 in 330ms (next.js: 133ms, application-code: 196ms)
+ GET /admin/users/6a9c09ed227479c5fad3e40b 200 in 80ms (next.js: 23ms, proxy.ts: 6ms, application-code: 51ms)
+ GET /api/admin/notifications?limit=1 200 in 111ms (next.js: 24ms, application-code: 86ms)
+ GET /api/admin/notifications?limit=8 200 in 87ms (next.js: 12ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=1 200 in 89ms (next.js: 9ms, application-code: 80ms)
+ GET /api/admin/users?id=6a9c09ed227479c5fad3e40b 200 in 317ms (next.js: 8ms, application-code: 309ms)
+ GET /api/admin/users?id=6a9c09ed227479c5fad3e40b 200 in 307ms (next.js: 10ms, application-code: 297ms)
+ GET /admin/users 200 in 46ms (next.js: 10ms, proxy.ts: 5ms, application-code: 31ms)
+ GET /api/admin/notifications?limit=1 200 in 90ms (next.js: 9ms, application-code: 81ms)
+ GET /api/admin/notifications?limit=8 200 in 102ms (next.js: 6ms, application-code: 96ms)
+ GET /api/admin/notifications?limit=1 200 in 96ms (next.js: 8ms, application-code: 88ms)
+ GET /api/admin/users?q= 200 in 232ms (next.js: 17ms, application-code: 216ms)
+ GET /admin/resources 200 in 113ms (next.js: 63ms, proxy.ts: 7ms, application-code: 44ms)
+API Request - Category: null Search: null
+ GET /api/admin/notifications?limit=1 200 in 273ms (next.js: 10ms, application-code: 263ms)
+Found resources: 27 for query: {}
+ GET /api/categories 200 in 240ms (next.js: 134ms, application-code: 106ms)
+ GET /api/admin/notifications?limit=8 200 in 254ms (next.js: 57ms, application-code: 197ms)
+ GET /api/admin/resources/analytics 200 in 260ms (next.js: 45ms, application-code: 215ms)
+ GET /api/admin/notifications?limit=1 200 in 114ms (next.js: 8ms, application-code: 106ms)
+ GET /api/categories 200 in 168ms (next.js: 22ms, application-code: 146ms)
+ GET /api/admin/resources/analytics 200 in 174ms (next.js: 34ms, application-code: 140ms)
+ GET /admin 200 in 212ms (next.js: 75ms, proxy.ts: 59ms, application-code: 78ms)
+ GET /api/admin/notifications?limit=1 200 in 304ms (next.js: 10ms, application-code: 294ms)
+ GET /api/categories 200 in 307ms (next.js: 76ms, application-code: 231ms)
+Checking Google Drive status for: dsiddharth550@gmail.com
+Database connected for status check
+ GET /api/admin/coupons 200 in 352ms (next.js: 189ms, application-code: 163ms)
+ GET /api/admin/notifications?limit=8 200 in 174ms (next.js: 7ms, application-code: 167ms)
+ GET /api/resources 200 in 1157ms (next.js: 82ms, application-code: 1076ms)
+Google Drive status for user: dsiddharth550@gmail.com
+Has valid credentials: true
+ GET /api/google-drive/status 200 in 459ms (next.js: 116ms, application-code: 343ms)
+ GET /api/admin/payment-settings 200 in 209ms (next.js: 100ms, application-code: 109ms)
+ GET /api/admin/notifications?limit=1 200 in 119ms (next.js: 5ms, application-code: 114ms)
+ GET /api/categories 200 in 106ms (next.js: 4ms, application-code: 102ms)
+API Request - Category: null Search: null
+Checking Google Drive status for: dsiddharth550@gmail.com
+Database connected for status check
+ GET /api/admin/coupons 200 in 105ms (next.js: 9ms, application-code: 96ms)
+ GET /api/admin/payment-settings 200 in 84ms (next.js: 8ms, application-code: 75ms)
+Stats: {
+  totalRevenue: 14,
+  totalUsers: 126,
+  totalResources: 27,
+  totalOrders: 23,
+  completedOrdersCount: 14,
+  capturedOrdersCount: 14
+}
+ GET /api/admin/stats 200 in 709ms (next.js: 54ms, application-code: 654ms)
+Google Drive status for user: dsiddharth550@gmail.com
+Has valid credentials: true
+ GET /api/google-drive/status 200 in 191ms (next.js: 28ms, application-code: 163ms)
+Found resources: 27 for query: {}
+ GET /api/resources 200 in 357ms (next.js: 37ms, application-code: 319ms)
+Stats: {
+  totalRevenue: 14,
+  totalUsers: 126,
+  totalResources: 27,
+  totalOrders: 23,
+  completedOrdersCount: 14,
+  capturedOrdersCount: 14
+}
+ GET /api/admin/stats 200 in 386ms (next.js: 7ms, application-code: 379ms)
+ GET /admin/resources 200 in 47ms (next.js: 10ms, proxy.ts: 7ms, application-code: 31ms)
+API Request - Category: null Search: null
+ GET /api/categories 200 in 109ms (next.js: 34ms, application-code: 75ms)
+ GET /api/admin/notifications?limit=1 200 in 119ms (next.js: 7ms, application-code: 112ms)
+ GET /api/admin/notifications?limit=8 200 in 129ms (next.js: 30ms, application-code: 99ms)
+ GET /api/admin/resources/analytics 200 in 135ms (next.js: 12ms, application-code: 123ms)
+ GET /api/categories 200 in 88ms (next.js: 7ms, application-code: 81ms)
+ GET /api/admin/notifications?limit=1 200 in 85ms (next.js: 6ms, application-code: 79ms)
+Found resources: 27 for query: {}
+ GET /api/admin/resources/analytics 200 in 96ms (next.js: 8ms, application-code: 88ms)
+ GET /api/resources 200 in 335ms (next.js: 22ms, application-code: 314ms)
+API Request - Category: null Search: null
+ GET /admin/users 200 in 82ms (next.js: 12ms, proxy.ts: 9ms, application-code: 60ms)
+Found resources: 27 for query: {}
+ GET /api/resources 200 in 372ms (next.js: 7ms, application-code: 365ms)
+ GET /api/admin/notifications?limit=8 200 in 160ms (next.js: 29ms, application-code: 131ms)
+ GET /api/admin/notifications?limit=1 200 in 165ms (next.js: 12ms, application-code: 152ms)
+ GET /api/admin/notifications?limit=1 200 in 81ms (next.js: 5ms, application-code: 75ms)
+ GET /api/admin/users?q= 200 in 375ms (next.js: 47ms, application-code: 329ms)
+ GET /admin 200 in 51ms (next.js: 9ms, proxy.ts: 8ms, application-code: 34ms)
+ GET /api/admin/notifications?limit=1 200 in 112ms (next.js: 11ms, application-code: 101ms)
+Checking Google Drive status for: dsiddharth550@gmail.com
+Database connected for status check
+ GET /api/categories 200 in 120ms (next.js: 47ms, application-code: 74ms)
+ GET /api/admin/coupons 200 in 135ms (next.js: 36ms, application-code: 99ms)
+ GET /api/admin/payment-settings 200 in 155ms (next.js: 62ms, application-code: 92ms)
+ GET /api/admin/notifications?limit=8 200 in 93ms (next.js: 12ms, application-code: 82ms)
+ GET /api/admin/notifications?limit=1 200 in 95ms (next.js: 6ms, application-code: 89ms)
+Google Drive status for user: dsiddharth550@gmail.com
+Has valid credentials: true
+ GET /api/google-drive/status 200 in 267ms (next.js: 22ms, application-code: 245ms)
+ GET /api/categories 200 in 95ms (next.js: 15ms, application-code: 80ms)
+ GET /api/admin/coupons 200 in 90ms (next.js: 8ms, application-code: 82ms)
+Checking Google Drive status for: dsiddharth550@gmail.com
+Database connected for status check
+ GET /api/admin/payment-settings 200 in 93ms (next.js: 12ms, application-code: 81ms)
+Google Drive status for user: dsiddharth550@gmail.com
+Has valid credentials: true
+ GET /api/google-drive/status 200 in 399ms (next.js: 7ms, application-code: 393ms)
+Stats: {
+  totalRevenue: 14,
+  totalUsers: 126,
+  totalResources: 27,
+  totalOrders: 23,
+  completedOrdersCount: 14,
+  capturedOrdersCount: 14
+}
+ GET /api/admin/stats 200 in 746ms (next.js: 37ms, application-code: 710ms)
+Stats: {
+  totalRevenue: 14,
+  totalUsers: 126,
+  totalResources: 27,
+  totalOrders: 23,
+  completedOrdersCount: 14,
+  capturedOrdersCount: 14
+}
+ GET /api/admin/stats 200 in 419ms (next.js: 10ms, application-code: 410ms)
+ GET /admin/users 200 in 49ms (next.js: 10ms, proxy.ts: 7ms, application-code: 32ms)
+ GET /api/admin/notifications?limit=1 200 in 93ms (next.js: 8ms, application-code: 85ms)
+ GET /api/admin/notifications?limit=8 200 in 100ms (next.js: 7ms, application-code: 93ms)
+ GET /api/admin/notifications?limit=1 200 in 92ms (next.js: 5ms, application-code: 87ms)
+ GET /api/admin/users?q= 200 in 242ms (next.js: 20ms, application-code: 221ms)
+ GET /admin/resources 200 in 42ms (next.js: 9ms, proxy.ts: 6ms, application-code: 26ms)
+API Request - Category: null Search: null
+ GET /api/categories 200 in 114ms (next.js: 37ms, application-code: 78ms)
+ GET /api/admin/notifications?limit=1 200 in 119ms (next.js: 10ms, application-code: 109ms)
+ GET /api/admin/notifications?limit=8 200 in 121ms (next.js: 25ms, application-code: 96ms)
+ GET /api/admin/resources/analytics 200 in 169ms (next.js: 56ms, application-code: 114ms)
+ GET /api/categories 200 in 96ms (next.js: 22ms, application-code: 74ms)
+ GET /api/admin/notifications?limit=1 200 in 96ms (next.js: 9ms, application-code: 88ms)
+Found resources: 27 for query: {}
+ GET /api/admin/resources/analytics 200 in 109ms (next.js: 8ms, application-code: 100ms)
+ GET /api/resources 200 in 345ms (next.js: 23ms, application-code: 322ms)
+API Request - Category: null Search: null
+Found resources: 27 for query: {}
+ GET /api/resources 200 in 383ms (next.js: 3ms, application-code: 380ms)
+ GET /api/admin/resources/6ab12a4e3a854c05408fc938/analytics 200 in 1566ms (next.js: 1406ms, application-code: 160ms)
+ GET /admin 200 in 33ms (next.js: 8ms, proxy.ts: 6ms, application-code: 19ms)
+ GET /api/admin/notifications?limit=1 200 in 133ms (next.js: 10ms, application-code: 124ms)
+Checking Google Drive status for: dsiddharth550@gmail.com
+Database connected for status check
+ GET /api/categories 200 in 99ms (next.js: 14ms, application-code: 85ms)
+ GET /api/admin/payment-settings 200 in 135ms (next.js: 55ms, application-code: 80ms)
+ GET /api/admin/coupons 200 in 167ms (next.js: 31ms, application-code: 136ms)
+ GET /api/admin/notifications?limit=1 200 in 109ms (next.js: 16ms, application-code: 93ms)
+ GET /api/admin/notifications?limit=8 200 in 114ms (next.js: 6ms, application-code: 108ms)
+ GET /api/categories 200 in 106ms (next.js: 7ms, application-code: 99ms)
+Google Drive status for user: dsiddharth550@gmail.com
+Has valid credentials: true
+ GET /api/google-drive/status 200 in 280ms (next.js: 8ms, application-code: 272ms)
+ GET /api/admin/payment-settings 200 in 106ms (next.js: 9ms, application-code: 97ms)
+Checking Google Drive status for: dsiddharth550@gmail.com
+Database connected for status check
+ GET /api/admin/coupons 200 in 99ms (next.js: 7ms, application-code: 92ms)
+Google Drive status for user: dsiddharth550@gmail.com
+Has valid credentials: true
+ GET /api/google-drive/status 200 in 157ms (next.js: 6ms, application-code: 152ms)
+Stats: {
+  totalRevenue: 14,
+  totalUsers: 126,
+  totalResources: 27,
+  totalOrders: 23,
+  completedOrdersCount: 14,
+  capturedOrdersCount: 14
+}
+ GET /api/admin/stats 200 in 455ms (next.js: 20ms, application-code: 436ms)
+Stats: {
+  totalRevenue: 14,
+  totalUsers: 126,
+  totalResources: 27,
+  totalOrders: 23,
+  completedOrdersCount: 14,
+  capturedOrdersCount: 14
+}
+ GET /api/admin/stats 200 in 359ms (next.js: 4ms, application-code: 355ms)
+ GET /admin/revenue 200 in 55ms (next.js: 18ms, proxy.ts: 7ms, application-code: 30ms)
+ GET /api/admin/notifications?limit=1 200 in 153ms (next.js: 10ms, application-code: 143ms)
+ GET /api/admin/notifications?limit=8 200 in 156ms (next.js: 71ms, application-code: 85ms)
+ GET /api/admin/revenue 200 in 231ms (next.js: 54ms, application-code: 177ms)
+ GET /api/admin/notifications?limit=1 200 in 84ms (next.js: 6ms, application-code: 78ms)
+ GET /api/admin/revenue 200 in 151ms (next.js: 7ms, application-code: 144ms)
+ GET /admin/users 200 in 65ms (next.js: 11ms, proxy.ts: 7ms, application-code: 47ms)
+ GET /api/admin/notifications?limit=1 200 in 144ms (next.js: 8ms, application-code: 136ms)
+ GET /api/admin/notifications?limit=8 200 in 144ms (next.js: 39ms, application-code: 105ms)
+ GET /api/admin/notifications?limit=1 200 in 78ms (next.js: 4ms, application-code: 74ms)
+ GET /api/admin/users?q= 200 in 276ms (next.js: 24ms, application-code: 253ms)
+ GET /admin/payment-captures 200 in 68ms (next.js: 15ms, proxy.ts: 6ms, application-code: 47ms)
+🔍 Fetching failed captures with Razorpay order IDs
+🔍 Fetching pending captures with Razorpay order IDs
+✅ Found 0 pending captures
+ GET /api/admin/payment-captures?type=pending&limit=100 200 in 156ms (next.js: 64ms, application-code: 92ms)
+ GET /api/admin/notifications?limit=1 200 in 162ms (next.js: 9ms, application-code: 154ms)
+✅ Found 0 failed captures
+ GET /api/admin/payment-captures?type=failed&limit=100 200 in 164ms (next.js: 48ms, application-code: 116ms)
+ GET /api/admin/notifications?limit=8 200 in 165ms (next.js: 78ms, application-code: 88ms)
+🔍 Fetching pending captures with Razorpay order IDs
+🔍 Fetching failed captures with Razorpay order IDs
+✅ Found 0 pending captures
+ GET /api/admin/payment-captures?type=pending&limit=100 200 in 87ms (next.js: 14ms, application-code: 73ms)
+✅ Found 0 failed captures
+ GET /api/admin/payment-captures?type=failed&limit=100 200 in 91ms (next.js: 15ms, application-code: 77ms)
+ GET /api/admin/notifications?limit=1 200 in 95ms (next.js: 5ms, application-code: 91ms)
+ GET /admin/categories 200 in 126ms (next.js: 67ms, proxy.ts: 10ms, application-code: 49ms)
+ GET /api/admin/notifications?limit=1 200 in 100ms (next.js: 7ms, application-code: 93ms)
+ GET /api/categories 200 in 128ms (next.js: 20ms, application-code: 108ms)
+ GET /api/admin/notifications?limit=8 200 in 149ms (next.js: 20ms, application-code: 128ms)
+ GET /api/admin/notifications?limit=1 200 in 114ms (next.js: 11ms, application-code: 104ms)
+ GET /admin/support 200 in 77ms (next.js: 47ms, proxy.ts: 6ms, application-code: 23ms)
+ GET /api/admin/notifications?limit=1 200 in 142ms (next.js: 6ms, application-code: 135ms)
+ GET /api/admin/notifications?limit=8 200 in 194ms (next.js: 10ms, application-code: 185ms)
+ GET /api/admin/notifications?limit=1 200 in 74ms (next.js: 4ms, application-code: 70ms)
+ GET /api/admin/support? 200 in 250ms (next.js: 94ms, application-code: 156ms)
+ GET /admin/developer-notes 200 in 2.7s (next.js: 2.6s, proxy.ts: 6ms, application-code: 125ms)
+ GET /admin/developer-notes 200 in 76ms (next.js: 14ms, proxy.ts: 14ms, application-code: 49ms)
+ GET /api/admin/notifications?limit=1 200 in 105ms (next.js: 11ms, application-code: 94ms)
+ GET /api/admin/notifications?limit=8 200 in 104ms (next.js: 21ms, application-code: 82ms)
+ GET /api/admin/notifications?limit=1 200 in 94ms (next.js: 7ms, application-code: 86ms)
+ GET /api/admin/developer-notes? 200 in 689ms (next.js: 481ms, application-code: 208ms)

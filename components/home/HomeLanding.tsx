@@ -348,7 +348,9 @@ export default function HomeLanding() {
                             key={resource._id}
                             type="button"
                             onClick={() => router.push(`/resource/${resource._id}`)}
-                            className="group h-full w-[44%] shrink-0 snap-start text-left sm:w-auto"
+                            // No h-full: flex stretch equalizes heights (h-full on an
+                            // auto-height rail collapses cards to their content size).
+                            className="group w-[44%] shrink-0 snap-start text-left sm:w-auto"
                           >
                             <div className="relative h-full overflow-hidden rounded-lg border border-[var(--line)] bg-[#FFFDF8]">
                               <span

@@ -85,6 +85,7 @@ export default function AdminProfilePage() {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -154,9 +155,9 @@ export default function AdminProfilePage() {
     }
   };
 
-  /** One-click restore: fills the form with the shipped defaults and saves. */
+  /** Confirmation modal se gaye bina reset nahi hoga. */
   const resetToDefaults = async () => {
-    if (!window.confirm('Reset everything (photo, text, socials, emails, stats) back to the defaults? This saves immediately.')) return;
+    setShowResetConfirm(false);
     const defaultsForm: ProfileForm = {
       ...EMPTY_FORM,
       socials: { ...EMPTY_FORM.socials },
@@ -203,7 +204,7 @@ export default function AdminProfilePage() {
           </div>
           <div className="flex shrink-0 flex-wrap gap-2 self-start sm:self-auto">
             <button
-              onClick={() => void resetToDefaults()}
+              onClick={() => setShowResetConfirm(true)}
               disabled={saving || loading}
               className="inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-600 disabled:opacity-50 hover:bg-slate-100 transition-colors dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/5"
             >
@@ -420,6 +421,42 @@ export default function AdminProfilePage() {
           </div>
         )}
       </div>
+
+      {/* ---------- Reset confirmation modal ---------- */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-label="Confirm reset">
+          <div className="w-full max-w-sm rounded-xl bg-white p-5 shadow-2xl dark:bg-gray-900">
+            <div className="flex items-start gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                <RotateCcw className="h-5 w-5" />
+              </span>
+              <div>
+                <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Reset everything?</h3>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                  Photo, text, social links, emails and stats will all go back to the defaults and save immediately. This cannot be undone.
+                </p>
+              </div>
+            </div>
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                onClick={() => setShowResetConfirm(false)}
+                disabled={saving}
+                className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 disabled:opacity-50 transition-colors dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/5"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => void resetToDefaults()}
+                disabled={saving}
+                className="inline-flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50 transition-colors"
+              >
+                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
+                {saving ? 'Resetting…' : 'Yes, reset'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }
