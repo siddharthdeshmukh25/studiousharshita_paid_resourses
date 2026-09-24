@@ -3,9 +3,10 @@ import connectDB from '@/lib/db/mongodb';
 import Coupon from '@/models/Coupon';
 
 /**
- * GET /api/coupons/active — public list of currently active coupons for the
- * home-page offers strip. Only shopper-safe fields are returned; usage counts,
- * category/resource restrictions and everything internal stay server-side.
+ * GET /api/coupons/active — public list of currently active PUBLIC coupons for
+ * the home-page offers strip. Private coupons (DM-only codes) are excluded.
+ * Only shopper-safe fields are returned; usage counts, category/resource
+ * restrictions and everything internal stay server-side.
  */
 export async function GET() {
   try {
@@ -14,6 +15,10 @@ export async function GET() {
     const now = new Date();
     const coupons = await Coupon.find({
       isActive: true,
+      // Private (checkout-only) coupons never appear on the strip. Docs created
+      // before this feature have no isPublic field — $ne:false keeps them public
+      // so no backfill is needed.
+      isPublic: { $ne: false },
       expiresAt: { $gt: now },
     })
       .sort({ expiresAt: 1 }) // soonest expiry first → most urgent offers shown first

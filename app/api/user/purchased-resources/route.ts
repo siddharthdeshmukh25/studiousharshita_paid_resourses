@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/models/User';
+import Review from '@/models/Review';
 import Resource from '@/models/Resource';
 import Order from '@/models/Order';
 import { getServerSession } from 'next-auth';
@@ -54,14 +55,24 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Ratings for the profile cards (same shape as the related-resources API).
+    const ratingStats = await Review.aggregate<{ _id: string; averageRating: number; reviewCount: number }>([
+      { $match: { resourceId: { $in: user.purchasedResources.map((resource: any) => resource._id.toString()) } } }, // eslint-disable-line @typescript-eslint/no-explicit-any
+      { $group: { _id: '$resourceId', averageRating: { $avg: '$rating' }, reviewCount: { $sum: 1 } } },
+    ]);
+    const ratingsByResource = new Map(ratingStats.map((stat) => [stat._id, stat]));
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const resources = user.purchasedResources.map((resource: any) => ({
       _id: resource._id.toString(),
       title: resource.title,
       description: resource.description,
       price: resource.price,
+      images: resource.images ?? [],
       thumbnailUrl: resource.thumbnailUrl,
       category: resource.category,
+      avgRating: ratingsByResource.get(resource._id.toString())?.averageRating ?? 0,
+      totalReviews: ratingsByResource.get(resource._id.toString())?.reviewCount ?? 0,
       purchasedAt: purchaseDates.get(resource._id.toString()) || user.updatedAt,
     }));
 

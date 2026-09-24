@@ -19,7 +19,10 @@ import {
   Tag,
   BadgeCheck,
   Store,
+  Ticket,
+  X,
 } from 'lucide-react';
+import { useToast } from '@/components/ui/Toast';
 
 interface Resource {
   _id: string;
@@ -41,6 +44,16 @@ declare global {
   }
 }
 
+interface PublicCoupon {
+  code: string;
+  title: string;
+  description?: string;
+  discountType: 'percentage' | 'fixed';
+  discountPercentage?: number;
+  discountAmount?: number;
+  expiresAt: string | null;
+}
+
 function CheckoutPageContent() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -55,6 +68,12 @@ function CheckoutPageContent() {
   const [couponDiscount, setCouponDiscount] = useState<number | null>(null);
   const [couponMessage, setCouponMessage] = useState<string | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
+
+  // Zomato-style coupon sheet
+  const [showCoupons, setShowCoupons] = useState(false);
+  const [publicCoupons, setPublicCoupons] = useState<PublicCoupon[]>([]);
+  const [couponsLoading, setCouponsLoading] = useState(false);
+  const { toast } = useToast();
 
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -106,12 +125,27 @@ function CheckoutPageContent() {
       setCouponCode(data.coupon.code);
       setCouponDiscount(data.coupon.discountPercentage);
       setCouponMessage(`${data.coupon.discountPercentage}% off applied — ${data.coupon.title}`);
+      setShowCoupons(false);
+      toast('success', `Applied ${data.coupon.code} — ${data.coupon.discountPercentage}% off ✓`);
     } catch (err) {
       setCouponDiscount(null);
-      setCouponMessage(err instanceof Error ? err.message : 'Could not apply coupon.');
+      const message = err instanceof Error ? err.message : 'Could not apply coupon.';
+      setCouponMessage(message);
+      toast('error', message);
     } finally {
       setCouponLoading(false);
     }
+  };
+
+  // Fetch the public coupon list the first time the sheet is opened.
+  const loadPublicCoupons = () => {
+    if (couponsLoading || publicCoupons.length > 0) return;
+    setCouponsLoading(true);
+    fetch('/api/coupons/active')
+      .then((res) => res.json() as Promise<{ coupons: PublicCoupon[] }>)
+      .then((data) => setPublicCoupons(data.coupons || []))
+      .catch(() => setPublicCoupons([]))
+      .finally(() => setCouponsLoading(false));
   };
 
   // Auto-apply a coupon passed from the resource page (?coupon=CODE)
@@ -291,7 +325,7 @@ function CheckoutPageContent() {
                   <Tag className="h-5 w-5 text-[var(--accent)]" />
                   Have a coupon?
                 </h2>
-                <div className="flex gap-3">
+                <div className="flex gap-2 sm:gap-3">
                   <input
                     value={couponCode}
                     onChange={(event) => {
@@ -300,17 +334,28 @@ function CheckoutPageContent() {
                       setCouponMessage(null);
                     }}
                     placeholder="Enter coupon code"
-                    className="min-w-0 flex-1 rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-4 py-3 text-base font-semibold uppercase text-[#1A1A1A] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20"
+                    className="min-w-0 flex-1 rounded-lg border border-[var(--line)] bg-[#FFFDF8] px-3 py-2.5 text-sm font-semibold uppercase text-[#1A1A1A] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 sm:px-4 sm:py-3 sm:text-base"
                   />
                   <button
                     type="button"
                     onClick={() => validateCoupon()}
                     disabled={couponLoading || !couponCode.trim()}
-                    className="rounded-lg bg-[#1A1A1A] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#33302B] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="shrink-0 rounded-lg bg-[#1A1A1A] px-3 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#33302B] disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-3 sm:text-base"
                   >
                     {couponLoading ? 'Checking…' : 'Apply'}
                   </button>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => { setShowCoupons(true); loadPublicCoupons(); }}
+                  className="mt-3 flex w-full items-center justify-between rounded-xl border border-dashed border-[var(--accent)]/50 bg-[var(--accent-soft)]/40 px-4 py-3 text-left transition-colors hover:bg-[var(--accent-soft)]/70"
+                >
+                  <span className="flex items-center gap-2.5 text-sm font-semibold text-[var(--accent-deep)] sm:text-base">
+                    <Ticket className="h-4 w-4 sm:h-5 sm:w-5" />
+                    {couponDiscount ? 'Change coupon' : 'View all available coupons'}
+                  </span>
+                  <span className="text-[var(--accent)]">→</span>
+                </button>
                 {couponMessage && (
                   <p className={`mt-3 text-base ${couponDiscount ? 'text-[var(--accent-deep)]' : 'text-red-600'}`}>
                     {couponMessage}
@@ -484,6 +529,80 @@ function CheckoutPageContent() {
       </main>
 
       <Footer />
+
+      {/* Zomato-style coupons sheet — bottom sheet on mobile, centered popup on desktop */}
+      {showCoupons && (
+        <div
+          className="fixed inset-0 z-[70] flex items-end justify-center bg-black/40 backdrop-blur-[2px] sm:items-center sm:p-4"
+          onClick={() => setShowCoupons(false)}
+        >
+          <div
+            className="flex max-h-[80vh] w-full max-w-md flex-col overflow-hidden rounded-t-2xl bg-[#FFFDF8] shadow-2xl sm:rounded-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-[var(--line)] px-5 py-4">
+              <h3 className="flex items-center gap-2 font-serif-display text-xl italic text-[#1A1A1A]">
+                <Ticket className="h-5 w-5 text-[var(--accent)]" />
+                coupons for you
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowCoupons(false)}
+                aria-label="Close coupons"
+                className="grid h-8 w-8 place-items-center rounded-full text-[#6B6257] transition-colors hover:bg-[var(--accent-soft)]"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex-1 space-y-3 overflow-y-auto p-4">
+              {couponsLoading ? (
+                <div className="space-y-3">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="h-20 animate-pulse rounded-xl bg-[var(--accent-soft-2)]" />
+                  ))}
+                </div>
+              ) : publicCoupons.length === 0 ? (
+                <p className="py-10 text-center text-sm text-[#6B6257]">No coupons available right now.</p>
+              ) : (
+                publicCoupons.map((coupon) => {
+                  const isApplied = couponDiscount !== null && couponCode === coupon.code;
+                  return (
+                    <div
+                      key={coupon.code}
+                      className={'rounded-xl border p-3.5 transition-colors ' + (isApplied ? 'border-[var(--accent)] bg-[var(--accent-soft)]/50' : 'border-[var(--line)] bg-[#FFFDF8]')}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-base font-bold text-[var(--accent-deep)]">{coupon.discountPercentage}% OFF</p>
+                          <p className="truncate text-sm font-medium text-[#1A1A1A]">{coupon.title}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => { setCouponCode(coupon.code); validateCoupon(coupon.code); }}
+                          disabled={couponLoading}
+                          className="shrink-0 rounded-lg bg-[#1A1A1A] px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-[#33302B] disabled:opacity-50"
+                        >
+                          Apply
+                        </button>
+                      </div>
+                      <div className="mt-2.5 flex items-center justify-between border-t border-dashed border-[var(--line)] pt-2.5">
+                        <span className="rounded-md border border-dashed border-[var(--accent)]/60 bg-[var(--accent-soft)]/40 px-2 py-1 text-xs font-bold uppercase tracking-wide text-[var(--accent-deep)]">
+                          {coupon.code}
+                        </span>
+                        {coupon.expiresAt && (
+                          <span className="text-[11px] text-[#6B6257]">
+                            Ends {new Date(coupon.expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

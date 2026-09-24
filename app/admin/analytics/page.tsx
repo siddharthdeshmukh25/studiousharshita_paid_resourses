@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BarChart3, Eye, Users, Globe2, MousePointer2, MapPin } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { countryName } from '@/lib/countries';
 import KPICard from '@/components/admin/KPICard';
 
 type Stats = { totalUsers: number };
@@ -94,7 +95,7 @@ function WorldMap({ countries, locationData }: { countries: Country[]; locationD
             <g key={country.country}>
               <circle cx={`${x}%`} cy={`${y}%`} r={size} fill="#60A5FA" fillOpacity=".18"/>
               <circle cx={`${x}%`} cy={`${y}%`} r="4" fill="#60A5FA"/>
-              <title>{country.country}: {country.users || country.events} users</title>
+              <title>{countryName(country.country)}: {country.users || country.events} users</title>
             </g>
           );
         })}

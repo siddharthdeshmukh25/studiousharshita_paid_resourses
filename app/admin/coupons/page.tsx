@@ -1,7 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState, useRef } from 'react';
-import { Plus, Ticket, Trash2, IndianRupee, Percent, ToggleLeft, ToggleRight, Power, Loader2, X, Search, Edit2, Upload, Eye } from 'lucide-react';
+import { Plus, Ticket, Trash2, IndianRupee, Percent, ToggleLeft, ToggleRight, Power, Loader2, X, Search, Edit2, Upload, Eye, Globe, Lock } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { formatPrice } from '@/lib/format';
 
@@ -21,6 +21,7 @@ type Coupon = {
   applicableCategories?: string[];
   applicableResources?: string[];
   isActive: boolean;
+  isPublic: boolean;
   imageUrl?: string;
   imageTitle?: string;
   imageDescription?: string;
@@ -71,7 +72,8 @@ export default function CouponsPage() {
     maxTotalUses: '',
     applicableCategories: [] as string[],
     applicableResources: [] as string[],
-    isActive: true
+    isActive: true,
+    isPublic: true
   });
 
   const [error, setError] = useState('');
@@ -164,7 +166,8 @@ export default function CouponsPage() {
         maxTotalUses: '',
         applicableCategories: [],
         applicableResources: [],
-        isActive: true
+        isActive: true,
+        isPublic: true
       });
       setCategorySearch('');
       setResourceSearch('');
@@ -208,7 +211,8 @@ export default function CouponsPage() {
       maxTotalUses: coupon.maxTotalUses?.toString() || '',
       applicableCategories: coupon.applicableCategories || [],
       applicableResources: coupon.applicableResources || [],
-      isActive: coupon.isActive
+      isActive: coupon.isActive,
+      isPublic: coupon.isPublic !== false // older docs default to public
     });
     setImageUrl(coupon.imageUrl || '');
     setImageTitle(coupon.imageTitle || '');
@@ -233,7 +237,8 @@ export default function CouponsPage() {
       maxTotalUses: '',
       applicableCategories: [],
       applicableResources: [],
-      isActive: true
+      isActive: true,
+      isPublic: true
     });
     setCategorySearch('');
     setResourceSearch('');
@@ -751,6 +756,38 @@ export default function CouponsPage() {
                   <span className="text-sm font-medium">Activate coupon immediately after creation</span>
                 </label>
               </div>
+
+              <div>
+                <p className="mb-2 text-sm font-medium">Visibility</p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  <label className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-3 transition-colors ${form.isPublic ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                    <input
+                      type="radio"
+                      name="couponVisibility"
+                      checked={form.isPublic}
+                      onChange={() => setForm({ ...form, isPublic: true })}
+                      className="mt-0.5"
+                    />
+                    <span className="min-w-0">
+                      <span className="flex items-center gap-1.5 text-sm font-semibold"><Globe className="h-3.5 w-3.5" /> Public</span>
+                      <span className="mt-0.5 block text-xs text-slate-500">Shows on the home page offers strip. Everyone can see and copy it.</span>
+                    </span>
+                  </label>
+                  <label className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-3 transition-colors ${!form.isPublic ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-700'}`}>
+                    <input
+                      type="radio"
+                      name="couponVisibility"
+                      checked={!form.isPublic}
+                      onChange={() => setForm({ ...form, isPublic: false })}
+                      className="mt-0.5"
+                    />
+                    <span className="min-w-0">
+                      <span className="flex items-center gap-1.5 text-sm font-semibold"><Lock className="h-3.5 w-3.5" /> Private</span>
+                      <span className="mt-0.5 block text-xs text-slate-500">Hidden from the offers strip. Works at checkout — share it via DM or story only.</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
             </div>
             
             <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
@@ -802,7 +839,13 @@ export default function CouponsPage() {
                             />
                           )}
                           <div className="min-w-0">
-                            <p className="font-medium">{coupon.title}</p>
+                            <p className="flex items-center gap-1.5 font-medium">
+                              {coupon.title}
+                              <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${coupon.isPublic !== false ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'}`}>
+                                {coupon.isPublic !== false ? <Globe className="h-2.5 w-2.5" /> : <Lock className="h-2.5 w-2.5" />}
+                                {coupon.isPublic !== false ? 'Public' : 'Private'}
+                              </span>
+                            </p>
                             {coupon.description && <p className="text-xs text-slate-500 truncate max-w-[200px]">{coupon.description}</p>}
                           </div>
                         </div>

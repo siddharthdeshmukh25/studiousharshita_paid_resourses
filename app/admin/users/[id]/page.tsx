@@ -4,6 +4,7 @@ import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Mail, Calendar, MapPin, Globe, Clock, ShoppingBag, Eye, MousePointer2, Smartphone, Monitor, Tablet } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { countryName } from '@/lib/countries';
 import { formatPrice } from '@/lib/format';
 
 type UserDetail = {
@@ -157,7 +158,7 @@ export default function UserProfilePage({ params }: { params: Promise<{ id: stri
           <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
             {data.user.country && (
               <span className="inline-flex items-center gap-1 rounded-full bg-lime-100 px-2 py-0.5 text-xs font-medium text-lime-700 dark:bg-lime-900/30 dark:text-lime-400">
-                {data.user.country}
+                {countryName(data.user.country)}
               </span>
             )}
             <span>Joined {new Date(data.user.createdAt).toLocaleDateString()}</span>

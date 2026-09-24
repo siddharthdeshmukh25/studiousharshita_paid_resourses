@@ -15,6 +15,8 @@ interface ICoupon {
   applicableCategories?: string[];
   applicableResources?: string[];
   isActive: boolean;
+  /** Public coupons show in the home offers strip; private ones are checkout-only (DM-style). */
+  isPublic: boolean;
   imageUrl?: string;
   imageTitle?: string;
   imageDescription?: string;
@@ -38,6 +40,7 @@ const CouponSchema = new Schema<ICoupon>(
     applicableCategories: [{ type: String }],
     applicableResources: [{ type: Schema.Types.ObjectId, ref: 'Resource' }],
     isActive: { type: Boolean, default: true },
+    isPublic: { type: Boolean, default: true },
     imageUrl: { type: String },
     imageTitle: { type: String, maxlength: 100 },
     imageDescription: { type: String, maxlength: 200 },
@@ -45,6 +48,11 @@ const CouponSchema = new Schema<ICoupon>(
   { timestamps: true }
 );
 
-const Coupon: Model<ICoupon> = mongoose.models.Coupon || mongoose.model<ICoupon>('Coupon', CouponSchema);
+// Force model recompilation so schema changes (isPublic) are picked up even
+// when the model was already registered by an earlier import this process.
+delete (mongoose.models as any).Coupon;
+delete (mongoose.connection.models as any).Coupon;
+
+const Coupon: Model<ICoupon> = mongoose.model<ICoupon>('Coupon', CouponSchema);
 
 export default Coupon;

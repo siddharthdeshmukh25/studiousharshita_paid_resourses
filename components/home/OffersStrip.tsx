@@ -98,7 +98,6 @@ export default function OffersStrip() {
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#B4544A]">⚡ limited time</p>
             <h2 className="font-serif-display mt-1 text-2xl italic text-[#1A1A1A] sm:text-3xl">offers running right now</h2>
           </div>
-          <p className="text-xs font-semibold text-[#6B6257]">Tap a code to copy — apply it at checkout</p>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

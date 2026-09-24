@@ -51,9 +51,19 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const query = new URL(request.url).searchParams.get('q')?.trim();
+    const params = new URL(request.url).searchParams;
+    const query = params.get('q')?.trim();
+    // Paginated list: the admin table loads 50 rows at a time and appends more
+    // as the admin scrolls. KPI numbers always reflect the FULL matching set.
+    const page = Math.max(1, Number(params.get('page')) || 1);
+    const limit = Math.min(100, Math.max(1, Number(params.get('limit')) || 50));
     const filter = query ? { $or: [{ name: { $regex: query, $options: 'i' } }, { email: { $regex: query, $options: 'i' } }] } : {};
-    const users = await User.find(filter).select('name email image role createdAt country ipAddress').sort({ createdAt: -1 }).limit(100).lean();
+    const [users, total, totalVisits, totalOpens] = await Promise.all([
+      User.find(filter).select('name email image role createdAt country ipAddress').sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
+      User.countDocuments(filter),
+      UserActivity.countDocuments({}),
+      ResourceAccessLog.countDocuments({}),
+    ]);
     const ids = users.map((user) => user._id);
     const [visitCounts, accessCounts] = await Promise.all([
       UserActivity.aggregate([{ $match: { userId: { $in: ids } } }, { $group: { _id: '$userId', visits: { $sum: 1 }, lastVisit: { $max: '$timestamp' } } }]),
@@ -61,7 +71,13 @@ export async function GET(request: NextRequest) {
     ]);
     const visitsByUser = new Map(visitCounts.map((item) => [item._id.toString(), item]));
     const opensByUser = new Map(accessCounts.map((item) => [item._id.toString(), item.opens]));
-    return NextResponse.json({ users: users.map((user) => ({ ...user, visits: visitsByUser.get(user._id.toString())?.visits || 0, lastVisit: visitsByUser.get(user._id.toString())?.lastVisit || null, resourceOpens: opensByUser.get(user._id.toString()) || 0 })) });
+    return NextResponse.json({
+      users: users.map((user) => ({ ...user, visits: visitsByUser.get(user._id.toString())?.visits || 0, lastVisit: visitsByUser.get(user._id.toString())?.lastVisit || null, resourceOpens: opensByUser.get(user._id.toString()) || 0 })),
+      total,
+      hasMore: page * limit < total,
+      totalVisits,
+      totalOpens,
+    });
   } catch (error) {
     console.error('Admin users error:', error);
     return NextResponse.json({ error: 'Failed to load users' }, { status: 500 });

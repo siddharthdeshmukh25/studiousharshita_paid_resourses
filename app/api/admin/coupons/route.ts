@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
       applicableCategories,
       applicableResources,
       isActive,
+      isPublic,
       imageUrl,
       imageTitle,
       imageDescription
@@ -64,6 +65,7 @@ export async function POST(request: NextRequest) {
       applicableCategories?: string[];
       applicableResources?: string[];
       isActive?: boolean;
+      isPublic?: boolean;
       imageUrl?: string;
       imageTitle?: string;
       imageDescription?: string;
@@ -110,6 +112,7 @@ export async function POST(request: NextRequest) {
       applicableCategories: applicableCategories || [],
       applicableResources: applicableResources || [],
       isActive: isActive !== undefined ? isActive : true,
+      isPublic: isPublic !== undefined ? isPublic : true,
       imageUrl: imageUrl?.trim() || undefined,
       imageTitle: imageTitle?.trim() || undefined,
       imageDescription: imageDescription?.trim() || undefined,
@@ -152,6 +155,7 @@ export async function PUT(request: NextRequest) {
       applicableCategories,
       applicableResources,
       isActive,
+      isPublic,
       imageUrl,
       imageTitle,
       imageDescription
@@ -169,6 +173,7 @@ export async function PUT(request: NextRequest) {
       applicableCategories?: string[];
       applicableResources?: string[];
       isActive?: boolean;
+      isPublic?: boolean;
       imageUrl?: string;
       imageTitle?: string;
       imageDescription?: string;
@@ -215,6 +220,7 @@ export async function PUT(request: NextRequest) {
       applicableCategories: applicableCategories || [],
       applicableResources: applicableResources || [],
       isActive: isActive !== undefined ? isActive : true,
+      isPublic: isPublic !== undefined ? isPublic : true,
       imageUrl: imageUrl?.trim() || undefined,
       imageTitle: imageTitle?.trim() || undefined,
       imageDescription: imageDescription?.trim() || undefined,

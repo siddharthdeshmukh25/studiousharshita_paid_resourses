@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Users, Eye, MousePointer2 } from 'lucide-react';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { countryName } from '@/lib/countries';
 import KPICard from '@/components/admin/KPICard';
 
 type UserRow = { _id: string; name: string; email: string; image?: string; role: string; createdAt: string; visits: number; lastVisit: string | null; resourceOpens: number; country?: string; ipAddress?: string };
@@ -16,25 +17,49 @@ export default function AdminUsersPage() {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  // Pagination: 50 users render first; scrolling near the bottom appends the
+  // next page. KPI numbers come from the API totals, not the rendered rows.
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [totals, setTotals] = useState({ users: 0, visits: 0, opens: 0 });
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const loadUsers = async (value = '') => {
-    setLoading(true); setError('');
-    try { 
-      const response = await fetch(`/api/admin/users?q=${encodeURIComponent(value)}`); 
-      const data = await response.json(); 
-      if (!response.ok) throw new Error(data.error); 
-      setUsers(data.users || []); 
-    } catch (err) { 
-      setError(err instanceof Error ? err.message : 'Could not load users'); 
-    } finally { 
-      setLoading(false); 
+  const loadUsers = async (value = '', nextPage = 1) => {
+    if (nextPage === 1) setLoading(true); setError('');
+    try {
+      const response = await fetch(`/api/admin/users?q=${encodeURIComponent(value)}&page=${nextPage}&limit=50`);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+      setUsers((current) => (nextPage === 1 ? data.users || [] : [...current, ...(data.users || [])]));
+      setHasMore(Boolean(data.hasMore));
+      setPage(nextPage);
+      setTotals({ users: data.total || 0, visits: data.totalVisits || 0, opens: data.totalOpens || 0 });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not load users');
+    } finally {
+      setLoading(false);
     }
   };
-  
-  useEffect(() => { 
-    const timer = window.setTimeout(() => { void loadUsers(); }, 0); 
-    return () => window.clearTimeout(timer); 
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void loadUsers(); }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
+
+  // Infinite scroll: fetch the next page when the sentinel enters the viewport.
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore || loading) return;
+    if (typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) void loadUsers(query, page + 1);
+      },
+      { rootMargin: '300px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, loading, page, query]);
 
   return <AdminLayout>
     <div className="space-y-6">
@@ -56,9 +81,9 @@ export default function AdminUsersPage() {
       </div>
       
       <div className="grid gap-4 sm:grid-cols-3">
-        <KPICard title="Registered users" value={users.length} icon={<Users className="h-5 w-5" />} />
-        <KPICard title="Recorded page visits" value={users.reduce((sum, user) => sum + user.visits, 0)} icon={<Eye className="h-5 w-5" />} />
-        <KPICard title="Resource opens" value={users.reduce((sum, user) => sum + user.resourceOpens, 0)} icon={<MousePointer2 className="h-5 w-5" />} />
+        <KPICard title="Registered users" value={totals.users} icon={<Users className="h-5 w-5" />} />
+        <KPICard title="Recorded page visits" value={totals.visits} icon={<Eye className="h-5 w-5" />} />
+        <KPICard title="Resource opens" value={totals.opens} icon={<MousePointer2 className="h-5 w-5" />} />
       </div>
       
       {error && <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">{error}</p>}
@@ -93,7 +118,7 @@ export default function AdminUsersPage() {
                   <td className="px-3 py-2.5 text-gray-600 dark:text-gray-400 sm:px-5 sm:py-3">
                     {user.country ? (
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
-                        {user.country}
+                        {countryName(user.country)}
                       </span>
                     ) : (
                       <span className="text-gray-400">—</span>
@@ -119,6 +144,16 @@ export default function AdminUsersPage() {
             </tbody>
           </table>
         </div>
+        {/* Next batch loads automatically as the admin scrolls near the bottom. */}
+        <div ref={sentinelRef} className="h-1" />
+        {loading && users.length > 0 && (
+          <p className="border-t border-gray-100 p-4 text-center text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">Loading more users…</p>
+        )}
+        {!hasMore && !loading && users.length > 0 && (
+          <p className="border-t border-gray-100 p-3 text-center text-xs text-gray-400 dark:border-gray-800 dark:text-gray-500">
+            Showing all {totals.users} registered users
+          </p>
+        )}
       </section>
     </div>
   </AdminLayout>;
