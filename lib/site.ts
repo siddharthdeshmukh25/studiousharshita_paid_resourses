@@ -67,6 +67,10 @@ export const DEFAULT_KEYWORDS = [
   'student study guides',
 ];
 
+/** Community channels — empty string hides the button everywhere. */
+export const TELEGRAM_CHANNEL_URL = (process.env.NEXT_PUBLIC_TELEGRAM_CHANNEL_URL || '').trim();
+export const WHATSAPP_CHANNEL_URL = (process.env.NEXT_PUBLIC_WHATSAPP_CHANNEL_URL || '').trim();
+
 export const siteUrl = (path = '/') => `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 
 /** Real PNG (rendered by app/opengraph-image.tsx). Never point OG at an SVG —

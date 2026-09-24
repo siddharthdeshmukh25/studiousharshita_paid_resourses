@@ -25,6 +25,8 @@ interface Resource {
   category: string;
   linkType?: string;
   linkUrl?: string;
+  sampleUrl?: string;
+  bundleResourceIds?: string[];
 }
 
 interface Category {
@@ -55,6 +57,9 @@ function ResourcesPageContent() {
     linkType: 'google_drive' as 'google_drive' | 'notion' | 'docs',
     linkUrl: '',
     category: '',
+    sampleUrl: '',
+    isBundle: false,
+    bundleResourceIds: [] as string[],
   });
   const [resources, setResources] = useState<Resource[]>([]);
   const [resourceMetrics, setResourceMetrics] = useState<Record<string, ResourceMetrics>>({});
@@ -74,6 +79,7 @@ function ResourcesPageContent() {
   const [itemToDelete, setItemToDelete] = useState<{ type: 'resource', id: string } | null>(null);
   const [discountType, setDiscountType] = useState<'percentage' | 'fixed'>('percentage');
   const [resourceAccess, setResourceAccess] = useState<'free' | 'paid'>('paid');
+  const [bundleSearch, setBundleSearch] = useState('');
   const [analyticsTimeFilter, setAnalyticsTimeFilter] = useState<'all' | '7days' | '30days' | '90days'>('all');
   const searchQuery = (searchParams.get('search') || '').trim().toLowerCase();
   const filteredResources = searchQuery
@@ -160,8 +166,12 @@ function ResourcesPageContent() {
       linkType: (resource.linkType || 'google_drive') as 'google_drive' | 'notion' | 'docs',
       linkUrl: resource.linkUrl || '',
       category: resource.category,
+      sampleUrl: resource.sampleUrl || '',
+      isBundle: (resource.bundleResourceIds?.length ?? 0) > 0,
+      bundleResourceIds: resource.bundleResourceIds || [],
     });
     setDiscountType('percentage');
+    setBundleSearch('');
     setShowAddModal(true);
   };
 
@@ -242,6 +252,14 @@ function ResourcesPageContent() {
       setError('Maximum 5 images allowed.');
       return;
     }
+    if (!newResource.linkUrl && (!newResource.isBundle || newResource.bundleResourceIds.length === 0)) {
+      setError('Add a delivery link, or select bundle contents to create a combo pack.');
+      return;
+    }
+    if (newResource.isBundle && newResource.bundleResourceIds.length === 0) {
+      setError('Select at least one resource to include in the bundle.');
+      return;
+    }
     setAddingResource(true);
     setError(null);
 
@@ -263,7 +281,9 @@ function ResourcesPageContent() {
           discount: resourceAccess === 'free' ? 0 : (newResource.discount ? parseFloat(newResource.discount) : 0),
           linkType: newResource.linkType,
           linkUrl: newResource.linkUrl,
-          category: newResource.category,
+          category: newResource.isBundle ? 'Bundles' : newResource.category,
+          sampleUrl: newResource.sampleUrl || undefined,
+          bundleResourceIds: newResource.isBundle ? newResource.bundleResourceIds : [],
         }),
       });
 
@@ -683,7 +703,6 @@ function ResourcesPageContent() {
                   Link Type
                 </label>
                 <select
-                  required
                   value={newResource.linkType}
                   onChange={(e) => setNewResource({ ...newResource, linkType: e.target.value as 'google_drive' | 'notion' | 'docs' })}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-gray-100 transition-all bg-white dark:bg-slate-800"
@@ -700,12 +719,14 @@ function ResourcesPageContent() {
                 </label>
                 <input
                   type="url"
-                  required
                   value={newResource.linkUrl}
                   onChange={(e) => setNewResource({ ...newResource, linkUrl: e.target.value })}
                   className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-gray-100 transition-all bg-white dark:bg-slate-800"
                   placeholder={newResource.linkType === 'google_drive' ? 'https://drive.google.com/file/d/...' : newResource.linkType === 'notion' ? 'https://notion.so/...' : 'https://docs.google.com/document/d/...'}
                 />
+                {newResource.isBundle && (
+                  <p className="mt-2 text-xs text-slate-500 dark:text-gray-400">Optional for bundles — buyers unlock the selected resources below.</p>
+                )}
               </div>
 
               <div className="rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-slate-900 p-5 shadow-sm">
@@ -727,6 +748,102 @@ function ResourcesPageContent() {
                 </select>
                 {categories.length === 0 && (
                   <p className="text-sm text-red-500 mt-1">No categories available. Please add a category first.</p>
+                )}
+              </div>
+
+              {/* Free sample link (optional) */}
+              <div className="rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-slate-900 p-5 shadow-sm">
+                <label className="block text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  Free Sample Link (optional)
+                </label>
+                <input
+                  type="url"
+                  value={newResource.sampleUrl}
+                  onChange={(e) => setNewResource({ ...newResource, sampleUrl: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-gray-100 transition-all bg-white dark:bg-slate-800"
+                  placeholder="https://drive.google.com/file/d/... (public preview)"
+                />
+                <p className="mt-2 text-xs text-slate-500 dark:text-gray-400">
+                  Shown as a “View Free Sample” button on the resource page before purchase.
+                </p>
+              </div>
+
+              {/* Bundle / combo pack mode */}
+              <div className="rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-slate-900 p-5 shadow-sm">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Bundle / Combo Pack</h3>
+                    <p className="mt-0.5 text-xs text-slate-500 dark:text-gray-400">One purchase unlocks all selected resources.</p>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={newResource.isBundle}
+                    onClick={() => setNewResource({ ...newResource, isBundle: !newResource.isBundle, category: !newResource.isBundle ? 'Bundles' : newResource.category })}
+                    className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${newResource.isBundle ? 'bg-blue-500' : 'bg-gray-300 dark:bg-slate-700'}`}
+                  >
+                    <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${newResource.isBundle ? 'left-[22px]' : 'left-0.5'}`} />
+                  </button>
+                </div>
+
+                {newResource.isBundle && (
+                  <div className="mt-4">
+                    <input
+                      type="text"
+                      value={bundleSearch}
+                      onChange={(e) => setBundleSearch(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Search resources to add…"
+                    />
+                    <div className="mt-2 max-h-56 space-y-1.5 overflow-y-auto pr-1">
+                      {resources
+                        .filter((r) => r._id !== editingResource?._id)
+                        .filter((r) => `${r.title} ${r.category}`.toLowerCase().includes(bundleSearch.trim().toLowerCase()))
+                        .map((r) => {
+                          const checked = newResource.bundleResourceIds.includes(r._id);
+                          const cover = r.images && r.images.length > 0 ? r.images[0] : r.thumbnailUrl;
+                          return (
+                            <label
+                              key={r._id}
+                              className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-2 text-sm transition-colors ${
+                                checked
+                                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
+                                  : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600'
+                              }`}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={checked}
+                                onChange={() =>
+                                  setNewResource((current) => ({
+                                    ...current,
+                                    bundleResourceIds: checked
+                                      ? current.bundleResourceIds.filter((id) => id !== r._id)
+                                      : [...current.bundleResourceIds, r._id],
+                                  }))
+                                }
+                                className="h-4 w-4 accent-blue-500"
+                              />
+                              {cover ? (
+                                <img src={cover} alt="" className="h-8 w-8 shrink-0 rounded object-cover" />
+                              ) : (
+                                <span className="h-8 w-8 shrink-0 rounded bg-slate-100 dark:bg-slate-800" />
+                              )}
+                              <span className="min-w-0 flex-1 truncate font-medium text-gray-900 dark:text-gray-100">{r.title}</span>
+                              <span className="shrink-0 text-xs text-slate-500 dark:text-gray-400">₹{r.price}</span>
+                            </label>
+                          );
+                        })}
+                      {resources.filter((r) => r._id !== editingResource?._id).length === 0 && (
+                        <p className="py-2 text-sm text-slate-500 dark:text-gray-400">Create regular resources first, then bundle them together.</p>
+                      )}
+                    </div>
+                    {newResource.bundleResourceIds.length > 0 && (
+                      <p className="mt-2 text-xs font-semibold text-blue-600 dark:text-blue-400">
+                        {newResource.bundleResourceIds.length} resource{newResource.bundleResourceIds.length > 1 ? 's' : ''} in this bundle
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
               </div>

@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { resourceId, rating, comment } = body;
 
-    if (!resourceId || !rating || !comment) {
+    // Comment is optional now — a rating-only review is valid.
+    if (!resourceId || !rating) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -74,13 +75,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Maximum 2 comments allowed per resource' }, { status: 400 });
     }
 
-    // Create new review (user has 0 or 1 review)
+    // Create new review (user has 0 or 1 review). Comment optional.
     const review = await Review.create({
       resourceId,
       userId: session.user.id,
       userName: user.name || user.email || 'Anonymous',
       rating,
-      comment,
+      comment: typeof comment === 'string' ? comment.trim().slice(0, 500) : '',
     });
 
     return NextResponse.json({ review }, { status: 201 });
@@ -101,7 +102,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { reviewId, rating, comment, userName } = body;
 
-    if (!reviewId || !rating || !comment) {
+    if (!reviewId || !rating) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -118,7 +119,7 @@ export async function PUT(request: NextRequest) {
     }
 
     review.rating = rating;
-    review.comment = comment;
+    review.comment = typeof comment === 'string' ? comment.trim().slice(0, 500) : '';
     if (userName) {
       review.userName = userName;
     }

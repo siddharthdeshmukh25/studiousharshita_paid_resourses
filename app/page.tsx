@@ -11,6 +11,7 @@ import {
   FinalCtaSection,
 } from '@/components/home/HomeSections';
 import GuidesTeaser from '@/components/home/GuidesTeaser';
+import OffersStrip from '@/components/home/OffersStrip';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import BlueDotLoader from '@/components/ui/BlueDotLoader';
@@ -67,6 +68,9 @@ export default function Home() {
 
         {/* 5. Shop — paid resources */}
         <ShopSection />
+
+        {/* 5.5 Flash offers — live coupons (hidden automatically when none are running) */}
+        <OffersStrip />
 
         {/* 6. Community quotes */}
         <CommunityQuotesSection />

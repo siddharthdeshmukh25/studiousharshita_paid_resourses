@@ -382,7 +382,7 @@ export function NewsletterSection() {
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: email.trim(), source: 'lead_magnet_planner' }),
       });
       const data = (await res.json()) as { message?: string };
       if (!res.ok) throw new Error(data.message || 'Could not subscribe right now.');
@@ -404,7 +404,8 @@ export function NewsletterSection() {
             come hang out in my corner of the internet.
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[#4A443B] sm:text-base">
-            Get useful resources, study finds, opportunities and occasional motivation straight to your inbox.
+            Join and a free printable study planner lands in your inbox right away — plus useful resources, study
+            finds and occasional motivation after that.
           </p>
           <form onSubmit={handleSubscribe} className="mx-auto mt-7 flex max-w-md flex-col gap-2.5 sm:flex-row">
             <label htmlFor="newsletter-email" className="sr-only">Your email address</label>

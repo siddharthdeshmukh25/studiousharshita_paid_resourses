@@ -1,13 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourceDetailSkeleton from '@/components/ui/ResourceDetailSkeleton';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
-import { Star, Loader2, Send, X, Share2, Heart, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, Loader2, Send, X, Share2, Heart, ExternalLink, ChevronLeft, ChevronRight, Eye, Package, Gift, Sparkles, Lock, RefreshCw, ShieldCheck, Check, ShoppingBag, Ticket, Zap, RotateCcw } from 'lucide-react';
+import RelatedResources from '@/components/resource/RelatedResources';
+import RecentlyViewed, { trackRecentlyViewed } from '@/components/resource/RecentlyViewed';
+import QuickRatingModal from '@/components/resource/QuickRatingModal';
+import { useToast } from '@/components/ui/Toast';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { formatPrice, formatDiscountedPrice } from '@/lib/format';
 
@@ -22,6 +26,8 @@ interface Resource {
   category: string;
   linkType?: string;
   linkUrl?: string;
+  sampleUrl?: string;
+  bundleResourceIds?: string[];
 }
 
 interface Review {
@@ -40,6 +46,7 @@ export default function ResourceDetailPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { isResourceWishlisted, refreshWishlist } = useWishlist();
+  const { toast } = useToast();
   const [resource, setResource] = useState<Resource | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [avgRating, setAvgRating] = useState(0);
@@ -64,10 +71,24 @@ export default function ResourceDetailPage() {
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
   const [reviewModalError, setReviewModalError] = useState<string | null>(null);
+  const [hoverRating, setHoverRating] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [pageStartTime, setPageStartTime] = useState<number>(Date.now());
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [bundleChildren, setBundleChildren] = useState<Array<{ _id: string; title: string; price: number; images?: string[]; thumbnailUrl?: string }>>([]);
+  const [showReviewNudge, setShowReviewNudge] = useState(false);
+  // Quick rating popup: fires once the student has genuinely explored the page —
+  // opened the resource AND scrolled through ~70% of it.
+  const [showQuickRating, setShowQuickRating] = useState(false);
+  const [quickSubmitting, setQuickSubmitting] = useState(false);
+  const [quickError, setQuickError] = useState<string | null>(null);
+  const [quickThanks, setQuickThanks] = useState(false);
+  const [openedOnce, setOpenedOnce] = useState(false);
+  const bottomReachedRef = useRef(false);
   const isWishlisted = isResourceWishlisted(params.id as string);
+  // Reviews are owned by the MongoDB user id (what the API stores), so every
+  // "is this my review?" check must compare ids — not the email.
+  const currentUserId = (session?.user as { id?: string } | undefined)?.id;
   const isFreeResource = resource?.price === 0;
   const galleryImages = resource?.images && resource.images.length > 0 ? resource.images : resource?.thumbnailUrl ? [resource.thumbnailUrl] : [];
   const currentImage = galleryImages[selectedImageIndex] || '/placeholder.png';
@@ -96,6 +117,133 @@ export default function ResourceDetailPage() {
     setSelectedImageIndex(0);
   }, [params.id]);
 
+  // Review nudge: signed-in users who have the resource (purchased or free) but
+  // have not reviewed it yet get one gentle, dismissible reminder. Dismissal is
+  // remembered per resource so we never nag twice.
+  useEffect(() => {
+    if (status === 'loading') return;
+    if (!session?.user?.email) return;
+    if (!(isPurchased || isFreeResource)) return;
+    if (reviews.some((review) => review.userId === currentUserId)) return;
+    try {
+      if (window.localStorage.getItem(`sh_review_nudge_${params.id}`)) return;
+    } catch {
+      /* storage unavailable — still fine to show once */
+    }
+    setShowReviewNudge(true);
+  }, [session, status, isPurchased, isFreeResource, reviews, params.id, currentUserId]);
+
+  const dismissReviewNudge = () => {
+    setShowReviewNudge(false);
+    try {
+      window.localStorage.setItem(`sh_review_nudge_${params.id}`, '1');
+    } catch {
+      /* ignore */
+    }
+  };
+
+  // Shared popup guards: never show if already rated this resource, already
+  // shown/dismissed this session, not signed in, or not actually owned.
+  const quickRatingBlocked = () => {
+    if (!session?.user?.email) return true;
+    if (!(isPurchased || isFreeResource)) return true;
+    if (reviews.some((review) => review.userId === currentUserId)) return true;
+    try {
+      if (window.sessionStorage.getItem(`sh_quick_rating_${params.id}`) === '1') return true;
+    } catch {
+      /* ignore */
+    }
+    return false;
+  };
+
+  const fireQuickRating = () => {
+    if (openedOnce) return;
+    setOpenedOnce(true);
+    setShowQuickRating(true);
+    try {
+      window.sessionStorage.setItem(`sh_quick_rating_${params.id}`, '1');
+    } catch {
+      /* ignore */
+    }
+  };
+
+  // Scroll trigger — a full exploration CYCLE: the student reached the bottom
+  // (95%+) and then scrolled back up (below 35%). Reaching the bottom alone
+  // shows nothing; the popup waits until they come back up. One per session.
+  useEffect(() => {
+    if (status === 'loading') return;
+    if (openedOnce) return;
+
+    const handleScroll = () => {
+      if (openedOnce) return;
+      if (quickRatingBlocked()) return;
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      // Needs a real scrollable page; short pages never trigger via scroll.
+      if (scrollable <= 0) return;
+      const depth = (window.scrollY / scrollable) * 100;
+
+      if (depth >= 95) {
+        bottomReachedRef.current = true;
+        return;
+      }
+      // Cycle complete: touched the bottom earlier, now back near the top.
+      if (bottomReachedRef.current && depth <= 35) {
+        bottomReachedRef.current = false;
+        fireQuickRating();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, status, isPurchased, isFreeResource, openedOnce, params.id, reviews, currentUserId]);
+
+  const handleQuickRatingSubmit = async (rating: number, comment: string) => {
+    setQuickSubmitting(true);
+    setQuickError(null);
+    try {
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          resourceId: params.id,
+          userName: session?.user?.name || 'Anonymous',
+          rating,
+          comment,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to submit rating');
+
+      setQuickThanks(true);
+      // Refresh the reviews list in the background.
+      fetch(`/api/reviews?resourceId=${params.id}`)
+        .then((res) => res.json())
+        .then((reviewsData) => {
+          setReviews(reviewsData.reviews || []);
+          setAvgRating(reviewsData.avgRating || 0);
+        })
+      } catch (err) {
+      setQuickError(err instanceof Error ? err.message : 'Failed to submit rating');
+    } finally {
+      setQuickSubmitting(false);
+    }
+  };
+
+  const closeQuickRating = () => {
+    // Whether submitted or dismissed — never pop again for this resource
+    // in this browser session.
+    try {
+      window.sessionStorage.setItem(`sh_quick_rating_${params.id}`, '1');
+    } catch {
+      /* ignore */
+    }
+    setShowQuickRating(false);
+  };
+
   // Keyboard navigation for the image lightbox
   useEffect(() => {
     if (!showImageModal) return;
@@ -119,8 +267,26 @@ export default function ResourceDetailPage() {
       const source = searchParams.get('ref') || 'direct';
       const response = await fetch(`/api/resources/${params.id}/open-drive?ref=${encodeURIComponent(source)}`);
       const data = await response.json();
-      if (response.ok && data.driveUrl) window.open(data.driveUrl, '_blank');
-      else alert(data.error || 'Failed to open resource');
+      if (response.ok && data.driveUrl) {
+        window.open(data.driveUrl, '_blank');
+        // Open tracking: the popup is earned by repeated use — the 4th open in
+        // this browser, or any open made 15+ minutes after the previous one
+        // (a returning student). The first open never triggers it.
+        let openCount = 0;
+        let lastOpenAt = 0;
+        try {
+          openCount = Number(window.localStorage.getItem(`sh_open_count_${params.id}`) || '0') + 1;
+          window.localStorage.setItem(`sh_open_count_${params.id}`, String(openCount));
+          lastOpenAt = Number(window.localStorage.getItem(`sh_last_open_${params.id}`) || '0');
+          window.localStorage.setItem(`sh_last_open_${params.id}`, String(Date.now()));
+        } catch {
+          /* ignore */
+        }
+        const returnedAfterLongTime = lastOpenAt > 0 && Date.now() - lastOpenAt > 15 * 60 * 1000;
+        if (!quickRatingBlocked() && (returnedAfterLongTime || openCount >= 4)) {
+          fireQuickRating();
+        }
+      } else alert(data.error || 'Failed to open resource');
     } catch {
       alert('Failed to open resource');
     } finally {
@@ -221,6 +387,18 @@ export default function ResourceDetailPage() {
         setReviews(reviewsData.reviews || []);
         setAvgRating(reviewsData.avgRating || 0);
 
+        const loadedResource = resourceData.resource as Resource | null;
+        if (loadedResource?._id) trackRecentlyViewed(loadedResource._id);
+        if (loadedResource?.bundleResourceIds?.length) {
+          // Resolve bundle children (title/price/cover) through the public ids endpoint.
+          fetch(`/api/resources?ids=${encodeURIComponent(loadedResource.bundleResourceIds.join(','))}`)
+            .then((res) => res.json() as Promise<{ resources?: Array<{ _id: string; title: string; price: number; images?: string[]; thumbnailUrl?: string }> }>)
+            .then((data) => setBundleChildren(data.resources || []))
+            .catch(() => setBundleChildren([]));
+        } else {
+          setBundleChildren([]);
+        }
+
         // Check if user has purchased this resource
         if (session) {
           try {
@@ -252,11 +430,8 @@ export default function ResourceDetailPage() {
   }, [params.id, session]);
 
   const handleSubmitReview = async () => {
-    console.log('handleSubmitReview called', { session, userRating, reviewComment, editingReviewId });
-    
-    if (!session || userRating === 0 || !reviewComment.trim()) {
-      console.log('Validation failed', { session: !!session, userRating, reviewComment: reviewComment.trim() });
-      setReviewModalError('Please select a rating and write a review');
+    if (!session || userRating === 0) {
+      setReviewModalError('Please select a rating');
       return;
     }
 
@@ -285,10 +460,9 @@ export default function ResourceDetailPage() {
           body: JSON.stringify(reviewData),
         });
       } else {
-        // Create new review
+        // Create new review — identity comes from the server session.
         const reviewData = {
           resourceId: params.id,
-          userId: session.user?.email,
           userName: session.user?.name || 'Anonymous',
           rating: userRating,
           comment: reviewComment,
@@ -306,28 +480,30 @@ export default function ResourceDetailPage() {
       }
 
       data = await response.json();
-      console.log('Review response:', data, 'Status:', response.status);
 
       if (!response.ok) {
-        console.error('API error:', data);
-        throw new Error(data.error || 'Failed to submit review');
+        throw new Error(data.error || 'Could not submit your review. Please try again.');
       }
 
       // Refresh reviews
       const reviewsRes = await fetch(`/api/reviews?resourceId=${params.id}`);
       const reviewsData = await reviewsRes.json();
-      console.log('Refreshed reviews:', reviewsData);
       setReviews(reviewsData.reviews || []);
       setAvgRating(reviewsData.avgRating || 0);
-      
-      // Reset form
+
+      // Reset form + confirm with a themed toast
       setUserRating(0);
       setReviewComment('');
       setEditingReviewId(null);
       setShowReviewModal(false);
+      setHoverRating(0);
+      toast('success', editingReviewId ? 'Your review has been updated ♡' : 'Thanks for sharing! Your review is live ♡');
     } catch (err) {
-      console.error('Review submission error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to submit review');
+      const message = err instanceof Error ? err.message : 'Could not submit your review. Please try again.';
+      // API errors (like the 2-comment limit) surface as a themed toast near the
+      // top of the screen; the modal stays open so nothing typed is lost.
+      setReviewModalError(message);
+      toast('error', message);
     } finally {
       setSubmittingReview(false);
     }
@@ -363,9 +539,10 @@ export default function ResourceDetailPage() {
       const reviewsData = await reviewsRes.json();
       setReviews(reviewsData.reviews || []);
       setAvgRating(reviewsData.avgRating || 0);
+      toast('success', 'Your review has been deleted');
     } catch (err) {
       console.error('Delete review error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to delete review');
+      toast('error', err instanceof Error ? err.message : 'Could not delete your review.');
     } finally {
       setReviewToDelete(null);
     }
@@ -624,21 +801,42 @@ export default function ResourceDetailPage() {
               </div>
 
               {/* Price and Checkout */}
-              <div className="bg-gradient-to-br from-[var(--accent-soft)] to-[var(--butter-soft)] rounded-xl shadow-sm border border-[var(--accent-soft-2)] p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-4">
+              <div className="bg-gradient-to-br from-[var(--accent-soft)] to-[var(--butter-soft)] rounded-xl shadow-sm border border-[var(--accent-soft-2)] p-3.5 sm:p-6">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <div>
                     {isFreeResource ? (
-                      <div><p className="text-2xl font-bold text-[var(--accent)] md:text-3xl">Free</p><p className="mt-1 text-sm font-medium text-[var(--accent-deep)]">Instant access after login</p></div>
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[var(--accent)] shadow-sm sm:h-11 sm:w-11 sm:rounded-xl">
+                          <Gift className="h-4 w-4 text-white sm:h-5 sm:w-5" />
+                        </span>
+                        <div>
+                          <div className="flex items-center gap-1.5 sm:gap-2">
+                            <p className="text-xl font-bold text-[var(--accent)] sm:text-2xl md:text-3xl">Free</p>
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[var(--accent-soft-2)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--accent-deep)] sm:px-2.5 sm:py-1 sm:text-[11px]">
+                              <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                              100% free
+                            </span>
+                          </div>
+                          <p className="mt-0.5 text-xs font-medium text-[var(--accent-deep)] sm:text-sm">Instant access after login</p>
+                        </div>
+                      </div>
                     ) : resource.discount && resource.discount > 0 ? (
                       <div>
-                        <p className="text-sm text-[#6B6257] line-through">{formatPrice(resource.price)}</p>
-                        <p className="text-2xl md:text-3xl font-bold text-[var(--accent)]">
-                          {formatDiscountedPrice(resource.price, resource.discount)}
+                        <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                          <span className="text-sm text-[#6B6257] line-through">{formatPrice(resource.price)}</span>
+                          <span className="text-xl font-bold text-[var(--accent)] sm:text-2xl md:text-3xl">
+                            {formatDiscountedPrice(resource.price, resource.discount)}
+                          </span>
+                          <span className="rounded-full border border-red-100 bg-red-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-600 sm:text-[11px]">
+                            {Math.round(resource.discount)}% off
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs font-semibold text-[var(--accent-deep)] sm:text-sm">
+                          You save {formatPrice(Math.round(resource.price * (resource.discount / 100)))}
                         </p>
-                        <p className="text-sm text-red-500 font-semibold">{Math.round(resource.discount)}% OFF</p>
                       </div>
                     ) : (
-                      <p className="text-2xl md:text-3xl font-bold text-[#1A1A1A]">
+                      <p className="text-xl font-bold text-[#1A1A1A] sm:text-2xl md:text-3xl">
                         {formatPrice(resource.price)}
                       </p>
                     )}
@@ -674,17 +872,18 @@ export default function ResourceDetailPage() {
                   </div>
                 )}
 
-                {!isFreeResource && <div className="mb-4 rounded-lg border border-[var(--accent-soft-2)] bg-[#FFFDF8]/75 p-3">
-                  <label htmlFor="resource-coupon" className="mb-2 block text-xs font-bold uppercase tracking-wide text-[#475569]">Have a coupon?</label>
-                  <div className="flex gap-2">
+                {!isFreeResource && <div className="mb-3 sm:mb-4">
+                  <div className="flex h-9 items-center gap-2 rounded-full border border-[var(--line)] bg-[#FFFDF8] p-1 pl-3.5 transition-all focus-within:border-[var(--accent)] focus-within:shadow-sm sm:h-10 sm:p-1.5 sm:pl-4">
+                    <Ticket className="h-3.5 w-3.5 shrink-0 text-[var(--accent)] sm:h-4 sm:w-4" />
                     <input
                       id="resource-coupon"
+                      aria-label="Coupon code"
                       value={couponCode}
                       onChange={(event) => { setCouponCode(event.target.value.toUpperCase()); setCouponDiscount(null); setCouponMessage(null); }}
-                      placeholder="Enter code"
-                      className="min-w-0 flex-1 rounded-md border border-[var(--line)] bg-[#FFFDF8] px-3 py-2 text-sm font-semibold uppercase text-[#0F172A] outline-none focus:border-[var(--accent)]"
+                      placeholder="Coupon code"
+                      className="h-full min-w-0 flex-1 border-0 bg-transparent text-xs font-semibold uppercase tracking-wide text-[#0F172A] outline-none placeholder:font-medium placeholder:text-[13px] placeholder:normal-case placeholder:tracking-normal placeholder:text-[#A8A093] sm:text-[13px]"
                     />
-                    <button type="button" onClick={applyCoupon} disabled={couponLoading || !couponCode.trim()} className="rounded-md bg-[#0F172A] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1E293B] disabled:cursor-not-allowed disabled:opacity-50">
+                    <button type="button" onClick={applyCoupon} disabled={couponLoading || !couponCode.trim()} className="h-7 shrink-0 rounded-full bg-[var(--accent)] px-3 text-[11px] font-bold uppercase tracking-wide text-white transition-colors hover:bg-[var(--accent-deep)] disabled:cursor-not-allowed disabled:opacity-40 sm:h-8 sm:px-4 sm:text-xs">
                       {couponLoading ? 'Checking' : 'Apply'}
                     </button>
                   </div>
@@ -693,10 +892,15 @@ export default function ResourceDetailPage() {
                 </div>}
 
                 {isPurchased || isFreeResource ? (
+                  <>
                   <button
                     onClick={openResource}
                     disabled={openResourceLoading}
-                    className="w-full bg-[var(--accent)] text-white py-3 rounded-lg hover:bg-[var(--accent-deep)] transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`w-full py-3 sm:py-3.5 rounded-xl text-sm sm:text-base text-white transition-all font-semibold flex items-center justify-center space-x-2 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed ${
+                      isFreeResource
+                        ? 'bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] hover:brightness-110'
+                        : 'bg-[var(--accent)] hover:bg-[var(--accent-deep)]'
+                    }`}
                   >
                     {openResourceLoading ? (
                       <>
@@ -705,19 +909,64 @@ export default function ResourceDetailPage() {
                       </>
                     ) : (
                       <>
-                        <ExternalLink className="h-5 w-5" />
+                        {isFreeResource ? <Gift className="h-4 w-4 sm:h-5 sm:w-5" /> : <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5" />}
                         <span>{isFreeResource ? 'Get Free Resource' : 'Open Resource'}</span>
                       </>
                     )}
                   </button>
+                  {isFreeResource && (
+                    <>
+                      <div className="mt-2.5 grid grid-cols-3 gap-1.5 sm:mt-3 sm:gap-2">
+                        {[{ icon: Lock, label: 'No card needed' }, { icon: RefreshCw, label: 'Lifetime access' }, { icon: ShieldCheck, label: 'Safe & secure' }].map(({ icon: Icon, label }) => (
+                          <div
+                            key={label}
+                            className="flex flex-col items-center gap-1 rounded-lg border border-[var(--accent-soft-2)] bg-[#FFFDF8]/80 px-1.5 py-2 text-center transition-colors hover:border-[var(--accent)] sm:gap-1.5 sm:py-2.5"
+                          >
+                            <Icon className="h-3.5 w-3.5 text-[var(--accent)] sm:h-4 sm:w-4" />
+                            <span className="text-[10px] font-semibold leading-tight text-[#4A443B] sm:text-[11px]">{label}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6B6257] sm:mt-2.5 sm:text-xs">
+                        <Check className="h-3 w-3 text-[var(--accent)] sm:h-3.5 sm:w-3.5" />
+                        Just log in and it&apos;s yours — no hidden steps
+                      </p>
+                    </>
+                  )}
+                  </>
                 ) : (
+                  <>
                   <button
                     onClick={handleCheckout}
                     disabled={checkoutLoading}
-                    className="w-full bg-[var(--accent)] text-white py-3 rounded-lg hover:bg-[var(--accent-deep)] transition-colors font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] text-white py-3 rounded-xl hover:brightness-110 transition-all font-semibold text-sm sm:text-base sm:py-3.5 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {checkoutLoading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Processing payment...</span></> : <><ExternalLink className="h-5 w-5" /><span>Buy Resource</span></>}
+                    {checkoutLoading ? <><Loader2 className="h-4 w-4 animate-spin sm:h-5 sm:w-5" /><span>Processing payment...</span></> : <><ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" /><span>Buy Resource</span></>}
                   </button>
+                  {resource.sampleUrl && (
+                    <a
+                      href={resource.sampleUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 w-full bg-[#FFFDF8] border-2 border-[var(--accent)] text-[var(--accent-deep)] py-2.5 rounded-lg hover:bg-[var(--accent-soft)] transition-colors font-semibold flex items-center justify-center space-x-2 text-sm"
+                    >
+                      <Eye className="h-4 w-4" />
+                      <span>View Free Sample</span>
+                    </a>
+                  )}
+                  <div className="mt-2.5 grid grid-cols-3 gap-1.5 sm:mt-3 sm:gap-2">
+                    {[{ icon: ShieldCheck, label: 'Secure payment' }, { icon: Zap, label: 'Instant access' }, { icon: RotateCcw, label: 'Easy refunds' }].map(({ icon: Icon, label }) => (
+                      <div key={label} className="flex flex-col items-center gap-1 rounded-lg border border-[var(--accent-soft-2)] bg-[#FFFDF8]/80 px-1.5 py-2 text-center transition-colors hover:border-[var(--accent)] sm:gap-1.5 sm:py-2.5">
+                        <Icon className="h-3.5 w-3.5 text-[var(--accent)] sm:h-4 sm:w-4" />
+                        <span className="text-[10px] font-semibold leading-tight text-[#4A443B] sm:text-[11px]">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6B6257] sm:mt-2.5 sm:text-xs">
+                    <Check className="h-3 w-3 text-[var(--accent)] sm:h-3.5 sm:w-3.5" />
+                    One-time payment — lifetime access
+                  </p>
+                  </>
                 )}
               </div>
 
@@ -732,11 +981,83 @@ export default function ResourceDetailPage() {
                   dangerouslySetInnerHTML={{ __html: resource.description }}
                 />
               </div>
+
+              {/* Bundle contents — what you get when you buy this combo */}
+              {bundleChildren.length > 0 && (
+                <div className="bg-gradient-to-br from-[var(--butter-soft)] to-[var(--accent-soft)] rounded-2xl p-4 sm:p-6 border border-[var(--accent-soft-2)]">
+                  <h3 className="font-semibold text-[#1A1A1A] mb-1 text-base sm:text-lg flex items-center">
+                    <Package className="mr-2 h-5 w-5 text-[var(--accent)]" />
+                    What&apos;s inside this bundle
+                  </h3>
+                  <p className="mb-4 text-xs text-[#6B6257]">All of these unlock together with one purchase.</p>
+                  <ul className="space-y-2">
+                    {bundleChildren.map((child) => {
+                      const childCover = child.images && child.images.length > 0 ? child.images[0] : child.thumbnailUrl;
+                      return (
+                        <li key={child._id}>
+                          <a
+                            href={`/resource/${child._id}`}
+                            className="flex items-center gap-3 rounded-xl border border-[var(--line)] bg-[#FFFDF8] p-2.5 transition-all hover:border-[var(--accent)] hover:shadow-sm"
+                          >
+                            <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-lg bg-[var(--accent-soft)]">
+                              {childCover ? (
+                                <img src={childCover} alt="" className="h-full w-full object-cover" />
+                              ) : (
+                                <Package className="h-4 w-4 text-[var(--accent)]" />
+                              )}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block truncate text-sm font-semibold text-[#1A1A1A]">{child.title}</span>
+                              <span className="block text-xs text-[#6B6257]">{formatPrice(child.price)} value</span>
+                            </span>
+                            <ChevronRight className="h-4 w-4 shrink-0 text-[#A29785]" />
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <p className="mt-3 text-sm font-bold text-[var(--accent-deep)]">
+                    Total value {formatPrice(bundleChildren.reduce((sum, child) => sum + (child.price || 0), 0))} — bundle price {formatPrice(resource.discount && resource.discount > 0 ? resource.price * (1 - resource.discount / 100) : resource.price)}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Comments Block — desktop: pinned under the image (left column row 2) + sticky while the long details column scrolls; mobile: after details */}
             <div className="order-3 mt-1 w-full min-w-0 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:self-start lg:sticky lg:top-20">
               <div className="bg-gradient-to-br from-[var(--sage-soft)] to-[var(--accent-soft)] rounded-2xl p-3 sm:p-6 border border-[var(--line)]">
+                {/* Review nudge — one-time, dismissible, per resource */}
+                {showReviewNudge && (
+                  <div className="mb-3 rounded-xl border-2 border-dashed border-[var(--accent)] bg-[#FFFDF8] p-3 sm:p-4">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-hand text-lg leading-snug text-[#1A1A1A]">
+                        enjoying the notes? ♡ tell other students how they were —
+                      </p>
+                      <button
+                        onClick={dismissReviewNudge}
+                        aria-label="Dismiss review reminder"
+                        className="shrink-0 rounded-full p-1 text-[#A29785] transition-colors hover:bg-[var(--accent-soft)] hover:text-[#1A1A1A]"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <button
+                        onClick={() => setShowReviewModal(true)}
+                        className="rounded-lg bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] px-4 py-2 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg"
+                      >
+                        ⭐ Rate this resource
+                      </button>
+                      <button
+                        onClick={dismissReviewNudge}
+                        className="text-xs font-medium text-[#6B6257] transition-colors hover:text-[#1A1A1A]"
+                      >
+                        Maybe later
+                      </button>
+                    </div>
+                    <p className="mt-2 text-[11px] text-[#A29785]">Takes 20 seconds — it genuinely helps other students decide. ♡</p>
+                  </div>
+                )}
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-semibold text-[#1A1A1A] text-lg flex items-center">
                     <span className="w-1 h-6 bg-[var(--accent)] rounded-full mr-3"></span>
@@ -805,12 +1126,14 @@ export default function ResourceDetailPage() {
                           </span>
                         </div>
 
-                        {/* Review Text */}
-                        <p className="text-xs sm:text-sm text-[#4A443B] mt-2 leading-relaxed break-words">
-                          {review.comment}
-                        </p>
+                        {/* Review Text — rating-only reviews have no comment */}
+                        {review.comment && (
+                          <p className="text-xs sm:text-sm text-[#4A443B] mt-2 leading-relaxed break-words">
+                            {review.comment}
+                          </p>
+                        )}
                         
-                        {session?.user?.email === review.userId && (
+                        {currentUserId && review.userId === currentUserId && (
                           <div className="mt-2 flex gap-3">
                             <button
                               onClick={() => handleEditReview(review)}
@@ -837,6 +1160,10 @@ export default function ResourceDetailPage() {
               </div>
             </div>
           </div>
+
+          {/* Related resources + recently viewed shelves */}
+          <RelatedResources resourceId={params.id as string} />
+          <RecentlyViewed currentResourceId={params.id as string} />
         </div>
       </main>
 
@@ -890,15 +1217,115 @@ export default function ResourceDetailPage() {
         </div>
       )}
 
+      {/* Quick Rating Popup — fires when the user returns from the opened file */}
+      <QuickRatingModal
+        isOpen={showQuickRating}
+        resourceName={resource?.title || 'this resource'}
+        submitting={quickSubmitting}
+        error={quickError}
+        thanked={quickThanks}
+        onSubmit={handleQuickRatingSubmit}
+        onClose={closeQuickRating}
+      />
+
       {/* Review Modal */}
       {showReviewModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-[#FFFDF8] rounded-2xl shadow-2xl max-w-sm w-full mx-4">
-            <div className="p-4 sm:p-6 border-b border-[var(--line)] bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] rounded-t-2xl">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg sm:text-xl font-semibold text-white">
-                  {editingReviewId ? 'Edit Your Review' : 'Write Your Review'}
-                </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => !submittingReview && setShowReviewModal(false)}>
+          <div
+            className="bg-[#FFFDF8] rounded-3xl shadow-2xl max-w-sm w-full mx-4 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Compact gradient header */}
+            <div className="relative bg-gradient-to-br from-[var(--accent)] to-[var(--accent-deep)] px-6 pt-5 pb-6 text-center">
+              <button
+                onClick={() => {
+                  setShowReviewModal(false);
+                  setEditingReviewId(null);
+                  setUserRating(0);
+                  setReviewComment('');
+                  setReviewModalError(null);
+                  setHoverRating(0);
+                }}
+                aria-label="Close"
+                className="absolute right-3 top-3 rounded-full p-1.5 text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+              >
+                <X className="h-4 w-4" />
+              </button>
+              <p className="font-hand text-2xl text-white">
+                {editingReviewId ? 'Update your review' : 'Share your experience'}
+              </p>
+              <p className="mt-0.5 text-xs font-medium text-white/85">rate it and add a comment if you like ♡</p>
+            </div>
+
+            <div className="px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
+              {reviewModalError && (
+                <div className="mb-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-center text-xs font-semibold text-red-700">
+                  {reviewModalError}
+                </div>
+              )}
+
+              {/* Stars — hover preview like the quick popup */}
+              <div
+                className="flex items-center justify-center gap-2"
+                onMouseLeave={() => setHoverRating(0)}
+              >
+                {[...Array(5)].map((_, i) => {
+                  const value = i + 1;
+                  const active = value <= (hoverRating || userRating);
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      disabled={submittingReview}
+                      onMouseEnter={() => setHoverRating(value)}
+                      onClick={() => setUserRating(value)}
+                      aria-label={`Rate ${value} star${value > 1 ? 's' : ''}`}
+                      className="transition-transform hover:scale-125 active:scale-110"
+                    >
+                      <Star
+                        className={`h-9 w-9 transition-colors ${
+                          active ? 'fill-[#D9A93F] text-[#D9A93F]' : 'text-[#D8CFC0]'
+                        }`}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Comment textarea — always visible, optional */}
+              <div className="mt-4">
+                <textarea
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value.slice(0, 200))}
+                  placeholder="Tell other students what you liked… (optional)"
+                  maxLength={200}
+                  rows={4}
+                  className="w-full resize-none rounded-2xl border border-[var(--line)] bg-white px-4 py-3 text-sm text-[#1A1A1A] placeholder:text-[#A29785] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-ring)]"
+                />
+                <div className="mt-1 text-right text-[11px] text-[#A29785]">
+                  {reviewComment.length}/200
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="mt-3 space-y-2">
+                <button
+                  onClick={handleSubmitReview}
+                  disabled={submittingReview || userRating === 0}
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--accent)] py-3 text-sm font-bold text-white shadow-md transition-all hover:bg-[var(--accent-deep)] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {submittingReview ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Submitting…</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      <span>{editingReviewId ? 'Update Review' : 'Post Review'}</span>
+                    </>
+                  )}
+                </button>
                 <button
                   onClick={() => {
                     setShowReviewModal(false);
@@ -906,71 +1333,12 @@ export default function ResourceDetailPage() {
                     setUserRating(0);
                     setReviewComment('');
                     setReviewModalError(null);
+                    setHoverRating(0);
                   }}
-                  className="text-white hover:text-[var(--butter)] transition-colors"
-                >
-                  <X className="h-5 w-5 sm:h-6 sm:w-6" />
-                </button>
-              </div>
-            </div>
-
-            <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
-              {reviewModalError && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                  {reviewModalError}
-                </div>
-              )}
-              <div>
-                <label className="block text-xs sm:text-sm font-semibold text-[#1A1A1A] mb-2">Your Rating</label>
-                <div className="flex items-center space-x-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      onClick={() => setUserRating(i + 1)}
-                      className={`h-6 w-6 sm:h-8 sm:w-8 cursor-pointer hover:scale-110 transition-transform ${
-                        i < userRating ? 'text-yellow-400 fill-yellow-400' : 'text-[#D8CFC0]'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="block text-xs sm:text-sm font-semibold text-[#1A1A1A] mb-2">Your Review</label>
-                <textarea
-                  value={reviewComment}
-                  onChange={(e) => setReviewComment(e.target.value)}
-                  placeholder="Write a review..."
-                  maxLength={200}
-                  className="w-full px-2 py-2 sm:px-3 sm:py-2.5 border border-[var(--line)] rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-[#1A1A1A] resize-none text-xs sm:text-sm break-words"
-                  rows={4}
-                />
-                <div className="mt-1 text-xs text-[#6B6257] text-right">
-                  {reviewComment.length}/200 characters
-                </div>
-              </div>
-              <div className="flex justify-end space-x-2 sm:space-x-3 pt-2 sm:pt-4">
-                <button
-                  onClick={() => setShowReviewModal(false)}
-                  className="px-3 py-1.5 sm:px-6 sm:py-3 border border-[var(--line)] rounded-xl text-[#4A443B] hover:bg-[var(--background)] transition-colors font-medium text-xs sm:text-base"
+                  disabled={submittingReview}
+                  className="mx-auto block text-xs font-medium text-[#A29785] transition-colors hover:text-[#6B6257]"
                 >
                   Cancel
-                </button>
-                <button
-                  onClick={handleSubmitReview}
-                  disabled={submittingReview}
-                  className="px-3 py-1.5 sm:px-6 sm:py-3 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-deep)] text-white rounded-xl hover:from-[var(--accent-deep)] hover:to-[var(--accent)] disabled:opacity-50 flex items-center space-x-2 transition-all font-medium shadow-lg text-xs sm:text-base"
-                >
-                  {submittingReview ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Submitting...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4" />
-                      <span>Submit Review</span>
-                    </>
-                  )}
                 </button>
               </div>
             </div>

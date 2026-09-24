@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { hasValidCredentials } from '@/lib/drive/tokenManager';
 import { hasAdminSession } from '@/lib/auth/admin';
+import mongoose from 'mongoose';
 
 export async function GET(
   request: NextRequest,
@@ -70,6 +71,24 @@ export async function PUT(
       );
     }
 
+    // Bundles: optional child list. A non-bundle still needs its delivery link.
+    const rawBundleIds: unknown[] = Array.isArray(body.bundleResourceIds) ? body.bundleResourceIds : [];
+    const bundleIds: string[] = Array.from(
+      new Set(
+        rawBundleIds.filter(
+          (rid): rid is string =>
+            typeof rid === 'string' && rid !== id && mongoose.Types.ObjectId.isValid(rid)
+        )
+      )
+    );
+    const linkUrl = typeof body.linkUrl === 'string' ? body.linkUrl : '';
+    if (!linkUrl && bundleIds.length === 0) {
+      return NextResponse.json(
+        { error: 'A delivery link is required (or add bundle contents to keep it a combo pack).' },
+        { status: 400 }
+      );
+    }
+
     // Keep credential validation for paid resources only. Free resources can
     // point to a publicly shared Drive/Docs link.
     const isPaidResource = Number(body.price) > 0;
@@ -112,9 +131,14 @@ export async function PUT(
         price: body.price,
         discount: body.discount,
         images: body.images,
+        // Keep the first image as the canonical thumbnail so share previews
+        // (og:image) keep working if the admin reorders the gallery.
+        thumbnailUrl: body.images[0],
         linkType: body.linkType,
-        linkUrl: body.linkUrl,
+        linkUrl: linkUrl || '',
         category: body.category,
+        sampleUrl: typeof body.sampleUrl === 'string' && body.sampleUrl.trim() ? body.sampleUrl.trim() : undefined,
+        bundleResourceIds: bundleIds,
       },
       { returnDocument: 'after' }
     );

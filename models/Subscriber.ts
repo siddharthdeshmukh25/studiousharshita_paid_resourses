@@ -2,6 +2,8 @@ import mongoose, { Schema, Model } from 'mongoose';
 
 interface ISubscriber {
   email: string;
+  /** Where the signup came from (e.g. footer, lead_magnet_planner) — analytics only. */
+  source?: string;
   createdAt: Date;
 }
 
@@ -12,6 +14,12 @@ const SubscriberSchema = new Schema<ISubscriber>(
       required: true,
       lowercase: true,
       trim: true,
+    },
+    source: {
+      type: String,
+      required: false,
+      trim: true,
+      maxlength: 60,
     },
   },
   {

@@ -10,6 +10,10 @@ interface IResource {
   linkType: 'google_drive' | 'notion' | 'docs';
   linkUrl: string;
   category: string;
+  /** Optional public preview link (Google Drive / Docs / Notion sample) — shown as a "Free sample" button before purchase. */
+  sampleUrl?: string;
+  /** Set when this resource is a bundle: the resources bundled inside it. Buying the bundle grants access to every child. */
+  bundleResourceIds?: mongoose.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -60,6 +64,16 @@ const ResourceSchema = new Schema<IResource>(
     category: {
       type: String,
       required: true,
+    },
+    sampleUrl: {
+      type: String,
+      required: false,
+    },
+    bundleResourceIds: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Resource',
+      required: false,
+      default: [],
     },
   },
   {

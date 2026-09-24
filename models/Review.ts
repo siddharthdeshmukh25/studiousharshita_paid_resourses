@@ -31,8 +31,11 @@ const ReviewSchema = new Schema<IReview>(
       max: 5,
     },
     comment: {
+      // Optional: a rating-only review (e.g. from the quick rating popup) is valid.
       type: String,
-      required: true,
+      required: false,
+      default: '',
+      maxlength: 500,
     },
   },
   {
@@ -40,7 +43,10 @@ const ReviewSchema = new Schema<IReview>(
   }
 );
 
-// Prevent model recompilation in development
-const Review: Model<IReview> = mongoose.models.Review || mongoose.model<IReview>('Review', ReviewSchema);
+// Force model recompilation to pick up schema changes (comment became optional)
+delete (mongoose.models as any).Review;
+delete (mongoose.connection.models as any).Review;
+
+const Review: Model<IReview> = mongoose.model<IReview>('Review', ReviewSchema);
 
 export default Review;

@@ -30,15 +30,17 @@ export async function POST(request: NextRequest) {
       attempts.set(ip, { count: 1, resetAt: now + WINDOW_MS });
     }
 
-    const body = (await request.json().catch(() => null)) as { email?: string } | null;
+    const body = (await request.json().catch(() => null)) as { email?: string; source?: string } | null;
     const email = body?.email?.trim().toLowerCase();
+    // Where the signup came from (lead magnet, footer…) — analytics only.
+    const source = body?.source?.trim().slice(0, 60) || undefined;
 
     if (!email || !EMAIL_RE.test(email) || email.length > 254) {
       return NextResponse.json({ message: 'Please enter a valid email address.' }, { status: 400 });
     }
 
     await connectDB();
-    await Subscriber.updateOne({ email }, { $setOnInsert: { email } }, { upsert: true });
+    await Subscriber.updateOne({ email }, { $setOnInsert: { email, source } }, { upsert: true });
 
     return NextResponse.json(
       { message: 'You are in! Useful resources are on their way to your inbox. ♡' },

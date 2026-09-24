@@ -4,6 +4,7 @@ import User from '@/models/User';
 import Resource from '@/models/Resource';
 import Order from '@/models/Order';
 import { hasAdminSession } from '@/lib/auth/admin';
+import { grantResourceAccess, resolveGrantIds } from '@/lib/bundles';
 
 export async function POST(request: NextRequest) {
   if (!(await hasAdminSession(request))) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -34,9 +35,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User already has access to this resource.' }, { status: 400 });
     }
 
-    // Grant access
-    user.purchasedResources.push(resource._id);
-    await user.save();
+    // Grant access — the resource plus, when it is a bundle, every child.
+    await grantResourceAccess(user._id.toString(), await resolveGrantIds(resource._id.toString()));
 
     // Create order record if orderId provided
     if (orderId) {

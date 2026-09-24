@@ -143,17 +143,25 @@ export default async function GuidePage({ params }: GuidePageProps) {
           </article>
 
           <section className="mt-12 rounded-lg border border-[var(--line)] bg-[#FFFDF8] p-6">
-            <h2 className="text-lg font-semibold text-[#1A1A1A]">Keep going</h2>
+            <h2 className="text-lg font-semibold text-[#1A1A1A]">Put this into practice</h2>
             <p className="mt-2 leading-relaxed text-[#4A443B]">
               Browse our digital study notes and planners, or start with the free resources to see whether our note format fits
               how you study.
             </p>
-            <Link
-              href="/"
-              className="mt-4 inline-block rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--accent-deep)]"
-            >
-              Browse study resources
-            </Link>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link
+                href="/resources?type=free"
+                className="inline-block rounded-lg border-2 border-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--accent-deep)] transition-colors hover:bg-[var(--accent-soft)]"
+              >
+                Browse free resources
+              </Link>
+              <Link
+                href="/resources?type=paid"
+                className="inline-block rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--accent-deep)]"
+              >
+                Shop premium notes
+              </Link>
+            </div>
           </section>
 
           {relatedGuides.length > 0 && (

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif, Poppins, Inter, Caveat } from "next/font/google";
 import "./globals.css";
 import Providers from '@/components/providers';
+import ToastProvider from '@/components/ui/Toast';
 import JsonLd from '@/components/seo/JsonLd';
 import CustomCursor from '@/components/ui/CustomCursor';
 import {
@@ -177,7 +178,9 @@ export default function RootLayout({
         />
         <CustomCursor />
         <JsonLd data={[organizationSchema, websiteSchema]} />
-        <Providers>{children}</Providers>
+        <Providers>
+          <ToastProvider>{children}</ToastProvider>
+        </Providers>
       </body>
     </html>
   );

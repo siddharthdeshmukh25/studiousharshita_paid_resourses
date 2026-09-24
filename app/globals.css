@@ -564,3 +564,29 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     transform: rotate(360deg);
   }
 }
+
+/* Toast slide-in animation (top 5%, theme-matched curved card) */
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.toast-slide-in {
+  animation: toast-slide-in 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) both;
+}
+
+/* ---- Thumbnail protection ----
+   Saves-as / copy guard: images can't be dragged out, long-press saved
+   (mobile), or opened in a new tab. Right-click "Save image as..." becomes
+   a no-op since the browser never sees a real image target underneath. */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none; /* disables the iOS/Android long-press sheet */
+  pointer-events: none;
+}

@@ -4021,3 +4021,52 @@ Stats: {
  GET /api/admin/notifications?limit=8 200 in 104ms (next.js: 21ms, application-code: 82ms)
  GET /api/admin/notifications?limit=1 200 in 94ms (next.js: 7ms, application-code: 86ms)
  GET /api/admin/developer-notes? 200 in 689ms (next.js: 481ms, application-code: 208ms)
+ GET /api/admin/notifications?limit=1 200 in 89ms (next.js: 14ms, application-code: 75ms)
+ GET /api/admin/notifications?limit=8 200 in 92ms (next.js: 6ms, application-code: 87ms)
+ GET /api/admin/notifications?limit=1 200 in 116ms (next.js: 29ms, application-code: 87ms)
+ GET /api/admin/notifications?limit=8 200 in 119ms (next.js: 8ms, application-code: 111ms)
+ GET /api/auth/session 200 in 36ms (next.js: 19ms, application-code: 16ms)
+ GET /api/wishlist 200 in 300ms (next.js: 5ms, application-code: 295ms)
+ GET /api/auth/session 200 in 38ms (next.js: 21ms, application-code: 17ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 76ms (next.js: 6ms, application-code: 70ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 87ms (next.js: 8ms, application-code: 79ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 165ms (next.js: 8ms, application-code: 157ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/wishlist 200 in 350ms (next.js: 18ms, application-code: 333ms)
+ GET /api/user/purchased-resources 200 in 236ms (next.js: 7ms, application-code: 229ms)
+ GET /api/auth/session 200 in 47ms (next.js: 16ms, application-code: 31ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 91ms (next.js: 20ms, application-code: 71ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 92ms (next.js: 17ms, application-code: 75ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 164ms (next.js: 7ms, application-code: 157ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/wishlist 200 in 356ms (next.js: 32ms, application-code: 324ms)
+ GET /api/user/purchased-resources 200 in 234ms (next.js: 6ms, application-code: 228ms)
+ GET /api/auth/session 200 in 52ms (next.js: 26ms, application-code: 26ms)
+Skipping local IP: ::1
+(node:12512) [MONGOOSE] Warning: mongoose: the `new` option for `findOneAndUpdate()` and `findOneAndReplace()` is deprecated. Use `returnDocument: 'after'` instead.
+ GET /api/reviews?resourceId=6ab12a4e3a854c05408fc938 200 in 108ms (next.js: 7ms, application-code: 101ms)
+ GET /api/resources/6ab12a4e3a854c05408fc938 200 in 119ms (next.js: 29ms, application-code: 90ms)
+Updated location for user dsiddharth550@gmail.com: IP=::1, Country=Not detected, Action=login
+ POST /api/user/location 200 in 190ms (next.js: 6ms, application-code: 184ms)
+Fetching purchased resources for user ID: 6a646862b7bdcc67d763f4c7
+Session user email: dsiddharth550@gmail.com
+ GET /api/wishlist 200 in 351ms (next.js: 21ms, application-code: 330ms)
+User found: dsiddharth550@gmail.com
+Purchased resources count: 1
+Purchased resource IDs: [ '6a8f44d4fafe8a5087a89a8e' ]
+ GET /api/user/purchased-resources 200 in 245ms (next.js: 9ms, application-code: 236ms)
+ POST /api/tracking 200 in 78ms (next.js: 48ms, application-code: 30ms)

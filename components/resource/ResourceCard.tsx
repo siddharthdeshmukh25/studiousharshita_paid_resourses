@@ -76,7 +76,7 @@ export default function ResourceCard({ id, title, rating, reviewCount, price, di
       {/* Info */}
       <div className="flex flex-grow flex-col gap-1 p-3 sm:p-4">
         {category && <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--accent)]">{category}</p>}
-        <h3 className="line-clamp-2 text-[13px] font-bold leading-snug text-[var(--text-primary)] sm:text-[15px]">{title}</h3>
+        <h3 className="line-clamp-2 min-h-[2.75em] text-[13px] font-bold leading-snug text-[var(--text-primary)] sm:text-[15px]">{title}</h3>
         {authorName && (
           <div className="flex items-center gap-1.5">
             {authorAvatar ? (
@@ -87,16 +87,20 @@ export default function ResourceCard({ id, title, rating, reviewCount, price, di
             <span className="flex items-center truncate text-[11px] text-[var(--text-secondary)]">{authorName}<CheckCircle className="ml-1 h-2.5 w-2.5 shrink-0 text-[var(--accent)]" /></span>
           </div>
         )}
-        {hasRating && (
-          <div className="flex items-center gap-1">
-            <span className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className={`h-3 w-3 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-[var(--line)]'}`} />
-              ))}
-            </span>
-            <span className="text-[11px] font-semibold text-[var(--text-secondary)]">{rating.toFixed(1)} <span className="font-normal text-[var(--text-muted)]">({reviewCount})</span></span>
-          </div>
-        )}
+        {/* Rating slot — height is always reserved (even with no rating) so
+            cards with and without a rating render at exactly the same size. */}
+        <div className="flex min-h-[17px] items-center gap-1">
+          {hasRating && (
+            <>
+              <span className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className={`h-3 w-3 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-[var(--line)]'}`} />
+                ))}
+              </span>
+              <span className="text-[11px] font-semibold text-[var(--text-secondary)]">{rating.toFixed(1)} <span className="font-normal text-[var(--text-muted)]">({reviewCount})</span></span>
+            </>
+          )}
+        </div>
         {/* Price line */}
         <div className="mt-auto flex items-baseline gap-1.5 pt-1.5">
           {isFree ? (

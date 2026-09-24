@@ -6,6 +6,7 @@ import User from '@/models/User';
 import Resource from '@/models/Resource';
 import PaymentSettings from '@/models/PaymentSettings';
 import { capturePayment } from '@/lib/paymentCapture';
+import { grantResourceAccess, resolveGrantIds } from '@/lib/bundles';
 import { createAdminNotification } from '@/lib/notifications';
 import { formatPrice } from '@/lib/format';
 
@@ -100,10 +101,9 @@ export async function POST(request: NextRequest) {
       const resource = await Resource.findById(resourceId);
       
       if (user && resource) {
-        if (!user.purchasedResources.includes(resource._id)) {
-          user.purchasedResources.push(resource._id);
-          await user.save();
-        }
+        // Grants the bought resource plus, when it is a bundle, every child.
+        const grantIds = await resolveGrantIds(resource._id.toString());
+        await grantResourceAccess(user._id.toString(), grantIds);
       }
 
       try {

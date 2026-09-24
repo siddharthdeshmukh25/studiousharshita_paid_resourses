@@ -5,6 +5,7 @@ import Resource from '@/models/Resource';
 import ResourceAccessLog from '@/models/ResourceAccessLog';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { userHasResourceAccess } from '@/lib/bundles';
 
 export async function GET(
   request: NextRequest,
@@ -43,9 +44,10 @@ export async function GET(
       );
     }
 
-    // Free resources are available to every signed-in user; paid resources require ownership.
+    // Free resources are available to every signed-in user; paid resources require
+    // ownership — directly, or through a bundle the user purchased.
     const isFreeResource = resource.price === 0;
-    const hasAccess = isFreeResource || user.purchasedResources.some(id => id.toString() === resource._id.toString());
+    const hasAccess = isFreeResource || (await userHasResourceAccess(user, resource._id.toString()));
     if (!hasAccess) {
       console.log('User purchased resources:', user.purchasedResources.map(id => id.toString()));
       console.log('Resource ID:', resource._id.toString());
