@@ -256,17 +256,25 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   display: none;
 }
 
-/* Manual AdSense slots appear only when their responsive unit IDs are configured. */
-.ad-slot-wide {
+/* Desktop ad rails live in the existing outer gutters, outside the original 6xl content box. */
+.resource-detail-ad-rail {
   display: none;
+  position: absolute;
+  top: 3rem;
+  width: 150px;
+  z-index: 1;
 }
 
-.ad-slot-mobile {
-  display: none;
+.resource-detail-ad-rail-left {
+  right: calc(100% + 1.5rem);
 }
 
-@media (min-width: 1600px) {
-  .ad-slot-wide {
+.resource-detail-ad-rail-right {
+  left: calc(100% + 1.5rem);
+}
+
+@media (min-width: 1520px) {
+  .resource-detail-ad-rail {
     display: block;
   }
 }

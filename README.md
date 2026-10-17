@@ -1,60 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# Studious Harshita
 
-First, run the development server:
+### Study resources, thoughtful tools, and digital downloads for students.
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-149eca?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript)](https://www.typescriptlang.org/)
+
+</div>
+
+---
+
+## About
+
+Studious Harshita is a student-focused digital resource store built with Next.js. Visitors can browse free study resources, discover premium notes and planners, and access purchased downloads through their account.
+
+This repository contains the storefront, resource browsing and detail pages, account flows, admin tools, payment integrations, Google Drive delivery, and optional AdSense display placements.
+
+## Tech stack
+
+- **Framework:** Next.js App Router
+- **UI:** React, TypeScript, Tailwind CSS
+- **Database:** MongoDB with Mongoose
+- **Authentication:** NextAuth with Google sign-in
+- **Payments:** Cashfree and Razorpay integrations
+- **Digital delivery:** Google Drive API
+- **Media:** Cloudinary
+
+## Getting started
+
+### Requirements
+
+- Node.js version compatible with the project's Next.js version
+- npm (the repository includes `package-lock.json`)
+- The environment values required for the integrations you want to run
+
+### Install and run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). To create and run a production build:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Google Drive Integration
-
-The admin connects a Google Drive account with a one-click **Sign in with Google** flow (Admin Settings → Google Drive). The server manages all OAuth credentials via environment variables — no manual Client ID / secret entry in the UI.
-
-### Required environment variables
-
-```
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
+```bash
+npm run build
+npm start
 ```
 
-These are the same OAuth credentials used for Google sign-in (NextAuth). The Google Drive flow requests offline access (`access_type=offline&prompt=consent`) so a refresh token is stored in the `GoogleDriveCredentials` collection and access tokens auto-refresh. The app requests **full Drive access** (`https://www.googleapis.com/auth/drive`) so buyers can be granted read access to any private file, including files uploaded manually — existing connections must reconnect once to pick up the new scope.
+To check lint rules:
 
-### One-time Google Cloud Console setup
+```bash
+npm run lint
+```
 
-1. **Enable the Google Drive API** for your project (APIs & Services → Library → Google Drive API).
-2. **Add the authorized redirect URI** to your OAuth 2.0 Client ID (APIs & Services → Credentials → your Web client):
-   ```
-   {YOUR_ORIGIN}/api/google-drive/auth
-   ```
-   e.g. `http://localhost:3000/api/google-drive/auth` locally.
-3. **Set the OAuth consent screen publishing status to "In production"** (APIs & Services → OAuth consent screen).
-   - Apps left in *Testing* mode get refresh tokens that **expire after 7 days**, so the connection silently drops every week.
-   - In production, tokens stay valid long-term (Google may still revoke them after ~6 months of no usage, or if the user changes their password).
+> Some features require external credentials and services. Configure only the integrations you need for your local environment.
 
-### How it works
+## Google AdSense: free resources only
 
-- **Connect**: Admin clicks "Connect with Google" → Google consent → callback at `/api/google-drive/auth` stores the tokens and redirects back.
-- **Auto-refresh**: `lib/drive/tokenManager.ts` refreshes the access token whenever it is close to expiry.
-- **On purchase**: `app/api/checkout/route.ts` grants the buyer read permission on the Drive file automatically.
-- **Disconnect**: Removes stored credentials.
+The app is wired for **manual responsive AdSense display units**, not site-wide Auto ads. Ads are rendered only on free-resource placements; paid resource listings and paid resource detail pages do not render these units.
 
-## Google AdSense display ads
+### Placement map
 
-The site uses the public publisher ID supplied by the owner. Manual display ads are intentionally limited to free resources; paid listings and paid resource pages do not render ad units. Create one AdSense display unit per placement and set these values in the deployment environment (and in `.env.local` for local testing):
+| Placement | Where it appears | Slot variable |
+| --- | --- | --- |
+| Free resource listing | After the fourth free resource card | `NEXT_PUBLIC_ADSENSE_SLOT_FREE_RESOURCES` |
+| Free resource detail — mobile | In normal page flow after the detail/review content, up to 767px wide | `NEXT_PUBLIC_ADSENSE_SLOT_FREE_DETAIL_INLINE` |
+| Free resource detail — desktop left | Left outer gutter, beyond the original content width on wide screens (1520px+) | `NEXT_PUBLIC_ADSENSE_SLOT_FREE_DETAIL_LEFT` |
+| Free resource detail — desktop right | Right outer gutter, beyond the original content width on wide screens (1520px+) | `NEXT_PUBLIC_ADSENSE_SLOT_FREE_DETAIL_RIGHT` |
+
+The mobile unit is **not** a fixed bottom anchor. Desktop side units use the outer gutters and appear only on wide screens (1520px and above); they do not resize or replace the original centered detail layout. Each placement is optional: if its slot ID is unset, that ad unit is omitted and no empty ad box is shown.
+
+### 1. Create the AdSense units
+
+1. Get approval for your site in Google AdSense.
+2. In AdSense, create a **display ad unit** for each placement you want to use.
+3. Copy the numeric ad unit ID (the `data-ad-slot` value) for each unit. The publisher ID alone does not identify a display unit.
+4. Use distinct ad units for listing, mobile detail, desktop left, and desktop right placements.
+
+### 2. Configure environment variables
+
+Set these in `.env.local` for local development and in your hosting provider's environment settings for production:
 
 ```dotenv
 NEXT_PUBLIC_ADSENSE_PUBLISHER_ID=ca-pub-9013540088743372
@@ -64,19 +92,69 @@ NEXT_PUBLIC_ADSENSE_SLOT_FREE_DETAIL_LEFT=your_desktop_left_slot_id
 NEXT_PUBLIC_ADSENSE_SLOT_FREE_DETAIL_RIGHT=your_desktop_right_slot_id
 ```
 
-The listing unit appears after the fourth free resource card. The inline detail unit appears on viewports up to 767px; left/right vertical units appear only at 1600px and wider. Create only the units you intend to use; an unset slot ID renders nothing and does not load AdSense. Google must approve the site before ads can serve. Do not use the AdSense site-wide Auto ads script alongside these manually placed units unless the paid routes are explicitly excluded in AdSense.
+Replace each `your_..._slot_id` placeholder with the matching ID from AdSense. Keep the publisher ID in the `ca-pub-...` format. You may leave any placement variable empty to disable only that placement. After changing environment variables, restart the dev server or redeploy the app so Next.js picks up the values.
 
-## Learn More
+> `NEXT_PUBLIC_` values are included in browser code and are not secrets. Never put API keys, OAuth secrets, or private credentials in these variables.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Verify the setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Confirm the site is approved and the publisher ID matches the AdSense account.
+- Check the free resource listing and free resource details at mobile, desktop, and wide-desktop viewport sizes.
+- Check the paid listing (`/resources?type=paid`) and paid resource details; these placements must remain absent.
+- Allow time for Google to review the site and begin serving ads. A configured slot can remain unfilled while the site or ad unit is being reviewed, when no ad is available, or when an ad blocker is active.
+- Keep the [Privacy Policy](/privacy-policy) accurate for advertising cookies and personalization.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Do **not** add the site-wide Auto ads script as well as these manual units unless you have separately configured and verified AdSense page exclusions for paid pages. With the current shared resource-detail URL pattern, manual units provide the intended free-only control.
 
-## Deploy on Vercel
+Implementation lives in [`lib/adsense.ts`](lib/adsense.ts), [`components/ads/AdSlot.tsx`](components/ads/AdSlot.tsx), [`components/resources/ResourcesBrowser.tsx`](components/resources/ResourcesBrowser.tsx), and [`app/resource/[id]/page.tsx`](app/resource/%5Bid%5D/page.tsx).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Google Drive resource delivery
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The admin can connect Google Drive from **Admin Settings → Google Drive**. The server stores OAuth credentials and grants buyers access to purchased files.
+
+Configure the OAuth credentials in the server environment:
+
+```dotenv
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+```
+
+One-time Google Cloud setup:
+
+1. Enable the Google Drive API in the project.
+2. Add `{YOUR_ORIGIN}/api/google-drive/auth` as an authorized redirect URI for the OAuth client. For local development, this is usually `http://localhost:3000/api/google-drive/auth`.
+3. Publish the OAuth consent screen as appropriate for your application. Google OAuth testing-mode refresh tokens may expire after seven days.
+
+The Drive integration requests the Drive scope required to share files with buyers. Existing connections may need to reconnect after scope changes.
+
+## Project structure
+
+```text
+app/                 Next.js routes, pages, and API endpoints
+components/           Shared interface and feature components
+contexts/             React contexts
+lib/                  Integrations, configuration, and utilities
+models/               Mongoose models
+public/                Static files
+```
+
+## Useful commands
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the local development server |
+| `npm run lint` | Run ESLint |
+| `npx tsc --noEmit` | Run the TypeScript check |
+| `npm run build` | Build the production app |
+| `npm start` | Serve the production build |
+
+## Deployment
+
+Deploy this Next.js app using a platform that supports Next.js App Router applications. Add the required production environment variables in the hosting dashboard before deploying. Never commit `.env.local` or production credentials.
+
+## Learn more
+
+- [Next.js documentation](https://nextjs.org/docs)
+- [React documentation](https://react.dev/)
+- [Google AdSense Help](https://support.google.com/adsense/)
+- [Google Drive API documentation](https://developers.google.com/drive/api/guides/about-sdk)
