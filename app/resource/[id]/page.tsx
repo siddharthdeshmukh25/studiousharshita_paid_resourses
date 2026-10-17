@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
+import ReferralBanner from '@/components/referrals/ReferralBanner';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -811,6 +812,10 @@ export default function ResourceDetailPage() {
                   </span>
                 </div>}
               </div>
+
+              {resource && (
+                <ReferralBanner resourceId={params.id as string} price={resource.price} refCode={searchParams.get('ref')} />
+              )}
 
               {/* Price and Checkout */}
               <div className="bg-gradient-to-br from-[var(--accent-soft)] to-[var(--butter-soft)] rounded-xl shadow-sm border border-[var(--accent-soft-2)] p-3.5 sm:p-6">

@@ -26,7 +26,9 @@ import {
   LogOut,
   BadgeCheck,
   Star,
+  Gift,
 } from 'lucide-react';
+import ReferEarnPanel from '@/components/referrals/ReferEarnPanel';
 
 interface Profile {
   name: string;
@@ -93,7 +95,7 @@ interface Ticket {
   createdAt: string;
 }
 
-type Tab = 'overview' | 'resources' | 'watchlist' | 'orders' | 'tickets';
+type Tab = 'overview' | 'resources' | 'watchlist' | 'orders' | 'tickets' | 'refer';
 
 const TABS: { id: Tab; label: string; shortLabel: string; icon: React.ReactNode }[] = [
   { id: 'overview', label: 'Overview', shortLabel: 'Overview', icon: <User className="h-4 w-4" /> },
@@ -101,6 +103,7 @@ const TABS: { id: Tab; label: string; shortLabel: string; icon: React.ReactNode 
   { id: 'watchlist', label: 'Watchlist', shortLabel: 'Watchlist', icon: <Heart className="h-4 w-4" /> },
   { id: 'orders', label: 'Orders', shortLabel: 'Orders', icon: <Receipt className="h-4 w-4" /> },
   { id: 'tickets', label: 'Support Tickets', shortLabel: 'Tickets', icon: <LifeBuoy className="h-4 w-4" /> },
+  { id: 'refer', label: 'Refer & Earn', shortLabel: 'Refer', icon: <Gift className="h-4 w-4" /> },
 ];
 
 const STATUS_META: Record<string, { label: string; className: string }> = {
@@ -121,6 +124,13 @@ export default function ProfilePage() {
   const { data: session, status } = useSession();
 
   const [activeTab, setActiveTab] = useState<Tab>('overview');
+
+  // Banner links to /profile#refer-earn to open the Refer & Earn tab directly.
+  useEffect(() => {
+    if (window.location.hash !== '#refer-earn') return;
+    const timer = window.setTimeout(() => setActiveTab('refer'), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [resources, setResources] = useState<PurchasedResource[]>([]);
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
@@ -202,7 +212,18 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen flex flex-col bg-[var(--background)]">
         <Navbar />
-        <div className="flex-1 grid place-items-center"><Loader2 className="h-8 w-8 animate-spin text-[#A29785]" /></div>
+        <main className="min-h-[60vh] flex-1 py-8 sm:py-12" role="status" aria-label="Loading profile">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 animate-pulse">
+            <div className="grid gap-5 lg:grid-cols-[290px_1fr] lg:gap-7">
+              <div className="h-32 rounded-2xl border border-[var(--line)] bg-[#FFFDF8] sm:h-40" />
+              <div className="space-y-4">
+                <div className="h-8 w-48 rounded bg-[var(--accent-soft-2)]" />
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{Array.from({ length: 4 }, (_, i) => <div key={i} className="aspect-[4/3] rounded-2xl bg-[var(--accent-soft-2)]" />)}</div>
+                <div className="h-44 rounded-2xl bg-[#FFFDF8]" />
+              </div>
+            </div>
+          </div>
+        </main>
         <Footer />
       </div>
     );
@@ -220,7 +241,7 @@ export default function ProfilePage() {
             <h1 className="text-2xl font-bold text-[#1A1A1A] mb-2">My Profile</h1>
             <p className="text-base text-[#6B6257] mb-6">Login to view your resources, orders and support tickets.</p>
             <button
-              onClick={() => signIn('google', { callbackUrl: '/profile' })}
+              onClick={() => signIn('google', { callbackUrl: window.location.hash ? `/profile${window.location.hash}` : '/profile' })}
               className="bg-[var(--accent)] text-white px-6 py-3 rounded-lg text-base font-semibold hover:bg-[var(--accent-deep)] transition-colors"
             >
               Login to continue
@@ -582,7 +603,9 @@ export default function ProfilePage() {
                   )}
 
                   {/* Support tickets */}
-                  {activeTab === 'tickets' && (
+                  {activeTab === 'refer' && <ReferEarnPanel />}
+
+          {activeTab === 'tickets' && (
                     <div>
                       <div className="flex items-center justify-between mb-3 sm:mb-4">
                         <h3 className="text-base sm:text-lg font-semibold text-[#1A1A1A]">Your tickets</h3>

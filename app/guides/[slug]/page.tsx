@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Clock, User } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import EarningOpportunityCallout from '@/components/referrals/EarningOpportunityCallout';
 import JsonLd from '@/components/seo/JsonLd';
 import { GUIDES, getGuide } from '@/lib/guides';
 import { LEGAL_ENTITY, SITE_NAME, SITE_URL, siteUrl } from '@/lib/site';
@@ -100,6 +101,8 @@ export default async function GuidePage({ params }: GuidePageProps) {
             <span aria-hidden="true" className="mx-2">/</span>
             <Link href="/guides" className="hover:text-[var(--accent)]">Study Guides</Link>
           </nav>
+
+          <EarningOpportunityCallout className="mb-8" />
 
           <article>
             <header>

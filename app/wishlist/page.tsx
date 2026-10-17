@@ -35,10 +35,10 @@ export default function WishlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div className="flex min-h-screen flex-col bg-[var(--background)]">
       <Navbar />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <main className="min-h-[60vh] flex-1 px-4 py-8 sm:px-6 md:py-12 lg:px-8">
         <div className="mb-6 md:mb-8">
           <h1 className="text-2xl md:text-3xl font-bold text-[#1A1A1A] mb-2 flex items-center">
             <Heart className="h-6 w-6 md:h-8 md:w-8 text-red-500 mr-3 fill-red-500" />

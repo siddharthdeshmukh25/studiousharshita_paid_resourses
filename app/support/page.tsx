@@ -124,7 +124,19 @@ function SupportPageContent() {
     return (
       <div className="min-h-screen flex flex-col bg-[var(--background)]">
         <Navbar />
-        <div className="flex-1 grid place-items-center"><Loader2 className="h-8 w-8 animate-spin text-[#A29785]" /></div>
+        <main className="min-h-[60vh] flex-1 py-8 md:py-12" role="status" aria-label="Loading support">
+          <div className="mx-auto max-w-4xl space-y-6 px-4 sm:px-6 lg:px-8 animate-pulse">
+            <div className="space-y-2"><div className="h-3 w-28 rounded bg-[var(--accent-soft-2)]" /><div className="h-8 w-64 max-w-full rounded bg-[var(--accent-soft-2)]" /><div className="h-4 w-full max-w-xl rounded bg-[var(--accent-soft-2)]" /></div>
+            <div className="space-y-5 rounded-2xl border border-[var(--line)] bg-[#FFFDF8] p-6 md:p-8">
+              <div className="h-6 w-48 rounded bg-[var(--accent-soft-2)]" />
+              <div className="h-4 w-72 max-w-full rounded bg-[var(--accent-soft-2)]" />
+              <div className="h-12 rounded-lg bg-[var(--accent-soft-2)]" />
+              <div className="h-12 rounded-lg bg-[var(--accent-soft-2)]" />
+              <div className="h-32 rounded-lg bg-[var(--accent-soft-2)]" />
+              <div className="ml-auto h-11 w-36 rounded-lg bg-[var(--accent-soft-2)]" />
+            </div>
+          </div>
+        </main>
         <Footer />
       </div>
     );
@@ -330,7 +342,7 @@ function SupportPageContent() {
 
 export default function SupportPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex flex-col bg-[var(--background)]"><Navbar /></div>}>
+    <Suspense fallback={<div className="min-h-screen flex flex-col bg-[var(--background)]"><Navbar /><main className="min-h-[60vh] flex-1 animate-pulse py-8"><div className="mx-auto max-w-4xl space-y-6 px-4"><div className="h-8 w-64 rounded bg-[var(--accent-soft-2)]" /><div className="h-56 rounded-2xl bg-[#FFFDF8]" /></div></main><Footer /></div>}>
       <SupportPageContent />
     </Suspense>
   );

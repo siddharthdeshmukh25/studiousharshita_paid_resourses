@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment, useEffect, useRef, useState } from 'react';
+import EarningOpportunityCallout from '@/components/referrals/EarningOpportunityCallout';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AdSlot from '@/components/ads/AdSlot';
 import { ADSENSE_SLOTS } from '@/lib/adsense';
@@ -299,6 +300,7 @@ export default function ResourcesBrowser() {
             </div>
           </div>
         </div>
+        {resourceType === 'free' && <EarningOpportunityCallout className="mb-6 sm:mb-8" />}
         {loading ? (
           <>
           {/* Spaced polaroid grid: even breathing room between cards on every breakpoint */}

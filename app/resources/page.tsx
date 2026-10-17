@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ResourcesBrowser from '@/components/resources/ResourcesBrowser';
-import BlueDotLoader from '@/components/ui/BlueDotLoader';
+import ResourcesBrowserSkeleton from '@/components/ui/ResourcesBrowserSkeleton';
 import { SITE_NAME } from '@/lib/site';
 
 const RESOURCES_TITLE = 'Browse Study Resources — Free & Premium Notes';
@@ -42,13 +42,7 @@ export default function ResourcesPage() {
     <div className="academic-surface min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 flex flex-col">
-        <Suspense
-          fallback={
-            <div className="grid flex-1 place-items-center py-24" role="status" aria-label="Loading">
-              <BlueDotLoader className="h-16 w-16" />
-            </div>
-          }
-        >
+        <Suspense fallback={<ResourcesBrowserSkeleton />}>
           <ResourcesBrowser />
         </Suspense>
       </main>

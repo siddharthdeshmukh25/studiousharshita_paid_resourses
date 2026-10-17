@@ -102,9 +102,19 @@ export default function TicketDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-[var(--background)]">
+      <div className="h-dvh flex flex-col bg-gradient-to-br from-[var(--background)] to-[var(--accent-soft)]">
         <Navbar />
-        <div className="flex-1 grid place-items-center"><Loader2 className="h-8 w-8 animate-spin text-[#A29785]" /></div>
+        <main className="mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col px-3 py-3 sm:px-6 md:py-8" role="status" aria-label="Loading support conversation">
+          <div className="flex min-h-0 flex-1 flex-col animate-pulse">
+            <div className="mb-4 h-5 w-28 rounded bg-[var(--accent-soft-2)]" />
+            <div className="min-h-64 flex-1 space-y-4 rounded-2xl border border-[var(--line)] bg-[#FFFDF8] p-4 sm:p-6">
+              <div className="h-20 w-4/5 rounded-2xl bg-[var(--accent-soft-2)]" />
+              <div className="ml-auto h-20 w-3/4 rounded-2xl bg-[var(--accent-soft-2)]" />
+              <div className="h-20 w-2/3 rounded-2xl bg-[var(--accent-soft-2)]" />
+            </div>
+            <div className="mt-4 h-12 shrink-0 rounded-xl bg-[var(--accent-soft-2)]" />
+          </div>
+        </main>
       </div>
     );
   }
@@ -113,14 +123,15 @@ export default function TicketDetailPage() {
     return (
       <div className="min-h-screen flex flex-col bg-[var(--background)]">
         <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center px-4">
+        <main className="min-h-[60vh] flex-1 flex items-center justify-center px-4">
+          <div className="text-center">
             <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Ticket not found</h2>
             <button onClick={() => router.push('/support')} className="text-[var(--accent)] hover:underline font-medium">
               Back to support center
             </button>
           </div>
-        </div>
+        </main>
+        <Footer />
       </div>
     );
   }

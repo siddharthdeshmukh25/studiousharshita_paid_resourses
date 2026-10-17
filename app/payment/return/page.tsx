@@ -289,5 +289,24 @@ function PaymentReturnContent() {
 }
 
 export default function PaymentReturnPage() {
-  return <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-[var(--accent-soft)] via-white to-[var(--accent-soft-2)]" />}><PaymentReturnContent /></Suspense>;
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen flex-col bg-gradient-to-br from-[var(--accent-soft)] via-white to-[var(--accent-soft-2)]">
+          <Navbar />
+          <main className="min-h-[60vh] flex-1 px-4 py-16" role="status" aria-label="Loading payment status">
+            <div className="mx-auto w-full max-w-lg animate-pulse rounded-2xl bg-[#FFFDF8] p-8 shadow-xl">
+              <div className="mx-auto h-16 w-16 rounded-full bg-[var(--accent-soft-2)]" />
+              <div className="mx-auto mt-5 h-7 w-56 max-w-full rounded bg-[var(--accent-soft-2)]" />
+              <div className="mt-8 space-y-3"><div className="h-4 rounded bg-[var(--accent-soft-2)]" /><div className="h-4 w-4/5 rounded bg-[var(--accent-soft-2)]" /></div>
+              <div className="mt-8 h-12 rounded-xl bg-[var(--accent-soft-2)]" />
+            </div>
+          </main>
+          <Footer />
+        </div>
+      }
+    >
+      <PaymentReturnContent />
+    </Suspense>
+  );
 }

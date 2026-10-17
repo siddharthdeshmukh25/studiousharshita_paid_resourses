@@ -10,6 +10,7 @@ import { getValidCoupon } from '@/lib/coupons';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { grantFilePermission } from '@/lib/drive/googleDrive';
+import { REFERRAL_COOKIE, recordReferralSale } from '@/lib/referrals';
 
 async function getPaymentSettings() {
   await connectDB();
@@ -182,6 +183,16 @@ export async function POST(request: NextRequest) {
     } else {
       return NextResponse.json({ error: 'Payment gateway not supported yet.' }, { status: 400 });
     }
+
+    // Attribute the sale to a referrer (if the buyer came through a referral link).
+    // Stays "pending" until the Order is completed; see /api/referrals/me.
+    await recordReferralSale({
+      referralCode: request.cookies.get(REFERRAL_COOKIE)?.value,
+      buyerId: user._id.toString(),
+      resourceId: resource._id.toString(),
+      orderRef: orderId,
+      saleAmount: amount,
+    });
 
     // Note: Order will be created only after successful payment via webhook
     // This prevents creating orders for failed/abandoned payments

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { BookOpen, Clock } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import EarningOpportunityCallout from '@/components/referrals/EarningOpportunityCallout';
 import JsonLd from '@/components/seo/JsonLd';
 import { GUIDES } from '@/lib/guides';
 import { SITE_NAME, SITE_URL, siteUrl } from '@/lib/site';
@@ -81,6 +82,8 @@ export default function GuidesHub() {
               using in the next study session.
             </p>
           </header>
+
+          <EarningOpportunityCallout className="mt-8 max-w-3xl" />
 
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {GUIDES.map((guide) => (

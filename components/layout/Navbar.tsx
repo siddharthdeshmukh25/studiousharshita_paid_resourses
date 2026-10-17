@@ -31,10 +31,16 @@ export default function Navbar() {
 
   // Load search history
   useEffect(() => {
+    const openLogin = () => setShowLoginModal(true);
+    window.addEventListener('open-login-modal', openLogin);
+    return () => window.removeEventListener('open-login-modal', openLogin);
+  }, []);
+
+  useEffect(() => {
     const savedHistory = localStorage.getItem('searchHistory');
-    if (savedHistory) {
-      setSearchHistory(JSON.parse(savedHistory));
-    }
+    if (!savedHistory) return;
+    const timer = window.setTimeout(() => setSearchHistory(JSON.parse(savedHistory)), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   // Track user location on login

@@ -7,6 +7,10 @@ const SiteSettingsSchema = new Schema(
       preset: { type: String, enum: ['blue', 'green', 'custom'], default: 'blue' },
       customColor: { type: String, default: null },
     },
+    referral: {
+      enabled: { type: Boolean, default: true },
+      defaultPercent: { type: Number, min: 0, max: 100, default: 10 },
+    },
   },
   { timestamps: true, collection: 'sitesettings' }
 );

@@ -14,6 +14,10 @@ interface IResource {
   sampleUrl?: string;
   /** Set when this resource is a bundle: the resources bundled inside it. Buying the bundle grants access to every child. */
   bundleResourceIds?: mongoose.Types.ObjectId[];
+  /** Referral commission. Disabled resources give no referral earnings. */
+  referralEnabled?: boolean;
+  /** Per-resource commission %. Empty means use the site default. */
+  referralPercent?: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -74,6 +78,16 @@ const ResourceSchema = new Schema<IResource>(
       ref: 'Resource',
       required: false,
       default: [],
+    },
+    referralEnabled: {
+      type: Boolean,
+      default: true,
+    },
+    referralPercent: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: null,
     },
   },
   {

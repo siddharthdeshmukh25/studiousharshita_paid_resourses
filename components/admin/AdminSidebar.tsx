@@ -20,7 +20,8 @@ import {
   Moon,
   FileText,
   Palette,
-  UserCircle
+  UserCircle,
+  Gift
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -55,6 +56,7 @@ const navItems: NavItem[] = [
   { id: 'categories', label: 'Categories', icon: <Tag className="h-5 w-5" />, path: '/admin/categories' },
   { id: 'coupons', label: 'Coupons', icon: <Ticket className="h-5 w-5" />, path: '/admin/coupons' },
   { id: 'analytics', label: 'Analytics', icon: <BarChart3 className="h-5 w-5" />, path: '/admin/analytics' },
+  { id: 'referrals', label: 'Refer & Earn', icon: <Gift className="h-5 w-5" />, path: '/admin/referrals' },
   { id: 'notifications', label: 'Notifications', icon: <Bell className="h-5 w-5" />, path: '/admin/notifications' },
   { id: 'theme-builder', label: 'Theme Builder', icon: <Palette className="h-5 w-5" />, path: '/admin/theme-builder' },
   { id: 'profile', label: 'Profile', icon: <UserCircle className="h-5 w-5" />, path: '/admin/profile' },
@@ -97,6 +99,7 @@ export default function AdminSidebar() {
 
   const getActiveItem = () => {
     if (pathname === '/admin/analytics') return 'analytics';
+    if (pathname === '/admin/referrals') return 'referrals';
     if (pathname === '/admin/notifications') return 'notifications';
     if (pathname === '/admin/users') return 'users';
     if (pathname === '/admin/revenue') return 'revenue';

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import HomeLanding from '@/components/home/HomeLanding';
 import {
   WelcomeSection,
@@ -14,8 +13,7 @@ import GuidesTeaser from '@/components/home/GuidesTeaser';
 import OffersStrip from '@/components/home/OffersStrip';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import BlueDotLoader from '@/components/ui/BlueDotLoader';
-import { DEFAULT_DESCRIPTION, DEFAULT_KEYWORDS, SITE_NAME } from '@/lib/site';
+import { DEFAULT_KEYWORDS, SITE_NAME } from '@/lib/site';
 
 const HOME_TITLE = 'Free & Premium Study Resources, Notes & AI Tools for Students';
 const HOME_DESCRIPTION =
@@ -47,15 +45,7 @@ export default function Home() {
       <Navbar />
       <main className="flex-1 flex flex-col">
         {/* 1. Hero + featured resources (paid first, then free) */}
-        <Suspense
-          fallback={
-            <div className="grid min-h-[60vh] place-items-center" role="status" aria-label="Loading">
-              <BlueDotLoader className="h-20 w-20" />
-            </div>
-          }
-        >
-          <HomeLanding />
-        </Suspense>
+        <HomeLanding />
 
         {/* 2. Blog — "from my desk" */}
         <GuidesTeaser />
