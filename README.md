@@ -52,6 +52,20 @@ These are the same OAuth credentials used for Google sign-in (NextAuth). The Goo
 - **On purchase**: `app/api/checkout/route.ts` grants the buyer read permission on the Drive file automatically.
 - **Disconnect**: Removes stored credentials.
 
+## Google AdSense display ads
+
+The site uses the public publisher ID supplied by the owner. Manual display ads are intentionally limited to free resources; paid listings and paid resource pages do not render ad units. Create one AdSense display unit per placement and set these values in the deployment environment (and in `.env.local` for local testing):
+
+```dotenv
+NEXT_PUBLIC_ADSENSE_PUBLISHER_ID=ca-pub-9013540088743372
+NEXT_PUBLIC_ADSENSE_SLOT_FREE_RESOURCES=your_listing_slot_id
+NEXT_PUBLIC_ADSENSE_SLOT_FREE_DETAIL_INLINE=your_mobile_detail_slot_id
+NEXT_PUBLIC_ADSENSE_SLOT_FREE_DETAIL_LEFT=your_desktop_left_slot_id
+NEXT_PUBLIC_ADSENSE_SLOT_FREE_DETAIL_RIGHT=your_desktop_right_slot_id
+```
+
+The listing unit appears after the fourth free resource card. The inline detail unit appears on viewports up to 767px; left/right vertical units appear only at 1600px and wider. Create only the units you intend to use; an unset slot ID renders nothing and does not load AdSense. Google must approve the site before ads can serve. Do not use the AdSense site-wide Auto ads script alongside these manually placed units unless the paid routes are explicitly excluded in AdSense.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

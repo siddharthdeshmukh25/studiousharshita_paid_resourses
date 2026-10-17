@@ -11,6 +11,8 @@ import { Star, Loader2, Send, X, Share2, Heart, ExternalLink, ChevronLeft, Chevr
 import RelatedResources from '@/components/resource/RelatedResources';
 import RecentlyViewed, { trackRecentlyViewed } from '@/components/resource/RecentlyViewed';
 import QuickRatingModal from '@/components/resource/QuickRatingModal';
+import AdSlot from '@/components/ads/AdSlot';
+import { ADSENSE_SLOTS } from '@/lib/adsense';
 import { useToast } from '@/components/ui/Toast';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { formatPrice, formatDiscountedPrice } from '@/lib/format';
@@ -90,6 +92,15 @@ export default function ResourceDetailPage() {
   // "is this my review?" check must compare ids — not the email.
   const currentUserId = (session?.user as { id?: string } | undefined)?.id;
   const isFreeResource = resource?.price === 0;
+  const hasLeftDetailAd = isFreeResource && Boolean(ADSENSE_SLOTS.freeDetailLeft);
+  const hasRightDetailAd = isFreeResource && Boolean(ADSENSE_SLOTS.freeDetailRight);
+  const wideDetailGrid = hasLeftDetailAd && hasRightDetailAd
+    ? 'min-[1600px]:grid-cols-[minmax(150px,1fr)_minmax(0,1152px)_minmax(150px,1fr)]'
+    : hasLeftDetailAd
+      ? 'min-[1600px]:grid-cols-[minmax(150px,1fr)_minmax(0,1152px)]'
+      : hasRightDetailAd
+        ? 'min-[1600px]:grid-cols-[minmax(0,1152px)_minmax(150px,1fr)]'
+        : '';
   const galleryImages = resource?.images && resource.images.length > 0 ? resource.images : resource?.thumbnailUrl ? [resource.thumbnailUrl] : [];
   const currentImage = galleryImages[selectedImageIndex] || '/placeholder.png';
   const imageCount = galleryImages.length;
@@ -691,8 +702,18 @@ export default function ResourceDetailPage() {
       <Navbar />
 
       <main className="flex-1 py-8">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start lg:[grid-template-rows:auto_1fr]">
+        <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
+          <div className={`grid grid-cols-1 gap-6 ${wideDetailGrid} ${hasLeftDetailAd || hasRightDetailAd ? 'min-[1600px]:items-start min-[1600px]:gap-6' : ''}`}>
+            {hasLeftDetailAd && (
+              <AdSlot
+                name="freeDetailLeft"
+                minViewportWidth={1600}
+                format="vertical"
+                className="sticky top-24 self-start"
+              />
+            )}
+            <div className={`min-w-0 ${hasLeftDetailAd ? 'min-[1600px]:col-start-2' : ''}`}>
+              <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-8 lg:[grid-template-rows:auto_1fr]">
             {/* Image Gallery */}
             <div className="order-1 lg:col-start-1 lg:row-start-1 min-w-0">
               <div className="flex flex-col gap-2 lg:flex-row lg:gap-3">
@@ -1161,9 +1182,26 @@ export default function ResourceDetailPage() {
             </div>
           </div>
 
-          {/* Related resources + recently viewed shelves */}
-          <RelatedResources resourceId={params.id as string} />
-          <RecentlyViewed currentResourceId={params.id as string} />
+              {isFreeResource && (
+                <AdSlot
+                  name="freeDetailInline"
+                  maxViewportWidth={767}
+                  className="mx-auto my-8 w-full max-w-3xl px-2 sm:px-4"
+                />
+              )}
+              {/* Related resources + recently viewed shelves */}
+              <RelatedResources resourceId={params.id as string} />
+              <RecentlyViewed currentResourceId={params.id as string} />
+            </div>
+            {hasRightDetailAd && (
+              <AdSlot
+                name="freeDetailRight"
+                minViewportWidth={1600}
+                format="vertical"
+                className="sticky top-24 self-start"
+              />
+            )}
+          </div>
         </div>
       </main>
 

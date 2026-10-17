@@ -78,7 +78,7 @@ export default function PrivacyPolicy() {
               <section>
                 <h2 className="text-xl font-semibold text-[#1A1A1A] mb-3">6. Cookies</h2>
                 <p className="leading-relaxed text-justify">
-                  We use cookies to maintain your session, remember your preferences, and analyze website traffic. You can manage or disable cookies through your browser settings, though this may affect certain functionalities of the platform.
+                  We use cookies to maintain your session, remember your preferences, and analyze website traffic. If Google AdSense ads are enabled, Google and its advertising partners may also use cookies or similar technologies to serve and measure ads, including personalized ads based on visits to this and other sites. You can learn how Google uses information from sites and apps that use its services at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] underline">Google’s partner-sites policy</a>. You can manage or disable cookies through your browser settings and manage Google ad personalization through <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer" className="text-[var(--accent)] underline">My Ad Center</a>; disabling cookies may affect certain functionalities of the platform.
                 </p>
               </section>
 

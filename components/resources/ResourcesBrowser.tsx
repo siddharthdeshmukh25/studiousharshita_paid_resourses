@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import AdSlot from '@/components/ads/AdSlot';
+import { ADSENSE_SLOTS } from '@/lib/adsense';
 import ResourceCard from '@/components/resource/ResourceCard';
 import ResourceCardSkeleton from '@/components/resource/ResourceCardSkeleton';
 
@@ -320,25 +322,32 @@ export default function ResourcesBrowser() {
         ) : (
           <>
           <div className="grid grid-cols-2 min-[600px]:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3 w-full">
-            {resources.map((resource) => (
-              <div
-                key={resource._id}
-                onClick={() => handleResourceClick(resource._id)}
-                className="h-full cursor-pointer w-full"
-              >
-                <ResourceCard
-                  id={resource._id}
-                  title={resource.title}
-                  rating={resource.avgRating || 0}
-                  reviewCount={resource.totalReviews || 0}
-                  price={resource.price}
-                  discount={resource.discount}
-                  thumbnailUrl={resource.thumbnailUrl}
-                  images={resource.images}
-                  category={resource.category}
-                  onGetResource={() => handleResourceClick(resource._id)}
-                />
-              </div>
+            {resources.map((resource, index) => (
+              <Fragment key={resource._id}>
+                <div
+                  onClick={() => handleResourceClick(resource._id)}
+                  className="h-full cursor-pointer w-full"
+                >
+                  <ResourceCard
+                    id={resource._id}
+                    title={resource.title}
+                    rating={resource.avgRating || 0}
+                    reviewCount={resource.totalReviews || 0}
+                    price={resource.price}
+                    discount={resource.discount}
+                    thumbnailUrl={resource.thumbnailUrl}
+                    images={resource.images}
+                    category={resource.category}
+                    onGetResource={() => handleResourceClick(resource._id)}
+                  />
+                </div>
+                {resourceType === 'free' && ADSENSE_SLOTS.freeResources && resource.price === 0 &&
+                  (index === 3 || (resources.length < 4 && index === resources.length - 1)) && (
+                    <div className="col-span-full mx-auto w-full max-w-3xl px-2 py-4 sm:px-4">
+                      <AdSlot name="freeResources" />
+                    </div>
+                  )}
+              </Fragment>
             ))}
           </div>
           </>
