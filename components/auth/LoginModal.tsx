@@ -1,15 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { signIn } from 'next-auth/react';
 import { X, Lock, ShieldCheck, Sparkles } from 'lucide-react';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
+  callbackUrl?: string;
 }
 
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+export default function LoginModal({ isOpen, onClose, callbackUrl }: LoginModalProps) {
   const [loading, setLoading] = useState(false);
 
   // Prevent body scroll when modal is open
@@ -43,7 +45,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
-      await signIn('google', { callbackUrl: window.location.href });
+      await signIn('google', { callbackUrl: callbackUrl || window.location.href });
     } catch (error) {
       console.error('Login error:', error);
       alert('Login failed. Please try again.');
@@ -52,11 +54,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     }
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || typeof document === 'undefined') return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#0F172A]/50 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-[#0F172A]/60 backdrop-blur-sm p-4"
       role="dialog"
       aria-modal="true"
       aria-label="Sign in"
@@ -158,6 +160,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

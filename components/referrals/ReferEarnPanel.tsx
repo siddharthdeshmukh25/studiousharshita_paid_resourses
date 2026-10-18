@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Copy, Check, Loader2, MousePointerClick, ShoppingBag, Wallet, Clock, Gift } from 'lucide-react';
+import { Copy, Check, Loader2, MousePointerClick, ShoppingBag, Wallet, Clock, Gift, ArrowUpRight, Percent } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { formatPrice } from '@/lib/format';
 
 type ReferralResource = {
@@ -10,7 +11,8 @@ type ReferralResource = {
   thumbnailUrl: string | null;
   isFree: boolean;
   referralEnabled: boolean;
-  commissionPercent: number | null;
+  commissionPercent: number;
+  estimatedCommission: number;
   clicks: number;
   buys: number;
   earned: number;
@@ -29,6 +31,7 @@ type ReferralSale = {
 };
 
 type ReferralData = {
+  demoPreview: { clicks: number; referrals: number; earned: number; firstReferralAt: string } | null;
   referralCode: string;
   referralEnabled: boolean;
   defaultPercent: number;
@@ -56,6 +59,7 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
 }
 
 export default function ReferEarnPanel() {
+  const router = useRouter();
   const [data, setData] = useState<ReferralData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -93,7 +97,20 @@ export default function ReferEarnPanel() {
     return <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error || 'Could not load referral data.'}</div>;
   }
 
-  const shareable = data.resources.filter((r) => r.referralEnabled && (r.isFree || r.commissionPercent !== null));
+  const shareable = data.resources.filter((resource) => !resource.isFree && resource.referralEnabled && resource.commissionPercent > 0);
+  const demoPreview = data.demoPreview;
+  const displayTotals = demoPreview
+    ? {
+        clicks: data.totals.clicks + demoPreview.clicks,
+        salesCount: data.totals.salesCount + demoPreview.referrals,
+        earned: data.totals.earned + demoPreview.earned,
+        pending: data.totals.pending,
+      }
+    : data.totals;
+
+  const conversionRate = displayTotals.clicks > 0
+    ? `${((displayTotals.salesCount / displayTotals.clicks) * 100).toFixed(1)}%`
+    : '0.0%';
 
   return (
     <div className="space-y-6">
@@ -104,18 +121,18 @@ export default function ReferEarnPanel() {
             <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-white/80">
               <Gift className="h-4 w-4" /> Your earnings
             </p>
-            <p className="mt-2 text-4xl font-bold sm:text-5xl">{formatPrice(data.totals.earned)}</p>              <p className="mt-1 text-sm text-white/80">
-              {formatPrice(data.totals.pending)} pending · confirmed when the buyer&apos;s payment completes
+            <p className="mt-2 text-4xl font-bold sm:text-5xl">{formatPrice(displayTotals.earned)}</p>              <p className="mt-1 text-sm text-white/80">
+              {formatPrice(displayTotals.pending)} pending · confirmed when the buyer&apos;s payment completes
             </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-center">
             <div className="rounded-xl bg-white/15 px-4 py-3">
-              <p className="text-2xl font-bold">{data.totals.clicks}</p>
+              <p className="text-2xl font-bold">{displayTotals.clicks}</p>
               <p className="text-xs text-white/80">Clicks</p>
             </div>
             <div className="rounded-xl bg-white/15 px-4 py-3">
-              <p className="text-2xl font-bold">{data.totals.salesCount}</p>
-              <p className="text-xs text-white/80">Sales</p>
+              <p className="text-2xl font-bold">{displayTotals.salesCount}</p>
+              <p className="text-xs text-white/80">Referrals</p>
             </div>
           </div>
         </div>
@@ -127,16 +144,17 @@ export default function ReferEarnPanel() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <StatCard icon={<MousePointerClick className="h-4 w-4" />} label="Total clicks" value={data.totals.clicks} />
-        <StatCard icon={<ShoppingBag className="h-4 w-4" />} label="Buys" value={data.totals.salesCount} />
-        <StatCard icon={<Wallet className="h-4 w-4" />} label="Commission earned" value={formatPrice(data.totals.earned)} />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard icon={<MousePointerClick className="h-4 w-4" />} label="Total clicks" value={displayTotals.clicks} />
+        <StatCard icon={<ShoppingBag className="h-4 w-4" />} label="Referrals" value={displayTotals.salesCount} />
+        <StatCard icon={<Wallet className="h-4 w-4" />} label="Commission earned" value={formatPrice(displayTotals.earned)} />
+        <StatCard icon={<Percent className="h-4 w-4" />} label="Referral conversion" value={conversionRate} />
       </div>
 
       <section className="rounded-xl border border-[var(--line)] bg-[#FFFDF8] p-4 shadow-sm sm:p-5">
         <h2 className="text-lg font-semibold text-[#1A1A1A]">Your referral links</h2>
         <p className="mb-4 text-sm text-[#6B6257]">
-          Share a link below. Buyers who purchase through it count as your referral. Each link is tied to one resource.
+          Share paid resources to earn commission when someone purchases through your link. Tap a card to view its resource.
         </p>
 
         {shareable.length === 0 ? (
@@ -144,23 +162,33 @@ export default function ReferEarnPanel() {
         ) : (
           <ul className="space-y-3">
             {shareable.map((resource) => (
-              <li key={resource.id} className="flex flex-col gap-3 rounded-lg border border-[var(--line)] p-3 sm:flex-row sm:items-center">
-                <div className="flex min-w-0 flex-1 items-center gap-3">
-                  {resource.thumbnailUrl ? (
-                    <img src={resource.thumbnailUrl} alt="" loading="lazy" className="h-12 w-12 flex-shrink-0 rounded-md object-cover" />
-                  ) : (
-                    <div className="h-12 w-12 flex-shrink-0 rounded-md bg-[var(--accent-soft)]" />
-                  )}
-                  <div className="min-w-0">
-                    <p className="truncate font-semibold text-[#1A1A1A]">{resource.title}</p>
-                    <p className="text-xs text-[#6B6257]">
-                      {resource.isFree ? `Free resource · ${resource.clicks} clicks · eligible paid-resource purchases earn commission` : `${resource.commissionPercent}% commission · ${resource.clicks} clicks · ${resource.buys} buys · ${formatPrice(resource.earned)} earned`}
-                    </p>
-                  </div>
-                </div>
+              <li key={resource.id} className="flex flex-col gap-3 rounded-2xl border border-[var(--line)] bg-gradient-to-br from-[#FFFDF8] to-[var(--accent-soft)]/50 p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--accent)] hover:shadow-md sm:flex-row sm:items-center sm:p-4">
                 <button
+                  type="button"
+                  onClick={() => router.push(`/resource/${resource.id}`)}
+                  className="flex min-w-0 flex-1 items-center gap-3 text-left sm:gap-4"
+                  aria-label={`Open ${resource.title}`}
+                >
+                  {resource.thumbnailUrl ? (
+                    <img src={resource.thumbnailUrl} alt="" loading="lazy" className="h-16 w-16 flex-shrink-0 rounded-xl border border-white object-cover shadow-sm" />
+                  ) : (
+                    <div className="grid h-16 w-16 flex-shrink-0 place-items-center rounded-xl bg-[var(--accent-soft-2)] text-[var(--accent)]"><Gift className="h-6 w-6" /></div>
+                  )}
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-bold text-[#1A1A1A] sm:text-base">{resource.title}</span>
+                    <span className="mt-1 block text-xs text-[#6B6257]">{resource.clicks} clicks · {resource.buys} buys · {formatPrice(resource.earned)} earned</span>
+                    <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[var(--accent-deep)]">View resource <ArrowUpRight className="h-3.5 w-3.5" /></span>
+                  </span>
+                  <span className="shrink-0 rounded-xl border border-[var(--accent-soft-2)] bg-white px-3 py-2 text-right shadow-sm sm:px-4">
+                    <span className="block text-[10px] font-bold uppercase tracking-wide text-[#6B6257]">Est. per sale</span>
+                    <span className="block text-lg font-extrabold leading-tight text-[var(--accent-deep)]">{formatPrice(resource.estimatedCommission)}</span>
+                    <span className="block text-[10px] font-semibold text-[#6B6257]">{resource.commissionPercent}% per sale</span>
+                  </span>
+                </button>
+                <button
+                  type="button"
                   onClick={() => void copyLink(resource.id)}
-                  className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[var(--accent-deep)] transition-colors"
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[var(--accent-deep)] sm:min-w-32"
                 >
                   {copiedId === resource.id ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   {copiedId === resource.id ? 'Copied' : 'Copy link'}

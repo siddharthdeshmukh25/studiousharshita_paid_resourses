@@ -30,7 +30,7 @@ export async function GET() {
     const [code, settings] = await Promise.all([ensureReferralCode(referrerId), getReferralSettings()]);
     if (!code) return NextResponse.json({ error: 'Could not create referral code.' }, { status: 500 });
 
-    const resources = await Resource.find()
+    const resources = await Resource.find({ price: { $gt: 0 }, referralEnabled: { $ne: false } })
       .select('title thumbnailUrl price discount referralEnabled referralPercent')
       .sort({ createdAt: -1 })
       .lean();
@@ -116,9 +116,22 @@ export async function GET() {
       { earned: 0, pending: 0, salesCount: 0 }
     );
 
-    const totalClicks = Array.from(clicksByResource.values()).reduce((sum, value) => sum + value, 0);
+    const shareableResources = resources
+      .map((resource) => ({ resource, commissionPercent: resolveCommissionPercent(resource, settings) }))
+      .filter((entry): entry is { resource: (typeof resources)[number]; commissionPercent: number } =>
+        entry.commissionPercent !== null && entry.commissionPercent > 0
+      );
+    const totalClicks = shareableResources.reduce(
+      (sum, { resource }) => sum + (clicksByResource.get(String(resource._id)) || 0),
+      0
+    );
+    // Presentation-only preview requested for this account; never write demo activity to MongoDB.
+    const demoPreview = session.user.email?.trim().toLowerCase() === 'dsiddharth550@gmail.com'
+      ? { clicks: 284, referrals: 56, earned: 6342, firstReferralAt: '2026-01-20T12:00:00.000Z' }
+      : null;
 
     return NextResponse.json({
+      demoPreview,
       referralCode: code,
       referralEnabled: settings.enabled,
       defaultPercent: settings.defaultPercent,
@@ -128,16 +141,20 @@ export async function GET() {
         earned: roundMoney(totals.earned),
         pending: roundMoney(totals.pending),
       },
-      resources: resources.map((resource) => {
+      resources: shareableResources.map(({ resource, commissionPercent }) => {
         const id = String(resource._id);
         const stats = byResource.get(id);
+        const discountedPrice = resource.discount && resource.discount > 0
+          ? Number((resource.price * (1 - resource.discount / 100)).toFixed(2))
+          : resource.price;
         return {
           id,
           title: resource.title,
           thumbnailUrl: resource.thumbnailUrl || null,
-          isFree: resource.price === 0,
-          referralEnabled: resource.referralEnabled !== false,
-          commissionPercent: resolveCommissionPercent(resource, settings),
+          isFree: false,
+          referralEnabled: true,
+          commissionPercent,
+          estimatedCommission: roundMoney((discountedPrice * commissionPercent) / 100),
           clicks: clicksByResource.get(id) || 0,
           buys: stats?.buys ?? 0,
           earned: roundMoney(stats?.earned ?? 0),

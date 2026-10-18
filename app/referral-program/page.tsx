@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { ArrowDown, ArrowRight, CheckCircle2, ChevronDown, Gift, GraduationCap, Link2, Wallet } from 'lucide-react';
+import { ArrowDown, CheckCircle2, ChevronDown, Gift, GraduationCap, Link2, Wallet } from 'lucide-react';
 import EarningsPreview from '@/components/referrals/EarningsPreview';
+import ReferralApplyButton from '@/components/referrals/ReferralApplyButton';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import JsonLd from '@/components/seo/JsonLd';
@@ -19,10 +19,6 @@ export const metadata: Metadata = {
     description: 'Share study finds you love and get rewarded when your recommendations lead to eligible purchases.',
   },
 };
-
-function ApplyButton({ className = '' }: { className?: string }) {
-  return <Link href="/profile#refer-earn" className={`inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3.5 text-sm font-extrabold text-white shadow-[0_5px_0_var(--accent-deep),0_14px_25px_-15px_rgba(38,72,54,0.7)] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 ${className}`}>Start earning <ArrowRight className="h-4 w-4" /></Link>;
-}
 
 export default function ReferralProgramPage() {
   const structuredData = {
@@ -53,7 +49,7 @@ export default function ReferralProgramPage() {
                 Love finding study tools your friends will actually use? Turn that into a flexible earning opportunity with Studious Harshita.
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
-                <ApplyButton />
+                <ReferralApplyButton />
                 <span className="text-xs font-medium text-[var(--text-secondary)]">Free to apply · student-friendly · share at your pace</span>
               </div>
               <p className="mt-3 text-[11px] text-[var(--text-secondary)]">Rewards depend on eligible purchases and current program terms.</p>
@@ -72,7 +68,7 @@ export default function ReferralProgramPage() {
               <p className="text-xs font-extrabold uppercase tracking-[.15em] text-[var(--accent)]">The opportunity</p>
               <h2 className="mt-3 text-3xl font-black tracking-tight text-[var(--text-primary)]">Make your recommendations count.</h2>
               <p className="mt-4 leading-relaxed text-[var(--text-secondary)]">No need to be an influencer. Share with a class group, a friend, or the community you already have. We want genuine recommendations—not spam.</p>
-              <ApplyButton className="mt-6" />
+              <ReferralApplyButton className="mt-6" />
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               {[
