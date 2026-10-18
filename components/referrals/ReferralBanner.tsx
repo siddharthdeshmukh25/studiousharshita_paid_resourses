@@ -103,12 +103,6 @@ export default function ReferralBanner({ resourceId, price, refCode }: Props) {
     setTimeout(() => setCopied(false), 1800);
   };
 
-  const openLogin = () => {
-    const loginTrigger = document.querySelector('[data-login-trigger="true"]') as HTMLButtonElement | null;
-    if (loginTrigger) loginTrigger.click();
-    else window.dispatchEvent(new CustomEvent('open-login-modal'));
-  };
-
   if (isFreeResource) {
     return <EarningOpportunityCallout className="mb-4" />;
   }
@@ -162,12 +156,12 @@ export default function ReferralBanner({ resourceId, price, refCode }: Props) {
           )}
         </div>
       ) : status === 'unauthenticated' ? (
-        <button
-          onClick={openLogin}
+        <Link
+          href="/referral-program"
           className="relative mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-bold text-[#E8590C] shadow-[0_4px_0_rgba(0,0,0,0.18)] transition-transform hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none"
         >
-          Login to get your link
-        </button>
+          See how Refer &amp; Earn works
+        </Link>
       ) : null}
     </section>
   );

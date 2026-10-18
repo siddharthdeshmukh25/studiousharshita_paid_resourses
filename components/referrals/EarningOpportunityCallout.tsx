@@ -1,26 +1,9 @@
-'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 import { ArrowRight, Banknote, Sparkles } from 'lucide-react';
-import LoginModal from '@/components/auth/LoginModal';
 
 type Props = { className?: string };
 
 export default function EarningOpportunityCallout({ className = '' }: Props) {
-  const { status } = useSession();
-  const router = useRouter();
-  const [showLoginModal, setShowLoginModal] = useState(false);
-
-  const startEarning = () => {
-    if (status === 'authenticated') {
-      router.push('/profile#refer-earn');
-      return;
-    }
-    setShowLoginModal(true);
-  };
-
   return (
     <aside className={`relative isolate overflow-hidden rounded-2xl border border-[#D3A957]/55 border-l-4 border-l-[#C28A3B] bg-gradient-to-r from-[#F5F0DA] via-[#EDF4E8] to-[#E3F0E8] p-3.5 shadow-[0_5px_0_rgba(69,92,79,0.14),0_14px_28px_-18px_rgba(34,55,47,0.46)] sm:p-4 ${className}`}>
       <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-12 h-28 w-28 rounded-full bg-[#F2D897]/60 blur-2xl" />
@@ -37,11 +20,10 @@ export default function EarningOpportunityCallout({ className = '' }: Props) {
           </div>
           <p className="mt-1 text-[10px] leading-snug text-[#4D6657] sm:text-xs">Share what you love and explore earning opportunities with Studious Harshita.</p>
         </div>
-        <button type="button" onClick={startEarning} className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[var(--accent-deep)] px-2.5 py-2 text-[11px] font-extrabold text-white shadow-[0_3px_0_#17382f,0_6px_12px_rgba(38,72,54,0.2)] transition hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 sm:gap-1.5 sm:px-3.5 sm:py-2.5 sm:text-xs">
+        <Link href="/referral-program" className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-[var(--accent-deep)] px-2.5 py-2 text-[11px] font-extrabold text-white shadow-[0_3px_0_#17382f,0_6px_12px_rgba(38,72,54,0.2)] transition hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 sm:gap-1.5 sm:px-3.5 sm:py-2.5 sm:text-xs">
           Start earning <ArrowRight className="h-3.5 w-3.5" />
-        </button>
+        </Link>
       </div>
-      <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} callbackUrl="/profile#refer-earn" />
     </aside>
   );
 }
