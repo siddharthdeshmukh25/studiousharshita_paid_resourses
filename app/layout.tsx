@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Poppins, Inter, Caveat } from "next/font/google";
+import localFont from 'next/font/local';
 import "./globals.css";
 import Providers from '@/components/providers';
 import ToastProvider from '@/components/ui/Toast';
@@ -20,43 +20,55 @@ import {
 } from '@/lib/site';
 import NextTopLoader from 'nextjs-toploader';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const geistSans = localFont({
+  src: './fonts/geist-latin.woff2',
+  variable: '--font-geist-sans',
+  weight: '100 900',
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const geistMono = localFont({
+  src: './fonts/geist-mono-latin.woff2',
+  variable: '--font-geist-mono',
+  weight: '100 900',
+  display: 'swap',
 });
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
+const instrumentSerif = localFont({
+  src: [
+    { path: './fonts/instrument-serif-latin.woff2', style: 'normal', weight: '400' },
+    { path: './fonts/instrument-serif-italic-latin.woff2', style: 'italic', weight: '400' },
+  ],
+  variable: '--font-instrument-serif',
+  display: 'swap',
 });
 
-const poppins = Poppins({
-  variable: "--font-poppins",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
+const poppins = localFont({
+  src: './fonts/poppins-regular-latin.woff2',
+  variable: '--font-poppins',
+  weight: '400',
+  display: 'swap',
 });
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["700"],
-  display: "swap",
+const poppinsMedium = localFont({
+  src: './fonts/poppins-medium-latin.woff2',
+  variable: '--font-poppins-medium',
+  weight: '500',
+  display: 'swap',
 });
 
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
+const inter = localFont({
+  src: './fonts/inter-bold-latin.woff2',
+  variable: '--font-inter',
+  weight: '700',
+  display: 'swap',
+});
+
+const caveat = localFont({
+  src: './fonts/caveat-latin.woff2',
+  variable: '--font-caveat',
+  weight: '400 600',
+  display: 'swap',
 });
 
 /**
@@ -161,7 +173,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${poppins.variable} ${inter.variable} ${caveat.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${poppins.variable} ${inter.variable} ${caveat.variable} ${poppinsMedium.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
